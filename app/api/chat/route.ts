@@ -18,7 +18,7 @@ type Message = { role: "user" | "assistant"; content: string };
 export async function POST(req: NextRequest) {
   const { messages } = (await req.json()) as { messages: Message[] };
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
       { content: "JasurGPT is not configured yet. API key missing." },
@@ -26,41 +26,38 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const geminiMessages = messages.map((m) => ({
-    role: m.role === "assistant" ? "model" : "user",
-    parts: [{ text: m.content }],
-  }));
-
   const body = {
-    system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-    contents: geminiMessages,
-    generationConfig: {
-      maxOutputTokens: 512,
-      temperature: 0.7,
-    },
+    model: "google/gemma-4-31b-it:free",
+    messages: [
+      { role: "system", content: SYSTEM_PROMPT },
+      ...messages,
+    ],
+    max_tokens: 512,
+    temperature: 0.7,
   };
 
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }
-  );
+  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+      "HTTP-Referer": "https://jasur-portfolio.vercel.app",
+      "X-Title": "JasurGPT",
+    },
+    body: JSON.stringify(body),
+  });
 
   if (!res.ok) {
     const err = await res.text();
-    console.error("Gemini error:", err);
+    console.error("OpenRouter error:", err);
     return NextResponse.json(
-      { content: "Error reaching Gemini. Try again later." },
+      { content: "Error reaching AI. Try again later." },
       { status: 200 }
     );
   }
 
   const data = await res.json();
-  const content =
-    data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "No response.";
+  const content = data?.choices?.[0]?.message?.content ?? "No response.";
 
   return NextResponse.json({ content });
 }
