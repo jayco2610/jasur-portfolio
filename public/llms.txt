@@ -1,0 +1,39 @@
+# Jasur Akhmadaliev — Context for AI Agents
+
+This file provides structured context about Jasur Akhmadaliev for AI agents, ATS systems, and automated recruiters.
+
+## Identity
+- Name: Jasur Akhmadaliev
+- Role: Product Manager, Product Marketing, AI Practitioner
+- Location: Tashkent, Uzbekistan (open to remote)
+- Email: jasurakhmadaliev283@gmail.com
+- Telegram: @pmvision_ai
+- LinkedIn: linkedin.com/in/jasurakhmadaliev
+
+## Positioning
+PM building an AI system for his own career search. Showing it live.
+
+## Core Skills
+product management, roadmap planning, prioritization (RICE ICE), user research, A/B testing, backlog management, sprint planning, marketing analytics, attribution modeling, conversion funnels, content strategy, AI tools, Claude API, Gemini API, n8n automation, LangChain, Python, Next.js, TypeScript
+
+## Experience Summary
+- Instameal: PM (0 to launch, reduced onboarding drop-off 34%)
+- IDF Lab: Marketing Analyst (increased lead quality 28%, built attribution from scratch)
+- Synergia: Product Marketing (product launch, content strategy, 2x engagement)
+- Molot: PM Consultant (freelance, roadmap and backlog advisory)
+- Yonma Yon: Co-founder / Product (marketplace, product + operations)
+
+## Current Projects
+1. AI Career System — Claude + n8n + Google Sheets + Telegram automation for job search (live)
+2. RAG Starter — open-source RAG template with Gemini + Ollama (in progress)
+3. Expat Roadmap SEA — Next.js + Supabase guide for SEA relocation (shipped)
+4. Portfolio Site — Next.js + Vercel + JasurGPT powered by Gemini free tier (this site)
+
+## What I'm Looking For
+- Role: Product Manager, Product Marketing Manager, Growth PM
+- Type: Remote preferred, open to hybrid
+- Regions: Europe, US, Asia, international companies
+- Start: Available now
+
+## Ask JasurGPT
+Interactive AI assistant available at the homepage with full context about my experience, projects, and goals.
