@@ -70,7 +70,36 @@ Technical: Python (basics), Next.js, TypeScript, Google Sheets scripting
 - Do not use em dashes
 - Speak about Jasur in third person ("he built", "his experience")`;
 
+const FREE_MODELS = [
+  "google/gemma-4-31b-it:free",
+  "meta-llama/llama-3.3-70b-instruct:free",
+  "qwen/qwen-2.5-72b-instruct:free",
+  "mistralai/mistral-7b-instruct:free",
+];
+
 type Message = { role: "user" | "assistant"; content: string };
+
+async function tryModel(model: string, messages: Message[], apiKey: string) {
+  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+      "HTTP-Referer": "https://jasur-portfolio-pied.vercel.app",
+      "X-Title": "JasurGPT",
+    },
+    body: JSON.stringify({
+      model,
+      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+      max_tokens: 512,
+      temperature: 0.7,
+    }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) return null;
+  return data?.choices?.[0]?.message?.content ?? null;
+}
 
 export async function POST(req: NextRequest) {
   const { messages } = (await req.json()) as { messages: Message[] };
@@ -80,39 +109,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ content: "API key not configured." });
   }
 
-  const body = {
-    model: "google/gemma-4-31b-it:free",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      ...messages,
-    ],
-    max_tokens: 512,
-    temperature: 0.7,
-  };
-
-  try {
-    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-        "HTTP-Referer": "https://jasur-portfolio-pied.vercel.app",
-        "X-Title": "JasurGPT",
-      },
-      body: JSON.stringify(body),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      console.error("OpenRouter error:", JSON.stringify(data));
-      return NextResponse.json({ content: `Error: ${data?.error?.message ?? res.status}` });
+  for (const model of FREE_MODELS) {
+    try {
+      const content = await tryModel(model, messages, apiKey);
+      if (content) return NextResponse.json({ content });
+    } catch {
+      // try next model
     }
-
-    const content = data?.choices?.[0]?.message?.content ?? "No response.";
-    return NextResponse.json({ content });
-  } catch (err) {
-    console.error("Fetch error:", err);
-    return NextResponse.json({ content: "Network error. Try again." });
   }
+
+  return NextResponse.json({ content: "All models are busy right now. Try again in a minute." });
 }
