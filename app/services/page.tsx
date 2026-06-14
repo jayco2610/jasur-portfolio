@@ -1,81 +1,81 @@
 export default function ServicesPage() {
   const automation = [
     {
-      price: "от 35 000 ₽",
-      name: "CRM + AI автоматизация под ключ",
-      sub: "amoCRM / Битрикс",
+      price: "from 35,000 ₽",
+      name: "CRM + AI Automation — Full Setup",
+      sub: "amoCRM / Bitrix",
       description:
-        "Настройка CRM + AI-слой: воронка и этапы сделки, импорт базы, базовая автоматизация (3 сценария), AI-агент для входящих обращений, интеграция с Telegram или WhatsApp.",
+        "CRM setup with an AI layer: sales funnel and deal stages, database import, basic automation (3 scenarios), AI agent for incoming requests, integration with Telegram or WhatsApp.",
       featured: true,
     },
     {
-      price: "от 25 000 ₽",
-      name: "Внедрение AI-агента под задачу",
+      price: "from 25,000 ₽",
+      name: "AI Agent Implementation",
       sub: null,
       description:
-        "AI-агент под конкретную задачу: обработка обращений, квалификация лидов, внутренний ассистент, автоответы. Разбор задачи и техническое ТЗ.",
+        "Custom AI agent for a specific task: handling inquiries, lead qualification, internal assistant, auto-replies. Includes task discovery and technical specification.",
       featured: false,
     },
     {
-      price: "от 15 000 ₽",
-      name: "Автоматизация процесса",
+      price: "from 15,000 ₽",
+      name: "Process Automation",
       sub: "n8n",
       description:
-        "Связка CRM, мессенджеров, AI и таблиц. Заявка из формы → карточка CRM → уведомление в Telegram → AI-ответ клиенту. Схема, настройка, тест, инструкция. Без кода.",
+        "Connect your CRM, messengers, AI, and spreadsheets. A form submission becomes a CRM card, triggers a Telegram notification, and sends an AI reply to the client. Schema, setup, testing, instructions. No code required.",
       featured: false,
     },
     {
-      price: "от 8 000 ₽",
-      name: "Продуктовый аудит AI-инструментов",
+      price: "from 8,000 ₽",
+      name: "AI Tools Audit",
       sub: null,
       description:
-        "Разбор стека (ChatGPT, Notion AI, Copilot): где теряются время и деньги. Итог: 1-страничный план оптимизации с приоритетами. Встреча 1,5 часа + документ.",
+        "Review your current stack (ChatGPT, Notion AI, Copilot): find where time and money are lost. Output: a 1-page optimization plan with priorities. 1.5-hour session + document.",
       featured: false,
     },
     {
-      price: "от 3 500 ₽",
-      name: "Консультация, разбор задачи",
-      sub: "1 час",
+      price: "from 3,500 ₽",
+      name: "Consultation — Task Review",
+      sub: "1 hour",
       description:
-        "CRM, автоматизация, AI-инструменты или процессы. Чёткий план действий и инструменты под вашу ситуацию. Zoom или звонок + письменное резюме.",
+        "CRM, automation, AI tools, or processes. A clear action plan and tools matched to your situation. Zoom or call + written summary.",
       featured: false,
     },
   ];
 
   const product = [
     {
-      price: "от 60 000 ₽/мес",
-      name: "Контент-завод / AI Brand Ambassador",
+      price: "from 60,000 ₽/mo",
+      name: "Content Factory / AI Brand Ambassador",
       sub: null,
       description:
-        "AI-система ежедневного контента: скрипты, видео с AI-аватаром, посты, stories под 3–5 платформ. Claude + n8n + HeyGen + планировщик. 20–40 единиц контента в месяц — бренд живёт в соцсетях каждый день без съёмок.",
-      note: "Подписки AI-сервисов (HeyGen, Claude API) оплачиваются клиентом отдельно — ориентировочно $80–250/мес.",
+        "AI-driven daily content system: scripts, AI avatar videos, posts, stories across 3–5 platforms. Claude + n8n + HeyGen + scheduler. 20–40 content pieces per month — brand stays active every day without filming.",
+      note: "AI service subscriptions (HeyGen, Claude API) are paid by the client separately — approximately $80–250/mo.",
       featured: true,
     },
     {
-      price: "от 40 000 ₽/мес",
-      name: "PM-сопровождение продукта",
+      price: "from 40,000 ₽/mo",
+      name: "Fractional PM",
       sub: null,
       description:
-        "Внешний PM: Discovery, CustDev, CJM, бэклог, roadmap, метрики. Работаю в вашем инструменте (Jira, Notion, Linear). Асинхронно в Telegram + встречи по запросу.",
+        "External product manager: Discovery, CustDev, CJM, backlog, roadmap, metrics. Works in your tool (Jira, Notion, Linear). Async via Telegram + calls on demand.",
       note: null,
       featured: false,
     },
     {
-      price: "от 25 000 ₽",
-      name: "Продуктовый маркетинг",
+      price: "from 25,000 ₽",
+      name: "Product Marketing",
       sub: null,
       description:
-        "Позиционирование, ICP, УТП, воронка, контент-план под цели роста. AI-анализ конкурентов включён. Итог: стратегия + 30-дневный контент-план + шаблоны под платформы.",
+        "Positioning, ICP, USP, funnel, content plan aligned with growth goals. AI competitor analysis included. Output: strategy + 30-day content plan + platform templates.",
       note: null,
       featured: false,
     },
     {
-      price: "от 20 000 ₽",
-      name: "Аудит отдела / процесса",
+      price: "from 20,000 ₽",
+      name: "Department / Process Audit",
       sub: null,
       description:
-        "Маркетинг, продажи, онбординг, клиентский сервис. Нахожу узкие места и расставляю приоритеты. Итог: карта процесса + план оптимизации с оценкой эффекта. 2–3 встречи + документ.",
+        "Marketing, sales, onboarding, or customer service. Find bottlenecks and prioritize fixes. Output: process map + optimization plan with impact estimates. 2–3 sessions + document.",
       note: null,
       featured: false,
     },
@@ -84,9 +84,9 @@ export default function ServicesPage() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-16">
       <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-3">Services</p>
-      <h1 className="font-mono text-3xl font-bold text-white mb-2">Чем помогаю</h1>
+      <h1 className="font-mono text-3xl font-bold text-white mb-2">What I can help with.</h1>
       <p className="text-white/40 text-sm mb-14">
-        Заявки:{" "}
+        Contact:{" "}
         <a href="mailto:jasurakhmadaliev283@gmail.com" className="text-[#a78bfa] hover:text-white transition-colors">
           jasurakhmadaliev283@gmail.com
         </a>{" "}
@@ -98,7 +98,7 @@ export default function ServicesPage() {
 
       {/* AI & Automation */}
       <section className="mb-16">
-        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">AI и автоматизация</p>
+        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">AI & Automation</p>
         <div className="space-y-4">
           {automation.map((s) => (
             <div
@@ -109,13 +109,11 @@ export default function ServicesPage() {
                   : "bg-[#111111] border-[#1f1f1f] hover:border-[#7C3AED]/20"
               }`}
             >
-              <div className="flex items-start justify-between gap-4 mb-3 flex-wrap">
-                <div>
-                  <span className="font-mono text-lg font-bold text-[#a78bfa]">{s.price}</span>
-                  {s.sub && (
-                    <span className="font-mono text-xs text-white/30 ml-2">· {s.sub}</span>
-                  )}
-                </div>
+              <div className="mb-3">
+                <span className="font-mono text-lg font-bold text-[#a78bfa]">{s.price}</span>
+                {s.sub && (
+                  <span className="font-mono text-xs text-white/30 ml-2">· {s.sub}</span>
+                )}
               </div>
               <p className="font-mono text-sm font-bold text-white mb-2">{s.name}</p>
               <p className="text-white/50 text-sm leading-relaxed">{s.description}</p>
@@ -126,7 +124,7 @@ export default function ServicesPage() {
 
       {/* Product & Content */}
       <section className="mb-16">
-        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">Продукт и контент</p>
+        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">Product & Content</p>
         <div className="space-y-4">
           {product.map((s) => (
             <div
@@ -149,14 +147,14 @@ export default function ServicesPage() {
           ))}
         </div>
         <p className="font-mono text-[10px] text-white/25 mt-4 italic">
-          Подписки на AI-сервисы при необходимости оплачиваются клиентом отдельно — обсуждается на старте.
+          AI service subscriptions, where needed, are paid by the client separately — discussed at the start.
         </p>
       </section>
 
       {/* CTA */}
       <div className="p-6 bg-[#111111] border border-[#7C3AED]/20 rounded-lg">
-        <p className="font-mono text-sm font-bold text-white mb-1">Обсудить задачу</p>
-        <p className="text-white/40 text-sm mb-4">CRM, автоматизация, AI-инструменты и процессы. Пишите — разберём и подберём формат.</p>
+        <p className="font-mono text-sm font-bold text-white mb-1">Let&apos;s talk</p>
+        <p className="text-white/40 text-sm mb-4">CRM, automation, AI tools, or processes. Write — we&apos;ll figure out the right format together.</p>
         <div className="flex gap-4 flex-wrap">
           <a
             href="https://t.me/biznesmind"
@@ -170,7 +168,7 @@ export default function ServicesPage() {
             href="mailto:jasurakhmadaliev283@gmail.com"
             className="font-mono text-sm px-5 py-2.5 border border-white/15 text-white/70 rounded hover:border-white/30 hover:text-white transition-colors"
           >
-            Написать на почту
+            Send an email
           </a>
         </div>
       </div>
