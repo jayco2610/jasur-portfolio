@@ -74,9 +74,10 @@ export default function ResumePage() {
   ];
 
   const skills: Record<string, string[]> = {
-    "Product": ["Product Discovery", "CustDev", "CJM", "User Stories", "Backlog Prioritization", "A/B Testing", "MVP", "Scrum", "NPS", "LTV / CAC", "Funnel Analytics"],
-    "AI & Automation": ["Claude API", "ChatGPT", "Prompt Engineering", "n8n", "Voiceflow", "Cursor", "NotebookLM", "AI Agents"],
-    "Tools": ["Google Sheets", "Figma", "Canva", "Telegram Bot API", "Whisper", "Facebook API"],
+    "Product": ["Product Discovery", "CustDev", "CJM", "User Stories", "Backlog Prioritization", "A/B Testing", "MVP", "Scrum", "SAFe (basic)", "NPS", "LTV / CAC", "Funnel Analytics"],
+    "AI & Automation": ["Claude API", "OpenRouter API", "ChatGPT", "Prompt Engineering", "n8n", "Voiceflow", "Cursor", "NotebookLM", "AI Agents", "Whisper API"],
+    "Development": ["Next.js", "React", "TypeScript", "Tailwind CSS", "Supabase", "Prisma", "Vercel", "Git / GitHub", "REST API"],
+    "Tools": ["Google Sheets", "Figma", "Canva", "Telegram Bot API", "Facebook API"],
     "Languages": ["English (B1)", "Russian (Native)", "Turkish (B2)", "Uzbek (Native)"],
   };
 
