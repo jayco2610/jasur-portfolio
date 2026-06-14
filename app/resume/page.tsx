@@ -107,13 +107,22 @@ export default function ResumePage() {
             </a>
           </div>
         </div>
-        <a
-          href="/resume.pdf"
-          download
-          className="font-mono text-sm px-5 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors shrink-0"
-        >
-          Download PDF
-        </a>
+        <div className="flex gap-2 shrink-0">
+          <a
+            href="/resume.pdf"
+            download
+            className="font-mono text-sm px-4 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors"
+          >
+            PDF — EN
+          </a>
+          <a
+            href="/resume-ru.pdf"
+            download
+            className="font-mono text-sm px-4 py-2.5 border border-[#7C3AED]/40 text-[#a78bfa] rounded hover:bg-[#7C3AED]/10 transition-colors"
+          >
+            PDF — RU
+          </a>
+        </div>
       </div>
 
       {/* Education */}
