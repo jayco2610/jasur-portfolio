@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
+import JasurGPT from "@/components/JasurGPT";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceMono = Space_Mono({
+  weight: ["400", "700"],
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -33,14 +35,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${spaceMono.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#111827] text-[#F8FAFF]">
+      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#e8e8e8]">
         <Nav />
         <main className="flex-1">{children}</main>
-        <footer className="border-t border-white/10 py-6 text-center text-sm text-white/40">
-          © 2025 Jasur Akhmadaliev · @pmvision_ai
+        <footer className="border-t border-white/5 py-8 text-center text-xs font-mono text-white/30">
+          © 2025 Jasur Akhmadaliev
         </footer>
+        <JasurGPT />
       </body>
     </html>
   );

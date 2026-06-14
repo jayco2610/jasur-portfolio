@@ -1,43 +1,57 @@
 @import "tailwindcss";
 
 :root {
-  --graphite: #111827;
-  --deep-blue: #1E3A8A;
-  --neon-purple: #7C3AED;
-  --light-bg: #F8FAFF;
-  --background: var(--graphite);
-  --foreground: var(--light-bg);
+  --purple: #7C3AED;
+  --purple-light: #a78bfa;
+  --bg: #0a0a0a;
+  --bg-card: #111111;
+  --border: #222222;
+  --text: #e8e8e8;
+  --text-dim: rgba(232, 232, 232, 0.45);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-graphite: var(--graphite);
-  --color-deep-blue: var(--deep-blue);
-  --color-neon-purple: var(--neon-purple);
-  --color-light-bg: var(--light-bg);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-card: var(--bg-card);
+  --color-purple: var(--purple);
+  --color-purple-light: var(--purple-light);
+  --font-mono: var(--font-mono);
+  --font-sans: var(--font-sans);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans), -apple-system, sans-serif;
+}
+
+.font-mono, [class*="font-mono"] {
+  font-family: var(--font-mono), "Courier New", monospace;
 }
 
 ::selection {
   background: #7C3AED;
-  color: #F8FAFF;
+  color: #fff;
 }
 
-.chat-scrollbar::-webkit-scrollbar {
-  width: 4px;
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
-.chat-scrollbar::-webkit-scrollbar-track {
-  background: #1f2937;
+
+.cursor::after {
+  content: "_";
+  animation: blink 1.2s step-end infinite;
+  color: #a78bfa;
 }
-.chat-scrollbar::-webkit-scrollbar-thumb {
-  background: #7C3AED;
-  border-radius: 2px;
+
+.chat-scrollbar::-webkit-scrollbar { width: 3px; }
+.chat-scrollbar::-webkit-scrollbar-track { background: #111; }
+.chat-scrollbar::-webkit-scrollbar-thumb { background: #7C3AED; border-radius: 2px; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
+
+.fade-up { animation: fadeUp 0.4s ease forwards; }

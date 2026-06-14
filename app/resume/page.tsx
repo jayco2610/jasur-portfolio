@@ -52,28 +52,37 @@ export default function ResumePage() {
     },
   ];
 
-  const skills = {
+  const skills: Record<string, string[]> = {
     "Product": ["Roadmap planning", "RICE / ICE prioritization", "User research", "A/B testing", "Backlog management"],
     "Marketing": ["Attribution modeling", "Conversion funnels", "Content strategy", "Campaign management"],
-    "AI & Tech": ["Claude API", "Gemini API", "n8n automation", "LangChain", "Ollama", "Python (basics)", "Next.js"],
-    "Tools": ["Notion", "Linear", "Figma (reading)", "Google Sheets (scripting)", "Amplitude (basics)"],
+    "AI & Tech": ["Claude API", "n8n", "LangChain", "Ollama", "OpenRouter", "Python (basics)", "Next.js"],
+    "Tools": ["Notion", "Linear", "Figma (reading)", "Google Sheets scripting", "Amplitude (basics)"],
   };
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-16">
-      <div className="flex items-start justify-between mb-12 gap-6">
+      <div className="flex items-start justify-between mb-14 gap-6 flex-wrap">
         <div>
-          <h1 className="text-3xl font-bold text-[#F8FAFF] mb-2">
-            Jasur Akhmadaliev
-          </h1>
-          <p className="text-white/60">Product Manager · Marketing · AI</p>
-          <p className="text-white/40 text-sm mt-1">
-            jasurakhmadaliev283@gmail.com · @pmvision_ai
-          </p>
+          <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-3">Resume</p>
+          <h1 className="font-mono text-3xl font-bold text-white mb-2">Jasur Akhmadaliev</h1>
+          <p className="text-white/50 text-sm">Product Manager · Marketing · AI</p>
+          <div className="flex gap-4 mt-3 flex-wrap">
+            <a href="mailto:jasurakhmadaliev283@gmail.com" className="font-mono text-xs text-white/30 hover:text-white transition-colors">
+              jasurakhmadaliev283@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/jasur-akhmadaliev" target="_blank" rel="noopener noreferrer"
+              className="font-mono text-xs text-[#a78bfa] hover:text-white transition-colors">
+              LinkedIn →
+            </a>
+            <a href="https://vc.ru/id5991727" target="_blank" rel="noopener noreferrer"
+              className="font-mono text-xs text-[#a78bfa] hover:text-white transition-colors">
+              VC.ru →
+            </a>
+          </div>
         </div>
         <a
           href="/resume.pdf"
-          className="px-5 py-2.5 bg-[#7C3AED] text-white rounded-lg text-sm font-medium hover:bg-[#6d28d9] transition-colors shrink-0"
+          className="font-mono text-sm px-5 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors shrink-0"
         >
           Download PDF
         </a>
@@ -81,22 +90,19 @@ export default function ResumePage() {
 
       {/* Experience */}
       <section className="mb-14">
-        <h2 className="text-xs font-mono text-white/40 tracking-widest uppercase mb-8">
-          Experience
-        </h2>
+        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-8">Experience</p>
         <div className="space-y-8">
           {experience.map((job) => (
-            <div key={`${job.role}-${job.company}`} className="relative pl-6 border-l border-white/10">
-              <div className="absolute left-0 top-1.5 w-2 h-2 rounded-full bg-[#7C3AED] -translate-x-[5px]" />
-              <div className="flex items-baseline gap-3 mb-3">
-                <h3 className="text-[#F8FAFF] font-semibold">{job.role}</h3>
-                <span className="text-white/50 text-sm">{job.company}</span>
-                <span className="text-white/30 text-xs ml-auto">{job.period}</span>
+            <div key={`${job.role}-${job.company}`} className="pl-5 border-l border-[#222]">
+              <div className="flex items-baseline gap-3 mb-3 flex-wrap">
+                <span className="font-mono text-sm font-bold text-white">{job.role}</span>
+                <span className="text-white/40 text-sm">{job.company}</span>
+                <span className="font-mono text-[10px] text-white/25 ml-auto">{job.period}</span>
               </div>
               <ul className="space-y-1.5">
                 {job.bullets.map((b) => (
-                  <li key={b} className="text-white/60 text-sm flex gap-2">
-                    <span className="text-[#7C3AED] mt-0.5 shrink-0">·</span>
+                  <li key={b} className="text-white/50 text-sm flex gap-2">
+                    <span className="text-[#7C3AED] mt-0.5 shrink-0">+</span>
                     {b}
                   </li>
                 ))}
@@ -108,19 +114,14 @@ export default function ResumePage() {
 
       {/* Skills */}
       <section>
-        <h2 className="text-xs font-mono text-white/40 tracking-widest uppercase mb-6">
-          Skills
-        </h2>
+        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">Skills</p>
         <div className="grid sm:grid-cols-2 gap-6">
           {Object.entries(skills).map(([category, items]) => (
             <div key={category}>
-              <h3 className="text-white/40 text-xs font-mono mb-3">{category}</h3>
+              <p className="font-mono text-[10px] text-white/30 mb-3 tracking-wider">{category}</p>
               <div className="flex flex-wrap gap-2">
                 {items.map((skill) => (
-                  <span
-                    key={skill}
-                    className="text-xs px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-white/60"
-                  >
+                  <span key={skill} className="font-mono text-[10px] px-2.5 py-1 rounded bg-[#111] border border-[#1f1f1f] text-white/50">
                     {skill}
                   </span>
                 ))}

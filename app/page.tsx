@@ -1,107 +1,171 @@
-import JasurGPT from "@/components/JasurGPT";
 import Link from "next/link";
+import PhotoAvatar from "@/components/PhotoAvatar";
 
 export default function Home() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-20">
+    <div>
       {/* Hero */}
-      <section className="mb-20">
-        <p className="text-[#7C3AED] text-sm font-mono mb-4 tracking-widest uppercase">
-          Product Manager · Marketing · AI
-        </p>
-        <h1 className="text-5xl font-bold text-[#F8FAFF] leading-tight mb-6">
-          Jasur Akhmadaliev
-        </h1>
-        <p className="text-xl text-white/70 max-w-xl leading-relaxed mb-4">
-          Building an AI system for his own career search.
-          <br />
-          Showing it live.
-        </p>
-        <p className="text-lg text-white/50 font-light italic mb-10">
-          &ldquo;Система для себя. Работает при всех.&rdquo;
-        </p>
-        <div className="flex gap-4 flex-wrap">
-          <Link
-            href="/projects"
-            className="px-6 py-3 bg-[#7C3AED] text-white rounded-lg font-medium hover:bg-[#6d28d9] transition-colors"
-          >
-            Projects
-          </Link>
-          <Link
-            href="/resume"
-            className="px-6 py-3 border border-white/20 text-white/80 rounded-lg font-medium hover:border-[#7C3AED] hover:text-white transition-colors"
-          >
-            Resume
-          </Link>
-          <a
-            href="https://t.me/pmvision_ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-3 border border-white/20 text-white/80 rounded-lg font-medium hover:border-[#1E3A8A] hover:text-white transition-colors"
-          >
-            Telegram →
-          </a>
-        </div>
-      </section>
-
-      {/* Currently building */}
-      <section className="mb-20">
-        <h2 className="text-xs font-mono text-white/40 tracking-widest uppercase mb-6">
-          Currently building
-        </h2>
-        <div className="grid sm:grid-cols-3 gap-4">
-          {[
-            {
-              title: "AI Career System",
-              desc: "Claude + n8n + Google Sheets pipeline that automates job search: vacancy analysis, resume adaptation, cover letters.",
-              tag: "live",
-            },
-            {
-              title: "RAG Starter",
-              desc: "Open-source RAG template with Gemini + Ollama. Portfolio piece for AI consulting.",
-              tag: "in progress",
-            },
-            {
-              title: "Expat Roadmap SEA",
-              desc: "Guide for relocating to Southeast Asia. Next.js + Supabase. First product shipped solo.",
-              tag: "shipped",
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="p-5 rounded-xl border border-white/10 bg-white/5 hover:border-[#7C3AED]/40 transition-colors"
+      <section className="max-w-5xl mx-auto px-6 pt-20 pb-24 flex flex-col md:flex-row items-center gap-12 md:gap-20">
+        <div className="flex-1 order-2 md:order-1">
+          <p className="font-mono text-[#a78bfa] text-xs tracking-[0.2em] uppercase mb-6">
+            Product Manager · Marketing · AI
+          </p>
+          <h1 className="font-mono text-4xl md:text-5xl font-bold text-white leading-tight mb-6 cursor">
+            Jasur<br />Akhmadaliev
+          </h1>
+          <p className="text-[15px] text-white/60 leading-relaxed max-w-md mb-10">
+            Building an AI system for his own career search.
+            Showing it live — from vacancy analysis to automated cover letters.
+          </p>
+          <div className="flex gap-3 flex-wrap">
+            <Link
+              href="/projects"
+              className="font-mono text-sm px-5 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors"
             >
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[#F8FAFF] font-semibold text-sm">
-                  {item.title}
-                </span>
-                <span
-                  className={`text-xs px-2 py-0.5 rounded-full font-mono ${
-                    item.tag === "live"
-                      ? "bg-green-500/20 text-green-400"
-                      : item.tag === "shipped"
-                      ? "bg-[#1E3A8A]/40 text-blue-300"
-                      : "bg-[#7C3AED]/20 text-purple-300"
-                  }`}
-                >
-                  {item.tag}
-                </span>
-              </div>
-              <p className="text-white/50 text-sm leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
+              View projects
+            </Link>
+            <Link
+              href="/resume"
+              className="font-mono text-sm px-5 py-2.5 border border-white/15 text-white/70 rounded hover:border-white/30 hover:text-white transition-colors"
+            >
+              Resume
+            </Link>
+            <a
+              href="https://t.me/pmvision_ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-sm px-5 py-2.5 border border-white/15 text-white/70 rounded hover:border-[#7C3AED]/60 hover:text-white transition-colors"
+            >
+              Telegram →
+            </a>
+          </div>
+        </div>
+
+        {/* Photo */}
+        <div className="order-1 md:order-2 shrink-0">
+          <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden border-2 border-[#7C3AED]/40 bg-[#111] flex items-center justify-center">
+            <PhotoAvatar />
+          </div>
         </div>
       </section>
 
-      {/* JasurGPT */}
-      <section>
-        <h2 className="text-xs font-mono text-white/40 tracking-widest uppercase mb-2">
-          Ask JasurGPT
-        </h2>
-        <p className="text-white/50 text-sm mb-6">
-          AI trained on my resume, projects, and experience. Ask anything.
-        </p>
-        <JasurGPT />
+      {/* Projects */}
+      <section className="border-t border-white/5 py-20">
+        <div className="max-w-5xl mx-auto px-6">
+          <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-10">
+            Selected work
+          </p>
+          <div className="grid md:grid-cols-2 gap-4">
+            {[
+              {
+                name: "AI Career System",
+                status: "live",
+                desc: "End-to-end job search automation. Claude + n8n + Google Sheets + Telegram. Vacancy in → cover letter out in under 60 seconds.",
+                tags: ["Claude", "n8n", "Telegram"],
+              },
+              {
+                name: "Expat Roadmap SEA",
+                status: "shipped",
+                desc: "Full-stack guide for relocating to Southeast Asia. Next.js + Supabase, built and deployed solo.",
+                tags: ["Next.js", "Supabase", "Vercel"],
+              },
+              {
+                name: "RAG Starter",
+                status: "in progress",
+                desc: "Open-source retrieval-augmented generation template. Gemini API + Ollama. Built for AI consulting.",
+                tags: ["Python", "LangChain", "Ollama"],
+              },
+              {
+                name: "Portfolio + JasurGPT",
+                status: "live",
+                desc: "This site. AI chat trained on full context — resume, projects, experience. Ask using the button below.",
+                tags: ["Next.js", "OpenRouter", "Vercel"],
+              },
+            ].map((p) => (
+              <div
+                key={p.name}
+                className="p-6 bg-[#111111] border border-[#1f1f1f] rounded-lg hover:border-[#7C3AED]/30 transition-colors"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-sm font-bold text-white">{p.name}</span>
+                  <span className={`font-mono text-[10px] px-2 py-0.5 rounded-full ${
+                    p.status === "live"
+                      ? "bg-emerald-500/15 text-emerald-400"
+                      : p.status === "shipped"
+                      ? "bg-blue-500/15 text-blue-400"
+                      : "bg-[#7C3AED]/15 text-[#a78bfa]"
+                  }`}>
+                    {p.status}
+                  </span>
+                </div>
+                <p className="text-sm text-white/50 leading-relaxed mb-4">{p.desc}</p>
+                <div className="flex gap-2 flex-wrap">
+                  {p.tags.map((t) => (
+                    <span key={t} className="font-mono text-[10px] px-2 py-1 bg-white/5 text-white/40 rounded">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8">
+            <Link href="/projects" className="font-mono text-sm text-[#a78bfa] hover:text-white transition-colors">
+              All projects →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* About */}
+      <section className="border-t border-white/5 py-20">
+        <div className="max-w-5xl mx-auto px-6">
+          <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-8">
+            About
+          </p>
+          <div className="max-w-2xl">
+            <p className="text-white/70 leading-relaxed mb-4">
+              I&apos;m a Product Manager and marketing analyst from Tashkent, Uzbekistan.
+              I&apos;ve shipped products at Instameal (food delivery), IDF Lab (B2B SaaS), and Synergia.
+              Currently building AI tooling for my own job search — and publishing the process publicly.
+            </p>
+            <p className="text-white/50 leading-relaxed">
+              Looking for a remote PM or product marketing role with an international team.
+              The AI career system you see above is both my portfolio and my actual workflow.
+            </p>
+          </div>
+
+          <div className="mt-10 flex gap-6 flex-wrap">
+            {[
+              { label: "LinkedIn", href: "https://www.linkedin.com/in/jasur-akhmadaliev" },
+              { label: "Telegram", href: "https://t.me/pmvision_ai" },
+              { label: "VC.ru", href: "https://vc.ru/id5991727" },
+              { label: "Email", href: "mailto:jasurakhmadaliev283@gmail.com" },
+            ].map((l) => (
+              <a
+                key={l.label}
+                href={l.href}
+                target={l.href.startsWith("mailto") ? undefined : "_blank"}
+                rel={l.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
+                className="font-mono text-sm text-[#a78bfa] hover:text-white transition-colors"
+              >
+                {l.label} →
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* JasurGPT hint */}
+      <section className="border-t border-white/5 py-12">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <p className="font-mono text-sm text-white/30">
+            Have questions about my experience or projects?
+          </p>
+          <p className="font-mono text-sm text-[#a78bfa] mt-1">
+            Ask JasurGPT — button in the bottom right corner.
+          </p>
+        </div>
       </section>
     </div>
   );

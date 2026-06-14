@@ -2,32 +2,35 @@
 
 import { useState, useRef, useEffect } from "react";
 
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-};
+type Message = { role: "user" | "assistant"; content: string };
 
 const SUGGESTIONS = [
-  "What projects have you shipped?",
   "What's your PM experience?",
   "Tell me about the AI career system",
-  "Why are you looking for a job?",
+  "What projects have you shipped?",
+  "Are you open to work?",
 ];
 
 export default function JasurGPT() {
+  const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    if (open) setTimeout(() => inputRef.current?.focus(), 100);
+  }, [open]);
+
   async function send(text: string) {
     if (!text.trim() || loading) return;
-    const userMessage: Message = { role: "user", content: text };
-    setMessages((prev) => [...prev, userMessage]);
+    const userMsg: Message = { role: "user", content: text };
+    setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
 
@@ -35,120 +38,125 @@ export default function JasurGPT() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: [...messages, userMessage] }),
+        body: JSON.stringify({ messages: [...messages, userMsg] }),
       });
       const data = await res.json();
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: data.content || "Something went wrong." },
-      ]);
+      setMessages((prev) => [...prev, { role: "assistant", content: data.content || "No response." }]);
     } catch {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "Connection error. Try again." },
-      ]);
+      setMessages((prev) => [...prev, { role: "assistant", content: "Connection error. Try again." }]);
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
-      {/* Chat header */}
-      <div className="px-5 py-4 border-b border-white/10 flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-[#7C3AED] flex items-center justify-center text-sm font-bold">
-          J
-        </div>
-        <div>
-          <p className="text-sm font-medium text-[#F8FAFF]">JasurGPT</p>
-          <p className="text-xs text-white/40">Powered by Gemini · knows my full context</p>
-        </div>
-        <div className="ml-auto flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-          <span className="text-xs text-white/40">online</span>
-        </div>
-      </div>
+    <>
+      {/* Floating button */}
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="fixed bottom-6 right-6 z-50 font-mono text-xs px-4 py-3 bg-[#7C3AED] text-white rounded-lg shadow-lg hover:bg-[#6d28d9] transition-colors flex items-center gap-2"
+      >
+        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+        Ask JasurGPT
+      </button>
 
-      {/* Messages */}
-      <div className="h-80 overflow-y-auto p-5 space-y-4 chat-scrollbar">
-        {messages.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center">
-            <p className="text-white/30 text-sm mb-6">
-              Ask me anything — I know Jasur&rsquo;s resume, projects, and experience.
-            </p>
-            <div className="flex flex-wrap gap-2 justify-center">
-              {SUGGESTIONS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => send(s)}
-                  className="text-xs px-3 py-2 rounded-lg border border-white/10 text-white/50 hover:border-[#7C3AED]/50 hover:text-white/80 transition-colors"
-                >
-                  {s}
-                </button>
-              ))}
+      {/* Chat modal */}
+      {open && (
+        <div className="fixed bottom-20 right-6 z-50 w-80 sm:w-96 rounded-xl border border-[#222] bg-[#0d0d0d] shadow-2xl flex flex-col overflow-hidden fade-up">
+          {/* Header */}
+          <div className="px-4 py-3 border-b border-[#1a1a1a] flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-[#7C3AED] flex items-center justify-center font-mono text-xs font-bold">
+                J
+              </div>
+              <div>
+                <p className="font-mono text-xs font-bold text-white">JasurGPT</p>
+                <p className="font-mono text-[10px] text-white/30">knows my full context</p>
+              </div>
             </div>
-          </div>
-        ) : (
-          messages.map((msg, i) => (
-            <div
-              key={i}
-              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+            <button
+              onClick={() => setOpen(false)}
+              className="text-white/30 hover:text-white transition-colors font-mono text-xs"
             >
-              <div
-                className={`max-w-xs lg:max-w-sm px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                  msg.role === "user"
-                    ? "bg-[#7C3AED] text-white rounded-br-sm"
-                    : "bg-white/10 text-white/80 rounded-bl-sm"
-                }`}
-              >
-                {msg.content}
-              </div>
-            </div>
-          ))
-        )}
-        {loading && (
-          <div className="flex justify-start">
-            <div className="bg-white/10 px-4 py-3 rounded-2xl rounded-bl-sm">
-              <div className="flex gap-1">
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce"
-                    style={{ animationDelay: `${i * 0.15}s` }}
-                  />
-                ))}
-              </div>
-            </div>
+              ✕
+            </button>
           </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
 
-      {/* Input */}
-      <div className="px-5 py-4 border-t border-white/10">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            send(input);
-          }}
-          className="flex gap-3"
-        >
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about experience, projects, skills..."
-            className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-[#F8FAFF] placeholder:text-white/30 focus:outline-none focus:border-[#7C3AED] transition-colors"
-          />
-          <button
-            type="submit"
-            disabled={!input.trim() || loading}
-            className="px-5 py-2.5 bg-[#7C3AED] text-white rounded-lg text-sm font-medium hover:bg-[#6d28d9] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          >
-            Send
-          </button>
-        </form>
-      </div>
-    </div>
+          {/* Messages */}
+          <div className="h-72 overflow-y-auto p-4 space-y-3 chat-scrollbar">
+            {messages.length === 0 ? (
+              <div className="h-full flex flex-col items-center justify-center text-center">
+                <p className="font-mono text-[11px] text-white/25 mb-5">
+                  Ask me about Jasur&apos;s experience, projects, or skills.
+                </p>
+                <div className="flex flex-col gap-2 w-full">
+                  {SUGGESTIONS.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => send(s)}
+                      className="font-mono text-[10px] px-3 py-2 border border-[#1f1f1f] text-white/40 hover:border-[#7C3AED]/40 hover:text-white/70 transition-colors rounded text-left"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              messages.map((msg, i) => (
+                <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div className={`max-w-[80%] px-3 py-2.5 rounded-lg text-xs leading-relaxed ${
+                    msg.role === "user"
+                      ? "bg-[#7C3AED] text-white font-sans"
+                      : "bg-[#161616] text-white/70 font-mono border border-[#1f1f1f]"
+                  }`}>
+                    {msg.content}
+                  </div>
+                </div>
+              ))
+            )}
+            {loading && (
+              <div className="flex justify-start">
+                <div className="bg-[#161616] border border-[#1f1f1f] px-3 py-2.5 rounded-lg">
+                  <div className="flex gap-1">
+                    {[0, 1, 2].map((i) => (
+                      <div
+                        key={i}
+                        className="w-1 h-1 rounded-full bg-[#a78bfa] animate-bounce"
+                        style={{ animationDelay: `${i * 0.15}s` }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={bottomRef} />
+          </div>
+
+          {/* Input */}
+          <div className="p-3 border-t border-[#1a1a1a]">
+            <form
+              onSubmit={(e) => { e.preventDefault(); send(input); }}
+              className="flex gap-2"
+            >
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ask anything..."
+                className="flex-1 bg-[#111] border border-[#222] rounded px-3 py-2 font-mono text-xs text-white placeholder:text-white/20 focus:outline-none focus:border-[#7C3AED] transition-colors"
+              />
+              <button
+                type="submit"
+                disabled={!input.trim() || loading}
+                className="px-3 py-2 bg-[#7C3AED] text-white rounded font-mono text-xs hover:bg-[#6d28d9] disabled:opacity-30 transition-colors"
+              >
+                →
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
