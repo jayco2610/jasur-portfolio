@@ -1,23 +1,31 @@
 import Link from "next/link";
-import PhotoAvatar from "@/components/PhotoAvatar";
 
 export default function Home() {
   return (
     <div>
-      {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 pt-20 pb-24 flex flex-col md:flex-row items-center gap-12 md:gap-20">
-        <div className="flex-1 order-2 md:order-1">
-          <p className="font-mono text-[#a78bfa] text-xs tracking-[0.2em] uppercase mb-6">
-            Product Manager · Marketing · AI
-          </p>
-          <h1 className="font-mono text-4xl md:text-5xl font-bold text-white leading-tight mb-6 cursor">
-            Jasur<br />Akhmadaliev
+      {/* Full-screen hero */}
+      <section className="relative h-[100dvh] min-h-[600px] flex items-center justify-center overflow-hidden">
+        {/* Background photo */}
+        <img
+          src="/jasur.jpg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-top"
+        />
+        {/* Dark gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-[#0a0a0a]" />
+
+        {/* Hero text */}
+        <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
+          <h1 className="font-mono text-5xl md:text-7xl font-bold text-[#a78bfa] mb-8 leading-none">
+            Welcome.
           </h1>
-          <p className="text-[15px] text-white/60 leading-relaxed max-w-md mb-10">
-            Building an AI system for his own career search.
-            Showing it live — from vacancy analysis to automated cover letters.
+          <p className="font-mono text-base md:text-lg text-white leading-relaxed">
+            I&apos;m Jasur Akhmadaliev — AI Product Manager from Tashkent.
+            Building digital products hands-on: from customer discovery to live users.
+            Scroll the cards below to see my projects,
+            or ask <span className="text-[#a78bfa]">JasurGPT</span> in the corner anything about my work.
           </p>
-          <div className="flex gap-3 flex-wrap">
+          <div className="mt-10 flex gap-3 justify-center flex-wrap">
             <Link
               href="/projects"
               className="font-mono text-sm px-5 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors"
@@ -26,26 +34,17 @@ export default function Home() {
             </Link>
             <Link
               href="/resume"
-              className="font-mono text-sm px-5 py-2.5 border border-white/15 text-white/70 rounded hover:border-white/30 hover:text-white transition-colors"
+              className="font-mono text-sm px-5 py-2.5 border border-white/25 text-white/80 rounded hover:border-white/50 hover:text-white transition-colors"
             >
               Resume
             </Link>
-            <a
-              href="https://t.me/pmvision_ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-sm px-5 py-2.5 border border-white/15 text-white/70 rounded hover:border-[#7C3AED]/60 hover:text-white transition-colors"
-            >
-              Telegram →
-            </a>
           </div>
         </div>
 
-        {/* Photo */}
-        <div className="order-1 md:order-2 shrink-0">
-          <div className="w-44 h-44 md:w-56 md:h-56 rounded-full overflow-hidden border-2 border-[#7C3AED]/40 bg-[#111] flex items-center justify-center">
-            <PhotoAvatar />
-          </div>
+        {/* Scroll hint */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+          <span className="font-mono text-[10px] text-white tracking-[0.2em] uppercase">Scroll</span>
+          <div className="w-px h-8 bg-white/50" />
         </div>
       </section>
 
