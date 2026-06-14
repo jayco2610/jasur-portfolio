@@ -36,6 +36,15 @@ export default function ProjectsPage() {
       link: "https://jasur-portfolio-pied.vercel.app",
       github: "https://github.com/jayco2610/jasur-portfolio",
     },
+    {
+      name: "Personal Brandbook",
+      status: "shipped",
+      stack: ["Canva", "PDF", "GitHub Pages"],
+      description: "10-page brand portfolio covering positioning, experience with real metrics, services with pricing, and project case studies including Expat Roadmap SEA and Portfolio + JasurGPT.",
+      metrics: ["10 pages", "Services with pricing", "Expat Roadmap case study"],
+      link: "/brandbook.pdf",
+      github: "https://github.com/jayco2610/jasur-brandbook",
+    },
   ];
 
   const githubRepos = [
