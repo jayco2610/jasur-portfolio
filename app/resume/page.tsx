@@ -197,6 +197,18 @@ export default function ResumePage() {
             </div>
           ))}
         </div>
+
+        {/* Certificate image */}
+        <div className="mt-6">
+          <p className="font-mono text-[10px] text-white/25 mb-3 tracking-wider">CERTIFICATE PREVIEW</p>
+          <div className="border border-[#1f1f1f] rounded-lg overflow-hidden max-w-xl">
+            <img
+              src="/certificate-deeplearning.png"
+              alt="AI for Product Manager — DeepLearning.AI"
+              className="w-full"
+            />
+          </div>
+        </div>
       </section>
     </div>
   );
