@@ -81,7 +81,7 @@ export default function ResumePage() {
   };
 
   const certifications = [
-    { name: "AI for Product Managers", issuer: "BOS Shelf", year: "2027" },
+    { name: "AI for Product Manager", issuer: "DeepLearning.AI · Coursera", year: "Jun 2025" },
     { name: "CJM and CustDev Tools", issuer: "ProductStar", year: "2026" },
     { name: "Metrics and Models for Project Managers", issuer: "Shelf", year: "2025" },
   ];
