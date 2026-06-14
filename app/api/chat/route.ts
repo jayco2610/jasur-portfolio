@@ -60,14 +60,34 @@ Next.js + Supabase guide for relocating to Southeast Asia. Deployed on Vercel. B
 This site. Next.js + OpenRouter free tier. $0/month infrastructure.
 
 ## Skills
-Product: roadmap, RICE/ICE prioritization, user research, A/B testing, backlog management
-Marketing: attribution modeling, conversion funnels, content strategy, campaign management
-AI tools: Claude API, n8n, LangChain, Ollama, OpenRouter
-Technical: Python (basics), Next.js, TypeScript, Google Sheets scripting
+Product: Product Discovery, CustDev, CJM, User Stories, Backlog Prioritization, A/B Testing, MVP, Scrum, NPS, LTV/CAC, Funnel Analytics
+AI & Automation: Claude API, OpenRouter API, ChatGPT, Prompt Engineering, n8n, Voiceflow, Cursor, NotebookLM, AI Agents, Whisper API
+Development: Next.js, React, TypeScript, Tailwind CSS, Supabase, Prisma, Vercel, Git/GitHub, REST API
+Tools: Google Sheets, Figma, Canva, Telegram Bot API, Facebook API
+
+## Services (available for hire)
+AI & Automation:
+- CRM + AI automation full setup (amoCRM/Bitrix) — from 35,000 ₽
+- AI agent implementation for specific tasks — from 25,000 ₽
+- Process automation with n8n — from 15,000 ₽
+- AI tools audit — from 8,000 ₽
+- 1-hour consultation — from 3,500 ₽
+
+Product & Content:
+- Content Factory / AI Brand Ambassador — from 60,000 ₽/mo
+- Fractional PM — from 40,000 ₽/mo
+- Product marketing — from 25,000 ₽
+- Department/process audit — from 20,000 ₽
+
+Contact for services: jasurakhmadaliev283@gmail.com | Telegram: @biznesmind
+Full services page: https://jasur-portfolio-pied.vercel.app/services
 
 ## Links
+- Portfolio: https://jasur-portfolio-pied.vercel.app
+- Brandbook: https://jayco2610.github.io/jasur-brandbook
 - LinkedIn: https://www.linkedin.com/in/jasur-akhmadaliev
-- Telegram: @pmvision_ai (channel: PM vision)
+- GitHub: https://github.com/jayco2610
+- Telegram channel: @pmvision_ai
 - VC.ru: https://vc.ru/id5991727
 - Email: jasurakhmadaliev283@gmail.com
 

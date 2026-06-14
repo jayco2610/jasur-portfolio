@@ -1,11 +1,20 @@
 export default function WritingPage() {
   const articles = [
     {
+      title: "I Built a Personal AI Assistant on My Own Resume — for $0/month",
+      platform: "LinkedIn / Habr",
+      lang: "EN / RU",
+      description: "How I shipped JasurGPT: Next.js + OpenRouter free tier + 4-model fallback chain. The assistant runs 24/7, knows my full work history, and costs nothing to operate.",
+      status: "next",
+      href: null,
+    },
+    {
       title: "How I Built an AI System for My Own Job Search: Architecture, Tools, Results",
       platform: "Habr",
       lang: "RU",
       description: "Technical breakdown: Claude + n8n + Google Sheets + Telegram. How automation works from vacancy to cover letter.",
       status: "planned",
+      href: null,
     },
     {
       title: "PM Building in Public: Using AI to Job-Hunt at Scale",
@@ -13,6 +22,7 @@ export default function WritingPage() {
       lang: "EN",
       description: "How a PM built a custom AI pipeline for his own job search and what it revealed about modern hiring.",
       status: "planned",
+      href: null,
     },
     {
       title: "Retention Without Budget: What Actually Works",
@@ -20,6 +30,7 @@ export default function WritingPage() {
       lang: "RU",
       description: "Product case: how to improve retention without paid tools, relying on product mechanics.",
       status: "planned",
+      href: null,
     },
   ];
 
@@ -40,11 +51,11 @@ export default function WritingPage() {
         <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">Upcoming</p>
         <div className="space-y-4">
           {articles.map((a) => (
-            <div key={a.title} className="p-5 bg-[#111111] border border-[#1f1f1f] rounded-lg">
+            <div key={a.title} className={`p-5 bg-[#111111] rounded-lg border ${a.status === "next" ? "border-[#7C3AED]/30" : "border-[#1f1f1f]"}`}>
               <div className="flex items-center gap-2 mb-3 flex-wrap">
                 <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white/5 text-white/30 border border-white/10">{a.platform}</span>
                 <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[#1E3A8A]/30 text-blue-300">{a.lang}</span>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-yellow-500/15 text-yellow-400">{a.status}</span>
+                <span className={`font-mono text-[10px] px-2 py-0.5 rounded ${a.status === "next" ? "bg-[#7C3AED]/20 text-[#a78bfa]" : "bg-yellow-500/15 text-yellow-400"}`}>{a.status}</span>
               </div>
               <h3 className="text-white font-semibold text-sm mb-2">{a.title}</h3>
               <p className="text-white/40 text-sm">{a.description}</p>
