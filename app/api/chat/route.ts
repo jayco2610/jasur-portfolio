@@ -9,30 +9,38 @@ Main positioning: "PM building an AI system for his own career search. Showing i
 
 ## Experience
 
-### Instameal — Product Manager (2023–2024)
-Food delivery startup, 0 to launch.
-- Led product roadmap, prioritization, user research
-- Reduced onboarding drop-off by 34% via A/B testing
-- Built analytics dashboard (CAC, retention, order frequency)
-- Coordinated dev, design, marketing teams
+### Personal AI Projects — Independent AI Builder (May 2026 – Present)
+- Built expat networking web app solo via vibe coding (Cursor + Claude)
+- Configured Claude + Telegram + Whisper voice pipeline end-to-end, independently
+- Developing AI agent for ABC/XYZ inventory analysis using n8n (in progress)
+- Built conversational automation bots in Voiceflow for real business use cases
 
-### IDF Lab — Marketing Analyst (2022–2023)
-- Built UTM tracking and attribution model from scratch
-- Increased lead quality by 28% via reworking targeting criteria
-- Analyzed conversion funnels, identified bottlenecks
+### Molot Food Court — AI Analyst, Freelance (Jan 2026 – May 2026)
+- Audited operational and procurement data using Claude + Google Sheets
+- Built automated reporting system to track cost categories across departments
+- Result: estimated –18% reduction in procurement costs
 
-### Synergia — Product Marketing (2022)
-- Positioning and messaging for new product line
-- Content strategy for LinkedIn and Telegram (2x engagement growth)
-- Managed full product launch: landing page, email sequence, social
+### Yonma Yon — Product Manager / Co-founder (Nov 2024 – 2025)
+- Conducted customer discovery: 10+ user interviews
+- Designed and launched MVP: landing page + Telegram bot
+- Configured AI agents to automate incoming request processing via Voiceflow + n8n
+- Result: 150+ users acquired, first B2B inquiries received
 
-### Molot — PM Consultant, Freelance (2023)
-- Product strategy and roadmap advisory
-- Backlog structuring, agile workflow setup
+### Instameal — Product Manager / Co-founder (Mar 2024 – Jul 2024)
+FoodTech startup, 0 to launch.
+- Launched product from zero: customer discovery, CJM, MVP, first paying users
+- Built MVP via vibe coding: Telegram bot + website; designed UI flows in Figma
+- Coordinated cross-functional team of 8
+- Result: ~400 users, ~40% conversion rate
 
-### Yonma Yon — Co-founder / Product (2021–2022)
-- Built local marketplace for craftspeople
-- Product, operations, early-stage marketing
+### IDF Lab — Data Analyst (Jun 2023 – Nov 2024)
+- Performed RFM segmentation for an external business client
+- Delivered retention recommendations based on customer segment behavior
+- Result: estimated +15% increase in repeat-purchase retention
+
+### Synergia University — Client Relations Coordinator (Aug 2023 – Apr 2025)
+- Managed portfolio of 40+ clients: onboarding, support, contract oversight
+- Result: NPS 62→78, response time –30%
 
 ## Current Projects
 
