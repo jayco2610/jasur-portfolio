@@ -78,6 +78,10 @@ export default function ResumePage() {
               className="font-mono text-xs text-[#a78bfa] hover:text-white transition-colors">
               VC.ru →
             </a>
+            <a href="https://github.com/jayco2610" target="_blank" rel="noopener noreferrer"
+              className="font-mono text-xs text-[#a78bfa] hover:text-white transition-colors">
+              GitHub →
+            </a>
           </div>
         </div>
         <a
@@ -113,7 +117,7 @@ export default function ResumePage() {
       </section>
 
       {/* Skills */}
-      <section>
+      <section className="mb-14">
         <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">Skills</p>
         <div className="grid sm:grid-cols-2 gap-6">
           {Object.entries(skills).map(([category, items]) => (
@@ -128,6 +132,22 @@ export default function ResumePage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Certifications */}
+      <section>
+        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">Certifications</p>
+        <div className="space-y-3">
+          <div className="flex items-center gap-4 p-4 bg-[#111111] border border-[#1f1f1f] rounded-lg">
+            <div className="w-8 h-8 bg-[#7C3AED]/15 rounded flex items-center justify-center shrink-0">
+              <span className="font-mono text-[10px] text-[#a78bfa] font-bold">AI</span>
+            </div>
+            <div>
+              <p className="font-mono text-sm text-white font-bold">Deep Learning AI Specialization</p>
+              <p className="font-mono text-[10px] text-white/35 mt-0.5">deeplearning.ai · Issued 2024</p>
+            </div>
+          </div>
         </div>
       </section>
     </div>

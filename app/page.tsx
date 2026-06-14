@@ -62,24 +62,28 @@ export default function Home() {
                 status: "live",
                 desc: "End-to-end job search automation. Claude + n8n + Google Sheets + Telegram. Vacancy in → cover letter out in under 60 seconds.",
                 tags: ["Claude", "n8n", "Telegram"],
+                link: null,
               },
               {
                 name: "Expat Roadmap SEA",
                 status: "shipped",
                 desc: "Full-stack guide for relocating to Southeast Asia. Next.js + Supabase, built and deployed solo.",
                 tags: ["Next.js", "Supabase", "Vercel"],
+                link: "https://expat-roadmap-sea.vercel.app",
               },
               {
                 name: "RAG Starter",
                 status: "in progress",
                 desc: "Open-source retrieval-augmented generation template. Gemini API + Ollama. Built for AI consulting.",
                 tags: ["Python", "LangChain", "Ollama"],
+                link: null,
               },
               {
                 name: "Portfolio + JasurGPT",
                 status: "live",
                 desc: "This site. AI chat trained on full context — resume, projects, experience. Ask using the button below.",
                 tags: ["Next.js", "OpenRouter", "Vercel"],
+                link: null,
               },
             ].map((p) => (
               <div
@@ -99,12 +103,20 @@ export default function Home() {
                   </span>
                 </div>
                 <p className="text-sm text-white/50 leading-relaxed mb-4">{p.desc}</p>
-                <div className="flex gap-2 flex-wrap">
-                  {p.tags.map((t) => (
-                    <span key={t} className="font-mono text-[10px] px-2 py-1 bg-white/5 text-white/40 rounded">
-                      {t}
-                    </span>
-                  ))}
+                <div className="flex items-center justify-between gap-4 flex-wrap">
+                  <div className="flex gap-2 flex-wrap">
+                    {p.tags.map((t) => (
+                      <span key={t} className="font-mono text-[10px] px-2 py-1 bg-white/5 text-white/40 rounded">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  {p.link && (
+                    <a href={p.link} target="_blank" rel="noopener noreferrer"
+                      className="font-mono text-[10px] text-[#a78bfa] hover:text-white transition-colors shrink-0">
+                      Live →
+                    </a>
+                  )}
                 </div>
               </div>
             ))}
