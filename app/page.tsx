@@ -16,16 +16,16 @@ export default function Home() {
 
         {/* Hero text */}
         <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
-          <h1 className="font-mono text-5xl md:text-7xl font-bold text-[#a78bfa] mb-8 leading-none">
+          <h1 className="hero-title font-mono text-5xl md:text-7xl font-bold text-[#a78bfa] mb-8 leading-none">
             Welcome.
           </h1>
-          <p className="font-mono text-base md:text-lg text-white leading-relaxed">
+          <p className="hero-text font-mono text-base md:text-lg text-white leading-relaxed">
             I&apos;m Jasur Akhmadaliev — AI Product Manager from Tashkent.
             Building digital products hands-on: from customer discovery to live users.
             Scroll the cards below to see my projects,
             or ask <span className="text-[#a78bfa]">JasurGPT</span> in the corner anything about my work.
           </p>
-          <div className="mt-10 flex gap-3 justify-center flex-wrap">
+          <div className="hero-buttons mt-10 flex gap-3 justify-center flex-wrap">
             <Link
               href="/projects"
               className="font-mono text-sm px-5 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors"
@@ -42,7 +42,7 @@ export default function Home() {
         </div>
 
         {/* Scroll hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+        <div className="hero-scroll absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
           <span className="font-mono text-[10px] text-white tracking-[0.2em] uppercase">Scroll</span>
           <div className="w-px h-8 bg-white/50" />
         </div>

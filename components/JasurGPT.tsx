@@ -54,7 +54,7 @@ export default function JasurGPT() {
       {/* Floating button */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="fixed bottom-6 right-6 z-50 font-mono text-xs px-4 py-3 bg-[#7C3AED] text-white rounded-lg shadow-lg hover:bg-[#6d28d9] transition-colors flex items-center gap-2"
+        className="gpt-button fixed bottom-6 right-6 z-50 font-mono text-xs px-4 py-3 bg-[#7C3AED] text-white rounded-lg shadow-lg hover:bg-[#6d28d9] transition-colors flex items-center gap-2"
       >
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
         Ask JasurGPT

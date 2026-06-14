@@ -21,15 +21,16 @@ export default function Nav() {
           jasur.dev
         </Link>
         <ul className="flex gap-8 font-mono text-xs">
-          {links.map(({ href, label }) => (
+          {links.map(({ href, label }, i) => (
             <li key={href}>
               <Link
                 href={href}
-                className={
+                className={`nav-link ${
                   pathname === href
                     ? "text-[#a78bfa]"
                     : "text-white/40 hover:text-white transition-colors"
-                }
+                }`}
+                style={{ animationDelay: `${i * 120}ms` }}
               >
                 {label}
               </Link>
