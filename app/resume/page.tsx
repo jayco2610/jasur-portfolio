@@ -137,6 +137,36 @@ export default function ResumePage() {
         </div>
       </section>
 
+      {/* Certifications */}
+      <section className="mb-14">
+        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">Certifications</p>
+        <div className="space-y-3">
+          {certifications.map((c) => (
+            <div key={c.name} className="flex items-center gap-4 p-4 bg-[#111111] border border-[#1f1f1f] rounded-lg">
+              <div className="w-8 h-8 bg-[#7C3AED]/15 rounded flex items-center justify-center shrink-0">
+                <span className="font-mono text-[10px] text-[#a78bfa] font-bold">AI</span>
+              </div>
+              <div>
+                <p className="font-mono text-sm text-white font-bold">{c.name}</p>
+                <p className="font-mono text-[10px] text-white/35 mt-0.5">{c.issuer} · {c.year}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Certificate image */}
+        <div className="mt-6">
+          <p className="font-mono text-[10px] text-white/25 mb-3 tracking-wider">CERTIFICATE PREVIEW</p>
+          <div className="border border-[#1f1f1f] rounded-lg overflow-hidden max-w-xl">
+            <img
+              src="/certificate-deeplearning.png"
+              alt="AI for Product Manager — DeepLearning.AI"
+              className="w-full"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* Experience */}
       <section className="mb-14">
         <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-8">Experience</p>
@@ -181,35 +211,6 @@ export default function ResumePage() {
         </div>
       </section>
 
-      {/* Certifications */}
-      <section>
-        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">Certifications</p>
-        <div className="space-y-3">
-          {certifications.map((c) => (
-            <div key={c.name} className="flex items-center gap-4 p-4 bg-[#111111] border border-[#1f1f1f] rounded-lg">
-              <div className="w-8 h-8 bg-[#7C3AED]/15 rounded flex items-center justify-center shrink-0">
-                <span className="font-mono text-[10px] text-[#a78bfa] font-bold">AI</span>
-              </div>
-              <div>
-                <p className="font-mono text-sm text-white font-bold">{c.name}</p>
-                <p className="font-mono text-[10px] text-white/35 mt-0.5">{c.issuer} · {c.year}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Certificate image */}
-        <div className="mt-6">
-          <p className="font-mono text-[10px] text-white/25 mb-3 tracking-wider">CERTIFICATE PREVIEW</p>
-          <div className="border border-[#1f1f1f] rounded-lg overflow-hidden max-w-xl">
-            <img
-              src="/certificate-deeplearning.png"
-              alt="AI for Product Manager — DeepLearning.AI"
-              className="w-full"
-            />
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
