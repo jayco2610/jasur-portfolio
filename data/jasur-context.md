@@ -108,6 +108,9 @@ Full AI infrastructure for a company. Model selection based on task requirements
 ### AI Setup for a Department
 AI configuration for a specific department — PM team, marketing, or customer support. Task audit, model selection (Claude, ChatGPT, or local), workflow and prompt setup, team training. 2–3 weeks from kickoff to working result. From 30,000 ₽.
 
+### RAG Assistant on Your Data
+Turns a company's documents, knowledge base, or product catalog into an assistant that answers only from that data — no made-up facts. Handles client and staff questions about services, pricing, policies, and procedures. Live example: Mia, a dental clinic assistant deployed on Hugging Face (https://huggingface.co/spaces/rag-jasur/mia-clinic-assistant). From 40,000 ₽.
+
 ### CRM + AI Automation — Full Setup
 CRM (amoCRM or Bitrix) with an AI layer: sales funnel and deal stages, database import, basic automation (3 scenarios), AI agent for incoming requests, integration with Telegram or WhatsApp. From 35,000 ₽.
 

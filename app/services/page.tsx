@@ -19,6 +19,15 @@ export default function ServicesPage() {
       tag: "New",
     },
     {
+      price: "from 40,000 ₽",
+      name: "RAG Assistant on Your Data",
+      sub: "Knowledge base → 24/7 assistant",
+      description:
+        "Turn your company's documents, knowledge base, or product catalog into an assistant that answers only from your data — no made-up facts. Handles client and staff questions about services, pricing, policies, and procedures. Live example: Mia, a dental clinic assistant deployed on Hugging Face.",
+      featured: true,
+      tag: "RAG",
+    },
+    {
       price: "from 35,000 ₽",
       name: "CRM + AI Automation — Full Setup",
       sub: "amoCRM / Bitrix",
