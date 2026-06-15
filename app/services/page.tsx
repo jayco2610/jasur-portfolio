@@ -1,6 +1,24 @@
 export default function ServicesPage() {
   const automation = [
     {
+      price: "discussed individually",
+      name: "Corporate AI Stack",
+      sub: "Claude · ChatGPT · Local Models",
+      description:
+        "Full AI infrastructure for a company: model selection based on task requirements and data security, API integrations, employee training, internal documentation. Works with cloud solutions (Claude Enterprise, ChatGPT Team) and local models (Ollama). Result: the team saves 1–2 hours per person per day.",
+      featured: true,
+      tag: "Enterprise",
+    },
+    {
+      price: "from 30,000 ₽",
+      name: "AI Setup for a Department",
+      sub: "PM · Marketing · Support",
+      description:
+        "Configure AI for a specific team: audit current tasks, select the right model, set up workflows and prompts, train the team. 2–3 weeks from kickoff to working result. Claude, ChatGPT, or local tools — depending on your requirements and data policy.",
+      featured: false,
+      tag: "New",
+    },
+    {
       price: "from 35,000 ₽",
       name: "CRM + AI Automation — Full Setup",
       sub: "amoCRM / Bitrix",
@@ -115,7 +133,14 @@ export default function ServicesPage() {
                   <span className="font-mono text-xs text-white/30 ml-2">· {s.sub}</span>
                 )}
               </div>
-              <p className="font-mono text-sm font-bold text-white mb-2">{s.name}</p>
+              <div className="flex items-center gap-2 mb-2">
+                <p className="font-mono text-sm font-bold text-white">{s.name}</p>
+                {s.tag && (
+                  <span className="font-mono text-[9px] text-[#a78bfa] border border-[#7C3AED]/40 rounded px-1.5 py-0.5 uppercase tracking-wider">
+                    {s.tag}
+                  </span>
+                )}
+              </div>
               <p className="text-white/50 text-sm leading-relaxed">{s.description}</p>
             </div>
           ))}
