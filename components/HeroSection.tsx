@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const TITLE = "Welcome.";
 const BIO =
-  "I'm Jasur Akhmadaliev — AI Product Manager from Tashkent.\nBuilding digital products hands-on: from customer discovery to live users.\nScroll the cards below to see my projects, or ask JasurGPT in the corner anything about my work.";
+  "Hi — I'm Jasur, AI Product Manager from Tashkent.\nI build and ship digital products solo: from discovery to live users.\nUse the menu above to explore my projects, resume, and services.\nAny questions? Ask JasurGPT — the button in the corner knows everything about me.";
 const MARKER = "JasurGPT";
 
 function renderBio(text: string) {
