@@ -2,22 +2,24 @@
 
 import { useState, useEffect, useRef } from "react";
 
+// Module-level flag: resets on hard refresh, persists across client navigation
+let hasEntered = false;
+
 export default function SiteEntrance() {
   const [visible, setVisible] = useState(false);
   const [fading, setFading] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Show only if not already entered this session
-    const entered = sessionStorage.getItem("site_entered");
-    if (!entered) setVisible(true);
+    if (!hasEntered) setVisible(true);
   }, []);
 
   const enter = () => {
     if (fading) return;
+    hasEntered = true;
     setFading(true);
 
-    // Play audio
+    // Play audio after click — browser allows it
     try {
       const audio = new Audio("/intro.mp3");
       audio.volume = 1;
@@ -25,9 +27,7 @@ export default function SiteEntrance() {
       audio.play().catch(() => {});
     } catch {}
 
-    // Fade out overlay then hide
     setTimeout(() => setVisible(false), 800);
-    sessionStorage.setItem("site_entered", "1");
   };
 
   if (!visible) return null;
@@ -40,7 +40,6 @@ export default function SiteEntrance() {
       }`}
       style={{ background: "rgba(10,10,10,0.97)" }}
     >
-      {/* Pulsing ring */}
       <div className="relative mb-10">
         <div className="absolute inset-0 rounded-full bg-[#7C3AED]/20 animate-ping" style={{ animationDuration: "2s" }} />
         <div className="w-20 h-20 rounded-full border border-[#7C3AED]/50 flex items-center justify-center">
@@ -51,7 +50,6 @@ export default function SiteEntrance() {
           </svg>
         </div>
       </div>
-
       <p className="font-mono text-white text-lg tracking-[0.15em] mb-3">JASUR.DEV</p>
       <p className="font-mono text-white/40 text-xs tracking-[0.3em] uppercase animate-pulse">
         Click anywhere to enter
