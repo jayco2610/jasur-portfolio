@@ -29,11 +29,11 @@ export default function Home() {
                 link: "https://expat-roadmap-sea.vercel.app",
               },
               {
-                name: "RAG Starter",
-                status: "in progress",
-                desc: "Open-source retrieval-augmented generation template. Gemini API + Ollama. Built for AI consulting.",
-                tags: ["Python", "LangChain", "Ollama"],
-                link: null,
+                name: "Mia — Clinic RAG Assistant",
+                status: "live",
+                desc: "Retrieval-augmented assistant for a dental clinic. Answers patient questions from the clinic's own documents — grounded, no made-up facts. Live on Hugging Face.",
+                tags: ["Python", "RAG", "LangChain"],
+                link: "https://huggingface.co/spaces/rag-jasur/mia-clinic-assistant",
               },
               {
                 name: "Portfolio + JasurGPT",

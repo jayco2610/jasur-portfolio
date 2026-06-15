@@ -23,6 +23,7 @@ export default function SiteEntrance() {
     try {
       const audio = new Audio("/intro.mp3");
       audio.volume = 1;
+      audio.playbackRate = 1.4;
       audioRef.current = audio;
       audio.play().catch(() => {});
     } catch {}

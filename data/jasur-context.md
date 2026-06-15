@@ -47,14 +47,14 @@ I built a system using Claude (Anthropic), n8n, and Google Sheets that automates
 
 This is my main portfolio proof of PM + AI skills working together.
 
-### RAG Starter (in progress)
-Open-source RAG (Retrieval-Augmented Generation) template using:
-- Gemini API for generation
-- Ollama for local LLM option
-- LangChain for orchestration
-- GitHub: rag-starter repo (coming soon)
+### Mia — Dental Clinic RAG Assistant (live)
+A working RAG (Retrieval-Augmented Generation) assistant for a dental clinic, deployed live on Hugging Face Spaces.
+- Answers patient questions about services, pricing, hours, and procedures
+- Pulls answers only from the clinic's own documents — grounded responses, no hallucinations
+- Built with Python, LangChain, and a RAG pipeline (retrieval + generation)
+- Live demo: https://huggingface.co/spaces/rag-jasur/mia-clinic-assistant
 
-Built as a portfolio piece for AI consulting in the dental clinic niche.
+This is the proof-of-concept for Jasur's AI consulting offer in the dental niche: turning a clinic's documents into a 24/7 assistant that answers patients accurately.
 
 ### Expat Roadmap SEA (shipped)
 Next.js app with Supabase backend. A practical guide for people relocating to Southeast Asia.

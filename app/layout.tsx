@@ -3,7 +3,6 @@ import { Space_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import JasurGPT from "@/components/JasurGPT";
-import SiteEntrance from "@/components/SiteEntrance";
 
 const spaceMono = Space_Mono({
   weight: ["400", "700"],
@@ -39,7 +38,6 @@ export default function RootLayout({
       className={`${spaceMono.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#e8e8e8]">
-        <SiteEntrance />
         <Nav />
         <main className="flex-1">{children}</main>
         <footer className="border-t border-white/5 py-8 text-center text-xs font-mono text-white/30">
