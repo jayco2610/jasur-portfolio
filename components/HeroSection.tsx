@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const TITLE = "Welcome.";
 const BIO =
   "Hi — I'm Jasur, AI Product Manager from Tashkent.\nI build and ship digital products solo: from discovery to live users.\nUse the menu above to explore my projects, resume, and services.\nAny questions? Ask JasurGPT — the button in the corner knows everything about me.";
-const VOICE_TEXT =
-  "Hi. I'm Jasur — AI Product Manager from Tashkent. I build and ship digital products solo, from discovery to live users. Use the menu above to explore my projects, resume, and services. Any questions? Ask JasurGPT — the button in the corner knows everything about me.";
 const MARKER = "JasurGPT";
 
 function renderBio(text: string) {
@@ -22,21 +20,6 @@ function renderBio(text: string) {
   );
 }
 
-function SpeakerIcon({ speaking }: { speaking: boolean }) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-      {speaking ? (
-        <>
-          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-        </>
-      ) : (
-        <line x1="23" y1="9" x2="17" y2="15" />
-      )}
-    </svg>
-  );
-}
 
 export default function HeroSection() {
   const [titleText, setTitleText] = useState("");
@@ -44,8 +27,6 @@ export default function HeroSection() {
   const [titleDone, setTitleDone] = useState(false);
   const [bioDone, setBioDone] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // Type title
   useEffect(() => {
@@ -83,56 +64,6 @@ export default function HeroSection() {
     return () => clearTimeout(t);
   }, [bioDone]);
 
-  // Stop speech on unmount
-  useEffect(() => {
-    return () => { if (typeof window !== "undefined") window.speechSynthesis?.cancel(); };
-  }, []);
-
-  const toggleVoice = useCallback(() => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-
-    if (speaking) {
-      window.speechSynthesis.cancel();
-      setSpeaking(false);
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(VOICE_TEXT);
-    utterance.lang = "en-US";
-    utterance.rate = 0.82;
-    utterance.pitch = 0.75;
-    utterance.volume = 1;
-
-    // Pick the best available voice (JARVIS-like: deep, clear English)
-    const trySetVoice = () => {
-      const voices = window.speechSynthesis.getVoices();
-      const preferred = [
-        "Daniel",        // macOS — sounds closest to JARVIS
-        "Aaron",
-        "Fred",
-        "Alex",
-        "Samantha",
-        "Google UK English Male",
-        "Google US English",
-      ];
-      for (const name of preferred) {
-        const match = voices.find((v) => v.name === name && /en/i.test(v.lang));
-        if (match) { utterance.voice = match; break; }
-      }
-    };
-
-    if (window.speechSynthesis.getVoices().length > 0) {
-      trySetVoice();
-    } else {
-      window.speechSynthesis.addEventListener("voiceschanged", trySetVoice, { once: true });
-    }
-
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-    utteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
-    setSpeaking(true);
-  }, [speaking]);
 
   return (
     <section className="relative h-[100dvh] min-h-[600px] flex items-center justify-center overflow-hidden">
@@ -154,41 +85,13 @@ export default function HeroSection() {
           )}
         </p>
 
-        <div className={`mt-10 flex gap-3 justify-center flex-wrap items-center transition-opacity duration-700 ${showButtons ? "opacity-100" : "opacity-0"}`}>
+        <div className={`mt-10 flex gap-3 justify-center flex-wrap transition-opacity duration-700 ${showButtons ? "opacity-100" : "opacity-0"}`}>
           <Link href="/projects" className="font-mono text-sm px-5 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors">
             View projects
           </Link>
           <Link href="/resume" className="font-mono text-sm px-5 py-2.5 border border-white/25 text-white/80 rounded hover:border-white/50 hover:text-white transition-colors">
             Resume
           </Link>
-
-          {/* Voice button */}
-          <button
-            onClick={toggleVoice}
-            title={speaking ? "Stop" : "Play intro"}
-            className={`flex items-center gap-2 font-mono text-xs px-4 py-2.5 rounded border transition-all duration-300 ${
-              speaking
-                ? "border-[#a78bfa] text-[#a78bfa] bg-[#7C3AED]/10"
-                : "border-white/20 text-white/50 hover:border-white/40 hover:text-white/80"
-            }`}
-          >
-            <span className={`flex items-center ${speaking ? "[&>svg]:drop-shadow-[0_0_6px_rgba(167,139,250,0.8)]" : ""}`}>
-              <SpeakerIcon speaking={speaking} />
-            </span>
-            {speaking ? (
-              <span className="flex gap-[3px] items-end h-3">
-                {[0, 1, 2, 3].map((i) => (
-                  <span
-                    key={i}
-                    className="w-[2px] bg-[#a78bfa] rounded-full animate-bounce"
-                    style={{ height: `${8 + i * 3}px`, animationDelay: `${i * 0.1}s` }}
-                  />
-                ))}
-              </span>
-            ) : (
-              <span>Play intro</span>
-            )}
-          </button>
         </div>
       </div>
 
