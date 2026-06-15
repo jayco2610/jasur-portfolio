@@ -40,19 +40,6 @@ export default function ResumePage() {
       skills: "CustDev, CJM, MVP, Voiceflow, n8n, NotebookLM, ChatGPT, Telegram Bot API",
     },
     {
-      role: "Product Manager / Co-founder",
-      company: "Instameal — FoodTech Startup",
-      period: "Mar 2024 – Jul 2024",
-      bullets: [
-        "Launched product from zero: customer discovery, CJM, MVP development, first paying users",
-        "Built MVP via vibe coding: Telegram bot + website; designed UI flows in Figma",
-        "Set up conversion funnel and product metrics dashboard; tested user activation mechanics",
-        "Coordinated cross-functional team of 8 across logistics, development, and marketing",
-        "Result: ~400 users, ~40% conversion rate",
-      ],
-      skills: "CustDev, CJM, Figma, Telegram Bot API, Product Metrics, Scrum, AI Research",
-    },
-    {
       role: "Data Analyst",
       company: "IDF Lab — Analytics Project (HSE)",
       period: "Jun 2023 – Nov 2024",
@@ -73,8 +60,23 @@ export default function ResumePage() {
         "Monitored timelines and quality across concurrent accounts; kept clients updated throughout",
         "Used Claude and ChatGPT to accelerate document preparation and data structuring",
         "Result: 3 projects on time with no delays, NPS 62→78, response time –30%",
+        "Presented process improvements at internal team meetup",
       ],
-      skills: "Client Management, Requirements Gathering, Google Sheets, Claude, ChatGPT, Documentation",
+      skills: "Client Management, Requirements Gathering, Excel, Google Sheets, Claude, ChatGPT, Documentation",
+    },
+    {
+      role: "Product Manager / Co-founder",
+      company: "Instameal — FoodTech Startup",
+      period: "Mar 2024 – Jul 2024",
+      bullets: [
+        "Launched product from zero: customer discovery, CJM, MVP development, first paying users",
+        "Built MVP via vibe coding: Telegram bot + website; designed UI flows in Figma",
+        "Set up conversion funnel and product metrics dashboard; tested user activation mechanics",
+        "Coordinated cross-functional team of 8 across logistics, development, and marketing",
+        "Used AI for hypothesis generation and product research",
+        "Result: ~400 users, ~40% conversion rate",
+      ],
+      skills: "CustDev, CJM, Figma, Telegram Bot API, Product Metrics, Scrum, AI Research",
     },
   ];
 
