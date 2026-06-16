@@ -29,13 +29,6 @@ export default function WritingPage() {
       href: "https://medium.com/@jasurakhmadaliev283/the-pm-ai-stack-that-actually-works-and-why-95-of-teams-miss-it-9fb5e3b46c4f",
     },
     {
-      title: "Google Killed the Search Box at I/O 2026. Here's What It Means for Product Teams",
-      platform: "Medium",
-      lang: "EN",
-      description: "How the Google I/O 2026 announcements reshape search and traffic, and what product teams should do about it.",
-      href: "https://medium.com/@jasurakhmadaliev283/google-killed-the-search-box-at-i-o-2026-heres-what-it-means-for-product-teams-50d37a954ed7",
-    },
-    {
       title: "The NASA Trick Product Managers Almost Never Use",
       platform: "Medium",
       lang: "EN",
