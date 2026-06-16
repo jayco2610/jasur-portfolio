@@ -1,83 +1,70 @@
 export default function WritingPage() {
   const published = [
     {
-      title: "PM и AI в 2025: статистика, инструменты и разрыв между использованием и результатом",
-      platform: "VC.ru",
-      lang: "RU",
-      description: "94% продакт-менеджеров используют AI. Разбор по этапам: discovery, приоритизация, PRD, аналитика — и почему адаптация не равна результату.",
-      href: "https://vc.ru/id5991727/2980172-prodakt-menedzhery-i-ai-instrumenty-statistika-i-razryv-v-ispolzovanii",
+      title: "The PM AI Stack That Actually Works (And Why 95% of Teams Miss It)",
+      platform: "Medium",
+      lang: "EN",
+      description: "The AI tools product managers actually use across discovery, prioritization, PRDs, and analytics — and the gap between adopting AI and getting results.",
+      href: "https://medium.com/@jasurakhmadaliev283/the-pm-ai-stack-that-actually-works-and-why-95-of-teams-miss-it-9fb5e3b46c4f",
     },
     {
-      title: "Google сломал SEO на Google I/O 2026. Что делать бизнесу",
-      platform: "VC.ru",
-      lang: "RU",
-      description: "Как анонсы Google I/O 2026 меняют поиск и трафик, и что это значит для бизнеса, который жил на SEO.",
-      href: "https://vc.ru/id5991727/2980099-google-slomal-seo-na-google-i-o-2026-chto-delat-biznesu",
+      title: "Google Killed the Search Box at I/O 2026. Here's What It Means for Product Teams",
+      platform: "Medium",
+      lang: "EN",
+      description: "How the Google I/O 2026 announcements reshape search and traffic, and what product teams should do about it.",
+      href: "https://medium.com/@jasurakhmadaliev283/google-killed-the-search-box-at-i-o-2026-heres-what-it-means-for-product-teams-50d37a954ed7",
+    },
+    {
+      title: "The NASA Trick Product Managers Almost Never Use",
+      platform: "Medium",
+      lang: "EN",
+      description: "A structured thinking technique borrowed from NASA that most PMs overlook when making decisions under uncertainty.",
+      href: "https://medium.com/@jasurakhmadaliev283/the-nasa-trick-product-managers-almost-never-use-67156efea126",
+    },
+    {
+      title: "The Customers You Already Have Are the Ones You Are Losing",
+      platform: "Medium",
+      lang: "EN",
+      description: "Why retention beats acquisition, and the quiet ways companies lose the customers they already paid to win.",
+      href: "https://medium.com/@jasurakhmadaliev283/the-customers-you-already-have-are-the-ones-you-are-losing-c69461b648f8",
+    },
+    {
+      title: "Your Best Thinking Happens Before You Start Writing",
+      platform: "Medium",
+      lang: "EN",
+      description: "How voice and AI capture better thinking than typing, and why input speed shapes the quality of your ideas.",
+      href: "https://medium.com/@jasurakhmadaliev283/your-best-thinking-happens-before-you-start-writing-0eb0f35df9c7",
     },
     {
       title: "Fable 5 за 36 часов: запуск, скандал, запрет. Что это значит для бизнеса на AI",
       platform: "VC.ru",
       lang: "RU",
-      description: "Разбор запуска новой модели без пресс-релиза: что произошло за 36 часов и какие выводы для тех, кто строит продукты на AI.",
+      description: "Launch, controversy, and restriction of a new AI model in 36 hours, and what it means for businesses building on AI.",
       href: "https://vc.ru/id5991727/2977300-fable-5-zapusk-skandal-posledstviya-dlya-biznesa-na-ai",
-    },
-    {
-      title: "+15% повторных продаж за квартал — без новой рекламы, через RFM-анализ",
-      platform: "VC.ru",
-      lang: "RU",
-      description: "Продуктовый кейс: три сегмента в Excel вместо новых бюджетов. Как RFM-анализ поднял повторные продажи без привлечения новых клиентов.",
-      href: "https://vc.ru/id5991727/2972334-povtornye-prodazhi-na-15-bez-novoy-reklamy-s-pomoshchyu-rfm-analiza",
-    },
-    {
-      title: "Вы говорите 130 слов в минуту, печатаете 40. В этой разнице теряется ваше лучшее мышление",
-      platform: "VC.ru",
-      lang: "RU",
-      description: "Как голосовые заметки и AI помогают думать быстрее и глубже, чем текст, и почему скорость ввода влияет на качество мысли.",
-      href: "https://vc.ru/id5991727/2972189-kak-uluchshit-mishlenie-s-pomoshchyu-golosovykh-zametok-i-ai",
     },
     {
       title: "Я потратил 8 месяцев на продукт, который никому не был нужен. Вот где была ошибка",
       platform: "VC.ru",
       lang: "RU",
-      description: "Личный кейс провала: маркетплейс для репетиторов и студентов, 8 месяцев работы и настоящая причина, по которой он не взлетел.",
+      description: "A personal failure case: eight months building a marketplace nobody needed, and the real mistake behind it.",
       href: "https://vc.ru/id5991727/2968908-oshibka-v-sozdanii-marketpleysa-dlya-repetitorov-i-studentov",
     },
     {
-      title: "Зачем мне Perplexity, если есть Google? Отвечу — но ответ не тот, которого вы ждёте",
+      title: "+15% повторных продаж за квартал — без новой рекламы, через RFM-анализ",
       platform: "VC.ru",
       lang: "RU",
-      description: "Когда Perplexity реально выигрывает у Google, а когда нет. Практическое сравнение двух подходов к поиску.",
-      href: "https://vc.ru/id5991727/2968896-perspektivy-ispolzovaniya-perplexity-i-google",
-    },
-    {
-      title: "Удержать клиента в 5–7 раз дешевле привлечения. Почему компании делают наоборот?",
-      platform: "VC.ru",
-      lang: "RU",
-      description: "Почему бизнес вкладывается в привлечение вместо удержания, хотя retention дешевле, и что с этим делать.",
-      href: "https://vc.ru/id5991727/2967728-uderzhanie-klienta-vazhnee-privlecheniya",
-    },
-  ];
-
-  const upcoming = [
-    {
-      title: "I Built a Personal AI Assistant on My Own Resume — for $0/month",
-      platform: "LinkedIn / Habr",
-      lang: "EN / RU",
-      description: "How I shipped JasurGPT: Next.js + OpenRouter free tier + 4-model fallback chain. Runs 24/7, knows my full work history, costs nothing.",
-    },
-    {
-      title: "How I Built an AI System for My Own Job Search: Architecture, Tools, Results",
-      platform: "Habr",
-      lang: "RU",
-      description: "Technical breakdown: Claude + n8n + Google Sheets + Telegram. How automation works from vacancy to cover letter.",
+      description: "Product case: +15% repeat sales in a quarter using RFM segmentation in Excel, with no new ad budget.",
+      href: "https://vc.ru/id5991727/2972334-povtornye-prodazhi-na-15-bez-novoy-reklamy-s-pomoshchyu-rfm-analiza",
     },
   ];
 
   const channels = [
     { name: "Telegram @pmvision_ai", description: "Main hub. AI tools, PM thinking, job search diary.", href: "https://t.me/pmvision_ai" },
-    { name: "VC.ru", description: "Business cases and product thinking in Russian.", href: "https://vc.ru/id5991727" },
+    { name: "Medium", description: "Long-form product and AI articles in English.", href: "https://medium.com/@jasurakhmadaliev283" },
     { name: "LinkedIn", description: "Professional content in English. PM cases and AI updates.", href: "https://www.linkedin.com/in/jasur-akhmadaliev" },
-    { name: "Habr", description: "Deep technical and product articles in Russian.", href: null },
+    { name: "VC.ru", description: "Business cases and product thinking in Russian.", href: "https://vc.ru/id5991727" },
+    { name: "Habr", description: "Deep technical and product articles in Russian.", href: "https://habr.com/ru/users/Akhmadaliev/" },
+    { name: "X", description: "Short-form English distribution.", href: "https://x.com/Jasur1651Jasur" },
   ];
 
   return (
@@ -102,29 +89,11 @@ export default function WritingPage() {
                 <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white/5 text-white/30 border border-white/10">{a.platform}</span>
                 <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[#1E3A8A]/30 text-blue-300">{a.lang}</span>
                 <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400">published</span>
-                <span className="font-mono text-[10px] text-[#a78bfa] ml-auto opacity-0 group-hover:opacity-100 transition-opacity">Read on VC.ru →</span>
+                <span className="font-mono text-[10px] text-[#a78bfa] ml-auto opacity-0 group-hover:opacity-100 transition-opacity">Read {a.platform === "Medium" ? "on Medium" : "on VC.ru"} →</span>
               </div>
               <h3 className="text-white font-semibold text-sm mb-2 group-hover:text-[#a78bfa] transition-colors">{a.title}</h3>
               <p className="text-white/40 text-sm">{a.description}</p>
             </a>
-          ))}
-        </div>
-      </section>
-
-      {/* Upcoming */}
-      <section className="mb-16">
-        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">Upcoming</p>
-        <div className="space-y-4">
-          {upcoming.map((a) => (
-            <div key={a.title} className="p-5 bg-[#111111] rounded-lg border border-[#1f1f1f]">
-              <div className="flex items-center gap-2 mb-3 flex-wrap">
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white/5 text-white/30 border border-white/10">{a.platform}</span>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[#1E3A8A]/30 text-blue-300">{a.lang}</span>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-yellow-500/15 text-yellow-400">planned</span>
-              </div>
-              <h3 className="text-white font-semibold text-sm mb-2">{a.title}</h3>
-              <p className="text-white/40 text-sm">{a.description}</p>
-            </div>
           ))}
         </div>
       </section>
