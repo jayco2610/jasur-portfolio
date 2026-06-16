@@ -21,11 +21,11 @@ export default function ProjectsPage() {
     {
       name: "Mia — Dental Clinic RAG Assistant",
       status: "live",
-      stack: ["Python", "RAG", "LangChain", "Hugging Face"],
+      stack: ["Python", "RAG", "Groq", "Gradio", "Hugging Face"],
       description: "A retrieval-augmented assistant for a dental clinic. Answers patient questions about services, pricing, hours, and procedures from the clinic's own documents — grounded answers only, no made-up facts. Deployed live on Hugging Face Spaces as a working demo for AI consulting in the dental niche.",
       metrics: ["Live demo on Hugging Face Spaces", "Answers grounded in clinic documents", "Built for dental AI consulting"],
       link: "https://huggingface.co/spaces/rag-jasur/mia-clinic-assistant",
-      github: null,
+      github: "https://github.com/jayco2610/rag-starter",
     },
     {
       name: "Portfolio + JasurGPT",
