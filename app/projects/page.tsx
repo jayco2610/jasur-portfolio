@@ -49,34 +49,34 @@ export default function ProjectsPage() {
 
   const githubRepos = [
     {
-      name: "claude-google-sheets-apps-script",
-      description: "Connect Claude to Google Sheets via Apps Script — no billing, no API key for Sheets",
-      url: "https://github.com/jayco2610/claude-google-sheets-apps-script",
+      name: "rag-starter",
+      description: "Minimal RAG engine — feed it documents, ask questions, get grounded answers. Runs fully offline with Ollama. Powers the Mia clinic assistant.",
+      url: "https://github.com/jayco2610/rag-starter",
     },
     {
-      name: "claude-obsidian-mcp",
-      description: "Connect Claude to your Obsidian vault — read, write, and search notes from any chat",
-      url: "https://github.com/jayco2610/claude-obsidian-mcp",
+      name: "claude-outreach-system",
+      description: "AI outreach system: finds companies, writes personalized emails, sends via Gmail, and logs everything to Google Sheets. Built inside Claude Code.",
+      url: "https://github.com/jayco2610/claude-outreach-system",
     },
     {
-      name: "claude-telegram-setup",
-      description: "Claude Code + Telegram: voice-control AI from your phone — step-by-step guide",
-      url: "https://github.com/jayco2610/claude-telegram-setup",
+      name: "claude-skills",
+      description: "21 custom Claude Code skills for content creation, PM workflows, and AI automation.",
+      url: "https://github.com/jayco2610/claude-skills",
     },
     {
-      name: "claude-memory-mcp",
-      description: "Persistent memory for Claude between sessions — local Knowledge Graph, no cloud",
-      url: "https://github.com/jayco2610/claude-memory-mcp",
+      name: "expat-roadmap-sea",
+      description: "Full-stack relocation platform for Southeast Asia: visa and city map, housing board, community, events. Next.js + Supabase, shipped solo.",
+      url: "https://github.com/jayco2610/expat-roadmap-sea",
     },
     {
-      name: "claude-duckduckgo-search-mcp",
-      description: "Real-time web search in Claude via DuckDuckGo — no API key, 10-minute setup",
-      url: "https://github.com/jayco2610/claude-duckduckgo-search-mcp",
+      name: "jasur-portfolio",
+      description: "This site, with JasurGPT — an AI assistant trained on my full professional context. Next.js + OpenRouter, $0/month infrastructure.",
+      url: "https://github.com/jayco2610/jasur-portfolio",
     },
     {
-      name: "claude-yt-dlp-mcp",
-      description: "Let Claude read YouTube videos via transcripts — yt-dlp MCP setup",
-      url: "https://github.com/jayco2610/claude-yt-dlp-mcp",
+      name: "jasur-brandbook",
+      description: "Personal brandbook as an HTML-to-PDF pipeline: positioning, services, and project case studies.",
+      url: "https://github.com/jayco2610/jasur-brandbook",
     },
   ];
 
@@ -142,7 +142,7 @@ export default function ProjectsPage() {
       {/* GitHub Open Source */}
       <div className="mt-16">
         <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-2">Open Source</p>
-        <p className="text-white/40 text-sm mb-8">MCP server guides and Claude productivity tools — all public on GitHub.</p>
+        <p className="text-white/40 text-sm mb-8">AI systems, tools, and products I built — all public on GitHub.</p>
         <div className="grid sm:grid-cols-2 gap-3">
           {githubRepos.map((r) => (
             <a
