@@ -1,6 +1,27 @@
 export default function WritingPage() {
   const published = [
     {
+      title: "Why 94% of Product Managers Use AI — and Most Are Missing the Point",
+      platform: "LinkedIn",
+      lang: "EN",
+      description: "Adoption is near-universal, but the real edge is using AI to think, not just to produce output faster.",
+      href: "https://www.linkedin.com/pulse/why-94-product-managers-use-ai-most-missing-point-jasur-akhmadaliev-qfybe/",
+    },
+    {
+      title: "15% Repeat Sales Without a Single New Customer",
+      platform: "LinkedIn",
+      lang: "EN",
+      description: "A product case: lifting repeat sales 15% in a quarter by working the customers you already have, not chasing new ones.",
+      href: "https://www.linkedin.com/pulse/15-repeat-sales-without-single-new-customer-jasur-akhmadaliev-ir9me",
+    },
+    {
+      title: "Why Smart Teams Still Launch Doomed Projects (and How to Stop)",
+      platform: "LinkedIn",
+      lang: "EN",
+      description: "Why capable teams keep shipping products nobody needs, and a practical way to catch it before you waste months.",
+      href: "https://www.linkedin.com/pulse/why-smart-teams-still-launch-doomed-projects-how-stop-akhmadaliev-ss0ge/",
+    },
+    {
       title: "The PM AI Stack That Actually Works (And Why 95% of Teams Miss It)",
       platform: "Medium",
       lang: "EN",
@@ -42,20 +63,6 @@ export default function WritingPage() {
       description: "Launch, controversy, and restriction of a new AI model in 36 hours, and what it means for businesses building on AI.",
       href: "https://vc.ru/id5991727/2977300-fable-5-zapusk-skandal-posledstviya-dlya-biznesa-na-ai",
     },
-    {
-      title: "Я потратил 8 месяцев на продукт, который никому не был нужен. Вот где была ошибка",
-      platform: "VC.ru",
-      lang: "RU",
-      description: "A personal failure case: eight months building a marketplace nobody needed, and the real mistake behind it.",
-      href: "https://vc.ru/id5991727/2968908-oshibka-v-sozdanii-marketpleysa-dlya-repetitorov-i-studentov",
-    },
-    {
-      title: "+15% повторных продаж за квартал — без новой рекламы, через RFM-анализ",
-      platform: "VC.ru",
-      lang: "RU",
-      description: "Product case: +15% repeat sales in a quarter using RFM segmentation in Excel, with no new ad budget.",
-      href: "https://vc.ru/id5991727/2972334-povtornye-prodazhi-na-15-bez-novoy-reklamy-s-pomoshchyu-rfm-analiza",
-    },
   ];
 
   const channels = [
@@ -89,7 +96,7 @@ export default function WritingPage() {
                 <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white/5 text-white/30 border border-white/10">{a.platform}</span>
                 <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[#1E3A8A]/30 text-blue-300">{a.lang}</span>
                 <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400">published</span>
-                <span className="font-mono text-[10px] text-[#a78bfa] ml-auto opacity-0 group-hover:opacity-100 transition-opacity">Read {a.platform === "Medium" ? "on Medium" : "on VC.ru"} →</span>
+                <span className="font-mono text-[10px] text-[#a78bfa] ml-auto opacity-0 group-hover:opacity-100 transition-opacity">Read on {a.platform} →</span>
               </div>
               <h3 className="text-white font-semibold text-sm mb-2 group-hover:text-[#a78bfa] transition-colors">{a.title}</h3>
               <p className="text-white/40 text-sm">{a.description}</p>
