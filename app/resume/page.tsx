@@ -144,7 +144,7 @@ export default function ResumePage() {
         <div>
           <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-3">Resume</p>
           <h1 className="font-mono text-3xl font-bold text-white mb-2">Jasur Akhmadaliev</h1>
-          <p className="text-white/50 text-sm">AI Product Manager · Product Strategy · AI Automation & MVP Launch</p>
+          <p className="text-white/50 text-sm">AI Product Manager · AI Implementation & Deployment · Claude · n8n · RAG · Voiceflow</p>
           <div className="flex gap-4 mt-3 flex-wrap">
             <a href="mailto:jasurakhmadaliev283@gmail.com" className="font-mono text-xs text-white/30 hover:text-white transition-colors">
               jasurakhmadaliev283@gmail.com
