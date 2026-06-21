@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import BlockedBadge from "@/components/BlockedBadge";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -99,6 +100,9 @@ export default function JasurGPT() {
                       {s}
                     </button>
                   ))}
+                </div>
+                <div className="mt-5">
+                  <BlockedBadge />
                 </div>
               </div>
             ) : (

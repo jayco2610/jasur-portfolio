@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { upstashConfigured, incr } from "@/lib/upstash";
 
 const SYSTEM_PROMPT = `You are JasurGPT — an AI assistant trained on the full professional context of Jasur Akhmadaliev.
 
@@ -159,12 +160,33 @@ const hits = new Map<string, number[]>();
 // Count of blocked probes since this server instance started (visible in Vercel logs).
 let blockedCount = 0;
 
-function rateLimited(ip: string): boolean {
+function rateLimitedInMemory(ip: string): boolean {
   const now = Date.now();
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
   recent.push(now);
   hits.set(ip, recent);
   return recent.length > RATE_LIMIT;
+}
+
+// Durable, cross-instance rate limit via Upstash when configured; otherwise
+// falls back to the in-memory limiter above.
+async function isRateLimited(ip: string): Promise<boolean> {
+  if (upstashConfigured()) {
+    const window = Math.floor(Date.now() / RATE_WINDOW_MS);
+    const count = await incr(`jgpt:rl:${ip}:${window}`, Math.ceil(RATE_WINDOW_MS / 1000) + 5);
+    if (count != null) return count > RATE_LIMIT;
+  }
+  return rateLimitedInMemory(ip);
+}
+
+// Persist blocked-probe counts (total + current week) when Upstash is configured.
+async function recordBlocked(): Promise<void> {
+  if (!upstashConfigured()) return;
+  const week = new Date().toISOString().slice(0, 10); // day bucket; week key derived client-side if needed
+  await Promise.all([
+    incr("jgpt:blocked:total"),
+    incr(`jgpt:blocked:day:${week}`, 60 * 60 * 24 * 60),
+  ]);
 }
 
 // Deterministic guard: block obvious prompt-extraction / injection before the model sees it.
@@ -206,7 +228,7 @@ function blockReason(text: string): "injection" | "meta" | null {
 
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-  if (rateLimited(ip)) {
+  if (await isRateLimited(ip)) {
     return NextResponse.json(
       { content: "Slow down a moment, too many messages. Try again shortly." },
       { status: 429 }
@@ -247,6 +269,7 @@ export async function POST(req: NextRequest) {
         lastUser.content.slice(0, 120)
       )}`
     );
+    await recordBlocked();
     return NextResponse.json({ content: refusalFor(lastUser.content) });
   }
 
