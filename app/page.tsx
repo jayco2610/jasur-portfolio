@@ -1,5 +1,6 @@
 import Link from "next/link";
 import HeroSection from "@/components/HeroSection";
+import BlockedBadge from "@/components/BlockedBadge";
 
 export default function Home() {
   return (
@@ -134,6 +135,9 @@ export default function Home() {
           <p className="font-mono text-sm text-[#a78bfa] mt-1">
             Ask JasurGPT — button in the bottom right corner.
           </p>
+          <div className="mt-5 flex justify-center">
+            <BlockedBadge hero />
+          </div>
         </div>
       </section>
     </div>
