@@ -156,6 +156,9 @@ const RATE_WINDOW_MS = 60_000; // per minute, per IP
 
 const hits = new Map<string, number[]>();
 
+// Count of blocked probes since this server instance started (visible in Vercel logs).
+let blockedCount = 0;
+
 function rateLimited(ip: string): boolean {
   const now = Date.now();
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
@@ -195,11 +198,10 @@ const META_PATTERNS: RegExp[] = [
   /на\s+ч[её]м\s+[^.?!]{0,20}(сайт|портфолио|бот|ты|он)\s+\w{0,3}(сделан|написан|работает|построен)|на\s+ч[её]м\s+(сделан|написан|работает|построен)\w*[^.?!]{0,20}(сайт|портфолио|бот)/i,
 ];
 
-function blockedInput(text: string): boolean {
-  return (
-    INJECTION_PATTERNS.some((re) => re.test(text)) ||
-    META_PATTERNS.some((re) => re.test(text))
-  );
+function blockReason(text: string): "injection" | "meta" | null {
+  if (INJECTION_PATTERNS.some((re) => re.test(text))) return "injection";
+  if (META_PATTERNS.some((re) => re.test(text))) return "meta";
+  return null;
 }
 
 export async function POST(req: NextRequest) {
@@ -237,7 +239,14 @@ export async function POST(req: NextRequest) {
   }
 
   const lastUser = [...messages].reverse().find((m) => m.role === "user");
-  if (lastUser && blockedInput(lastUser.content)) {
+  const reason = lastUser ? blockReason(lastUser.content) : null;
+  if (lastUser && reason) {
+    blockedCount += 1;
+    console.warn(
+      `[JasurGPT] blocked ${reason} #${blockedCount} ip=${ip} q=${JSON.stringify(
+        lastUser.content.slice(0, 120)
+      )}`
+    );
     return NextResponse.json({ content: refusalFor(lastUser.content) });
   }
 
