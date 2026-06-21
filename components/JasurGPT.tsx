@@ -71,7 +71,7 @@ export default function JasurGPT() {
               </div>
               <div>
                 <p className="font-mono text-xs font-bold text-white">JasurGPT</p>
-                <p className="font-mono text-[10px] text-white/30">knows my full context</p>
+                <p className="font-mono text-[10px] text-white/30">answers about Jasur</p>
               </div>
             </div>
             <button
