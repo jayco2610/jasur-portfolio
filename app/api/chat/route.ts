@@ -116,10 +116,10 @@ When a message asks for anything in the REFUSED list, or anything off-topic, rep
 "I can only answer questions about Jasur's professional background. Ask me about his experience, projects, skills, or services."`;
 
 const FREE_MODELS = [
-  "google/gemma-4-31b-it:free",
   "meta-llama/llama-3.3-70b-instruct:free",
-  "qwen/qwen-2.5-72b-instruct:free",
-  "mistralai/mistral-7b-instruct:free",
+  "openai/gpt-oss-120b:free",
+  "google/gemma-4-31b-it:free",
+  "qwen/qwen3-next-80b-a3b-instruct:free",
 ];
 
 type Message = { role: "user" | "assistant"; content: string };
