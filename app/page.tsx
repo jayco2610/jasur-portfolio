@@ -1,8 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import HeroSection from "@/components/HeroSection";
 import BlockedBadge from "@/components/BlockedBadge";
+import { useLanguage } from "@/context/LanguageContext";
+import { t } from "@/lib/translations";
 
 export default function Home() {
+  const { lang } = useLanguage();
+  const h = t[lang].home;
+
   return (
     <div>
       <HeroSection />
@@ -11,39 +18,10 @@ export default function Home() {
       <section className="border-t border-white/5 py-20">
         <div className="max-w-5xl mx-auto px-6">
           <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-10">
-            Selected work
+            {h.selectedWork}
           </p>
           <div className="grid md:grid-cols-2 gap-4">
-            {[
-              {
-                name: "AI Career System",
-                status: "live",
-                desc: "End-to-end job search automation. Claude + n8n + Google Sheets + Telegram. Vacancy in → cover letter out in under 60 seconds.",
-                tags: ["Claude", "n8n", "Telegram"],
-                link: null,
-              },
-              {
-                name: "Expat Roadmap SEA",
-                status: "shipped",
-                desc: "Full-stack guide for relocating to Southeast Asia. Next.js + Supabase, built and deployed solo.",
-                tags: ["Next.js", "Supabase", "Vercel"],
-                link: "https://expat-roadmap-sea.vercel.app",
-              },
-              {
-                name: "Mia — Clinic RAG Assistant",
-                status: "live",
-                desc: "Retrieval-augmented assistant for a dental clinic. Answers patient questions from the clinic's own documents — grounded, no made-up facts. Live on Hugging Face.",
-                tags: ["Python", "RAG", "LangChain"],
-                link: "https://huggingface.co/spaces/rag-jasur/mia-clinic-assistant",
-              },
-              {
-                name: "Portfolio + JasurGPT",
-                status: "live",
-                desc: "This site. AI chat trained on full context — resume, projects, experience. Ask using the button below.",
-                tags: ["Next.js", "OpenRouter", "Vercel"],
-                link: null,
-              },
-            ].map((p) => (
+            {h.projects.map((p) => (
               <div
                 key={p.name}
                 className="p-6 bg-[#111111] border border-[#1f1f1f] rounded-lg hover:border-[#7C3AED]/30 transition-colors"
@@ -51,11 +29,9 @@ export default function Home() {
                 <div className="flex items-center gap-2 mb-3">
                   <span className="font-mono text-sm font-bold text-white">{p.name}</span>
                   <span className={`font-mono text-[10px] px-2 py-0.5 rounded-full ${
-                    p.status === "live"
+                    p.status === "live" || p.status === "в работе"
                       ? "bg-emerald-500/15 text-emerald-400"
-                      : p.status === "shipped"
-                      ? "bg-blue-500/15 text-blue-400"
-                      : "bg-[#7C3AED]/15 text-[#a78bfa]"
+                      : "bg-blue-500/15 text-blue-400"
                   }`}>
                     {p.status}
                   </span>
@@ -63,9 +39,9 @@ export default function Home() {
                 <p className="text-sm text-white/50 leading-relaxed mb-4">{p.desc}</p>
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                   <div className="flex gap-2 flex-wrap">
-                    {p.tags.map((t) => (
-                      <span key={t} className="font-mono text-[10px] px-2 py-1 bg-white/5 text-white/40 rounded">
-                        {t}
+                    {p.tags.map((tag) => (
+                      <span key={tag} className="font-mono text-[10px] px-2 py-1 bg-white/5 text-white/40 rounded">
+                        {tag}
                       </span>
                     ))}
                   </div>
@@ -81,8 +57,25 @@ export default function Home() {
           </div>
           <div className="mt-8">
             <Link href="/projects" className="font-mono text-sm text-[#a78bfa] hover:text-white transition-colors">
-              All projects →
+              {h.allProjects}
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* By the numbers */}
+      <section className="border-t border-white/5 py-14">
+        <div className="max-w-5xl mx-auto px-6">
+          <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-3">{h.byNumbers}</p>
+          <p className="text-white/40 text-sm mb-8 max-w-2xl">{h.statsDesc}</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {h.stats.map((s) => (
+              <div key={s.value} className="p-5 bg-[#111111] border border-[#1f1f1f] rounded-lg">
+                <p className="font-mono text-3xl font-bold text-[#a78bfa]">{s.value}</p>
+                <p className="font-mono text-[11px] text-white/50 mt-1">{s.label}</p>
+                <p className="font-mono text-[10px] text-white/25 mt-0.5">{s.sub}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -90,21 +83,11 @@ export default function Home() {
       {/* About */}
       <section className="border-t border-white/5 py-20">
         <div className="max-w-5xl mx-auto px-6">
-          <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-8">
-            About
-          </p>
+          <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-8">{h.about}</p>
           <div className="max-w-2xl">
-            <p className="text-white/70 leading-relaxed mb-4">
-              I&apos;m a Product Manager and marketing analyst from Tashkent, Uzbekistan.
-              I&apos;ve shipped products at Instameal (food delivery), IDF Lab (B2B SaaS), and Synergia.
-              Currently building AI tooling for my own job search — and publishing the process publicly.
-            </p>
-            <p className="text-white/50 leading-relaxed">
-              Looking for a remote PM or product marketing role with an international team.
-              The AI career system you see above is both my portfolio and my actual workflow.
-            </p>
+            <p className="text-white/70 leading-relaxed mb-4">{h.aboutP1}</p>
+            <p className="text-white/50 leading-relaxed">{h.aboutP2}</p>
           </div>
-
           <div className="mt-10 flex gap-6 flex-wrap">
             {[
               { label: "LinkedIn", href: "https://www.linkedin.com/in/jasur-akhmadaliev" },
@@ -112,13 +95,10 @@ export default function Home() {
               { label: "VC.ru", href: "https://vc.ru/id5991727" },
               { label: "Email", href: "mailto:jasurakhmadaliev283@gmail.com" },
             ].map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
+              <a key={l.label} href={l.href}
                 target={l.href.startsWith("mailto") ? undefined : "_blank"}
                 rel={l.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
-                className="font-mono text-sm text-[#a78bfa] hover:text-white transition-colors"
-              >
+                className="font-mono text-sm text-[#a78bfa] hover:text-white transition-colors">
                 {l.label} →
               </a>
             ))}
@@ -129,12 +109,8 @@ export default function Home() {
       {/* JasurGPT hint */}
       <section className="border-t border-white/5 py-12">
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <p className="font-mono text-sm text-white/30">
-            Have questions about my experience or projects?
-          </p>
-          <p className="font-mono text-sm text-[#a78bfa] mt-1">
-            Ask JasurGPT — button in the bottom right corner.
-          </p>
+          <p className="font-mono text-sm text-white/30">{h.gptHint}</p>
+          <p className="font-mono text-sm text-[#a78bfa] mt-1">{h.gptCta}</p>
           <div className="mt-5 flex justify-center">
             <BlockedBadge hero />
           </div>

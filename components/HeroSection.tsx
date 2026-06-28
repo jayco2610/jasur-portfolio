@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
+import { t } from "@/lib/translations";
 
-const TITLE = "Welcome.";
-const BIO =
-  "Hi — I'm Jasur, AI Product Manager from Tashkent.\nI build and ship digital products solo: from discovery to live users.\nUse the menu above to explore my projects, resume, and services.\nAny questions? Ask JasurGPT — the button in the corner knows everything about me.";
-const MARKER = "JasurGPT";
 const SCRAMBLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*<>?[]{}";
+const MARKER = "JasurGPT";
 
 function rand() {
   return SCRAMBLE[Math.floor(Math.random() * SCRAMBLE.length)];
@@ -26,28 +25,34 @@ function renderBio(text: string) {
 }
 
 export default function HeroSection() {
-  // Scramble state: array of chars (null = hidden, string = shown)
+  const { lang } = useLanguage();
+  const hero = t[lang].hero;
+  const TITLE = hero.title;
+
   const [chars, setChars] = useState<(string | null)[]>(Array(TITLE.length).fill(null));
   const [titleDone, setTitleDone] = useState(false);
   const [bioText, setBioText] = useState("");
   const [bioDone, setBioDone] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
 
-  // Scramble title reveal
   useEffect(() => {
-    const SCRAMBLE_FRAMES = 8; // frames of random chars before settling
-    const FRAME_MS = 42;       // ms per frame
+    setChars(Array(TITLE.length).fill(null));
+    setTitleDone(false);
+    setBioText("");
+    setBioDone(false);
+    setShowButtons(false);
+
+    const SCRAMBLE_FRAMES = 8;
+    const FRAME_MS = 42;
     let tick = 0;
-    let settled = 0;           // how many chars are locked in
+    let settled = 0;
 
     const timeout = setTimeout(() => {
       const interval = setInterval(() => {
         setChars((prev) => {
           const next = [...prev];
-          // Scramble current char
           if (settled < TITLE.length) {
             const ch = TITLE[settled];
-            // Spaces and dots settle immediately
             if (ch === " " || ch === ".") {
               next[settled] = ch;
               settled++;
@@ -64,7 +69,6 @@ export default function HeroSection() {
           }
           return next;
         });
-
         if (settled >= TITLE.length) {
           clearInterval(interval);
           setTitleDone(true);
@@ -74,11 +78,11 @@ export default function HeroSection() {
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [lang]);
 
-  // Fast typewriter for bio
   useEffect(() => {
     if (!titleDone) return;
+    const BIO = hero.bio;
     let i = 0;
     let interval: ReturnType<typeof setInterval>;
     const timeout = setTimeout(() => {
@@ -86,16 +90,15 @@ export default function HeroSection() {
         i++;
         setBioText(BIO.slice(0, i));
         if (i >= BIO.length) { clearInterval(interval); setBioDone(true); }
-      }, 32);
+      }, 28);
     }, 150);
     return () => { clearTimeout(timeout); clearInterval(interval); };
-  }, [titleDone]);
+  }, [titleDone, lang]);
 
-  // Show buttons
   useEffect(() => {
     if (!bioDone) return;
-    const t = setTimeout(() => setShowButtons(true), 300);
-    return () => clearTimeout(t);
+    const timeout = setTimeout(() => setShowButtons(true), 300);
+    return () => clearTimeout(timeout);
   }, [bioDone]);
 
   return (
@@ -104,13 +107,9 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-[#0a0a0a]" />
 
       <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
-        {/* Scramble title */}
         <h1 className="font-mono text-5xl md:text-7xl font-bold text-[#a78bfa] mb-8 leading-none min-h-[1.2em]">
           {chars.map((c, i) => (
-            <span
-              key={i}
-              className={c !== null && c !== TITLE[i] ? "opacity-50" : ""}
-            >
+            <span key={i} className={c !== null && c !== TITLE[i] ? "opacity-50" : ""}>
               {c ?? ""}
             </span>
           ))}
@@ -119,7 +118,6 @@ export default function HeroSection() {
           )}
         </h1>
 
-        {/* Bio */}
         <p className="font-mono text-base md:text-lg text-white leading-relaxed whitespace-pre-line min-h-[5em]">
           {renderBio(bioText)}
           {titleDone && !bioDone && (
@@ -127,20 +125,18 @@ export default function HeroSection() {
           )}
         </p>
 
-        {/* Buttons */}
         <div className={`mt-10 flex gap-3 justify-center flex-wrap transition-opacity duration-700 ${showButtons ? "opacity-100" : "opacity-0"}`}>
           <Link href="/projects" className="font-mono text-sm px-5 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors">
-            View projects
+            {hero.viewProjects}
           </Link>
           <Link href="/resume" className="font-mono text-sm px-5 py-2.5 border border-white/25 text-white/80 rounded hover:border-white/50 hover:text-white transition-colors">
-            Resume
+            {hero.resume}
           </Link>
         </div>
       </div>
 
-      {/* Scroll hint */}
       <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 transition-opacity duration-1000 ${showButtons ? "opacity-40" : "opacity-0"}`}>
-        <span className="font-mono text-[10px] text-white tracking-[0.2em] uppercase">Scroll</span>
+        <span className="font-mono text-[10px] text-white tracking-[0.2em] uppercase">{hero.scroll}</span>
         <div className="w-px h-8 bg-white/50" />
       </div>
     </section>
