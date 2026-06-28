@@ -34,7 +34,7 @@ export default function ProjectsPage() {
       description: "End-to-end automation for job search. Receives a vacancy link in Telegram, fetches and analyzes the job description, compares it against my resume, finds the recruiter, generates a tailored cover letter, and logs everything to Google Sheets — without manual steps.",
       metrics: ["Covers 100% of incoming vacancies", "Cover letter in under 60 seconds", "Zero manual copy-paste"],
       link: null,
-      github: null,
+      github: "https://github.com/jayco2610/claude-outreach-system",
     },
     {
       name: "Personal Brandbook",
