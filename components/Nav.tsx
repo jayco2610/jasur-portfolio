@@ -73,7 +73,7 @@ export default function Nav() {
           </ul>
           <button
             onClick={toggle}
-            className="font-mono text-[10px] px-2.5 py-1 rounded border border-white/10 text-white/40 hover:text-white hover:border-[#7C3AED]/50 transition-all"
+            className="font-mono text-xs font-bold px-3 py-1 rounded border border-[#7C3AED]/60 text-[#a78bfa] hover:bg-[#7C3AED]/20 hover:text-white transition-all"
             aria-label="Toggle language"
           >
             {lang === "en" ? "RU" : "EN"}
