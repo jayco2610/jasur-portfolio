@@ -11,7 +11,7 @@ export const t = {
 
     hero: {
       title: "Welcome.",
-      bio: "Product Manager who moves from messy problems to shipped products.\nI lead discovery, define what to cut, and drive delivery — then measure what changed for real users.\nBuilding AI systems for my own job search and publishing every step.\nAny questions? Ask JasurGPT — the button in the corner knows everything about me.",
+      bio: "My name is Jasur Akhmadaliev — Product Manager and AI builder. I've shipped products at Instameal (food delivery), IDF Lab (B2B SaaS), and Synergia, and graduated from HSE University. I'm currently building an AI system for my own job search — and publishing every step publicly. Browse my projects below or ask JasurGPT in the corner anything about my work.",
       viewProjects: "View projects",
       resume: "Resume",
       scroll: "Scroll",
@@ -377,7 +377,7 @@ export const t = {
 
     hero: {
       title: "Привет.",
-      bio: "Продакт-менеджер: от размытых проблем до запущенного продукта.\nПровожу дискавери, определяю что резать, координирую доставку — и измеряю что реально изменилось для пользователей.\nСтрою AI-систему для своего поиска работы и публикую каждый шаг открыто.\nЕсть вопросы? Спросите JasurGPT — кнопка в углу знает всё обо мне.",
+      bio: "Меня зовут Жасур Ахмадалиев — продакт-менеджер и AI-разработчик. Запускал продукты в Instameal (фудтех), IDF Lab (B2B SaaS) и Synergia, окончил ВШЭ. Сейчас строю AI-систему для собственного поиска работы — и публикую каждый шаг открыто. Смотрите проекты ниже или задайте любой вопрос о моей работе JasurGPT в углу экрана.",
       viewProjects: "Посмотреть проекты",
       resume: "Резюме",
       scroll: "Листать",

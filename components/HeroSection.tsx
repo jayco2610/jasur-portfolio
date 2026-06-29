@@ -118,7 +118,7 @@ export default function HeroSection() {
           )}
         </h1>
 
-        <p className="font-mono text-base md:text-lg text-white leading-relaxed whitespace-pre-line min-h-[5em]">
+        <p className="font-mono text-base md:text-lg text-white leading-relaxed min-h-[5em]">
           {renderBio(bioText)}
           {titleDone && !bioDone && (
             <span className="inline-block w-[2px] h-[1em] bg-white/60 ml-0.5 align-middle animate-pulse" />
