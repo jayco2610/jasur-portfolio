@@ -5,6 +5,8 @@ import Nav from "@/components/Nav";
 import JasurGPT from "@/components/JasurGPT";
 import AvailabilityStrip from "@/components/AvailabilityStrip";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 
 const spaceMono = Space_Mono({
   weight: ["400", "700"],
@@ -57,6 +59,14 @@ export default function RootLayout({
           </footer>
           <JasurGPT />
         </LanguageProvider>
+        <Analytics />
+        <Script
+          id="clarity"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xeojrhfu6q");`,
+          }}
+        />
       </body>
     </html>
   );
