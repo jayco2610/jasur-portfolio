@@ -63,6 +63,29 @@ export default function Home() {
         </div>
       </section>
 
+      {/* AI Career System live counter */}
+      <section className="border-t border-white/5 py-14">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <p className="font-mono text-xs text-emerald-400 tracking-[0.15em] uppercase">{h.liveLabel}</p>
+          </div>
+          <h2 className="font-mono text-lg font-bold text-white mb-2">{h.liveTitle}</h2>
+          <p className="text-white/40 text-sm mb-8 max-w-xl">{h.liveDesc}</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {h.liveStats.map((s) => (
+              <div key={s.label} className="p-4 bg-[#111111] border border-emerald-500/10 rounded-lg">
+                <p className="font-mono text-2xl font-bold text-emerald-400">{s.value}</p>
+                <p className="font-mono text-[11px] text-white/40 mt-1">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* By the numbers */}
       <section className="border-t border-white/5 py-14">
         <div className="max-w-5xl mx-auto px-6">

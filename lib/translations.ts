@@ -36,6 +36,15 @@ export const t = {
       gptHint: "Have questions about my experience or projects?",
       gptCta: "Ask JasurGPT — button in the bottom right corner.",
       allProjects: "All projects →",
+      liveLabel: "Live system",
+      liveTitle: "AI Career System — running now",
+      liveDesc: "The automation pipeline I built processes every vacancy I send it. No manual steps.",
+      liveStats: [
+        { value: "47", label: "vacancies processed" },
+        { value: "47", label: "cover letters generated" },
+        { value: "55s", label: "avg. time-to-output" },
+        { value: "100%", label: "pipeline automation" },
+      ],
       projects: [
         {
           name: "AI Career System",
@@ -402,6 +411,15 @@ export const t = {
       gptHint: "Есть вопросы об опыте или проектах?",
       gptCta: "Спросите JasurGPT — кнопка в правом нижнем углу.",
       allProjects: "Все проекты →",
+      liveLabel: "Живая система",
+      liveTitle: "AI Career System — работает прямо сейчас",
+      liveDesc: "Автоматизированный пайплайн обрабатывает каждую вакансию, которую я ему отправляю. Без ручных шагов.",
+      liveStats: [
+        { value: "47", label: "вакансий обработано" },
+        { value: "47", label: "писем сгенерировано" },
+        { value: "55с", label: "среднее время до результата" },
+        { value: "100%", label: "автоматизация пайплайна" },
+      ],
       projects: [
         {
           name: "AI Career System",
