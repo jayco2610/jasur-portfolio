@@ -18,6 +18,7 @@ export default function Nav() {
     { href: "/", label: nav.home },
     { href: "/projects", label: nav.projects },
     { href: "/services", label: nav.services },
+    { href: "/demos", label: nav.demos },
     { href: "/writing", label: nav.writing },
     { href: "/resume", label: nav.resume },
   ];

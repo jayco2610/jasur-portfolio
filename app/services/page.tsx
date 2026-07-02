@@ -49,6 +49,8 @@ const automation = [
       ru: "Настройка CRM с AI-слоем: воронка продаж и стадии сделок, импорт базы, базовая автоматизация (3 сценария), AI-агент для входящих, интеграция с Telegram или WhatsApp.",
     },
     featured: true,
+    demoLink: "/demos/leftovers",
+    demoLabel: { en: "Live demo: AI sells the evening leftovers →", ru: "Живое демо: ИИ сливает вечерние остатки →" },
   },
   {
     price: { en: "from 25,000 ₽", ru: "от 25 000 ₽" },
@@ -59,6 +61,8 @@ const automation = [
       ru: "Кастомный AI-агент под конкретную задачу: обработка запросов, квалификация лидов, внутренний ассистент, авто-ответы. Включает дискавери задачи и техническое задание.",
     },
     featured: false,
+    demoLink: "/demos/reviews",
+    demoLabel: { en: "Live demo: AI replies to reviews →", ru: "Живое демо: ИИ-ответы на отзывы →" },
   },
   {
     price: { en: "from 15,000 ₽", ru: "от 15 000 ₽" },
@@ -69,6 +73,8 @@ const automation = [
       ru: "Связать CRM, мессенджеры, AI и таблицы. Заявка с формы → карточка в CRM → уведомление в Telegram → AI-ответ клиенту. Схема, настройка, тест, инструкция.",
     },
     featured: false,
+    demoLink: "/demos/fraud",
+    demoLabel: { en: "Live demo: POS fraud alerts in Telegram →", ru: "Живое демо: алерты о фроде на кассе в Telegram →" },
   },
   {
     price: { en: "from 8,000 ₽", ru: "от 8 000 ₽" },

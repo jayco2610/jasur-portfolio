@@ -4,10 +4,20 @@ export const t = {
       home: "Home",
       projects: "Projects",
       services: "Services",
+      demos: "Demos",
       writing: "Writing",
       resume: "Resume",
     },
     footer: "© 2025 Jasur Akhmadaliev",
+
+    demos: {
+      label: "Demos",
+      title: "Live automation demos",
+      intro:
+        "Interactive demos of automations I pitch to local businesses: pre-orders from the stands, selling off evening leftovers with AI, POS fraud control, and AI replies to reviews. Everything works right in the browser.",
+      note: "Simulated data. On a real project this connects to the POS software (iiko), SBP payments, and the venue's customer base.",
+      open: "Open the demo",
+    },
 
     hero: {
       title: "Welcome.",
@@ -379,10 +389,20 @@ export const t = {
       home: "Главная",
       projects: "Проекты",
       services: "Услуги",
+      demos: "Демо",
       writing: "Статьи",
       resume: "Резюме",
     },
     footer: "© 2025 Жасур Ахмадалиев",
+
+    demos: {
+      label: "Демо",
+      title: "Живые демо автоматизаций",
+      intro:
+        "Интерактивные демо автоматизаций, которые я предлагаю локальному бизнесу: предзаказ с трибуны, слив вечерних остатков через ИИ, фрод-контроль касс и ИИ-ответы на отзывы. Всё работает прямо в браузере.",
+      note: "Данные симулированы. На реальном проекте подключается кассовое ПО (iiko), оплата через СБП и база клиентов заведения.",
+      open: "Открыть демо",
+    },
 
     hero: {
       title: "Привет.",
