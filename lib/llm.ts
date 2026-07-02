@@ -35,11 +35,15 @@ export async function generate(
         }),
       });
       const data = await res.json();
-      if (!res.ok) continue;
+      if (!res.ok) {
+        console.warn(`[llm] ${model} HTTP ${res.status}: ${JSON.stringify(data?.error ?? data).slice(0, 300)}`);
+        continue;
+      }
       const content = data?.choices?.[0]?.message?.content;
       if (typeof content === "string" && content.trim()) return content.trim();
-    } catch {
-      // try next model
+      console.warn(`[llm] ${model} empty content: ${JSON.stringify(data).slice(0, 300)}`);
+    } catch (e) {
+      console.warn(`[llm] ${model} threw: ${e instanceof Error ? e.message : String(e)}`);
     }
   }
   return null;
