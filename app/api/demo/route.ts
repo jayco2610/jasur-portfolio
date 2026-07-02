@@ -134,5 +134,6 @@ export async function POST(req: NextRequest) {
   );
 
   if (!content) return NextResponse.json({ error: "unavailable" }, { status: 503 });
-  return NextResponse.json({ content });
+  // Models ignore the no-em-dash rule often enough; enforce it here.
+  return NextResponse.json({ content: content.replace(/\s*—\s*/g, ", ") });
 }
