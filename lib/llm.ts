@@ -6,7 +6,13 @@ const FREE_MODELS = [
   "openai/gpt-oss-120b:free",
   "google/gemma-4-31b-it:free",
   "qwen/qwen3-next-80b-a3b-instruct:free",
+  "nvidia/nemotron-3-super-120b-a12b:free",
+  "nousresearch/hermes-3-llama-3.1-405b:free",
+  "google/gemma-4-26b-a4b-it:free",
+  "nvidia/nemotron-3-nano-30b-a3b:free",
 ];
+
+const PASSES = 2; // free models are flaky; run the chain twice before giving up
 
 export type LlmMessage = { role: "system" | "user" | "assistant"; content: string };
 
@@ -17,6 +23,19 @@ export async function generate(
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) return null;
 
+  for (let pass = 0; pass < PASSES; pass++) {
+    if (pass > 0) await new Promise((r) => setTimeout(r, 800));
+    const content = await tryChain(apiKey, messages, opts);
+    if (content) return content;
+  }
+  return null;
+}
+
+async function tryChain(
+  apiKey: string,
+  messages: LlmMessage[],
+  opts?: { maxTokens?: number; temperature?: number; title?: string }
+): Promise<string | null> {
   for (const model of FREE_MODELS) {
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {

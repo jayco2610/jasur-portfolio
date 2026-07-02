@@ -101,8 +101,9 @@ export async function POST(req: NextRequest) {
 
   const lang: Lang = body.lang === "en" ? "en" : "ru";
 
+  // Generous cap: reasoning models spend tokens thinking before the answer.
   let prompt: { system: string; user: string } | null = null;
-  let maxTokens = 256;
+  let maxTokens = 1024;
 
   if (body.type === "leftovers") {
     const items = parseItems(body.items);
@@ -116,7 +117,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "invalid_request" }, { status: 400 });
     }
     prompt = reviewPrompt(review, rating, tone, lang);
-    maxTokens = 320;
   } else {
     return NextResponse.json({ error: "invalid_request" }, { status: 400 });
   }
