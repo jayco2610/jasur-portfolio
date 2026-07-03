@@ -9,12 +9,16 @@ export default function DemoShell({
   subtitle,
   pitch,
   hint,
+  footer,
   children,
 }: {
   title: { en: string; ru: string };
   subtitle: { en: string; ru: string };
   pitch?: { en: string; ru: string };
   hint?: { en: string; ru: string };
+  // null hides the default business-demo disclaimer (used by product pages
+  // that carry their own note).
+  footer?: { en: string; ru: string } | null;
   children: React.ReactNode;
 }) {
   const { lang } = useLanguage();
@@ -42,11 +46,15 @@ export default function DemoShell({
         </div>
       )}
       {children}
-      <p className="font-mono text-[10px] text-white/25 mt-12">
-        {lang === "en"
-          ? "Simulated data. On a real project this connects to the POS software (iiko), SBP payments, and the venue's customer base."
-          : "Данные симулированы. На реальном проекте подключается кассовое ПО (iiko), оплата через СБП и база клиентов заведения."}
-      </p>
+      {footer !== null && (
+        <p className="font-mono text-[10px] text-white/25 mt-12">
+          {footer
+            ? footer[lang]
+            : lang === "en"
+            ? "Simulated data. On a real project this connects to the POS software (iiko), SBP payments, and the venue's customer base."
+            : "Данные симулированы. На реальном проекте подключается кассовое ПО (iiko), оплата через СБП и база клиентов заведения."}
+        </p>
+      )}
     </div>
   );
 }

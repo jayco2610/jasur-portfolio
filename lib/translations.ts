@@ -14,9 +14,11 @@ export const t = {
       label: "Demos",
       title: "Live automation demos",
       intro:
-        "Interactive demos of automations I pitch to local businesses: pre-orders from the stands, selling off evening leftovers with AI, POS fraud control, and AI replies to reviews. Everything works right in the browser.",
-      note: "Simulated data. On a real project this connects to the POS software (iiko), SBP payments, and the venue's customer base.",
+        "Interactive demos of automations I pitch to local businesses, plus walkthroughs of my own AI products: the Mia RAG assistant and the AI Career System. Everything works right in the browser.",
+      note: "Business demos run on simulated data. On a real project this connects to the POS software (iiko), SBP payments, and the venue's customer base.",
       open: "Open the demo",
+      groupBusiness: "For local business",
+      groupProducts: "My AI products",
     },
 
     hero: {
@@ -122,6 +124,22 @@ export const t = {
           ],
           link: "https://huggingface.co/spaces/rag-jasur/mia-clinic-assistant",
           github: "https://github.com/jayco2610/rag-starter",
+          demo: "/demos/mia",
+        },
+        {
+          name: "Business Automation Demos",
+          status: "live",
+          stack: ["Next.js", "OpenRouter", "Telegram WebApp", "СБП"],
+          description:
+            "Four interactive demos I pitch to local businesses, working right in the browser: pre-orders from the stands, selling off evening leftovers with AI, POS fraud alerts in Telegram, and AI replies to map reviews.",
+          metrics: [
+            "4 demos, 2 with live AI generation",
+            "8-model fallback chain on free models",
+            "Built into this site, open on any phone",
+          ],
+          link: null,
+          github: "https://github.com/jayco2610/jasur-portfolio",
+          demo: "/demos",
         },
         {
           name: "Expat Roadmap SEA",
@@ -150,6 +168,7 @@ export const t = {
           ],
           link: null,
           github: "https://github.com/jayco2610/claude-outreach-system",
+          demo: "/demos/career",
         },
         {
           name: "Personal Brandbook",
@@ -399,9 +418,11 @@ export const t = {
       label: "Демо",
       title: "Живые демо автоматизаций",
       intro:
-        "Интерактивные демо автоматизаций, которые я предлагаю локальному бизнесу: предзаказ с трибуны, слив вечерних остатков через ИИ, фрод-контроль касс и ИИ-ответы на отзывы. Всё работает прямо в браузере.",
-      note: "Данные симулированы. На реальном проекте подключается кассовое ПО (iiko), оплата через СБП и база клиентов заведения.",
+        "Интерактивные демо автоматизаций, которые я предлагаю локальному бизнесу, плюс разборы моих собственных AI-продуктов: RAG-ассистента Mia и AI Career System. Всё работает прямо в браузере.",
+      note: "Бизнес-демо работают на симулированных данных. На реальном проекте подключается кассовое ПО (iiko), оплата через СБП и база клиентов заведения.",
       open: "Открыть демо",
+      groupBusiness: "Для локального бизнеса",
+      groupProducts: "Мои AI-продукты",
     },
 
     hero: {
@@ -507,6 +528,22 @@ export const t = {
           ],
           link: "https://huggingface.co/spaces/rag-jasur/mia-clinic-assistant",
           github: "https://github.com/jayco2610/rag-starter",
+          demo: "/demos/mia",
+        },
+        {
+          name: "Демо автоматизаций для бизнеса",
+          status: "в работе",
+          stack: ["Next.js", "OpenRouter", "Telegram WebApp", "СБП"],
+          description:
+            "Четыре интерактивных демо, которые я предлагаю локальному бизнесу, работают прямо в браузере: предзаказ с трибуны, слив вечерних остатков через ИИ, алерты о фроде на кассе в Telegram и ИИ-ответы на отзывы в картах.",
+          metrics: [
+            "4 демо, 2 с живой генерацией ИИ",
+            "Цепочка из 8 бесплатных моделей-фолбэков",
+            "Встроены в этот сайт, открываются с телефона",
+          ],
+          link: null,
+          github: "https://github.com/jayco2610/jasur-portfolio",
+          demo: "/demos",
         },
         {
           name: "Expat Roadmap SEA",
@@ -535,6 +572,7 @@ export const t = {
           ],
           link: null,
           github: "https://github.com/jayco2610/claude-outreach-system",
+          demo: "/demos/career",
         },
         {
           name: "Personal Brandbook",

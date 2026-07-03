@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 
@@ -32,6 +33,14 @@ export default function ProjectsPage() {
                 </span>
               </div>
               <div className="flex items-center gap-3 shrink-0">
+                {(proj as { demo?: string }).demo && (
+                  <Link
+                    href={(proj as { demo: string }).demo}
+                    className="font-mono text-[10px] px-2 py-1 rounded bg-[#7C3AED] text-white hover:bg-[#6d28d9] transition-colors"
+                  >
+                    {lang === "en" ? "Demo →" : "Демо →"}
+                  </Link>
+                )}
                 {proj.github && (
                   <a href={proj.github} target="_blank" rel="noopener noreferrer"
                     className="font-mono text-[10px] text-white/30 hover:text-white transition-colors">
