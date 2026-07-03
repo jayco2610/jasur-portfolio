@@ -13,7 +13,7 @@ Main positioning: "PM building an AI system for his own career search and showin
 ### Personal AI Projects — Independent AI Builder (May 2026 – Present)
 - Built Expat Roadmap SEA — full-stack relocation platform solo using AI-assisted development (Cursor + Claude): 5 product areas, production in 4 weeks, $0 infrastructure cost
 - Built Portfolio + JasurGPT — personal site with AI assistant trained on full professional context
-- Built AI Career System — end-to-end job search automation (Claude + n8n + Google Sheets + Telegram); pipeline automation rate: 100%; time-to-output: 55s avg; 47 vacancies processed
+- Built AI Career System — end-to-end job search automation (Claude + n8n + Google Sheets + Telegram); pipeline automation rate: 100%; time-to-output: 80s avg; 47 vacancies processed
 - Configured Claude + Telegram + Whisper voice pipeline end-to-end, independently
 - Developing AI agent for ABC/XYZ inventory analysis using n8n (in progress)
 - Built conversational automation bots in Voiceflow for real business use cases
@@ -60,7 +60,7 @@ HSE University (Higher School of Economics) — Bachelor of Business and Economi
 ### AI Career System — live
 End-to-end job search automation: Claude + n8n + Google Sheets + Telegram.
 Receives vacancy link → parses JD → compares with resume → generates tailored cover letter → logs to Sheets. Zero manual steps.
-Stats: 47 vacancies processed, 47 cover letters generated, 55s avg time-to-output, 100% pipeline automation rate.
+Stats: 47 vacancies processed, 47 cover letters generated, 80s avg time-to-output, 100% pipeline automation rate.
 
 ### Mia — Dental Clinic RAG Assistant — live
 Retrieval-augmented assistant built for a dental clinic. Answers patient questions from clinic documents only. Hallucination rate: 0%. Live demo on Hugging Face Spaces.

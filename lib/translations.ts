@@ -54,14 +54,14 @@ export const t = {
       liveStats: [
         { value: "47", label: "vacancies processed" },
         { value: "47", label: "cover letters generated" },
-        { value: "55s", label: "avg. time-to-output" },
+        { value: "80s", label: "avg. time-to-output" },
         { value: "100%", label: "pipeline automation" },
       ],
       projects: [
         {
           name: "AI Career System",
           status: "live",
-          desc: "End-to-end job search automation. Claude + n8n + Google Sheets + Telegram. Vacancy in → cover letter out in 55 seconds.",
+          desc: "End-to-end job search automation. Claude + n8n + Google Sheets + Telegram. Vacancy in → cover letter out in 80 seconds.",
           tags: ["Claude", "n8n", "Telegram"],
           link: null,
         },
@@ -163,7 +163,7 @@ export const t = {
             "End-to-end job search automation. Receives a vacancy link in Telegram, parses and analyzes the JD, compares against resume, generates a tailored cover letter, logs to Google Sheets — zero manual touchpoints.",
           metrics: [
             "Pipeline automation rate: 100% (zero manual steps)",
-            "Time-to-output: 55s avg (vs. 45 min manual)",
+            "Time-to-output: 80s avg (vs. 45 min manual)",
             "Manual touchpoints eliminated: 7",
           ],
           link: null,
@@ -253,7 +253,7 @@ export const t = {
           bullets: [
             "Built expat networking platform solo using AI-assisted development (Cursor + Claude)",
             "Built Portfolio + JasurGPT — personal site with AI chat trained on resume and projects",
-            "Built AI Career System — end-to-end job search automation (Claude + n8n + Google Sheets + Telegram); vacancy in → cover letter out in 55 seconds; pipeline automation rate: 100%",
+            "Built AI Career System — end-to-end job search automation (Claude + n8n + Google Sheets + Telegram); vacancy in → cover letter out in 80 seconds; pipeline automation rate: 100%",
             "Configured Claude + Telegram + Whisper voice pipeline end-to-end, independently",
             "Developing AI agent for ABC/XYZ inventory analysis using n8n (in progress)",
             "Built conversational automation bots in Voiceflow for real business use cases",
@@ -351,7 +351,7 @@ export const t = {
           link: null,
           bullets: [
             "End-to-end job search automation: vacancy parsing, ATS resume adaptation, auto cover letter generation",
-            "Claude + n8n + Google Sheets + Telegram; pipeline automation rate: 100%; time-to-output: 55s",
+            "Claude + n8n + Google Sheets + Telegram; pipeline automation rate: 100%; time-to-output: 80s",
           ],
           skills: "Claude API, n8n, Google Sheets, Telegram Bot API, Prompt Engineering",
         },
@@ -465,7 +465,7 @@ export const t = {
         {
           name: "AI Career System",
           status: "в работе",
-          desc: "Автоматизация поиска работы от начала до конца. Claude + n8n + Google Sheets + Telegram. Вакансия на входе → сопроводительное письмо за 55 секунд.",
+          desc: "Автоматизация поиска работы от начала до конца. Claude + n8n + Google Sheets + Telegram. Вакансия на входе → сопроводительное письмо за 80 секунд.",
           tags: ["Claude", "n8n", "Telegram"],
           link: null,
         },
@@ -567,7 +567,7 @@ export const t = {
             "Автоматизация поиска работы от начала до конца. Получает ссылку на вакансию в Telegram, парсит и анализирует описание, сравнивает с резюме, генерирует письмо, логирует в Google Sheets — без ручных шагов.",
           metrics: [
             "Уровень автоматизации пайплайна: 100% (ноль ручных шагов)",
-            "Время до результата: 55 сек. в среднем (против 45 мин. вручную)",
+            "Время до результата: 80 сек. в среднем (против 45 мин. вручную)",
             "Устранено ручных действий: 7",
           ],
           link: null,
@@ -651,7 +651,7 @@ export const t = {
           bullets: [
             "Построил платформу для экспатов соло с помощью AI-assisted разработки (Cursor + Claude)",
             "Создал Portfolio + JasurGPT — личный сайт с AI-чатом, обученным на резюме и проектах",
-            "Построил AI Career System — автоматизация поиска работы (Claude + n8n + Google Sheets + Telegram); от вакансии до письма за 55 секунд; уровень автоматизации: 100%",
+            "Построил AI Career System — автоматизация поиска работы (Claude + n8n + Google Sheets + Telegram); от вакансии до письма за 80 секунд; уровень автоматизации: 100%",
             "Настроил голосовой пайплайн Claude + Telegram + Whisper с нуля",
             "Разрабатываю AI-агента для ABC/XYZ-анализа запасов на n8n (в процессе)",
             "Создал conversational-боты в Voiceflow для реальных бизнес-задач",
@@ -749,7 +749,7 @@ export const t = {
           link: null,
           bullets: [
             "Автоматизация поиска работы: парсинг вакансий, адаптация резюме под ATS, автогенерация писем",
-            "Claude + n8n + Google Sheets + Telegram; уровень автоматизации: 100%; время до результата: 55 сек.",
+            "Claude + n8n + Google Sheets + Telegram; уровень автоматизации: 100%; время до результата: 80 сек.",
           ],
           skills: "Claude API, n8n, Google Sheets, Telegram Bot API, Prompt Engineering",
         },
