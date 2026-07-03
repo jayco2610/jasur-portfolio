@@ -90,6 +90,16 @@ Rules:
   return { system, user };
 }
 
+// Guards against reasoning models leaking English chain-of-thought into
+// the answer: the reply must be dominated by the requested language.
+function matchesLang(s: string, lang: Lang): boolean {
+  const cyr = (s.match(/[а-яё]/gi) ?? []).length;
+  const lat = (s.match(/[a-z]/gi) ?? []).length;
+  const total = cyr + lat;
+  if (total === 0) return false;
+  return lang === "ru" ? cyr / total > 0.7 : lat / total > 0.7;
+}
+
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   if (await isRateLimited("demo", ip)) {
@@ -107,7 +117,8 @@ export async function POST(req: NextRequest) {
 
   // Generous cap: reasoning models spend tokens thinking before the answer.
   let prompt: { system: string; user: string } | null = null;
-  let maxTokens = 1024;
+  const maxTokens = 1024;
+  let maxLen = 350; // asked for 250 chars; allow some slack, reject dumps
 
   if (body.type === "leftovers") {
     const items = parseItems(body.items);
@@ -121,6 +132,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "invalid_request" }, { status: 400 });
     }
     prompt = reviewPrompt(review, rating, tone, lang);
+    maxLen = 550; // asked for 400 chars
   } else {
     return NextResponse.json({ error: "invalid_request" }, { status: 400 });
   }
@@ -130,7 +142,12 @@ export async function POST(req: NextRequest) {
       { role: "system", content: prompt.system },
       { role: "user", content: prompt.user },
     ],
-    { maxTokens, temperature: 0.8, title: "Portfolio Demos" }
+    {
+      maxTokens,
+      temperature: 0.8,
+      title: "Portfolio Demos",
+      validate: (s) => s.length <= maxLen && matchesLang(s, lang),
+    }
   );
 
   if (!content) return NextResponse.json({ error: "unavailable" }, { status: 503 });

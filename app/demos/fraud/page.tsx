@@ -39,7 +39,7 @@ const copy = {
     subtitle:
       "A simulated stream of register events runs on the left. Rules check every event, and anything suspicious lands in the owner's Telegram within a second: who, where, how much.",
     pitch:
-      "The pitch: if a cashier voids a check, deletes an item, or plays with discounts, the owner gets an alert instantly. Control 24/7 without hours of camera footage.",
+      "If a cashier voids a check, deletes an item, or plays with discounts, the owner gets an alert instantly. Control 24/7 without hours of camera footage.",
     rulesTitle: "Active rules",
     rules: [
       "Check void over 1,000 ₽",
@@ -69,7 +69,7 @@ const copy = {
     subtitle:
       "Слева идёт симулированный поток кассовых событий. Каждое событие проверяется по правилам, и всё подозрительное за секунду прилетает владельцу в Telegram: кто, где и на сколько.",
     pitch:
-      "Питч: если кассир отменяет чек, удаляет позицию или химичит со скидками, владельцу в ту же секунду летит алерт. Контроль 24/7 без отсмотра камер часами.",
+      "Если кассир отменяет чек, удаляет позицию или химичит со скидками, владельцу в ту же секунду летит алерт. Контроль 24/7 без отсмотра камер часами.",
     rulesTitle: "Активные правила",
     rules: [
       "Отмена чека на сумму больше 1 000 ₽",
@@ -186,6 +186,7 @@ export default function FraudDemoPage() {
       title={{ en: copy.en.title, ru: copy.ru.title }}
       subtitle={{ en: copy.en.subtitle, ru: copy.ru.subtitle }}
       pitch={{ en: copy.en.pitch, ru: copy.ru.pitch }}
+      hint={{ en: "Press Inject a fraud event and watch the alert land in Telegram on the right.", ru: "Нажмите «Подбросить фрод-событие» и следите за алертом в Telegram справа." }}
     >
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-8 max-w-2xl">

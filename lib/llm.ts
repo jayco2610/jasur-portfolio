@@ -16,10 +16,27 @@ const PASSES = 2; // free models are flaky; run the chain twice before giving up
 
 export type LlmMessage = { role: "system" | "user" | "assistant"; content: string };
 
-export async function generate(
-  messages: LlmMessage[],
-  opts?: { maxTokens?: number; temperature?: number; title?: string }
-): Promise<string | null> {
+export type GenerateOpts = {
+  maxTokens?: number;
+  temperature?: number;
+  title?: string;
+  // Reject bad outputs (wrong language, leaked reasoning, over-length) and
+  // move on to the next model in the chain.
+  validate?: (s: string) => boolean;
+};
+
+// Reasoning models sometimes dump their chain of thought into content.
+// Strip the marked blocks and unwrap quotes; validate() catches the rest.
+function cleanContent(raw: string): string {
+  return raw
+    .replace(/<think>[\s\S]*?<\/think>/gi, "")
+    .replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, "")
+    .trim()
+    .replace(/^["'«»""]+|["'«»""]+$/g, "")
+    .trim();
+}
+
+export async function generate(messages: LlmMessage[], opts?: GenerateOpts): Promise<string | null> {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) return null;
 
@@ -31,11 +48,7 @@ export async function generate(
   return null;
 }
 
-async function tryChain(
-  apiKey: string,
-  messages: LlmMessage[],
-  opts?: { maxTokens?: number; temperature?: number; title?: string }
-): Promise<string | null> {
+async function tryChain(apiKey: string, messages: LlmMessage[], opts?: GenerateOpts): Promise<string | null> {
   for (const model of FREE_MODELS) {
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -59,7 +72,12 @@ async function tryChain(
         continue;
       }
       const content = data?.choices?.[0]?.message?.content;
-      if (typeof content === "string" && content.trim()) return content.trim();
+      if (typeof content === "string" && content.trim()) {
+        const clean = cleanContent(content);
+        if (clean && (!opts?.validate || opts.validate(clean))) return clean;
+        console.warn(`[llm] ${model} rejected output: ${clean.slice(0, 150)}`);
+        continue;
+      }
       console.warn(`[llm] ${model} empty content: ${JSON.stringify(data).slice(0, 300)}`);
     } catch (e) {
       console.warn(`[llm] ${model} threw: ${e instanceof Error ? e.message : String(e)}`);

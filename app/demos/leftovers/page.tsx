@@ -29,7 +29,7 @@ const copy = {
     subtitle:
       "At 7:30 pm the system looks at what is left on the counter (data comes from the POS software), AI writes the push text, and loyal customers living nearby get it. Press the button and watch it happen.",
     pitch:
-      "The pitch: instead of writing prepared food off at a loss every evening, the venue sells it at 40% off to people who are a 10-minute walk away.",
+      "Instead of writing prepared food off at a loss every evening, the venue sells it at 40% off to people who are a 10-minute walk away.",
     counterTitle: "Counter · 7:30 pm",
     colItem: "Item",
     colQty: "Qty",
@@ -54,7 +54,7 @@ const copy = {
     subtitle:
       "В 19:30 система смотрит, что осталось на витрине (данные приходят из кассового ПО), ИИ пишет текст пуша, и его получают лояльные клиенты, живущие рядом. Нажмите кнопку и посмотрите, как это происходит.",
     pitch:
-      "Питч: вместо того чтобы каждый вечер списывать готовую еду в минус, точка продаёт её со скидкой 40% людям, которые живут в 10 минутах пешком.",
+      "Вместо того чтобы каждый вечер списывать готовую еду в минус, точка продаёт её со скидкой 40% людям, которые живут в 10 минутах пешком.",
     counterTitle: "Витрина · 19:30",
     colItem: "Позиция",
     colQty: "Кол-во",
@@ -120,6 +120,7 @@ export default function LeftoversDemoPage() {
       title={{ en: copy.en.title, ru: copy.ru.title }}
       subtitle={{ en: copy.en.subtitle, ru: copy.ru.subtitle }}
       pitch={{ en: copy.en.pitch, ru: copy.ru.pitch }}
+      hint={{ en: "Press Run the AI push and watch the push land on the phone.", ru: "Нажмите «Запустить ИИ-рассылку» и посмотрите, как пуш придёт на телефон справа." }}
     >
       <div className="flex flex-col lg:flex-row gap-10 items-start">
         {/* Left: counter + recipients */}

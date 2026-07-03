@@ -24,7 +24,7 @@ const copy = {
     subtitle:
       "A fan scans a QR code on the seat, orders during the period, pays via SBP without getting up, and picks the order up at a separate window in seconds. On the right: what the concession stand sees during a 15-minute break.",
     pitch:
-      "The pitch: during breaks you lose fans who refuse to stand in line. Pre-orders let the stand serve about 30% more checks in the same 15 minutes.",
+      "During breaks you lose fans who refuse to stand in line. Pre-orders let the stand serve about 30% more checks in the same 15 minutes.",
     seat: "Sector B · Row 7 · Seat 12",
     scanHint: "Scan the QR code on your seat",
     scanBtn: "Scan QR",
@@ -57,7 +57,7 @@ const copy = {
     subtitle:
       "Болельщик сканирует QR на кресле, заказывает во время матча, платит через СБП не вставая с места и забирает заказ в отдельном окне за секунды. Справа: что видит точка питания за 15-минутный перерыв.",
     pitch:
-      "Питч: в перерывах вы теряете людей, которые не хотят стоять в очередях. С предзаказом точка пропускает примерно на 30% больше чеков за те же 15 минут.",
+      "В перерывах вы теряете людей, которые не хотят стоять в очередях. С предзаказом точка пропускает примерно на 30% больше чеков за те же 15 минут.",
     seat: "Сектор B · Ряд 7 · Место 12",
     scanHint: "Отсканируйте QR-код на вашем кресле",
     scanBtn: "Сканировать QR",
@@ -178,6 +178,7 @@ export default function PreorderDemoPage() {
       title={{ en: copy.en.title, ru: copy.ru.title }}
       subtitle={{ en: copy.en.subtitle, ru: copy.ru.subtitle }}
       pitch={{ en: copy.en.pitch, ru: copy.ru.pitch }}
+      hint={{ en: "Press Scan QR on the phone and walk the order through to pickup.", ru: "Нажмите «Сканировать QR» в телефоне и пройдите заказ до конца, до статуса «готов к выдаче»." }}
     >
       <div className="flex flex-col lg:flex-row gap-10 items-start">
         {/* Phone */}

@@ -71,7 +71,7 @@ const copy = {
     subtitle:
       "Managers spend hours answering reviews on maps services. Here AI does it in seconds: click a review and watch the venue's reply being written. Every reply follows the venue's tone rules.",
     pitch:
-      "The pitch: every unanswered review on Yandex Maps or 2GIS costs new customers. AI drafts the replies, the manager only approves.",
+      "Every unanswered review on Yandex Maps or 2GIS costs new customers. AI drafts the replies, the manager only approves.",
     tone: "Reply tone",
     toneNeutral: "neutral",
     toneWarm: "warm",
@@ -89,7 +89,7 @@ const copy = {
     subtitle:
       "Менеджеры тратят часы на ответы в Яндекс Картах и 2ГИС. Здесь это делает ИИ за секунды: нажмите на отзыв и посмотрите, как пишется ответ заведения. Каждый ответ следует правилам тона заведения.",
     pitch:
-      "Питч: каждый отзыв без ответа на Яндекс Картах или 2ГИС стоит новых клиентов. ИИ готовит черновики ответов, менеджер только утверждает.",
+      "Каждый отзыв без ответа на Яндекс Картах или 2ГИС стоит новых клиентов. ИИ готовит черновики ответов, менеджер только утверждает.",
     tone: "Тон ответа",
     toneNeutral: "нейтральный",
     toneWarm: "тёплый",
@@ -171,6 +171,7 @@ export default function ReviewsDemoPage() {
       title={{ en: copy.en.title, ru: copy.ru.title }}
       subtitle={{ en: copy.en.subtitle, ru: copy.ru.subtitle }}
       pitch={{ en: copy.en.pitch, ru: copy.ru.pitch }}
+      hint={{ en: "Press Reply with AI under any review, or paste your own review below.", ru: "Нажмите «Ответить с ИИ» под любым отзывом или вставьте свой отзыв в поле внизу." }}
     >
       {/* Tone toggle */}
       <div className="flex items-center gap-3 mb-8">
