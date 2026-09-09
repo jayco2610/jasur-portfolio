@@ -42,7 +42,7 @@ export const t = {
       ],
       about: "About",
       aboutP1:
-        "I'm a Product Manager and marketing analyst from Tashkent, Uzbekistan. I've shipped products at Instameal (food delivery), IDF Lab (B2B SaaS), and Synergia. Currently building AI tooling for my own job search — and publishing the process publicly.",
+        "I'm a Product Manager and marketing analyst based in Moscow. I've shipped products at Instameal (food delivery), IDF Lab (B2B SaaS), and Synergia. Currently building AI tooling for my own job search — and publishing the process publicly.",
       aboutP2:
         "Looking for a remote PM or product marketing role with an international team. The AI career system you see above is both my portfolio and my actual workflow.",
       gptHint: "Have questions about my experience or projects?",
@@ -75,7 +75,7 @@ export const t = {
         {
           name: "Mia — Clinic RAG Assistant",
           status: "live",
-          desc: "Retrieval-augmented assistant for a dental clinic. Answers patient questions from clinic documents only — 0% hallucination rate. Live on Hugging Face.",
+          desc: "Retrieval-augmented assistant for a dental clinic. Answers patients from the clinic's documents only. Doesn't know — says so. Live on Hugging Face.",
           tags: ["Python", "RAG", "LangChain"],
           link: "https://huggingface.co/spaces/rag-jasur/mia-clinic-assistant",
         },
@@ -116,9 +116,9 @@ export const t = {
           status: "live",
           stack: ["Python", "RAG", "Groq", "Gradio", "Hugging Face"],
           description:
-            "Retrieval-augmented assistant for a dental clinic. Answers patient questions about services, pricing, hours, and procedures from the clinic's own documents — grounded answers only, 0% hallucination rate. Deployed live on Hugging Face Spaces.",
+            "Retrieval-augmented assistant for a dental clinic. Answers questions about services, pricing, hours, and procedures from the clinic's own documents. Every answer points at the fragment it came from. No fragment — no answer. Deployed live on Hugging Face Spaces.",
           metrics: [
-            "Hallucination rate: 0% (strict retrieval-only mode)",
+            "Retrieval only: answers from indexed documents, with the source attached",
             "4 query categories: pricing, services, hours, procedures",
             "Live demo on Hugging Face Spaces",
           ],
@@ -446,7 +446,7 @@ export const t = {
       ],
       about: "О себе",
       aboutP1:
-        "Продакт-менеджер и маркетинг-аналитик из Ташкента. Запускал продукты в Instameal (фудтех), IDF Lab (B2B SaaS) и Synergia. Сейчас строю AI-инструменты для собственного поиска работы — и публикую процесс открыто.",
+        "Продакт-менеджер и маркетинг-аналитик из Москвы. Запускал продукты в Instameal (фудтех), IDF Lab (B2B SaaS) и Synergia. Сейчас строю AI-инструменты для собственного поиска работы — и публикую процесс открыто.",
       aboutP2:
         "Ищу удалённую PM или product marketing роль в международной команде. AI Career System выше — это одновременно моё портфолио и реальный рабочий инструмент.",
       gptHint: "Есть вопросы об опыте или проектах?",
@@ -479,7 +479,7 @@ export const t = {
         {
           name: "Mia — RAG-ассистент для клиники",
           status: "в работе",
-          desc: "Ретривал-ассистент для стоматологической клиники. Отвечает на вопросы пациентов только по документам клиники — 0% галлюцинаций. Живой демо на Hugging Face.",
+          desc: "Ретривал-ассистент для стоматологической клиники. Отвечает пациентам только по документам клиники. Не знает — так и говорит. Живой демо на Hugging Face.",
           tags: ["Python", "RAG", "LangChain"],
           link: "https://huggingface.co/spaces/rag-jasur/mia-clinic-assistant",
         },
@@ -520,9 +520,9 @@ export const t = {
           status: "в работе",
           stack: ["Python", "RAG", "Groq", "Gradio", "Hugging Face"],
           description:
-            "Ретривал-ассистент для стоматологической клиники. Отвечает на вопросы пациентов об услугах, ценах, часах работы и процедурах только по документам клиники — 0% галлюцинаций.",
+            "Ретривал-ассистент для стоматологической клиники. Отвечает про услуги, цены, часы работы и процедуры только по документам клиники. Под каждым ответом видно, из какого фрагмента он собран. Нет фрагмента — нет ответа.",
           metrics: [
-            "Уровень галлюцинаций: 0% (только ретривал, без выдумок)",
+            "Только ретривал: отвечает по проиндексированным документам, с указанием источника",
             "4 категории запросов: цены, услуги, часы, процедуры",
             "Живой демо на Hugging Face Spaces",
           ],

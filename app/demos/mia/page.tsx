@@ -88,9 +88,9 @@ const copy = {
   en: {
     title: "Mia, a clinic RAG assistant",
     subtitle:
-      "A real project: an assistant for a dental clinic that answers patients only from the clinic's own documents. Below is a step-by-step simulation of how it works inside; the live assistant is one click away.",
+      "An assistant for a dental clinic that answers patients only from the clinic's own documents. Below is a step-by-step simulation of how it works inside; the live assistant is one click away.",
     pitch:
-      "A knowledge base turns into a 24/7 assistant that never invents prices or promises. Hallucination rate on the live project: 0%.",
+      "A knowledge base becomes an assistant that works round the clock and doesn't invent prices. Every answer is assembled from a document fragment. No fragment — no answer.",
     hint: "Pick a patient question under the phone and watch the answer get built from documents.",
     step1: "Knowledge base",
     step1desc: "The clinic's documents are split into fragments and indexed",
@@ -110,9 +110,9 @@ const copy = {
   ru: {
     title: "Mia, RAG-ассистент клиники",
     subtitle:
-      "Реальный проект: ассистент стоматологической клиники, который отвечает пациентам только по документам клиники. Ниже пошаговая симуляция того, как это устроено внутри; живой ассистент открывается в один клик.",
+      "Ассистент стоматологической клиники, который отвечает пациентам только по документам клиники. Ниже пошаговая симуляция того, как это устроено внутри; живой ассистент открывается в один клик.",
     pitch:
-      "База знаний превращается в ассистента 24/7, который никогда не выдумывает цены и обещания. Уровень галлюцинаций на живом проекте: 0%.",
+      "База знаний становится ассистентом, который работает круглосуточно и не выдумывает цены. Каждый ответ собран из фрагмента документа. Нет фрагмента — нет ответа.",
     hint: "Выберите вопрос пациента под телефоном и посмотрите, как ответ собирается из документов.",
     step1: "База знаний",
     step1desc: "Документы клиники разбиты на фрагменты и проиндексированы",

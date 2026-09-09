@@ -13,7 +13,7 @@ const productDemos = [
       en: "An assistant that answers patients only from the clinic's documents. Step-by-step walkthrough plus the live assistant on Hugging Face.",
       ru: "Ассистент, который отвечает пациентам только по документам клиники. Пошаговый разбор плюс живой ассистент на Hugging Face.",
     },
-    tags: ["RAG", "Hugging Face", "0% галлюцинаций"],
+    tags: ["RAG", "Hugging Face", "не выдумывает"],
     live: true,
   },
   {
