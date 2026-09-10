@@ -8,20 +8,20 @@ import Script from "next/script";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jasur-portfolio-pied.vercel.app"),
-  title: "Jasur Akhmadaliev — PM · AI Builder",
+  title: "Jasur Akhmadaliev — Portfolio · PM · AI Builder",
   description:
-    "Product Manager building an AI system for his own career search. Showing it live.",
+    "Portfolio of Jasur Akhmadaliev, a Product Manager building an AI system for his own career search. Showing it live.",
   openGraph: {
-    title: "Jasur Akhmadaliev — PM · AI Builder",
+    title: "Jasur Akhmadaliev — Portfolio · PM · AI Builder",
     description:
-      "Product Manager building an AI system for his own career search. Showing it live.",
-    siteName: "jasur.dev",
+      "Portfolio of Jasur Akhmadaliev, a Product Manager building an AI system for his own career search. Showing it live.",
+    siteName: "Jasur Akhmadaliev — Portfolio",
     images: [{ url: "/jasur.jpg", width: 1200, height: 800, alt: "Jasur Akhmadaliev" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jasur Akhmadaliev — PM · AI Builder",
-    description: "Product Manager building an AI system for his own career search. Showing it live.",
+    title: "Jasur Akhmadaliev — Portfolio · PM · AI Builder",
+    description: "Portfolio of Jasur Akhmadaliev, a Product Manager building an AI system for his own career search. Showing it live.",
     images: ["/jasur.jpg"],
   },
 };
