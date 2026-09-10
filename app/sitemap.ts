@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getAllPosts } from "@/lib/blog";
 
 const BASE_URL = "https://jasur-portfolio-pied.vercel.app";
 
@@ -19,10 +20,21 @@ const routes = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
-  return routes.map(({ path, priority }) => ({
+
+  const staticPages: MetadataRoute.Sitemap = routes.map(({ path, priority }) => ({
     url: `${BASE_URL}${path}`,
     lastModified,
     changeFrequency: "weekly",
     priority,
   }));
+
+  // Статьи блога: у них своя дата и они меняются реже, чем разделы сайта.
+  const posts: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: post.date ? new Date(post.date) : lastModified,
+    changeFrequency: "monthly",
+    priority: 0.9,
+  }));
+
+  return [...staticPages, ...posts];
 }
