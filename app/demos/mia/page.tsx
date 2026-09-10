@@ -165,7 +165,7 @@ export default function MiaDemoPage() {
         href={HF_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-block font-mono text-sm px-5 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors mb-10"
+        className="inline-block tiny !text-[11px] px-5 py-3 bg-ink text-paper hover:opacity-80 transition-opacity mb-10"
       >
         {c.openLive}
       </a>
@@ -174,12 +174,12 @@ export default function MiaDemoPage() {
         {/* Left: pipeline steps */}
         <div className="flex-1 min-w-0 w-full space-y-4">
           {/* Step 1: knowledge base */}
-          <div className="p-5 bg-[#111111] border border-[#1f1f1f] rounded-lg">
-            <p className="font-mono text-xs font-bold text-white mb-1">1 · {c.step1}</p>
-            <p className="text-white/40 text-xs mb-3">{c.step1desc}</p>
+          <div className="demo-card">
+            <p className="tiny !text-[11px] mb-1">1 · {c.step1}</p>
+            <p className="text-dim text-xs mb-3">{c.step1desc}</p>
             <div className="grid grid-cols-2 gap-2">
               {DOCS.map((d) => (
-                <div key={d.name.en} className="flex items-center gap-2 px-3 py-2 bg-white/[0.03] rounded font-mono text-[11px] text-white/60">
+                <div key={d.name.en} className="flex items-center gap-2 px-3 py-2 border border-rule text-[11px]">
                   <span>{d.icon}</span> {d.name[lang]}
                 </div>
               ))}
@@ -187,17 +187,13 @@ export default function MiaDemoPage() {
           </div>
 
           {/* Step 2: retrieval */}
-          <div
-            className={`p-5 bg-[#111111] border rounded-lg transition-colors ${
-              phase === "searching" ? "border-[#7C3AED]/60" : phase === "found" || phase === "done" ? "border-[#7C3AED]/30" : "border-[#1f1f1f]"
-            }`}
-          >
-            <p className="font-mono text-xs font-bold text-white mb-1">2 · {c.step2}</p>
-            <p className="text-white/40 text-xs mb-3">{c.step2desc}</p>
-            {phase === "idle" && <p className="font-mono text-[10px] text-white/25">{c.step2empty}</p>}
+          <div className={`demo-card ${phase === "searching" || phase === "found" || phase === "done" ? "demo-card-active" : ""}`}>
+            <p className="tiny !text-[11px] mb-1">2 · {c.step2}</p>
+            <p className="text-dim text-xs mb-3">{c.step2desc}</p>
+            {phase === "idle" && <p className="tiny !text-[10px]">{c.step2empty}</p>}
             {phase === "searching" && (
-              <div className="flex items-center gap-2 font-mono text-[11px] text-[#a78bfa]">
-                <span className="w-3 h-3 border border-[#7C3AED] border-t-transparent rounded-full animate-spin" />
+              <div className="flex items-center gap-2 text-[11px] text-dim">
+                <span className="w-3 h-3 border border-ink border-t-transparent rounded-full animate-spin" />
                 {c.searching}
               </div>
             )}
@@ -205,25 +201,21 @@ export default function MiaDemoPage() {
               question?.fragments.map((f, i) => (
                 <div
                   key={f.source.en}
-                  className="mb-2 px-3 py-2.5 bg-[#7C3AED]/10 border border-[#7C3AED]/25 rounded animate-[fadeUp_0.4s_ease_both]"
+                  className="mb-2 px-3 py-2.5 border border-rule bg-[#f5f4f0] animate-[fadeUp_0.4s_ease_both]"
                   style={{ animationDelay: `${i * 150}ms` }}
                 >
-                  <p className="font-mono text-[9px] text-[#a78bfa] uppercase tracking-wider mb-1">{f.source[lang]}</p>
-                  <p className="text-xs text-white/70 leading-relaxed">{f.text[lang]}</p>
+                  <p className="tiny !text-[9px] mb-1">{f.source[lang]}</p>
+                  <p className="text-xs leading-relaxed">{f.text[lang]}</p>
                 </div>
               ))}
           </div>
 
           {/* Step 3: grounded answer */}
-          <div
-            className={`p-5 bg-[#111111] border rounded-lg transition-colors ${
-              phase === "done" ? "border-emerald-500/40" : "border-[#1f1f1f]"
-            }`}
-          >
-            <p className="font-mono text-xs font-bold text-white mb-1">3 · {c.step3}</p>
-            <p className="text-white/40 text-xs">{c.step3desc}</p>
+          <div className={`demo-card ${phase === "done" ? "demo-card-done" : ""}`}>
+            <p className="tiny !text-[11px] mb-1">3 · {c.step3}</p>
+            <p className="text-dim text-xs">{c.step3desc}</p>
             {phase === "done" && (
-              <p className="font-mono text-[11px] text-emerald-400 mt-3 animate-[fadeUp_0.4s_ease_both]">✓ {c.step3check}</p>
+              <p className="text-[11px] text-acc mt-3 animate-[fadeUp_0.4s_ease_both]">✓ {c.step3check}</p>
             )}
           </div>
         </div>
@@ -273,7 +265,7 @@ export default function MiaDemoPage() {
               ))}
             </div>
           </PhoneFrame>
-          <p className="font-mono text-[10px] text-white/25 max-w-[300px] text-center">{c.simNote}</p>
+          <p className="tiny !text-[10px] max-w-[300px] text-center">{c.simNote}</p>
         </div>
       </div>
     </DemoShell>

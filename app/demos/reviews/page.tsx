@@ -106,9 +106,9 @@ const copy = {
 
 function Stars({ rating }: { rating: number }) {
   return (
-    <span className="font-mono text-xs text-amber-400/90">
+    <span className="text-xs text-acc">
       {"★".repeat(rating)}
-      <span className="text-white/15">{"★".repeat(5 - rating)}</span>
+      <span className="text-faint">{"★".repeat(5 - rating)}</span>
     </span>
   );
 }
@@ -175,44 +175,40 @@ export default function ReviewsDemoPage() {
     >
       {/* Tone toggle */}
       <div className="flex items-center gap-3 mb-8">
-        <span className="font-mono text-xs text-white/40">{c.tone}:</span>
+        <span className="tiny">{c.tone}:</span>
         {(["neutral", "warm"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTone(t)}
-            className={`font-mono text-xs px-3 py-1.5 rounded border transition-colors ${
-              tone === t
-                ? "bg-[#7C3AED] border-[#7C3AED] text-white"
-                : "border-white/15 text-white/50 hover:border-white/30"
+            className={`text-xs px-3 py-1.5 border transition-colors ${
+              tone === t ? "bg-ink border-ink text-paper" : "border-rule hover:border-ink"
             }`}
           >
             {t === "neutral" ? c.toneNeutral : c.toneWarm}
           </button>
         ))}
-        {error && <span className="font-mono text-xs text-amber-400/90 ml-2">{error}</span>}
+        {error && <span className="text-xs text-acc ml-2">{error}</span>}
       </div>
 
       <div className="space-y-4 max-w-3xl">
         {REVIEWS.map((r) => (
-          <div key={r.id} className="p-5 bg-[#111111] border border-[#1f1f1f] rounded-lg">
+          <div key={r.id} className="demo-card">
             <div className="flex items-center gap-3 mb-2">
-              <span className="w-8 h-8 rounded-full bg-[#7C3AED]/25 text-[#a78bfa] flex items-center justify-center font-mono text-xs">
+              <span className="w-8 h-8 rounded-full border border-ink flex items-center justify-center text-xs">
                 {r.name[lang][0]}
               </span>
               <div>
-                <p className="font-mono text-xs font-bold text-white">{r.name[lang]}</p>
+                <p className="text-xs font-bold">{r.name[lang]}</p>
                 <Stars rating={r.rating} />
               </div>
-              <span className="ml-auto font-mono text-[9px] text-white/30 border border-white/10 rounded px-1.5 py-0.5 uppercase tracking-wider">
-                {r.source}
-              </span>
+              <span className="ml-auto demo-pill">{r.source}</span>
             </div>
-            <p className="text-sm text-white/60 leading-relaxed mb-3">{r.text[lang]}</p>
+            <p className="text-sm text-dim leading-relaxed mb-3">{r.text[lang]}</p>
 
             {replies[r.id] ? (
-              <div className="mt-3 pl-4 border-l-2 border-[#7C3AED]/50">
-                <p className="font-mono text-[10px] text-[#a78bfa] uppercase tracking-wider mb-1">{c.replyLabel}</p>
-                <p className="text-sm text-white/75 leading-relaxed">
+              <div className="mt-3 pl-4 border-l-2 border-ink">
+                <p className="tiny !text-[10px] mb-1">{c.replyLabel}</p>
+                <p className="text-sm leading-relaxed">
                   <TypedText text={replies[r.id]} />
                 </p>
               </div>
@@ -220,7 +216,7 @@ export default function ReviewsDemoPage() {
               <button
                 onClick={() => reply(r.id, r.text[lang], r.rating)}
                 disabled={loadingId !== null}
-                className="font-mono text-xs px-4 py-2 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors disabled:opacity-50"
+                className="text-xs px-4 py-2 bg-ink text-paper hover:opacity-80 transition-opacity disabled:opacity-50"
               >
                 {loadingId === r.id ? c.replying : c.replyBtn}
               </button>
@@ -229,23 +225,23 @@ export default function ReviewsDemoPage() {
         ))}
 
         {/* Custom review */}
-        <div className="p-5 bg-[#111111] border border-[#7C3AED]/25 rounded-lg">
-          <p className="font-mono text-xs font-bold text-white mb-3">{c.customTitle}</p>
+        <div className="demo-card demo-card-active">
+          <p className="text-xs font-bold mb-3">{c.customTitle}</p>
           <textarea
             value={customText}
             onChange={(e) => setCustomText(e.target.value)}
             maxLength={500}
             rows={3}
             placeholder={c.customPlaceholder}
-            className="w-full bg-[#0d0d0d] border border-[#1f1f1f] rounded-lg px-3 py-2.5 text-sm text-white/80 placeholder:text-white/25 focus:outline-none focus:border-[#7C3AED]/50 resize-none"
+            className="w-full bg-paper border border-rule px-3 py-2.5 text-sm placeholder:text-faint focus:outline-none focus:border-ink resize-none"
           />
           <div className="flex items-center gap-3 mt-3">
-            <span className="font-mono text-xs text-white/40">{c.customRating}:</span>
+            <span className="tiny">{c.customRating}:</span>
             {[1, 2, 3, 4, 5].map((n) => (
               <button
                 key={n}
                 onClick={() => setCustomRating(n)}
-                className={`font-mono text-sm ${n <= customRating ? "text-amber-400" : "text-white/20"} hover:text-amber-300 transition-colors`}
+                className={`text-sm ${n <= customRating ? "text-acc" : "text-faint"} hover:text-ink transition-colors`}
               >
                 ★
               </button>
@@ -253,15 +249,15 @@ export default function ReviewsDemoPage() {
             <button
               onClick={() => reply("custom", customText.trim(), customRating)}
               disabled={loadingId !== null || customText.trim().length < 10}
-              className="ml-auto font-mono text-xs px-4 py-2 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors disabled:opacity-40"
+              className="ml-auto text-xs px-4 py-2 bg-ink text-paper hover:opacity-80 transition-opacity disabled:opacity-40"
             >
               {loadingId === "custom" ? c.replying : c.customBtn}
             </button>
           </div>
           {replies.custom && (
-            <div className="mt-4 pl-4 border-l-2 border-[#7C3AED]/50">
-              <p className="font-mono text-[10px] text-[#a78bfa] uppercase tracking-wider mb-1">{c.replyLabel}</p>
-              <p className="text-sm text-white/75 leading-relaxed">
+            <div className="mt-4 pl-4 border-l-2 border-ink">
+              <p className="tiny !text-[10px] mb-1">{c.replyLabel}</p>
+              <p className="text-sm leading-relaxed">
                 <TypedText text={replies.custom} />
               </p>
             </div>

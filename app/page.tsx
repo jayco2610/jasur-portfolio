@@ -1,144 +1,193 @@
 "use client";
 
+import type { Ref } from "react";
 import Link from "next/link";
 import HeroSection from "@/components/HeroSection";
-import BlockedBadge from "@/components/BlockedBadge";
-import { useLanguage } from "@/context/LanguageContext";
+import Band from "@/components/Band";
+import CountUp from "@/components/CountUp";
+import Mark from "@/components/Mark";
+import { useReveal } from "@/hooks/useReveal";
+import { useLanguage, type Lang } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
+
+function ProjectRow({
+  p,
+  i,
+}: {
+  p: (typeof t)[Lang]["home"]["projects"][number];
+  i: number;
+}) {
+  const { ref, className } = useReveal<HTMLElement>(i);
+  const inner = (
+    <>
+      <span className="tiny">A.0{i + 1}</span>
+      <div>
+        <span className="row-title">{p.name}</span>
+        <div className="tiny mt-2.5">{p.tags.join(" · ")}</div>
+      </div>
+      <p className="row-desc">{p.desc}</p>
+      <span className="tiny">{p.status}</span>
+    </>
+  );
+  return p.link ? (
+    <a
+      ref={ref as Ref<HTMLAnchorElement>}
+      className={`row ${className}`}
+      href={p.link}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {inner}
+    </a>
+  ) : (
+    <div ref={ref as Ref<HTMLDivElement>} className={`row ${className}`}>
+      {inner}
+    </div>
+  );
+}
 
 export default function Home() {
   const { lang } = useLanguage();
   const h = t[lang].home;
+  const ru = lang === "ru";
+
+  const contacts = [
+    { label: "LinkedIn", note: ru ? "Профессиональное" : "Professional", href: "https://www.linkedin.com/in/jasur-akhmadaliev" },
+    { label: "Telegram", note: ru ? "Быстрее всего" : "Fastest", href: "https://t.me/biznesmind" },
+    { label: "VC.ru", note: ru ? "Тексты" : "Writing", href: "https://vc.ru/id5991727" },
+    { label: "Email", note: ru ? "Подробно" : "In detail", href: "mailto:jasurakhmadaliev283@gmail.com" },
+    { label: ru ? "Резюме" : "Resume", note: ru ? "Формально" : "Formal", href: "/resume" },
+  ];
 
   return (
-    <div>
+    <>
       <HeroSection />
 
-      {/* Projects */}
-      <section className="border-t border-white/5 py-20">
-        <div className="max-w-5xl mx-auto px-6">
-          <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-10">
-            {h.selectedWork}
-          </p>
-          <div className="grid md:grid-cols-2 gap-4">
-            {h.projects.map((p) => (
-              <div
-                key={p.name}
-                className="p-6 bg-[#111111] border border-[#1f1f1f] rounded-lg hover:border-[#7C3AED]/30 transition-colors"
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="font-mono text-sm font-bold text-white">{p.name}</span>
-                  <span className={`font-mono text-[10px] px-2 py-0.5 rounded-full ${
-                    p.status === "live" || p.status === "в работе"
-                      ? "bg-emerald-500/15 text-emerald-400"
-                      : "bg-blue-500/15 text-blue-400"
-                  }`}>
-                    {p.status}
-                  </span>
-                </div>
-                <p className="text-sm text-white/50 leading-relaxed mb-4">{p.desc}</p>
-                <div className="flex items-center justify-between gap-4 flex-wrap">
-                  <div className="flex gap-2 flex-wrap">
-                    {p.tags.map((tag) => (
-                      <span key={tag} className="font-mono text-[10px] px-2 py-1 bg-white/5 text-white/40 rounded">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  {p.link && (
-                    <a href={p.link} target="_blank" rel="noopener noreferrer"
-                      className="font-mono text-[10px] text-[#a78bfa] hover:text-white transition-colors shrink-0">
-                      Live →
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
+      {/* ===== работы ===== */}
+      <Band word={ru ? "РАБОТЫ" : "WORK"} note={`01 — ${h.projects.length} ${ru ? "проекта" : "projects"}`} />
+
+      <div className="wrap">
+        <section className="sec">
+          <div className="sh">
+            <span className="tiny">01</span>
+            <h2>
+              {h.selectedWork.split(" ")[0]} <em className="serif">{h.selectedWork.split(" ").slice(1).join(" ")}</em>
+            </h2>
+            <span className="tiny">{h.projects.length}</span>
           </div>
-          <div className="mt-8">
-            <Link href="/projects" className="font-mono text-sm text-[#a78bfa] hover:text-white transition-colors">
-              {h.allProjects}
+
+          {h.projects.map((p, i) => (
+            <ProjectRow key={p.name} p={p} i={i} />
+          ))}
+
+          <p className="mt-8">
+            <Link href="/projects" className="tiny hover:text-ink transition-colors">
+              {h.allProjects} →
             </Link>
-          </div>
-        </div>
-      </section>
+          </p>
+        </section>
+      </div>
 
-      {/* AI Career System live counter */}
-      <section className="border-t border-white/5 py-14">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            <p className="font-mono text-xs text-emerald-400 tracking-[0.15em] uppercase">{h.liveLabel}</p>
+      {/* ===== цифры ===== */}
+      <Band word={ru ? "ЦИФРЫ" : "NUMBERS"} note={`02 — ${ru ? "проверяемые" : "verifiable"}`} />
+
+      <div className="wrap">
+        <section className="sec">
+          <div className="sh">
+            <span className="tiny">02</span>
+            <h2>
+              {ru ? "Живая" : "Live"} <em className="serif">{ru ? "система" : "system"}</em>
+            </h2>
+            <span className="tiny">{h.liveLabel}</span>
           </div>
-          <h2 className="font-mono text-lg font-bold text-white mb-2">{h.liveTitle}</h2>
-          <p className="text-white/40 text-sm mb-8 max-w-xl">{h.liveDesc}</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+          <div className="nums">
             {h.liveStats.map((s) => (
-              <div key={s.label} className="p-4 bg-[#111111] border border-emerald-500/10 rounded-lg">
-                <p className="font-mono text-2xl font-bold text-emerald-400">{s.value}</p>
-                <p className="font-mono text-[11px] text-white/40 mt-1">{s.label}</p>
+              <div className="num" key={s.label}>
+                <CountUp value={s.value} />
+                <span className="tiny">{s.label}</span>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* By the numbers */}
-      <section className="border-t border-white/5 py-14">
-        <div className="max-w-5xl mx-auto px-6">
-          <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-3">{h.byNumbers}</p>
-          <p className="text-white/40 text-sm mb-8 max-w-2xl">{h.statsDesc}</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="sh mt-13">
+            <span className="tiny">02.1</span>
+            <h2>{ru ? "Охват" : "Reach"}</h2>
+            <span className="tiny">{ru ? "публично" : "public"}</span>
+          </div>
+
+          <div className="nums">
             {h.stats.map((s) => (
-              <div key={s.value} className="p-5 bg-[#111111] border border-[#1f1f1f] rounded-lg">
-                <p className="font-mono text-3xl font-bold text-[#a78bfa]">{s.value}</p>
-                <p className="font-mono text-[11px] text-white/50 mt-1">{s.label}</p>
-                <p className="font-mono text-[10px] text-white/25 mt-0.5">{s.sub}</p>
+              <div className="num" key={s.value + s.label}>
+                <CountUp value={s.value} />
+                <span className="tiny">
+                  {s.label} · {s.sub}
+                </span>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      {/* About */}
-      <section className="border-t border-white/5 py-20">
-        <div className="max-w-5xl mx-auto px-6">
-          <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-8">{h.about}</p>
-          <div className="max-w-2xl">
-            <p className="text-white/70 leading-relaxed mb-4">{h.aboutP1}</p>
-            <p className="text-white/50 leading-relaxed">{h.aboutP2}</p>
+      {/* ===== портрет ===== */}
+      <Band word={ru ? "ПОРТРЕТ" : "PORTRAIT"} note="03 — Рис. 01" />
+
+      <div className="wrap">
+        <section className="sec">
+          <div className="sh">
+            <span className="tiny">03</span>
+            <h2>{h.about}</h2>
+            <span className="tiny">{ru ? "Рис. 01" : "Fig. 01"}</span>
           </div>
-          <div className="mt-10 flex gap-6 flex-wrap">
-            {[
-              { label: "LinkedIn", href: "https://www.linkedin.com/in/jasur-akhmadaliev" },
-              { label: "Telegram", href: "https://t.me/pmvision_ai" },
-              { label: "VC.ru", href: "https://vc.ru/id5991727" },
-              { label: "Email", href: "mailto:jasurakhmadaliev283@gmail.com" },
-            ].map((l) => (
-              <a key={l.label} href={l.href}
-                target={l.href.startsWith("mailto") ? undefined : "_blank"}
-                rel={l.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
-                className="font-mono text-sm text-[#a78bfa] hover:text-white transition-colors">
-                {l.label} →
+
+          <div className="grid gap-9 pt-6 lg:grid-cols-[290px_1fr] lg:gap-16 items-start">
+            <figure>
+              <img src="/portrait.jpg" alt="Jasur Akhmadaliev" className="w-full block grayscale contrast-[1.06]" />
+              <figcaption className="flex justify-between mt-2.5">
+                <span className="tiny">{ru ? "Рис. 01 — Москва" : "Fig. 01 — Moscow"}</span>
+                <span className="tiny">2026</span>
+              </figcaption>
+            </figure>
+
+            <div>
+              <p className="text-[clamp(16px,1.4vw,19px)] leading-[1.7]">{h.aboutP1}</p>
+              <p className="text-[clamp(16px,1.4vw,19px)] leading-[1.7] mt-4">{h.aboutP2}</p>
+              <p className="text-[clamp(16px,1.4vw,19px)] leading-[1.7] mt-4">{h.aboutP3}</p>
+              <p className="mt-5">
+                <Mark>{h.aboutTag}</Mark>
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* ===== контакты ===== */}
+      <div className="wrap">
+        <section className="sec">
+          <div className="sh">
+            <span className="tiny">04</span>
+            <h2>{ru ? "Связаться" : "Get in touch"}</h2>
+            <span className="tiny">{ru ? "пять каналов" : "five channels"}</span>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-5">
+            {contacts.map((c) => (
+              <a
+                key={c.label}
+                href={c.href}
+                target={c.href.startsWith("http") ? "_blank" : undefined}
+                rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="group pt-7 pr-3.5 pb-6 border-b border-rule no-underline text-ink"
+              >
+                <b className="inline-block text-[19px] font-bold tracking-[-0.024em] px-1.5 -ml-1.5 pb-0.5 transition-colors group-hover:bg-ink group-hover:text-paper">
+                  {c.label}
+                </b>
+                <span className="tiny block mt-2.5">{c.note}</span>
               </a>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* JasurGPT hint */}
-      <section className="border-t border-white/5 py-12">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <p className="font-mono text-sm text-white/30">{h.gptHint}</p>
-          <p className="font-mono text-sm text-[#a78bfa] mt-1">{h.gptCta}</p>
-          <div className="mt-5 flex justify-center">
-            <BlockedBadge hero />
-          </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   );
 }

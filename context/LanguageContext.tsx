@@ -5,12 +5,12 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 export type Lang = "en" | "ru";
 
 const LanguageContext = createContext<{ lang: Lang; toggle: () => void }>({
-  lang: "en",
+  lang: "ru",
   toggle: () => {},
 });
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>("en");
+  const [lang, setLang] = useState<Lang>("ru");
 
   useEffect(() => {
     const saved = localStorage.getItem("lang") as Lang;

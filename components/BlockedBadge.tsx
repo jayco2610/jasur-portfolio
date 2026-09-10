@@ -29,8 +29,8 @@ export default function BlockedBadge({ hero = false }: { hero?: boolean }) {
     : `${count.toLocaleString()} prompt-injection ${count === 1 ? "attempt" : "attempts"} blocked`;
 
   return (
-    <span className="font-mono text-[10px] text-emerald-300/70 inline-flex items-center gap-1.5">
-      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
+    <span className="tiny !text-[10px] inline-flex items-center gap-1.5">
+      <span className="w-1.5 h-1.5 rounded-full bg-acc" />
       {label}
     </span>
   );

@@ -125,11 +125,11 @@ export default function LeftoversDemoPage() {
       <div className="flex flex-col lg:flex-row gap-10 items-start">
         {/* Left: counter + recipients */}
         <div className="flex-1 min-w-0 w-full">
-          <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-3">{c.counterTitle}</p>
-          <div className="bg-[#111111] border border-[#1f1f1f] rounded-lg overflow-hidden mb-4">
-            <table className="w-full font-mono text-xs">
+          <p className="tiny mb-3">{c.counterTitle}</p>
+          <div className="border border-rule overflow-hidden mb-4">
+            <table className="w-full text-xs">
               <thead>
-                <tr className="text-white/30 border-b border-[#1f1f1f]">
+                <tr className="text-dim border-b border-rule">
                   <th className="text-left px-4 py-2.5 font-normal">{c.colItem}</th>
                   <th className="text-right px-3 py-2.5 font-normal">{c.colQty}</th>
                   <th className="text-right px-3 py-2.5 font-normal">{c.colPrice}</th>
@@ -138,18 +138,18 @@ export default function LeftoversDemoPage() {
               </thead>
               <tbody>
                 {STOCK.map((i) => (
-                  <tr key={i.name.en} className="border-b border-[#1f1f1f]/50 text-white/60">
+                  <tr key={i.name.en} className="border-b border-rule-soft">
                     <td className="px-4 py-2.5">{i.name[lang]}</td>
                     <td className="text-right px-3 py-2.5">{i.qty}</td>
                     <td className="text-right px-3 py-2.5">{i.price} ₽</td>
-                    <td className="text-right px-4 py-2.5 text-white/80">{(i.qty * i.price).toLocaleString("ru-RU")} ₽</td>
+                    <td className="text-right px-4 py-2.5">{(i.qty * i.price).toLocaleString("ru-RU")} ₽</td>
                   </tr>
                 ))}
-                <tr className="text-white/85">
+                <tr>
                   <td className="px-4 py-3 font-bold" colSpan={3}>
                     {c.writeOffLabel}
                   </td>
-                  <td className="text-right px-4 py-3 font-bold text-red-400">
+                  <td className="text-right px-4 py-3 font-bold text-acc">
                     {writeOffSum.toLocaleString("ru-RU")} ₽
                   </td>
                 </tr>
@@ -160,45 +160,45 @@ export default function LeftoversDemoPage() {
           <button
             onClick={run}
             disabled={loading}
-            className="font-mono text-sm px-5 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors disabled:opacity-50 mb-2"
+            className="tiny !text-[11px] px-5 py-3 bg-ink text-paper hover:opacity-80 transition-opacity disabled:opacity-50 mb-2"
           >
             {loading ? c.generating : pushText ? c.regenBtn : c.runBtn}
           </button>
-          {error && <p className="font-mono text-xs text-amber-400/90 mt-2">{error}</p>}
+          {error && <p className="text-xs text-acc mt-2">{error}</p>}
 
           {pushText && (
             <>
               {/* Results */}
               <div className="grid grid-cols-3 gap-3 mt-6 mb-6">
                 {[
-                  { value: `${writeOffSum.toLocaleString("ru-RU")} ₽`, label: c.resultBefore, cls: "text-red-400 line-through" },
-                  { value: "0 ₽", label: c.resultAfter, cls: "text-emerald-400" },
-                  { value: `~${savedSum.toLocaleString("ru-RU")} ₽`, label: c.resultSaved, cls: "text-[#a78bfa]" },
+                  { value: `${writeOffSum.toLocaleString("ru-RU")} ₽`, label: c.resultBefore, cls: "text-dim line-through" },
+                  { value: "0 ₽", label: c.resultAfter, cls: "text-ink" },
+                  { value: `~${savedSum.toLocaleString("ru-RU")} ₽`, label: c.resultSaved, cls: "text-acc" },
                 ].map((s) => (
-                  <div key={s.label} className="p-4 bg-[#111111] border border-[#1f1f1f] rounded-lg">
-                    <p className={`font-mono text-lg font-bold ${s.cls}`}>{s.value}</p>
-                    <p className="font-mono text-[10px] text-white/30 mt-1">{s.label}</p>
+                  <div key={s.label} className="demo-card">
+                    <p className={`text-lg font-bold ${s.cls}`}>{s.value}</p>
+                    <p className="tiny !text-[10px] mt-1">{s.label}</p>
                   </div>
                 ))}
               </div>
 
               {/* Recipients */}
-              <p className="font-mono text-[10px] text-white/30 uppercase tracking-wider mb-2">{c.recipientsTitle}</p>
+              <p className="tiny mb-2">{c.recipientsTitle}</p>
               <div className="space-y-1.5">
                 {RECIPIENTS.map((r, i) => (
                   <div
                     key={r.name.en}
-                    className="flex items-center gap-3 px-3 py-2 bg-[#0d0d0d] border border-[#1f1f1f] rounded-lg font-mono text-xs animate-[fadeUp_0.5s_ease_both]"
+                    className="flex items-center gap-3 px-3 py-2 border border-rule text-xs animate-[fadeUp_0.5s_ease_both]"
                     style={{ animationDelay: `${i * 120}ms` }}
                   >
-                    <span className="w-6 h-6 rounded-full bg-[#7C3AED]/25 text-[#a78bfa] flex items-center justify-center text-[10px]">
+                    <span className="w-6 h-6 rounded-full border border-ink flex items-center justify-center text-[10px]">
                       {r.name[lang][0]}
                     </span>
-                    <span className="text-white/70">{r.name[lang]}</span>
-                    <span className="text-white/30">
+                    <span>{r.name[lang]}</span>
+                    <span className="text-dim">
                       {r.dist} · {c.lastVisit}: {r.last[lang]}
                     </span>
-                    <span className="ml-auto text-emerald-400/80">✓ {c.sent}</span>
+                    <span className="ml-auto text-acc">✓ {c.sent}</span>
                   </div>
                 ))}
               </div>

@@ -118,18 +118,10 @@ export default function CareerDemoPage() {
       footer={null}
     >
       <div className="flex items-center gap-4 mb-8 flex-wrap">
-        <button
-          onClick={run}
-          className="font-mono text-sm px-5 py-2.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors"
-        >
+        <button onClick={run} className="tiny !text-[11px] px-5 py-3 bg-ink text-paper hover:opacity-80 transition-opacity">
           {stage >= 5 ? c.rerun : c.run}
         </button>
-        <a
-          href={GITHUB_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-mono text-xs text-[#a78bfa] hover:text-white transition-colors"
-        >
+        <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="tiny hover:text-ink transition-colors">
           {c.github}
         </a>
       </div>
@@ -137,9 +129,9 @@ export default function CareerDemoPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-10 max-w-2xl">
         {c.stats.map((s) => (
-          <div key={s.label} className="p-4 bg-[#111111] border border-[#1f1f1f] rounded-lg">
-            <p className="font-mono text-xl font-bold text-[#a78bfa]">{s.value}</p>
-            <p className="font-mono text-[10px] text-white/30 mt-1">{s.label}</p>
+          <div key={s.label} className="demo-card">
+            <p className="text-xl font-bold serif not-italic">{s.value}</p>
+            <p className="tiny !text-[10px] mt-1">{s.label}</p>
           </div>
         ))}
       </div>
@@ -149,42 +141,35 @@ export default function CareerDemoPage() {
         {c.steps.map((step, i) => {
           const st = stepState(i);
           return (
-            <div
-              key={step.name}
-              className={`p-5 bg-[#111111] border rounded-lg transition-colors ${
-                st === "active" ? "border-[#7C3AED]/60" : st === "done" ? "border-emerald-500/30" : "border-[#1f1f1f]"
-              }`}
-            >
+            <div key={step.name} className={`demo-card ${st === "active" ? "demo-card-active" : st === "done" ? "demo-card-done" : ""}`}>
               <div className="flex items-center gap-3 mb-1">
                 <span
-                  className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center font-mono text-[10px] ${
+                  className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[10px] border ${
                     st === "done"
-                      ? "bg-emerald-500/15 text-emerald-400"
+                      ? "bg-acc text-paper border-acc"
                       : st === "active"
-                      ? "bg-[#7C3AED]/20 text-[#a78bfa]"
-                      : "bg-white/5 text-white/30"
+                      ? "border-ink"
+                      : "border-rule text-faint"
                   }`}
                 >
                   {st === "done" ? "✓" : i + 1}
                 </span>
-                <p className={`font-mono text-sm font-bold ${st === "idle" ? "text-white/35" : "text-white"}`}>{step.name}</p>
-                {st === "active" && (
-                  <span className="ml-auto w-3.5 h-3.5 border border-[#7C3AED] border-t-transparent rounded-full animate-spin" />
-                )}
+                <p className={`text-sm font-bold ${st === "idle" ? "text-faint" : "text-ink"}`}>{step.name}</p>
+                {st === "active" && <span className="ml-auto w-3.5 h-3.5 border border-ink border-t-transparent rounded-full animate-spin" />}
               </div>
-              <p className={`text-xs ml-9 ${st === "idle" ? "text-white/25" : "text-white/45"}`}>{step.desc}</p>
+              <p className={`text-xs ml-9 ${st === "idle" ? "text-faint" : "text-dim"}`}>{step.desc}</p>
 
               {/* Step payloads */}
               {i === 0 && st !== "idle" && (
-                <div className="ml-9 mt-3 px-3 py-2.5 bg-[#182533] rounded-lg max-w-sm animate-[fadeUp_0.4s_ease_both]">
-                  <p className="font-mono text-[11px] text-white/85">🔗 {c.vacancy.title}</p>
-                  <p className="font-mono text-[9px] text-white/40 mt-0.5">{c.vacancy.meta}</p>
+                <div className="ml-9 mt-3 px-3 py-2.5 border border-rule max-w-sm animate-[fadeUp_0.4s_ease_both]">
+                  <p className="text-[11px]">🔗 {c.vacancy.title}</p>
+                  <p className="tiny !text-[9px] mt-0.5">{c.vacancy.meta}</p>
                 </div>
               )}
               {i === 1 && (st === "done" || st === "active") && stage >= 1 && (
                 <div className="ml-9 mt-3 flex flex-wrap gap-1.5 animate-[fadeUp_0.4s_ease_both]">
                   {c.requirements.map((r) => (
-                    <span key={r} className="font-mono text-[10px] px-2 py-1 rounded bg-white/5 border border-white/10 text-white/55">
+                    <span key={r} className="text-[10px] px-2 py-1 border border-rule">
                       {r}
                     </span>
                   ))}
@@ -193,25 +178,25 @@ export default function CareerDemoPage() {
               {i === 2 && stage >= 2 && (
                 <div className="ml-9 mt-3 space-y-1.5 animate-[fadeUp_0.4s_ease_both]">
                   {c.matches.map((m) => (
-                    <p key={m.skill} className={`font-mono text-[11px] ${m.ok ? "text-emerald-400/90" : "text-amber-400/80"}`}>
+                    <p key={m.skill} className={`text-[11px] ${m.ok ? "text-ink" : "text-acc"}`}>
                       {m.ok ? "✓" : "△"} {m.skill}
                     </p>
                   ))}
-                  <p className="font-mono text-xs text-[#a78bfa] font-bold pt-1">78% {c.matchScore}</p>
+                  <p className="text-xs font-bold pt-1">78% {c.matchScore}</p>
                 </div>
               )}
               {i === 3 && stage >= 3 && (
-                <div className="ml-9 mt-3 px-4 py-3 bg-white/[0.03] border-l-2 border-[#7C3AED]/50 rounded-r animate-[fadeUp_0.4s_ease_both]">
-                  <p className="font-mono text-[9px] text-white/35 uppercase tracking-wider mb-1.5">{c.letterLabel}</p>
-                  <p className="text-xs text-white/65 leading-relaxed">{c.letter}</p>
+                <div className="ml-9 mt-3 px-4 py-3 border-l-2 border-ink bg-[#f5f4f0] animate-[fadeUp_0.4s_ease_both]">
+                  <p className="tiny !text-[9px] mb-1.5">{c.letterLabel}</p>
+                  <p className="text-xs leading-relaxed text-dim">{c.letter}</p>
                 </div>
               )}
               {i === 4 && stage >= 4 && (
                 <div className="ml-9 mt-3 overflow-x-auto animate-[fadeUp_0.4s_ease_both]">
-                  <p className="font-mono text-[9px] text-white/35 uppercase tracking-wider mb-1.5">{c.sheetLabel}</p>
-                  <div className="flex font-mono text-[10px] border border-emerald-500/25 rounded overflow-hidden w-max">
+                  <p className="tiny !text-[9px] mb-1.5">{c.sheetLabel}</p>
+                  <div className="flex text-[10px] border border-rule overflow-hidden w-max">
                     {c.sheetRow.map((cell) => (
-                      <span key={cell} className="px-3 py-1.5 bg-emerald-500/5 text-white/60 border-r border-emerald-500/15 last:border-r-0 whitespace-nowrap">
+                      <span key={cell} className="px-3 py-1.5 border-r border-rule last:border-r-0 whitespace-nowrap">
                         {cell}
                       </span>
                     ))}
@@ -223,14 +208,14 @@ export default function CareerDemoPage() {
         })}
 
         {stage >= 5 && (
-          <div className="p-5 border border-emerald-500/40 bg-emerald-500/5 rounded-lg animate-[fadeUp_0.4s_ease_both]">
-            <p className="font-mono text-sm font-bold text-emerald-400 mb-1">✓ {c.doneTitle}</p>
-            <p className="text-xs text-white/50">{c.doneDesc}</p>
+          <div className="demo-card demo-card-done animate-[fadeUp_0.4s_ease_both]">
+            <p className="text-sm font-bold text-acc mb-1">✓ {c.doneTitle}</p>
+            <p className="text-xs text-dim">{c.doneDesc}</p>
           </div>
         )}
       </div>
 
-      <p className="font-mono text-[10px] text-white/25 mt-8 max-w-2xl">{c.simNote}</p>
+      <p className="tiny !text-[10px] mt-8 max-w-2xl">{c.simNote}</p>
     </DemoShell>
   );
 }

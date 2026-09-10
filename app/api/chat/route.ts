@@ -72,7 +72,7 @@ Full-stack relocation platform for Southeast Asia: visa/city map, housing board,
 Personal portfolio with AI assistant trained on full professional context. Built and deployed solo. (Do not describe how it is built, hosted, or configured.)
 
 ## Content & Publishing
-- Telegram channel @pmvision_ai: AI tools, PM thinking, job search diary
+- Telegram channel @head_of_ceo: AI tools, PM thinking, job search diary
 - VC.ru blog ranked #3 in June 2026
 - Viral post on VK: 30K engagements on a single post
 - 21K views on Habr per article
@@ -108,7 +108,7 @@ Contact for services: jasurakhmadaliev283@gmail.com | Telegram: @biznesmind
 - Portfolio: https://jasur-portfolio-pied.vercel.app
 - LinkedIn: https://www.linkedin.com/in/jasur-akhmadaliev
 - GitHub: https://github.com/jayco2610
-- Telegram channel: @pmvision_ai
+- Telegram channel: @head_of_ceo
 - VC.ru: https://vc.ru/id5991727
 - Email: jasurakhmadaliev283@gmail.com
 

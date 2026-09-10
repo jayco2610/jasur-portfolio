@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Mark from "@/components/Mark";
 import { useLanguage } from "@/context/LanguageContext";
 
 // Common wrapper for every demo page: back link, header, content, disclaimer.
@@ -23,31 +24,26 @@ export default function DemoShell({
 }) {
   const { lang } = useLanguage();
   return (
-    <div className="max-w-5xl mx-auto px-6 py-16">
-      <Link
-        href="/demos"
-        className="font-mono text-xs text-white/30 hover:text-white transition-colors"
-      >
+    <div className="wrap pt-11 pb-24">
+      <Link href="/demos" className="tiny hover:text-ink transition-colors">
         ← {lang === "en" ? "All demos" : "Все демо"}
       </Link>
-      <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mt-6 mb-3">
-        {lang === "en" ? "Live demo" : "Живое демо"}
-      </p>
-      <h1 className="font-mono text-3xl font-bold text-white mb-3">{title[lang]}</h1>
-      <p className="text-white/50 text-sm leading-relaxed max-w-2xl mb-4">{subtitle[lang]}</p>
+
+      <div className="tiny mt-7 mb-3">{lang === "en" ? "Live demo" : "Живое демо"}</div>
+      <h1 className="text-[clamp(30px,4.2vw,48px)] leading-[0.98] tracking-[-0.036em] font-bold">{title[lang]}</h1>
+      <p className="text-[15px] text-dim leading-relaxed max-w-2xl mt-4">{subtitle[lang]}</p>
+
       {pitch && (
-        <div className="mb-4 px-4 py-3 border border-[#7C3AED]/20 rounded-lg bg-[#7C3AED]/5 max-w-2xl">
-          <p className="font-mono text-xs text-[#a78bfa] leading-relaxed">{pitch[lang]}</p>
-        </div>
+        <p className="mt-5 max-w-2xl text-[clamp(15.5px,1.35vw,18px)] leading-[1.62]">
+          <Mark>{pitch[lang]}</Mark>
+        </p>
       )}
-      {hint && (
-        <div className="mb-10 px-4 py-3 border border-emerald-500/25 rounded-lg bg-emerald-500/5 max-w-2xl">
-          <p className="font-mono text-xs text-emerald-300/90 leading-relaxed">▶ {hint[lang]}</p>
-        </div>
-      )}
-      {children}
+      {hint && <p className="tiny normal-case tracking-normal text-[13px] mt-4 max-w-2xl border-t border-rule pt-3">▶ {hint[lang]}</p>}
+
+      <div className="mt-10">{children}</div>
+
       {footer !== null && (
-        <p className="font-mono text-[10px] text-white/25 mt-12">
+        <p className="tiny normal-case tracking-normal text-[11px] mt-12 border-t border-rule pt-4 max-w-2xl">
           {footer
             ? footer[lang]
             : lang === "en"

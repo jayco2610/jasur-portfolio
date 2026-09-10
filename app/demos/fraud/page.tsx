@@ -175,10 +175,10 @@ export default function FraudDemoPage() {
   }, [events]);
 
   const kindColor: Record<EventKind, string> = {
-    sale: "text-white/40",
-    void: "text-amber-400/80",
-    delete: "text-orange-400/80",
-    discount: "text-sky-400/80",
+    sale: "text-faint",
+    void: "text-dim",
+    delete: "text-dim",
+    discount: "text-dim",
   };
 
   return (
@@ -195,9 +195,9 @@ export default function FraudDemoPage() {
           { value: alerts.length, label: c.stats.alerts },
           { value: `${flaggedSum.toLocaleString("ru-RU")} ₽`, label: c.stats.saved },
         ].map((s) => (
-          <div key={s.label} className="p-4 bg-[#111111] border border-[#1f1f1f] rounded-lg">
-            <p className="font-mono text-xl font-bold text-[#a78bfa]">{s.value}</p>
-            <p className="font-mono text-[10px] text-white/30 mt-1">{s.label}</p>
+          <div key={s.label} className="demo-card">
+            <p className="text-xl font-bold serif not-italic">{s.value}</p>
+            <p className="tiny !text-[10px] mt-1">{s.label}</p>
           </div>
         ))}
       </div>
@@ -206,53 +206,48 @@ export default function FraudDemoPage() {
         {/* Left: feed + rules */}
         <div className="flex-1 min-w-0 w-full">
           <div className="flex items-center justify-between mb-3">
-            <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase">{c.feedTitle}</p>
+            <p className="tiny">{c.feedTitle}</p>
             <div className="flex gap-2">
               <button
                 onClick={() => setRunning((v) => !v)}
-                className="font-mono text-xs px-3 py-1.5 border border-white/15 text-white/70 rounded hover:border-white/30 hover:text-white transition-colors"
+                className="text-xs px-3 py-1.5 border border-rule hover:border-ink transition-colors"
               >
                 {running ? c.pause : c.resume}
               </button>
               <button
                 onClick={() => pushEvent("void", rnd(1100, 3500))}
-                className="font-mono text-xs px-3 py-1.5 bg-[#7C3AED] text-white rounded hover:bg-[#6d28d9] transition-colors"
+                className="text-xs px-3 py-1.5 bg-ink text-paper hover:opacity-80 transition-opacity"
               >
                 {c.inject}
               </button>
             </div>
           </div>
 
-          <div
-            ref={feedRef}
-            className="h-[340px] overflow-y-auto chat-scrollbar bg-[#0d0d0d] border border-[#1f1f1f] rounded-lg p-3 font-mono text-xs space-y-1.5"
-          >
+          <div ref={feedRef} className="h-[340px] overflow-y-auto chat-scrollbar border border-rule p-3 text-xs space-y-1.5">
             {events.map((ev) => (
               <div
                 key={ev.id}
-                className={`flex items-center gap-2 px-2 py-1.5 rounded ${
-                  ev.flagged ? "bg-red-500/10 border border-red-500/30" : ""
-                }`}
+                className={`flex items-center gap-2 px-2 py-1.5 ${ev.flagged ? "bg-[#f5f4f0] border border-acc/40" : ""}`}
               >
-                <span className="text-white/25 shrink-0">{ev.time}</span>
-                <span className="text-white/30 shrink-0">
+                <span className="text-faint shrink-0">{ev.time}</span>
+                <span className="text-faint shrink-0">
                   {c.registerWord} {ev.register}
                 </span>
-                <span className={`shrink-0 ${ev.flagged ? "text-red-400" : kindColor[ev.kind]}`}>
+                <span className={`shrink-0 ${ev.flagged ? "text-acc" : kindColor[ev.kind]}`}>
                   {c.kinds[ev.kind]}
                   {ev.kind === "discount" ? ` ${ev.discountPct}%` : ""}
                 </span>
-                <span className="text-white/50 ml-auto shrink-0">{ev.amount.toLocaleString("ru-RU")} ₽</span>
-                {ev.flagged && <span className="text-red-400 shrink-0">⚠</span>}
+                <span className="text-dim ml-auto shrink-0">{ev.amount.toLocaleString("ru-RU")} ₽</span>
+                {ev.flagged && <span className="text-acc shrink-0">⚠</span>}
               </div>
             ))}
           </div>
 
-          <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mt-6 mb-3">{c.rulesTitle}</p>
+          <p className="tiny mt-6 mb-3">{c.rulesTitle}</p>
           <ul className="space-y-2">
             {c.rules.map((r) => (
-              <li key={r} className="flex items-start gap-2 text-sm text-white/50">
-                <span className="text-[#a78bfa] mt-0.5">▸</span>
+              <li key={r} className="flex items-start gap-2 text-sm text-dim">
+                <span className="text-acc mt-0.5">▸</span>
                 {r}
               </li>
             ))}

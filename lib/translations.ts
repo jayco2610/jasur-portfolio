@@ -27,6 +27,17 @@ export const t = {
       viewProjects: "View projects",
       resume: "Resume",
       scroll: "Scroll",
+
+      kicker: "01 — Introduction",
+      l1: "I build",
+      l2: "systems",
+      l3: "that run without a human",
+      deckA: "Built the first one ",
+      deckMark: "for my own job search",
+      deckB: ". Forty-seven vacancies, a letter in eighty seconds, zero manual steps.",
+      deck2:
+        "Everything below is deployed and running right now. These are not slides from a deck — they are tools I use every day.",
+      figCap: "Fig. 00 — Frontispiece",
     },
 
     home: {
@@ -42,9 +53,12 @@ export const t = {
       ],
       about: "About",
       aboutP1:
-        "I'm a Product Manager and marketing analyst based in Moscow. I've shipped products at Instameal (food delivery), IDF Lab (B2B SaaS), and Synergia. Currently building AI tooling for my own job search — and publishing the process publicly.",
+        "I don't like writing about myself in the third person, or the word \"expertise.\" It's simpler to just say what I do. Mornings I look at the numbers and decide what to fix. Afternoons I explain why half of what's being asked for shouldn't get built. Evenings I put together another piece of automation that gets someone out of manual work.",
       aboutP2:
-        "Looking for a remote PM or product marketing role with an international team. The AI career system you see above is both my portfolio and my actual workflow.",
+        "That's been the pattern for years now. The companies changed — food delivery, business software, marketing — the substance didn't.",
+      aboutP3:
+        "Right now I run a product department. In parallel I'm building things on language models: one of them is looking for a job for me right now, while you're reading this.",
+      aboutTag: "Looking for a product role",
       gptHint: "Have questions about my experience or projects?",
       gptCta: "Ask JasurGPT — button in the bottom right corner.",
       allProjects: "All projects →",
@@ -239,7 +253,7 @@ export const t = {
       about: "About",
       certPreview: "Certificate Preview",
       aboutText:
-        "Product Manager who ships digital products hands-on, from customer discovery to live users. Built and deployed Expat Roadmap SEA (Next.js + Supabase) and Portfolio + JasurGPT solo. Configured Claude + Telegram + Whisper pipeline independently, built AI Career System for automated job search, developing an AI agent for business analytics. Use n8n, Voiceflow, and NotebookLM in real projects. Publishing about the process publicly at @pmvision_ai.",
+        "Product Manager who takes products all the way to users — from Customer Discovery to production. Shipped solo: Expat Roadmap SEA (Next.js, Supabase) — a relocation platform with five product areas. AI Career System (Claude, n8n, Telegram) — processed 47 vacancies, 80 seconds to a finished letter, zero manual steps. Mia — a RAG assistant for a dental clinic that answers only from the clinic's documents. Currently building an AI agent for business analytics. I write about the process openly: blog in the Top 3 on VC.ru, 40K+ views on Habr, channel @head_of_ceo.",
       contentBullets: [
         "Publishing publicly about AI experiments, product thinking, and job search process",
         "Dzen: 67% read-through rate; Threads: ~15,000 views per thread",
@@ -431,6 +445,17 @@ export const t = {
       viewProjects: "Посмотреть проекты",
       resume: "Резюме",
       scroll: "Листать",
+
+      kicker: "01 — Введение",
+      l1: "Строю",
+      l2: "системы",
+      l3: "которые работают без человека",
+      deckA: "Первую построил ",
+      deckMark: "для собственного поиска работы",
+      deckB: ". Сорок семь вакансий, письмо за восемьдесят секунд, ноль ручных шагов.",
+      deck2:
+        "Всё, что показано ниже, запущено и работает прямо сейчас. Это не кейсы из презентации, а инструменты, которыми я пользуюсь каждый день.",
+      figCap: "Рис. 00 — Фронтиспис",
     },
 
     home: {
@@ -446,9 +471,12 @@ export const t = {
       ],
       about: "О себе",
       aboutP1:
-        "Продакт-менеджер и маркетинг-аналитик из Москвы. Запускал продукты в Instameal (фудтех), IDF Lab (B2B SaaS) и Synergia. Сейчас строю AI-инструменты для собственного поиска работы — и публикую процесс открыто.",
+        "Не люблю писать про себя в третьем лице и слово «экспертиза». Проще объяснить, что я делаю. Утром смотрю цифры и решаю, что чинить. Днём объясняю, почему половину из того, что просят, делать не надо. Вечером собираю очередную связку, которая избавит кого-то от ручной работы.",
       aboutP2:
-        "Ищу удалённую PM или product marketing роль в международной команде. AI Career System выше — это одновременно моё портфолио и реальный рабочий инструмент.",
+        "Так уже несколько лет. Компании менялись — доставка еды, софт для бизнеса, маркетинг, — суть не менялась.",
+      aboutP3:
+        "Сейчас руковожу продуктовым отделом. Параллельно строю штуки на нейросетях: одна из них ищет мне работу прямо сейчас, пока вы это читаете.",
+      aboutTag: "Ищу продуктовую работу",
       gptHint: "Есть вопросы об опыте или проектах?",
       gptCta: "Спросите JasurGPT — кнопка в правом нижнем углу.",
       allProjects: "Все проекты →",
@@ -637,7 +665,7 @@ export const t = {
       about: "О себе",
       certPreview: "Предпросмотр сертификата",
       aboutText:
-        "Продакт-менеджер, который запускает цифровые продукты руками — от Customer Discovery до живых пользователей. Построил и задеплоил Expat Roadmap SEA (Next.js + Supabase) и Portfolio + JasurGPT соло. Настроил пайплайн Claude + Telegram + Whisper самостоятельно, построил AI Career System для автоматизации поиска работы, разрабатываю AI-агента для бизнес-аналитики. Использую n8n, Voiceflow и NotebookLM в реальных проектах. Публикую о процессе открыто в @pmvision_ai.",
+        "Продакт-менеджер, который доводит продукт до пользователей — от Customer Discovery до продакшена. Запустил соло: Expat Roadmap SEA (Next.js, Supabase) — платформа релокации с пятью продуктовыми направлениями. AI Career System (Claude, n8n, Telegram) — обработала 47 вакансий, время до готового письма 80 секунд, ручных шагов ноль. Mia — RAG-ассистент для стоматологии, отвечает только по документам клиники. В разработке — AI-агент для бизнес-аналитики. О процессе пишу открыто: блог в Топ-3 на VC.ru, 40K+ просмотров на Хабре, канал @head_of_ceo.",
       contentBullets: [
         "Пишу публично об AI-экспериментах, продуктовом мышлении и поиске работы",
         "Дзен: 67% дочитываемость; Threads: ~15 000 просмотров на тред",

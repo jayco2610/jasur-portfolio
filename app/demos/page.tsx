@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useReveal } from "@/hooks/useReveal";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 
 const productDemos = [
   {
     href: "/demos/mia",
-    emoji: "🦷",
     name: { en: "Mia, a clinic RAG assistant", ru: "Mia, RAG-ассистент клиники" },
     desc: {
       en: "An assistant that answers patients only from the clinic's documents. Step-by-step walkthrough plus the live assistant on Hugging Face.",
@@ -18,7 +18,6 @@ const productDemos = [
   },
   {
     href: "/demos/career",
-    emoji: "🎯",
     name: { en: "AI Career System", ru: "AI Career System" },
     desc: {
       en: "My own job search automation: vacancy link in, tailored cover letter out in ~80 seconds. Watch a real run step by step.",
@@ -32,7 +31,6 @@ const productDemos = [
 const demos = [
   {
     href: "/demos/preorder",
-    emoji: "🏒",
     name: { en: "Pre-order from the stands", ru: "Предзаказ с трибуны" },
     desc: {
       en: "A fan scans a QR on the seat, pays via SBP without getting up, and picks the order up at a separate window. The stand serves ~30% more checks per break.",
@@ -43,7 +41,6 @@ const demos = [
   },
   {
     href: "/demos/leftovers",
-    emoji: "🥐",
     name: { en: "Evening leftovers sold by AI", ru: "Слив вечерних остатков через ИИ" },
     desc: {
       en: "At 7:30 pm AI looks at the counter, writes a push, and sends it to loyal customers nearby. Write-offs go to zero.",
@@ -54,7 +51,6 @@ const demos = [
   },
   {
     href: "/demos/fraud",
-    emoji: "🛡️",
     name: { en: "POS fraud control", ru: "Фрод-контроль касс" },
     desc: {
       en: "Check voids, deleted items, and suspicious discounts trigger an instant Telegram alert to the owner: who, where, how much.",
@@ -65,7 +61,6 @@ const demos = [
   },
   {
     href: "/demos/reviews",
-    emoji: "💬",
     name: { en: "AI replies to reviews", ru: "ИИ-автоответы на отзывы" },
     desc: {
       en: "AI drafts replies to Yandex Maps and 2GIS reviews in the venue's tone. The manager only approves.",
@@ -76,75 +71,76 @@ const demos = [
   },
 ];
 
+function DemoRow({ demo, lang, index, letter, openLabel }: {
+  demo: (typeof demos)[number];
+  lang: "en" | "ru";
+  index: number;
+  letter: string;
+  openLabel: string;
+}) {
+  const { ref, className } = useReveal<HTMLAnchorElement>(index);
+  return (
+    <Link ref={ref} href={demo.href} className={`row block ${className}`}>
+      <span className="tiny">
+        {letter}.0{index + 1}
+      </span>
+      <div>
+        <span className="row-title !text-[22px] md:!text-[28px]">{demo.name[lang]}</span>
+        <div className="tiny mt-2.5">{demo.tags.join(" · ")}</div>
+      </div>
+      <p className="row-desc">{demo.desc[lang]}</p>
+      <span className="tiny">{demo.live ? "live AI" : openLabel}</span>
+    </Link>
+  );
+}
+
 export default function DemosPage() {
   const { lang } = useLanguage();
   const d = t[lang].demos;
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16">
-      <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-3">{d.label}</p>
-      <h1 className="font-mono text-3xl font-bold text-white mb-4">{d.title}</h1>
-      <p className="text-white/50 text-sm leading-relaxed max-w-2xl mb-4">{d.intro}</p>
-      <div className="mb-12 px-4 py-3 border border-[#7C3AED]/20 rounded-lg bg-[#7C3AED]/5 max-w-2xl">
-        <p className="font-mono text-xs text-[#a78bfa]">{d.note}</p>
+    <>
+      <div className="wrap">
+        <div className="tiny pt-11 pb-8">{d.label}</div>
+        <div className="sh">
+          <span className="tiny">01</span>
+          <h2>
+            {d.title.split(" ")[0]} <em className="serif">{d.title.split(" ").slice(1).join(" ")}</em>
+          </h2>
+          <span className="tiny">{demos.length + productDemos.length}</span>
+        </div>
+
+        <div className="grid gap-6 pt-6 md:grid-cols-[1.25fr_1fr] md:gap-14">
+          <p className="text-[clamp(15.5px,1.35vw,18px)] leading-[1.62] max-w-2xl">{d.intro}</p>
+          <p className="text-[14.5px] text-dim border-t border-ink pt-3.5">{d.note}</p>
+        </div>
       </div>
 
-      <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-5">{d.groupBusiness}</p>
-      <div className="grid sm:grid-cols-2 gap-4 mb-14">
-        {demos.map((demo, i) => (
-          <DemoCard key={demo.href} demo={demo} index={i} lang={lang} openLabel={d.open} />
-        ))}
+      <div className="wrap">
+        <section className="sec">
+          <div className="sh">
+            <span className="tiny">02</span>
+            <h2>{d.groupBusiness}</h2>
+            <span className="tiny">{demos.length}</span>
+          </div>
+          {demos.map((demo, i) => (
+            <DemoRow key={demo.href} demo={demo} lang={lang} index={i} letter="D" openLabel={d.open} />
+          ))}
+        </section>
       </div>
 
-      <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-5">{d.groupProducts}</p>
-      <div className="grid sm:grid-cols-2 gap-4">
-        {productDemos.map((demo, i) => (
-          <DemoCard key={demo.href} demo={demo} index={i} lang={lang} openLabel={d.open} />
-        ))}
+      <div className="wrap">
+        <section className="sec pb-24">
+          <div className="sh">
+            <span className="tiny">03</span>
+            <h2>{d.groupProducts}</h2>
+            <span className="tiny">{productDemos.length}</span>
+          </div>
+          {productDemos.map((demo, i) => (
+            <DemoRow key={demo.href} demo={demo} lang={lang} index={i} letter="P" openLabel={d.open} />
+          ))}
+        </section>
       </div>
-    </div>
-  );
-}
-
-function DemoCard({
-  demo,
-  index,
-  lang,
-  openLabel,
-}: {
-  demo: (typeof demos)[number];
-  index: number;
-  lang: "en" | "ru";
-  openLabel: string;
-}) {
-  return (
-    <Link
-      href={demo.href}
-      className="group p-6 bg-[#111111] border border-[#1f1f1f] rounded-lg hover:border-[#7C3AED]/40 transition-colors animate-[fadeUp_0.5s_ease_both]"
-      style={{ animationDelay: `${index * 90}ms` }}
-    >
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-2xl">{demo.emoji}</span>
-        {demo.live && (
-          <span className="ml-auto font-mono text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-            live AI
-          </span>
-        )}
-      </div>
-      <p className="font-mono text-sm font-bold text-white mb-2 group-hover:text-[#a78bfa] transition-colors">
-        {demo.name[lang]}
-      </p>
-      <p className="text-white/45 text-sm leading-relaxed mb-4">{demo.desc[lang]}</p>
-      <div className="flex flex-wrap gap-1.5">
-        {demo.tags.map((tag) => (
-          <span key={tag} className="font-mono text-[9px] text-white/35 border border-white/10 rounded px-1.5 py-0.5">
-            {tag}
-          </span>
-        ))}
-      </div>
-      <p className="font-mono text-xs text-[#a78bfa] mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-        {openLabel} →
-      </p>
-    </Link>
+    </>
   );
 }

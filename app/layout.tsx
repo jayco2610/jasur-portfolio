@@ -1,23 +1,10 @@
 import type { Metadata } from "next";
-import { Space_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import JasurGPT from "@/components/JasurGPT";
-import AvailabilityStrip from "@/components/AvailabilityStrip";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
-
-const spaceMono = Space_Mono({
-  weight: ["400", "700"],
-  variable: "--font-mono",
-  subsets: ["latin"],
-});
-
-const inter = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jasur-portfolio-pied.vercel.app"),
@@ -45,17 +32,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${spaceMono.variable} ${inter.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#e8e8e8]">
+    <html lang="en" className="h-full antialiased">
+      <body className="min-h-full flex flex-col">
         <LanguageProvider>
-          <AvailabilityStrip />
           <Nav />
           <main className="flex-1">{children}</main>
-          <footer className="border-t border-white/5 py-8 text-center text-xs font-mono text-white/30">
-            © 2026 Jasur Akhmadaliev
+          <footer className="wrap">
+            <div className="flex flex-wrap justify-between gap-2.5 border-t border-ink pt-7 pb-24 mt-11">
+              <span className="tiny">Jasur Akhmadaliev</span>
+              <span className="tiny">Москва</span>
+              <span className="tiny">2026 · Prompt-injection hardened</span>
+            </div>
           </footer>
           <JasurGPT />
         </LanguageProvider>

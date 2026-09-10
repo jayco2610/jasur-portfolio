@@ -330,9 +330,9 @@ export default function PreorderDemoPage() {
         {/* Business panel */}
         <div className="flex-1 min-w-0 w-full">
           <div className="flex items-center justify-between mb-4">
-            <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase">{c.bizTitle}</p>
-            <p className="font-mono text-xs text-white/50">
-              {c.breakLabel}: <span className="text-[#a78bfa] font-bold">{mm}:{ss}</span>
+            <p className="tiny">{c.bizTitle}</p>
+            <p className="text-xs text-dim">
+              {c.breakLabel}: <span className="text-ink font-bold">{mm}:{ss}</span>
             </p>
           </div>
 
@@ -342,56 +342,51 @@ export default function PreorderDemoPage() {
               { value: `${avgCheck.toLocaleString("ru-RU")} ₽`, label: c.avgCheck },
               { value: `${revenue.toLocaleString("ru-RU")} ₽`, label: c.revenue },
             ].map((s) => (
-              <div key={s.label} className="p-4 bg-[#111111] border border-[#1f1f1f] rounded-lg">
-                <p className="font-mono text-xl font-bold text-[#a78bfa]">{s.value}</p>
-                <p className="font-mono text-[10px] text-white/30 mt-1">{s.label}</p>
+              <div key={s.label} className="demo-card">
+                <p className="text-xl font-bold serif not-italic">{s.value}</p>
+                <p className="tiny !text-[10px] mt-1">{s.label}</p>
               </div>
             ))}
           </div>
 
           {/* Queue vs pre-order comparison */}
-          <div className="p-4 bg-[#111111] border border-[#1f1f1f] rounded-lg mb-6">
-            <p className="font-mono text-[10px] text-white/30 uppercase tracking-wider mb-3">{c.compareTitle}</p>
+          <div className="demo-card mb-6">
+            <p className="tiny !text-[10px] mb-3">{c.compareTitle}</p>
             <div className="space-y-2.5">
               <div>
-                <div className="flex justify-between font-mono text-[10px] text-white/40 mb-1">
+                <div className="flex justify-between text-[10px] text-dim mb-1">
                   <span>{c.withQueue}</span>
                   <span>48</span>
                 </div>
-                <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-white/25 rounded-full" style={{ width: "62%" }} />
+                <div className="h-2 border border-rule overflow-hidden">
+                  <div className="h-full bg-faint" style={{ width: "62%" }} />
                 </div>
               </div>
               <div>
-                <div className="flex justify-between font-mono text-[10px] mb-1">
-                  <span className="text-white/40">{c.withPreorder}</span>
-                  <span className="text-[#a78bfa] font-bold">62 · +30%</span>
+                <div className="flex justify-between text-[10px] mb-1">
+                  <span className="text-dim">{c.withPreorder}</span>
+                  <span className="text-acc font-bold">62 · +30%</span>
                 </div>
-                <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-[#7C3AED] rounded-full" style={{ width: "81%" }} />
+                <div className="h-2 border border-rule overflow-hidden">
+                  <div className="h-full bg-acc" style={{ width: "81%" }} />
                 </div>
               </div>
             </div>
           </div>
 
           {/* Incoming orders feed */}
-          <p className="font-mono text-[10px] text-white/30 uppercase tracking-wider mb-2">{c.feedTitle}</p>
-          <div
-            ref={feedRef}
-            className="h-[180px] overflow-y-auto chat-scrollbar bg-[#0d0d0d] border border-[#1f1f1f] rounded-lg p-3 font-mono text-xs space-y-1.5"
-          >
+          <p className="tiny mb-2">{c.feedTitle}</p>
+          <div ref={feedRef} className="h-[180px] overflow-y-auto chat-scrollbar border border-rule p-3 text-xs space-y-1.5">
             {feed.map((o, i) => (
               <div
                 key={`${o.id}-${i}`}
-                className={`flex items-center justify-between px-2 py-1.5 rounded ${
-                  o.yours ? "bg-[#7C3AED]/15 border border-[#7C3AED]/40" : ""
-                }`}
+                className={`flex items-center justify-between px-2 py-1.5 ${o.yours ? "bg-[#f5f4f0] border border-acc/40" : ""}`}
               >
-                <span className={o.yours ? "text-[#a78bfa] font-bold" : "text-white/60"}>
+                <span className={o.yours ? "text-acc font-bold" : "text-dim"}>
                   {o.id}
                   {o.yours ? ` · ${c.yourOrder}` : ""}
                 </span>
-                <span className="text-white/40">{o.sum.toLocaleString("ru-RU")} ₽</span>
+                <span className="text-dim">{o.sum.toLocaleString("ru-RU")} ₽</span>
               </div>
             ))}
           </div>

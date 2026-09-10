@@ -1,5 +1,8 @@
 "use client";
 
+import Band from "@/components/Band";
+import CountUp from "@/components/CountUp";
+import { useReveal } from "@/hooks/useReveal";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 
@@ -125,9 +128,9 @@ const published = [
 
 const channelsList = [
   {
-    name: "Telegram @pmvision_ai",
+    name: "Telegram @head_of_ceo",
     description: { en: "Main hub. AI tools, PM thinking, job search diary.", ru: "Главный канал. AI-инструменты, продуктовое мышление, дневник поиска работы." },
-    href: "https://t.me/pmvision_ai",
+    href: "https://t.me/head_of_ceo",
   },
   {
     name: "Medium",
@@ -156,78 +159,113 @@ const channelsList = [
   },
 ];
 
+function ArticleRow({ a, i, lang, ru }: { a: (typeof published)[number]; i: number; lang: "en" | "ru"; ru: boolean }) {
+  const { ref, className } = useReveal<HTMLAnchorElement>(i);
+  return (
+    <a ref={ref} href={a.href} target="_blank" rel="noopener noreferrer" className={`row block ${className}`}>
+      <span className="tiny">B.{String(i + 1).padStart(2, "0")}</span>
+      <div>
+        <span className="row-title !text-[22px] md:!text-[28px]">{a.title[lang]}</span>
+        <div className="tiny mt-2.5">
+          {a.platform} · {a.lang}
+        </div>
+      </div>
+      <p className="row-desc">{a.description[lang]}</p>
+      <span className="tiny">{ru ? "читать" : "read"} →</span>
+    </a>
+  );
+}
+
 export default function WritingPage() {
   const { lang } = useLanguage();
   const w = t[lang].writing;
+  const ru = lang === "ru";
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16">
-      <p className="font-mono text-xs text-white/30 tracking-[0.2em] uppercase mb-3">{w.label}</p>
-      <h1 className="font-mono text-3xl font-bold text-white mb-2">{w.title}</h1>
-      <p className="text-white/40 text-sm mb-14">{w.subtitle}</p>
+    <>
+      <div className="wrap">
+        <div className="tiny pt-11 pb-8">{w.label}</div>
 
-      {/* Stats */}
-      <p className="text-white/40 text-sm mb-6 max-w-2xl">{w.statsDesc}</p>
-      <div className="grid grid-cols-3 gap-4 mb-14">
-        {w.stats.map((s) => (
-          <div key={s.value} className="p-5 bg-[#111111] border border-[#1f1f1f] rounded-lg">
-            <p className="font-mono text-2xl font-bold text-[#a78bfa]">{s.value}</p>
-            <p className="font-mono text-[11px] text-white/50 mt-1">{s.label}</p>
-            <p className="font-mono text-[10px] text-white/25 mt-0.5">{s.sub}</p>
+        <div className="grid gap-9 items-end lg:grid-cols-[1.35fr_0.9fr] lg:gap-14">
+          <div>
+            <div className="sh">
+              <span className="tiny">01</span>
+              <h2>
+                {w.title.split(" ")[0]} <em className="serif">{w.title.split(" ").slice(1).join(" ")}</em>
+              </h2>
+              <span className="tiny">{published.length}</span>
+            </div>
+            <p className="text-[clamp(15.5px,1.35vw,18px)] leading-[1.62] max-w-2xl pt-6">{w.statsDesc}</p>
+
+            <div className="nums mt-2">
+              {w.stats.map((s) => (
+                <div className="num" key={s.value}>
+                  <CountUp value={s.value} />
+                  <span className="tiny">
+                    {s.label} · {s.sub}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+
+          <figure className="self-end max-w-[420px] lg:max-w-none">
+            <img src="/writing-photo.png" alt="" className="w-full block grayscale contrast-[1.04] mix-blend-multiply" />
+            <figcaption className="flex justify-between items-baseline mt-2.5 pt-2 border-t border-ink">
+              <span className="tiny">{ru ? "Рис. 00 — Чтение" : "Fig. 00 — Reading"}</span>
+              <span className="tiny">2026</span>
+            </figcaption>
+          </figure>
+        </div>
       </div>
 
-      {/* Published */}
-      <section className="mb-16">
-        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">{w.publishedLabel}</p>
-        <div className="space-y-4">
-          {published.map((a) => (
-            <a key={a.href} href={a.href} target="_blank" rel="noopener noreferrer"
-              className="block p-5 bg-[#111111] rounded-lg border border-[#1f1f1f] hover:border-[#7C3AED]/40 transition-colors group">
-              <div className="flex items-center gap-2 mb-3 flex-wrap">
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-white/5 text-white/30 border border-white/10">{a.platform}</span>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[#1E3A8A]/30 text-blue-300">{a.lang}</span>
-                <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400">
-                  {lang === "en" ? "published" : "опубликовано"}
-                </span>
-                <span className="font-mono text-[10px] text-[#a78bfa] ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-                  {lang === "en" ? `Read on ${a.platform} →` : `Читать на ${a.platform} →`}
-                </span>
-              </div>
-              <h3 className="text-white font-semibold text-sm mb-2 group-hover:text-[#a78bfa] transition-colors">
-                {typeof a.title === "object" ? a.title[lang] : a.title}
-              </h3>
-              <p className="text-white/40 text-sm">
-                {typeof a.description === "object" ? a.description[lang] : a.description}
-              </p>
-            </a>
-          ))}
-        </div>
-      </section>
+      {/* ===== опубликовано ===== */}
+      <Band word={ru ? "ТЕКСТЫ" : "TEXTS"} note={`02 — ${w.publishedLabel}`} />
 
-      {/* Channels */}
-      <section>
-        <p className="font-mono text-xs text-white/25 tracking-[0.15em] uppercase mb-6">{w.channelsLabel}</p>
-        <div className="grid sm:grid-cols-2 gap-4">
-          {channelsList.map((c) => (
-            <div key={c.name} className="p-5 bg-[#111111] border border-[#1f1f1f] rounded-lg">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-mono text-sm text-white font-bold">{c.name}</h3>
-                {c.href && (
-                  <a href={c.href} target="_blank" rel="noopener noreferrer"
-                    className="font-mono text-[10px] text-[#a78bfa] hover:text-white transition-colors">
-                    {lang === "en" ? "Visit →" : "Открыть →"}
-                  </a>
-                )}
-              </div>
-              <p className="text-white/40 text-sm">
-                {typeof c.description === "object" ? c.description[lang] : c.description}
-              </p>
-            </div>
+      <div className="wrap">
+        <section className="sec">
+          <div className="sh">
+            <span className="tiny">02</span>
+            <h2>{w.publishedLabel}</h2>
+            <span className="tiny">{published.length}</span>
+          </div>
+
+          {published.map((a, i) => (
+            <ArticleRow key={a.href} a={a} i={i} lang={lang} ru={ru} />
           ))}
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+
+      {/* ===== каналы ===== */}
+      <div className="wrap">
+        <section className="sec pb-24">
+          <div className="sh">
+            <span className="tiny">03</span>
+            <h2>{w.channelsLabel}</h2>
+            <span className="tiny">{channelsList.length}</span>
+          </div>
+
+          <div className="grid sm:grid-cols-2">
+            {channelsList.map((c) => (
+              <a
+                key={c.name}
+                href={c.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group pt-6 pr-6 pb-6 border-b border-rule-soft no-underline text-ink"
+              >
+                <div className="flex items-baseline justify-between gap-3">
+                  <b className="inline-block font-bold px-1.5 -ml-1.5 pb-0.5 transition-colors group-hover:bg-ink group-hover:text-paper">
+                    {c.name}
+                  </b>
+                  <span className="tiny shrink-0">→</span>
+                </div>
+                <p className="row-desc mt-2">{c.description[lang]}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+      </div>
+    </>
   );
 }

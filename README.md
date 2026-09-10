@@ -85,4 +85,4 @@ OPENROUTER_API_KEY=your_key_here
 ## Author
 
 Jasur Akhmadaliev — AI Product Manager  
-[LinkedIn](https://www.linkedin.com/in/jasur-akhmadaliev) · [Telegram @pmvision_ai](https://t.me/pmvision_ai) · [jasur-portfolio-pied.vercel.app](https://jasur-portfolio-pied.vercel.app)
+[LinkedIn](https://www.linkedin.com/in/jasur-akhmadaliev) · [Telegram @head_of_ceo](https://t.me/head_of_ceo) · [jasur-portfolio-pied.vercel.app](https://jasur-portfolio-pied.vercel.app)
