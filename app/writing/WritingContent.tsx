@@ -8,25 +8,42 @@ import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 import type { PostMeta } from "@/lib/blog";
 
-function OwnPostRow({ post, i, ru }: { post: PostMeta; i: number; ru: boolean }) {
-  const { ref, className } = useReveal<HTMLAnchorElement>(i);
-  const date = post.date
-    ? new Date(post.date).toLocaleDateString(ru ? "ru-RU" : "en-US", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
-    : "";
+function postDate(date: string, ru: boolean): string {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString(ru ? "ru-RU" : "en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 
+// Свежая статья идёт крупно, как передовица издания.
+function PostLead({ post, ru }: { post: PostMeta; ru: boolean }) {
+  const { ref, className } = useReveal<HTMLAnchorElement>(0);
   return (
-    <Link ref={ref} href={`/blog/${post.slug}`} className={`row block ${className}`}>
-      <span className="tiny">{date}</span>
-      <div>
-        <span className="row-title !text-[22px] md:!text-[28px]">{post.title}</span>
-        {post.tags.length > 0 && <div className="tiny mt-2.5">{post.tags.join(" · ")}</div>}
+    <Link ref={ref} href={`/blog/${post.slug}`} className={`post-lead ${className}`}>
+      <div className="post-meta">
+        <span className="tiny">{postDate(post.date, ru)}</span>
+        {post.tags.length > 0 && <span className="tiny">{post.tags.join(" · ")}</span>}
+        <span className="tiny">{ru ? "свежее" : "latest"}</span>
       </div>
-      <p className="row-desc">{post.description}</p>
-      <span className="tiny">{ru ? "читать" : "read"}</span>
+      <h3>{post.title}</h3>
+      <p className="post-desc">{post.description}</p>
+      <p className="tiny mt-5">{ru ? "Читать" : "Read"}</p>
+    </Link>
+  );
+}
+
+function PostItem({ post, i, ru }: { post: PostMeta; i: number; ru: boolean }) {
+  const { ref, className } = useReveal<HTMLAnchorElement>(i);
+  return (
+    <Link ref={ref} href={`/blog/${post.slug}`} className={`post-item ${className}`}>
+      <div className="post-meta">
+        <span className="tiny">{postDate(post.date, ru)}</span>
+        {post.tags.length > 0 && <span className="tiny">{post.tags.join(" · ")}</span>}
+      </div>
+      <h3>{post.title}</h3>
+      <p className="post-desc">{post.description}</p>
     </Link>
   );
 }
@@ -206,90 +223,111 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
   const w = t[lang].writing;
   const ru = lang === "ru";
 
+  const [lead, ...rest] = posts;
+
   return (
     <>
-      <div className="wrap">
-        <div className="tiny pt-11 pb-8">{w.label}</div>
-
-        <div className="grid gap-9 items-end lg:grid-cols-[1.35fr_0.9fr] lg:gap-14">
-          <div>
-            <div className="sh">
-              <span className="tiny">01</span>
-              <h2>
-                {w.title.split(" ")[0]} <em className="serif">{w.title.split(" ").slice(1).join(" ")}</em>
-              </h2>
-              <span className="tiny">{published.length}</span>
-            </div>
-            <p className="text-[clamp(15.5px,1.35vw,18px)] leading-[1.62] max-w-2xl pt-6">{w.statsDesc}</p>
-
-            <div className="nums mt-2">
-              {w.stats.map((s) => (
-                <div className="num" key={s.value}>
-                  <CountUp value={s.value} />
-                  <span className="tiny">
-                    {s.label} · {s.sub}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <figure className="self-end max-w-[420px] lg:max-w-none">
-            <img src="/writing-photo.png" alt="" className="w-full block grayscale contrast-[1.04] mix-blend-multiply" />
-            <figcaption className="flex justify-between items-baseline mt-2.5 pt-2 border-t border-ink">
-              <span className="tiny">{ru ? "Рис. 00 — Чтение" : "Fig. 00 — Reading"}</span>
-              <span className="tiny">2026</span>
-            </figcaption>
-          </figure>
-        </div>
-      </div>
-
-      {/* ===== мои статьи (блог на этом сайте) ===== */}
+      {/* ===== блог: собственная шапка издания =====
+          Показываем только когда есть статьи, иначе на сайте висела бы
+          пустая витрина, а публикации на площадках уезжали бы вниз. */}
       {posts.length > 0 && (
         <>
-          <Band
-            word={ru ? "БЛОГ" : "BLOG"}
-            note={`02 — ${ru ? "здесь, у меня" : "here, on this site"}`}
-          />
+          <div className="wrap">
+            <header className="blog-mast">
+              <div className="tiny mb-6">{ru ? "Блог · Жасур Ахмадалиев" : "Blog · Jasur Akhmadaliev"}</div>
+              <h1 className="blog-name">
+                {ru ? "Строю и " : "Building, "}
+                <em>{ru ? "рассказываю" : "out loud"}</em>
+              </h1>
+              <p className="blog-lede">
+                {ru
+                  ? "Продукт, AI и автоматизация. Пишу о том, что делаю сам: что заработало, что развалилось и сколько это стоило. Без пересказов чужих статей."
+                  : "Product, AI and automation. I write about what I actually build: what worked, what broke and what it cost. No rehashing of other people's posts."}
+              </p>
+            </header>
+          </div>
 
           <div className="wrap">
-            <section className="sec">
-              <div className="sh">
-                <span className="tiny">02</span>
-                <h2>
-                  {ru ? "Мои" : "My"} <em className="serif">{ru ? "статьи" : "articles"}</em>
-                </h2>
-                <span className="tiny">{posts.length}</span>
-              </div>
-
-              {posts.map((post, i) => (
-                <OwnPostRow key={post.slug} post={post} i={i} ru={ru} />
+            <section className="pb-2">
+              {lead && <PostLead post={lead} ru={ru} />}
+              {rest.map((post, i) => (
+                <PostItem key={post.slug} post={post} i={i} ru={ru} />
               ))}
+            </section>
+          </div>
 
-              <p className="mt-8">
-                <a href="/feed.xml" className="tiny hover:text-ink transition-colors">
+          <div className="wrap">
+            <div className="blog-cta">
+              <div>
+                <p className="blog-cta-title">
+                  {ru
+                    ? "Новые тексты сначала выходят в Telegram"
+                    : "New pieces land in Telegram first"}
+                </p>
+                <p className="post-desc">
+                  {ru
+                    ? "Там же разборы, черновики и то, что не дотянуло до статьи."
+                    : "Along with notes, drafts and everything that never became an article."}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-6 items-end">
+                <a
+                  href="https://t.me/head_of_ceo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tiny !text-[11px] px-5 py-3 bg-ink text-paper hover:opacity-80 transition-opacity"
+                >
+                  @head_of_ceo
+                </a>
+                <a href="/feed.xml" className="share-link">
                   RSS
                 </a>
-              </p>
-            </section>
+              </div>
+            </div>
           </div>
         </>
       )}
 
       {/* ===== опубликовано на площадках ===== */}
-      <Band word={ru ? "ТЕКСТЫ" : "TEXTS"} note={`03 — ${w.publishedLabel}`} />
+      <Band word={ru ? "ТЕКСТЫ" : "TEXTS"} note={`02 — ${w.publishedLabel}`} />
 
       <div className="wrap">
         <section className="sec">
-          <div className="sh">
-            <span className="tiny">03</span>
-            <h2>{w.publishedLabel}</h2>
-            <span className="tiny">{published.length}</span>
+          <div className="grid gap-9 items-end lg:grid-cols-[1.35fr_0.9fr] lg:gap-14">
+            <div>
+              <div className="sh">
+                <span className="tiny">02</span>
+                <h2>{w.publishedLabel}</h2>
+                <span className="tiny">{published.length}</span>
+              </div>
+              <p className="text-[clamp(15.5px,1.35vw,18px)] leading-[1.62] max-w-2xl pt-6">{w.statsDesc}</p>
+
+              <div className="nums mt-2">
+                {w.stats.map((s) => (
+                  <div className="num" key={s.value}>
+                    <CountUp value={s.value} />
+                    <span className="tiny">
+                      {s.label} · {s.sub}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <figure className="self-end max-w-[420px] lg:max-w-none">
+              <img src="/writing-photo.png" alt="" className="w-full block grayscale contrast-[1.04] mix-blend-multiply" />
+              <figcaption className="flex justify-between items-baseline mt-2.5 pt-2 border-t border-ink">
+                <span className="tiny">{ru ? "Рис. 00 — Чтение" : "Fig. 00 — Reading"}</span>
+                <span className="tiny">2026</span>
+              </figcaption>
+            </figure>
           </div>
 
-          {published.map((a, i) => (
-            <ArticleRow key={a.href} a={a} i={i} lang={lang} ru={ru} />
-          ))}
+          <div className="mt-10">
+            {published.map((a, i) => (
+              <ArticleRow key={a.href} a={a} i={i} lang={lang} ru={ru} />
+            ))}
+          </div>
         </section>
       </div>
 
@@ -297,7 +335,7 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
       <div className="wrap">
         <section className="sec pb-24">
           <div className="sh">
-            <span className="tiny">04</span>
+            <span className="tiny">03</span>
             <h2>{w.channelsLabel}</h2>
             <span className="tiny">{channelsList.length}</span>
           </div>

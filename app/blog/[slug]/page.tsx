@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPost, getAllSlugs, formatDate } from "@/lib/blog";
+import { getPost, getAllSlugs, getAllPosts, formatDate } from "@/lib/blog";
+import ShareLinks from "@/components/ShareLinks";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
 
@@ -50,6 +51,9 @@ export default async function BlogPost({
   if (!post) notFound();
 
   const ru = post.lang === "ru";
+  const others = getAllPosts()
+    .filter((p) => p.slug !== post.slug)
+    .slice(0, 3);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -119,30 +123,66 @@ export default async function BlogPost({
           />
         </article>
 
-        <div className="max-w-[46rem] mt-16 pt-7 border-t border-ink pb-24">
-          <p className="tiny mb-4">{ru ? "Написать мне" : "Get in touch"}</p>
-          <div className="flex flex-wrap gap-6">
-            <a
-              href="https://t.me/biznesmind"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tiny hover:text-ink transition-colors"
-            >
-              Telegram @biznesmind
-            </a>
-            <a
-              href="https://t.me/head_of_ceo"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tiny hover:text-ink transition-colors"
-            >
-              {ru ? "Канал @head_of_ceo" : "Channel @head_of_ceo"}
-            </a>
-            <Link href="/writing" className="tiny hover:text-ink transition-colors">
-              {ru ? "Другие статьи" : "More articles"}
-            </Link>
+        <div className="max-w-[46rem] mt-14 pt-7 border-t border-ink">
+          <ShareLinks url={`${SITE}/blog/${post.slug}`} title={post.title} ru={ru} />
+        </div>
+
+        {/* автор */}
+        <div className="max-w-[46rem] mt-12 pt-8 border-t border-rule">
+          <div className="grid gap-6 sm:grid-cols-[92px_1fr] sm:gap-7 items-start">
+            <img
+              src="/portrait.jpg"
+              alt="Jasur Akhmadaliev"
+              className="w-[92px] h-[92px] object-cover grayscale contrast-[1.06]"
+            />
+            <div>
+              <p className="text-[19px] font-bold tracking-[-0.024em]">Jasur Akhmadaliev</p>
+              <p className="post-desc !mt-2">
+                {ru
+                  ? "Продакт-менеджер. Строю AI-инструменты для собственной работы и показываю процесс открыто. Москва."
+                  : "Product manager. I build AI tools for my own work and show the process openly. Moscow."}
+              </p>
+              <div className="flex flex-wrap gap-5 mt-4">
+                <a
+                  href="https://t.me/head_of_ceo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tiny hover:text-ink transition-colors"
+                >
+                  {ru ? "Канал @head_of_ceo" : "Channel @head_of_ceo"}
+                </a>
+                <a
+                  href="https://t.me/biznesmind"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="tiny hover:text-ink transition-colors"
+                >
+                  {ru ? "Написать: @biznesmind" : "Write: @biznesmind"}
+                </a>
+                <Link href="/resume" className="tiny hover:text-ink transition-colors">
+                  {ru ? "Резюме" : "Resume"}
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* другие статьи */}
+        {others.length > 0 && (
+          <div className="max-w-[46rem] mt-14 pb-24">
+            <p className="tiny pb-2 border-b border-ink">{ru ? "Ещё почитать" : "Read next"}</p>
+            {others.map((other) => (
+              <Link key={other.slug} href={`/blog/${other.slug}`} className="post-item">
+                <div className="post-meta">
+                  <span className="tiny">{formatDate(other.date, other.lang)}</span>
+                </div>
+                <h3>{other.title}</h3>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {others.length === 0 && <div className="pb-24" />}
       </div>
     </>
   );
