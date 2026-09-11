@@ -73,10 +73,10 @@ export default function ProjectsPage() {
         <div className="tiny pt-11 pb-8">{p.label}</div>
         <div className="sh">
           <span className="tiny">01</span>
-          <h2>
+          <h1>
             {p.title.split(" ").slice(0, -1).join(" ")}{" "}
             <em className="serif">{p.title.split(" ").slice(-1)}</em>
-          </h2>
+          </h1>
           <span className="tiny">{p.projects.length}</span>
         </div>
         <p className="text-[clamp(15.5px,1.35vw,18px)] leading-[1.62] max-w-2xl pt-6">{p.subtitle}</p>

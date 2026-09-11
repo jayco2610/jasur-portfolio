@@ -17,9 +17,10 @@ export const metadata: Metadata = {
     description:
       "Portfolio of Jasur Akhmadaliev, a Product Manager building an AI system for his own career search. Showing it live.",
     siteName: "Jasur Akhmadaliev — Portfolio",
-    images: [{ url: "/jasur.jpg", width: 1200, height: 800, alt: "Jasur Akhmadaliev" }],
+    images: [{ url: "/og-cover.jpg", width: 1200, height: 630, alt: "Jasur Akhmadaliev" }],
   },
   alternates: {
+    canonical: "https://jasur-portfolio-pied.vercel.app",
     types: {
       "application/rss+xml": [{ url: "/feed.xml", title: "Блокнот · блог Жасура Ахмадалиева" }],
     },
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Jasur Akhmadaliev — Portfolio · PM · AI Builder",
     description: "Portfolio of Jasur Akhmadaliev, a Product Manager building an AI system for his own career search. Showing it live.",
-    images: ["/jasur.jpg"],
+    images: ["/og-cover.jpg"],
   },
 };
 
@@ -38,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="ru" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <LanguageProvider>
           <Nav />

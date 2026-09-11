@@ -33,11 +33,15 @@ export async function generateMetadata({
       description: post.description,
       publishedTime: post.date,
       url: `${SITE}/blog/${post.slug}`,
+      // Свой блок openGraph перекрывает родительский целиком,
+      // поэтому картинку надо повторить здесь, иначе репост будет пустым.
+      images: [{ url: post.cover ?? "/og-cover.jpg", width: 1200, height: 630, alt: post.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
+      images: [post.cover ?? "/og-cover.jpg"],
     },
   };
 }

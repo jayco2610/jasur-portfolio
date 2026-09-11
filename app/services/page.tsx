@@ -211,10 +211,10 @@ export default function ServicesPage() {
         <div className="tiny pt-11 pb-8">{s.label}</div>
         <div className="sh">
           <span className="tiny">01</span>
-          <h2>
+          <h1>
             {s.title.split(" ").slice(0, -1).join(" ")}{" "}
             <em className="serif">{s.title.split(" ").slice(-1)}</em>
-          </h2>
+          </h1>
           <span className="tiny">{automation.length + product.length}</span>
         </div>
 

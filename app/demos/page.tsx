@@ -104,9 +104,9 @@ export default function DemosPage() {
         <div className="tiny pt-11 pb-8">{d.label}</div>
         <div className="sh">
           <span className="tiny">01</span>
-          <h2>
+          <h1>
             {d.title.split(" ")[0]} <em className="serif">{d.title.split(" ").slice(1).join(" ")}</em>
-          </h2>
+          </h1>
           <span className="tiny">{demos.length + productDemos.length}</span>
         </div>
 

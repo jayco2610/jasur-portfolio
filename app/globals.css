@@ -208,6 +208,7 @@ body {
   }
 }
 
+.sh h1,
 .sh h2 {
   font-size: clamp(22px, 2.4vw, 32px);
   font-weight: 700;
@@ -839,6 +840,44 @@ a.row:hover .row-title {
 .mag-else a span {
   display: block;
   margin-top: 8px;
+}
+
+/* строки и подписи внутри статьи: блок автора, «ещё почитать» */
+
+.post-desc {
+  font-size: 15.5px;
+  line-height: 1.62;
+  color: #3b3932;
+  max-width: 32em;
+  margin-top: 14px;
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 12px;
+}
+
+.post-item {
+  display: block;
+  text-decoration: none;
+  color: var(--mag-ink, var(--ink));
+  border-bottom: 1px solid var(--mag-rule, var(--rule-soft));
+  padding: 22px 0;
+}
+
+.post-item h3 {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.026em;
+  line-height: 1.2;
+  max-width: 22em;
+  transition: color 0.16s;
+}
+
+.post-item:hover h3 {
+  color: var(--acc);
 }
 
 /* подводка под заголовком: о чём издание или раздел */
