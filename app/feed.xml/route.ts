@@ -29,11 +29,12 @@ export async function GET() {
     .join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="/feed.xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Jasur Akhmadaliev — Статьи</title>
+    <title>Блокнот · блог Жасура Ахмадалиева</title>
     <link>${SITE}/writing</link>
-    <description>Продукт, AI и то, что я строю вживую.</description>
+    <description>Продукт, маркетинг и AI. Только то, что я делаю сам.</description>
     <language>ru</language>
     <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml" />
 ${items}

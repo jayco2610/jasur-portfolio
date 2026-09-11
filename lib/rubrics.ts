@@ -4,16 +4,70 @@
 export const MAGAZINE_NAME = { ru: "Блокнот", en: "Notebook" };
 
 export const RUBRICS = [
-  { key: "product", ru: "Продукт", en: "Product" },
-  { key: "marketing", ru: "Маркетинг", en: "Marketing" },
-  { key: "ai", ru: "AI", en: "AI" },
-  { key: "process", ru: "Процесс", en: "Process" },
-  { key: "career", ru: "Карьера", en: "Career" },
-  { key: "tools", ru: "Инструменты", en: "Tools" },
+  {
+    key: "product",
+    ru: "Продукт",
+    en: "Product",
+    descRu:
+      "Что делать, чего не делать и почему. На своих проектах.",
+    descEn:
+      "What to build, what to drop and why. On my own projects.",
+  },
+  {
+    key: "marketing",
+    ru: "Маркетинг",
+    en: "Marketing",
+    descRu:
+      "Как продавать то, что сделал. Что сработало, что стоило денег зря.",
+    descEn:
+      "How to sell what you built. What worked, what burned money.",
+  },
+  {
+    key: "ai",
+    ru: "AI",
+    en: "AI",
+    descRu:
+      "Модели, промты, связки. Что из этого работает в деле.",
+    descEn:
+      "Models, prompts, pipelines. What actually holds up in use.",
+  },
+  {
+    key: "process",
+    ru: "Процесс",
+    en: "Process",
+    descRu:
+      "Как устроена работа. Автоматизация, рутина, дневник стройки.",
+    descEn:
+      "How the work is wired. Automation, routine, a build diary.",
+  },
+  {
+    key: "career",
+    ru: "Карьера",
+    en: "Career",
+    descRu:
+      "Резюме, собеседования, переговоры. Всё через себя.",
+    descEn:
+      "Resumes, interviews, negotiation. All of it first-hand.",
+  },
+  {
+    key: "tools",
+    ru: "Инструменты",
+    en: "Tools",
+    descRu:
+      "Сервисы и цены. Что окупается, что бесплатно только на словах.",
+    descEn:
+      "Tools and real prices. What earns its keep, what only looks free.",
+  },
 ] as const;
 
 export type RubricKey = (typeof RUBRICS)[number]["key"];
 
 export function rubricName(key: string, lang: "ru" | "en"): string {
   return RUBRICS.find((r) => r.key === key)?.[lang] ?? key;
+}
+
+export function rubricDescription(key: string, lang: "ru" | "en"): string {
+  const r = RUBRICS.find((x) => x.key === key);
+  if (!r) return "";
+  return lang === "ru" ? r.descRu : r.descEn;
 }

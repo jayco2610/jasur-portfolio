@@ -76,7 +76,12 @@ export default function JasurGPT() {
           </div>
 
           {/* Messages */}
-          <div className="h-72 overflow-y-auto p-4 space-y-3 chat-scrollbar">
+          {/* Clarity пишет видеозапись сессии. Без этой пометки в записи
+              видно, что незнакомые люди писали в чат. */}
+          <div
+            className="h-72 overflow-y-auto p-4 space-y-3 chat-scrollbar"
+            data-clarity-mask="true"
+          >
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center">
                 <p className="tiny !text-[11px] mb-5">Ask me about Jasur&apos;s experience, projects, or skills.</p>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import MagChrome from "@/components/magazine/MagChrome";
 import { useLanguage } from "@/context/LanguageContext";
 import { useReveal } from "@/hooks/useReveal";
-import { rubricName, MAGAZINE_NAME } from "@/lib/rubrics";
+import { rubricName, rubricDescription, MAGAZINE_NAME } from "@/lib/rubrics";
 import type { PostMeta } from "@/lib/blog";
 
 function shortDate(date: string, ru: boolean): string {
@@ -74,6 +74,8 @@ export default function RubricContent({
               {ru ? "Все материалы" : "All pieces"} <span>↘</span>
             </Link>
           </div>
+
+          <p className="mag-about">{rubricDescription(rubric, lang)}</p>
         </div>
 
         <div className="mag-sh">
@@ -92,8 +94,8 @@ export default function RubricContent({
           <div className="mag-empty">
             <p>
               {ru
-                ? "В этой рубрике пока пусто. Материалы появятся здесь по мере выхода."
-                : "Nothing here yet. Pieces will show up as they are published."}
+                ? "Здесь пока пусто."
+                : "Empty here for now."}
             </p>
             <Link href="/writing" className="mag-all">
               {ru ? "Смотреть всё" : "See everything"} <span>↘</span>

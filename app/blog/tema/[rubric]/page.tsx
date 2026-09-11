@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPostsByRubric, rubricName, RUBRICS } from "@/lib/blog";
+import { rubricDescription } from "@/lib/rubrics";
 import RubricContent from "./RubricContent";
 
 // Страницы делаем для всех рубрик, даже пустых: раздел в меню есть,
@@ -20,7 +21,7 @@ export async function generateMetadata({
 
   return {
     title: `${name} — Блокнот, блог Jasur Akhmadaliev`,
-    description: `Материалы в рубрике «${name}».`,
+    description: rubricDescription(rubric, "ru"),
     // Пустую рубрику в поиск не отдаём, чтобы не плодить тонкие страницы.
     robots: isEmpty ? { index: false, follow: true } : undefined,
   };

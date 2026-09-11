@@ -6,7 +6,7 @@ import { useReveal } from "@/hooks/useReveal";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 import type { PostMeta } from "@/lib/blog";
-import { rubricName, MAGAZINE_NAME } from "@/lib/rubrics";
+import { RUBRICS, rubricName, rubricDescription, MAGAZINE_NAME } from "@/lib/rubrics";
 
 const published = [
   {
@@ -229,18 +229,28 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
 
       <div className="mag-w">
         <div className="mag-title">
-          <div className="mag-title-row">
-            <div>
-              <h1>{MAGAZINE_NAME[lang]}</h1>
-              <div className="mag-title-tags">
-                <span>{ru ? "продукт и метрики" : "product and metrics"}</span>
-                <span>{ru ? "AI и автоматизация" : "AI and automation"}</span>
-                <span>{ru ? "что я строю прямо сейчас" : "what I am building right now"}</span>
-              </div>
-            </div>
-            <a className="mag-all" href="/feed.xml">
-              RSS <span>↘</span>
-            </a>
+          <h1>{MAGAZINE_NAME[lang]}</h1>
+          <p className="mag-about">
+            {ru
+              ? "Пишу про то, что делаю сам. Что сработало, что развалилось, сколько стоило."
+              : "I write about what I build myself. What worked, what broke, what it cost."}
+          </p>
+        </div>
+
+        {/* О чём каждый раздел */}
+        <div className="mag-sec" style={{ paddingTop: 0 }}>
+          <div className="mag-sh">
+            <h3>{ru ? "Разделы" : "Sections"}</h3>
+            <span className="mag-ln" />
+            <span className="tiny">{String(RUBRICS.length).padStart(2, "0")}</span>
+          </div>
+          <div className="mag-rub-grid">
+            {RUBRICS.map((r) => (
+              <Link key={r.key} href={`/blog/tema/${r.key}`} className="mag-rub-card">
+                <b>{rubricName(r.key, lang)}</b>
+                <span>{rubricDescription(r.key, lang)}</span>
+              </Link>
+            ))}
           </div>
         </div>
 
@@ -266,8 +276,8 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
         ) : (
           <p className="py-16 text-[16px] leading-[1.6] max-w-2xl">
             {ru
-              ? "Первый материал выйдет здесь на днях."
-              : "The first piece lands here shortly."}
+              ? "Пока пусто. Скоро будет."
+              : "Empty for now. Soon."}
           </p>
         )}
       </div>
@@ -321,11 +331,14 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
 
         <footer className="mag-foot">
           <span className="tiny">
-            {MAGAZINE_NAME[lang]} · {ru ? "издание Жасура Ахмадалиева" : "a Jasur Akhmadaliev publication"}
+            {MAGAZINE_NAME[lang]} · {ru ? "блог Жасура Ахмадалиева" : "a blog by Jasur Akhmadaliev"}
           </span>
-          <Link href="/" className="tiny">
-            {ru ? "← В портфолио" : "← Back to portfolio"}
-          </Link>
+          <span className="flex gap-6">
+            <a href="/feed.xml" className="tiny">RSS</a>
+            <Link href="/" className="tiny">
+              {ru ? "← В портфолио" : "← Back to portfolio"}
+            </Link>
+          </span>
         </footer>
       </div>
     </div>

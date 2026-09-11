@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { marked } from "marked";
+import DOMPurify from "isomorphic-dompurify";
 import { RUBRICS, type RubricKey } from "./rubrics";
 
 export { RUBRICS, rubricName, type RubricKey } from "./rubrics";
@@ -60,7 +61,9 @@ function parseFile(filename: string): Post {
     cover: data.cover ? String(data.cover) : undefined,
     canonical: data.canonical ? String(data.canonical) : undefined,
     draft: data.draft === true,
-    html: marked.parse(content) as string,
+    // Сейчас статьи это наши же файлы, но когда тексты поедут из админки,
+    // без очистки любой скрипт в статье выполнится на нашем домене.
+    html: DOMPurify.sanitize(marked.parse(content) as string),
     readingMinutes: Math.max(1, Math.round(words / 180)),
   };
 }
@@ -83,6 +86,9 @@ export function getAllPosts(): Post[] {
 }
 
 export function getPost(slug: string): Post | null {
+  // Адрес приходит из ссылки, поэтому в имя файла пускаем только
+  // латиницу, цифры и дефис. Иначе им можно было бы гулять по диску.
+  if (!/^[a-z0-9-]+$/.test(slug)) return null;
   const file = `${slug}.md`;
   if (!fs.existsSync(path.join(BLOG_DIR, file))) return null;
   const post = parseFile(file);

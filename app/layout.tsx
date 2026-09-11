@@ -19,6 +19,11 @@ export const metadata: Metadata = {
     siteName: "Jasur Akhmadaliev — Portfolio",
     images: [{ url: "/jasur.jpg", width: 1200, height: 800, alt: "Jasur Akhmadaliev" }],
   },
+  alternates: {
+    types: {
+      "application/rss+xml": [{ url: "/feed.xml", title: "Блокнот · блог Жасура Ахмадалиева" }],
+    },
+  },
   twitter: {
     card: "summary_large_image",
     title: "Jasur Akhmadaliev — Portfolio · PM · AI Builder",

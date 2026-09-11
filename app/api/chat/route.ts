@@ -199,6 +199,18 @@ async function isRateLimited(ip: string): Promise<boolean> {
   return rateLimitedInMemory(ip);
 }
 
+// Потолок на весь сайт за сутки. Лимит по IP не спасает от толпы адресов:
+// без этого за день можно выжечь дневную квоту бесплатных моделей, и бот
+// замолчит для всех. Ключ живёт двое суток и истекает сам.
+const DAILY_CAP = 500;
+
+async function isDailyCapReached(): Promise<boolean> {
+  if (!upstashConfigured()) return false;
+  const day = new Date().toISOString().slice(0, 10);
+  const count = await incr(`jgpt:day:${day}`, 60 * 60 * 48);
+  return count != null && count > DAILY_CAP;
+}
+
 // Persist blocked-probe counts (total + current week) when Upstash is configured.
 async function recordBlocked(): Promise<void> {
   if (!upstashConfigured()) return;
@@ -251,6 +263,16 @@ export async function POST(req: NextRequest) {
   if (await isRateLimited(ip)) {
     return NextResponse.json(
       { content: "Slow down a moment, too many messages. Try again shortly." },
+      { status: 429 }
+    );
+  }
+
+  if (await isDailyCapReached()) {
+    return NextResponse.json(
+      {
+        content:
+          "JasurGPT has hit its daily limit. Write to Jasur directly: https://t.me/biznesmind",
+      },
       { status: 429 }
     );
   }
