@@ -247,6 +247,10 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
           <div className="mag-rub-grid">
             {RUBRICS.map((r) => (
               <Link key={r.key} href={`/blog/tema/${r.key}`} className="mag-rub-card">
+                <div className="mag-rub-im">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={r.cover} alt="" loading="lazy" />
+                </div>
                 <b>{rubricName(r.key, lang)}</b>
                 <span>{rubricDescription(r.key, lang)}</span>
               </Link>

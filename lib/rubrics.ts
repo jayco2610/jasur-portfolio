@@ -6,6 +6,7 @@ export const MAGAZINE_NAME = { ru: "Блокнот", en: "Notebook" };
 export const RUBRICS = [
   {
     key: "product",
+    cover: "/blog/r-product.jpg",
     ru: "Продукт",
     en: "Product",
     descRu:
@@ -15,6 +16,7 @@ export const RUBRICS = [
   },
   {
     key: "marketing",
+    cover: "/blog/r-marketing.jpg",
     ru: "Маркетинг",
     en: "Marketing",
     descRu:
@@ -24,6 +26,7 @@ export const RUBRICS = [
   },
   {
     key: "ai",
+    cover: "/blog/r-ai.jpg",
     ru: "AI",
     en: "AI",
     descRu:
@@ -33,6 +36,7 @@ export const RUBRICS = [
   },
   {
     key: "process",
+    cover: "/blog/r-process.jpg",
     ru: "Процесс",
     en: "Process",
     descRu:
@@ -42,6 +46,7 @@ export const RUBRICS = [
   },
   {
     key: "career",
+    cover: "/blog/r-career.jpg",
     ru: "Карьера",
     en: "Career",
     descRu:
@@ -51,6 +56,7 @@ export const RUBRICS = [
   },
   {
     key: "tools",
+    cover: "/blog/r-tools.jpg",
     ru: "Инструменты",
     en: "Tools",
     descRu:
@@ -64,6 +70,10 @@ export type RubricKey = (typeof RUBRICS)[number]["key"];
 
 export function rubricName(key: string, lang: "ru" | "en"): string {
   return RUBRICS.find((r) => r.key === key)?.[lang] ?? key;
+}
+
+export function rubricCover(key: string): string | undefined {
+  return RUBRICS.find((r) => r.key === key)?.cover;
 }
 
 export function rubricDescription(key: string, lang: "ru" | "en"): string {

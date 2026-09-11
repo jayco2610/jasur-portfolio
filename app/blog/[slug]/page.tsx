@@ -35,13 +35,15 @@ export async function generateMetadata({
       url: `${SITE}/blog/${post.slug}`,
       // Свой блок openGraph перекрывает родительский целиком,
       // поэтому картинку надо повторить здесь, иначе репост будет пустым.
-      images: [{ url: post.cover ?? "/og-cover.jpg", width: 1200, height: 630, alt: post.title }],
+      // Обложки статей вертикальные, в ленту соцсетей они не лезут,
+      // поэтому в репост всегда уходит общая горизонтальная карточка.
+      images: [{ url: "/og-cover.jpg", width: 1200, height: 630, alt: post.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
-      images: [post.cover ?? "/og-cover.jpg"],
+      images: ["/og-cover.jpg"],
     },
   };
 }
@@ -121,6 +123,13 @@ export default async function BlogPost({
                 {new URL(post.canonical).hostname.replace("www.", "")}
               </a>
             </p>
+          )}
+
+          {post.cover && (
+            <div className="mag-lead-im">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={post.cover} alt="" />
+            </div>
           )}
 
           <div

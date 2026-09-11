@@ -4,7 +4,7 @@ import Link from "next/link";
 import MagChrome from "@/components/magazine/MagChrome";
 import { useLanguage } from "@/context/LanguageContext";
 import { useReveal } from "@/hooks/useReveal";
-import { rubricName, rubricDescription, MAGAZINE_NAME } from "@/lib/rubrics";
+import { rubricName, rubricDescription, rubricCover, MAGAZINE_NAME } from "@/lib/rubrics";
 import type { PostMeta } from "@/lib/blog";
 
 function shortDate(date: string, ru: boolean): string {
@@ -52,6 +52,7 @@ export default function RubricContent({
 
   // Метки материалов рубрики идут подзаголовками, как в журнальном развороте.
   const tags = Array.from(new Set(posts.flatMap((p) => p.tags))).slice(0, 3);
+  const cover = rubricCover(rubric);
 
   return (
     <div className="mag-root">
@@ -77,6 +78,13 @@ export default function RubricContent({
 
           <p className="mag-about">{rubricDescription(rubric, lang)}</p>
         </div>
+
+        {cover && (
+          <div className="mag-rub-band">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={cover} alt="" />
+          </div>
+        )}
 
         <div className="mag-sh">
           <h3>{ru ? "В рубрике" : "In this section"}</h3>
