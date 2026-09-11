@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import MagChrome from "@/components/magazine/MagChrome";
 import { useLanguage } from "@/context/LanguageContext";
 import { useReveal } from "@/hooks/useReveal";
-import { rubricName } from "@/lib/rubrics";
+import { rubricName, MAGAZINE_NAME } from "@/lib/rubrics";
 import type { PostMeta } from "@/lib/blog";
 
-function postDate(date: string, ru: boolean): string {
+function shortDate(date: string, ru: boolean): string {
   if (!date) return "";
   return new Date(date).toLocaleDateString(ru ? "ru-RU" : "en-US", {
-    day: "numeric",
+    day: "2-digit",
     month: "long",
-    year: "numeric",
   });
 }
 
@@ -29,21 +29,13 @@ function Card({
   const { ref, className } = useReveal<HTMLAnchorElement>(i);
   return (
     <Link ref={ref} href={`/blog/${post.slug}`} className={`mag-card ${className}`}>
-      <div className="mag-visual">
-        {post.cover ? (
-          <img src={post.cover} alt="" />
-        ) : (
-          <>
-            <span className="mag-visual-no">{String(i + 1).padStart(2, "0")}</span>
-            <span>{rubricName(post.rubric, lang)}</span>
-          </>
-        )}
+      <div className="mag-im">{post.cover && <img src={post.cover} alt="" />}</div>
+      <div className="mag-rub">{rubricName(post.rubric, lang)}</div>
+      <h4>{post.title}</h4>
+      <div className="mag-card-meta">
+        <span className="tiny">{shortDate(post.date, ru)}</span>
+        {post.tags[0] && <span className="tiny">{post.tags[0]}</span>}
       </div>
-      <div className="post-meta mt-3.5">
-        <span className="tiny">{postDate(post.date, ru)}</span>
-      </div>
-      <h3>{post.title}</h3>
-      <p className="post-desc !mt-3 !text-[14.5px]">{post.description}</p>
     </Link>
   );
 }
@@ -51,46 +43,61 @@ function Card({
 export default function RubricContent({
   rubric,
   posts,
-  allRubrics,
 }: {
   rubric: string;
   posts: PostMeta[];
-  allRubrics: string[];
 }) {
   const { lang } = useLanguage();
   const ru = lang === "ru";
 
+  // Метки материалов рубрики идут подзаголовками, как в журнальном развороте.
+  const tags = Array.from(new Set(posts.flatMap((p) => p.tags))).slice(0, 3);
+
   return (
-    <div className="wrap pb-24">
-      <header className="blog-mast">
-        <Link href="/writing" className="tiny">
-          {ru ? "Блог · Жасур Ахмадалиев" : "Blog · Jasur Akhmadaliev"}
-        </Link>
-        <h1 className="blog-name mt-6">{rubricName(rubric, lang)}</h1>
-        <p className="blog-lede">
-          {posts.length} {ru ? "материала в рубрике" : "pieces in this section"}
-        </p>
+    <div className="mag-root">
+      <MagChrome activeRubric={rubric} rightLabel={rubricName(rubric, lang)} />
 
-        <nav className="mag-rubrics">
-          {allRubrics.map((key) => (
-            <Link key={key} href={`/blog/tema/${key}`} data-active={key === rubric}>
-              {rubricName(key, lang)}
+      <div className="mag-w">
+        <div className="mag-title">
+          <div className="mag-title-row">
+            <div>
+              <h1>{rubricName(rubric, lang)}</h1>
+              {tags.length > 0 && (
+                <div className="mag-title-tags">
+                  {tags.map((tag) => (
+                    <span key={tag}>{tag.toLowerCase()}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <Link className="mag-all" href="/writing">
+              {ru ? "Все материалы" : "All pieces"} <span>↘</span>
             </Link>
+          </div>
+        </div>
+
+        <div className="mag-sh">
+          <h3>{ru ? "В рубрике" : "In this section"}</h3>
+          <span className="mag-ln" />
+          <span className="tiny">{String(posts.length).padStart(2, "0")}</span>
+        </div>
+
+        <div className="mag-grid">
+          {posts.map((post, i) => (
+            <Card key={post.slug} post={post} i={i} lang={lang} ru={ru} />
           ))}
-        </nav>
-      </header>
+        </div>
 
-      <div className="mag-grid">
-        {posts.map((post, i) => (
-          <Card key={post.slug} post={post} i={i} lang={lang} ru={ru} />
-        ))}
+        <footer className="mag-foot">
+          <span className="tiny">
+            {MAGAZINE_NAME[lang]} ·{" "}
+            {ru ? "издание Жасура Ахмадалиева" : "a Jasur Akhmadaliev publication"}
+          </span>
+          <Link href="/" className="tiny">
+            {ru ? "← В портфолио" : "← Back to portfolio"}
+          </Link>
+        </footer>
       </div>
-
-      <p className="mt-14">
-        <Link href="/writing" className="tiny hover:text-ink transition-colors">
-          {ru ? "Все материалы" : "All pieces"}
-        </Link>
-      </p>
     </div>
   );
 }

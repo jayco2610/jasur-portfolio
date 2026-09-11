@@ -43,9 +43,11 @@ function parseFile(filename: string): Post {
 
   const words = content.trim().split(/\s+/).length;
 
-  const rubric = RUBRICS.some((r) => r.key === data.rubric)
+  // Если рубрика не указана или написана с ошибкой, кладём материал
+  // в «Процесс», иначе он пропадёт из журнала целиком.
+  const rubric: RubricKey = RUBRICS.some((r) => r.key === data.rubric)
     ? (data.rubric as RubricKey)
-    : "personal";
+    : "process";
 
   return {
     slug,

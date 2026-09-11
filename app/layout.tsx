@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Nav from "@/components/Nav";
+import SiteFooter from "@/components/SiteFooter";
 import JasurGPT from "@/components/JasurGPT";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { Analytics } from "@vercel/analytics/next";
@@ -37,13 +38,7 @@ export default function RootLayout({
         <LanguageProvider>
           <Nav />
           <main className="flex-1">{children}</main>
-          <footer className="wrap">
-            <div className="flex flex-wrap justify-between gap-2.5 border-t border-ink pt-7 pb-24 mt-11">
-              <span className="tiny">Jasur Akhmadaliev</span>
-              <span className="tiny">Москва</span>
-              <span className="tiny">2026 · Prompt-injection hardened</span>
-            </div>
-          </footer>
+          <SiteFooter />
           <JasurGPT />
         </LanguageProvider>
         <Analytics />

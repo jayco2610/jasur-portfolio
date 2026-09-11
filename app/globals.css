@@ -377,282 +377,440 @@ a.row:hover .row-title {
     color 0.2s 0.18s;
 }
 
-/* ============ блог: собственное лицо ============
-   Портфолио набрано гротеском и плотной сеткой.
-   Блог намеренно другой: антиква в заголовках, больше воздуха,
-   чтение на первом месте. Палитра общая, чтобы сайт не разваливался. */
+/* ============ ЖУРНАЛ ============
+   Отдельная визуальная система внутри того же сайта: белый лист вместо
+   бумажного, чёрная липкая шапка, своя навигация. При входе в раздел
+   ощущается как другое издание, хотя адрес и домен те же. */
 
-.blog-mast {
-  padding: clamp(38px, 6vh, 70px) 0 clamp(26px, 3vh, 34px);
+.mag-root {
+  --mag: #ffffff;
+  --mag-ink: #0c0c0b;
+  --bar: #0c0c0b;
+  --mag-rule: #e2e0da;
+  background: var(--mag);
+  color: var(--mag-ink);
+  min-height: 100vh;
+}
+
+.mag-w {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 3.4vw, 58px);
+}
+
+/* полоса возврата в портфолио */
+
+.mag-back {
+  background: var(--paper);
   border-bottom: 1px solid var(--ink);
 }
 
-.blog-name {
-  font-family: var(--font-serif);
-  font-size: clamp(40px, 7vw, 88px);
-  line-height: 0.92;
-  letter-spacing: -0.028em;
-  font-weight: 400;
-  color: var(--ink);
+.mag-back-in {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
 }
 
-.blog-name em {
-  font-style: italic;
-}
-
-.blog-lede {
-  font-size: clamp(15.5px, 1.4vw, 19px);
-  line-height: 1.6;
-  color: #3c3a33;
-  max-width: 34em;
-  margin-top: 22px;
-}
-
-/* простая строка материала: блок «ещё почитать» под статьёй */
-
-.post-item {
-  display: block;
+.mag-back a {
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   text-decoration: none;
   color: var(--ink);
-  border-bottom: 1px solid var(--rule-soft);
-  padding: 22px 0;
+  transition: color 0.18s;
 }
 
-.post-item h3 {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(19px, 2vw, 26px);
-  line-height: 1.14;
-  letter-spacing: -0.018em;
-  max-width: 20em;
-  transition: color 0.16s;
-}
-
-.post-item:hover h3 {
+.mag-back a:hover {
   color: var(--acc);
 }
 
-/* рубрики в шапке журнала */
+/* чёрная липкая шапка издания */
 
-.mag-rubrics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 26px;
-  margin-top: 28px;
-  padding-top: 18px;
-  border-top: 1px solid var(--rule);
+.mag-head {
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  background: var(--bar);
+  color: #fff;
 }
 
-.mag-rubrics a {
+.mag-head-in {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 44px);
+}
+
+.mag-logo {
+  width: 58px;
+  height: 58px;
+  background: #fff;
+  color: var(--bar);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-decoration: none;
+}
+
+.mag-nav {
+  display: flex;
+  gap: clamp(14px, 2.2vw, 32px);
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.mag-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.mag-nav a {
   font-size: 11px;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--dim);
+  color: #fff;
   text-decoration: none;
-  transition: color 0.16s;
+  white-space: nowrap;
+  opacity: 0.78;
+  padding: 22px 0;
+  transition: opacity 0.2s;
 }
 
-.mag-rubrics a:hover,
-.mag-rubrics a[data-active="true"] {
-  color: var(--ink);
+.mag-nav a:hover,
+.mag-nav a[data-on="true"] {
+  opacity: 1;
 }
 
-/* шапка раздела: крупные разрядные буквы поперёк страницы */
-
-.mag-section {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
-  margin-top: clamp(44px, 6vh, 78px);
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--ink);
+.mag-nav a[data-on="true"] {
+  box-shadow: inset 0 -2px 0 var(--acc);
 }
 
-.mag-section h2 {
-  font-size: clamp(20px, 3.4vw, 42px);
-  letter-spacing: 0.24em;
+/* вертикальные подписи по краям полосы */
+
+.mag-vl,
+.mag-vr {
+  position: fixed;
+  top: 50%;
+  z-index: 40;
+  font-size: 9px;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
-  font-weight: 400;
-  line-height: 1;
+  color: var(--faint);
+  pointer-events: none;
 }
 
-/* обложка номера */
-
-.mag-cover {
-  display: grid;
-  gap: 26px;
-  padding: clamp(26px, 4vh, 44px) 0;
-  border-bottom: 1px solid var(--ink);
-  text-decoration: none;
-  color: var(--ink);
+.mag-vl {
+  left: 10px;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
 }
 
-@media (min-width: 900px) {
-  .mag-cover {
-    grid-template-columns: 1.15fr 1fr;
-    gap: 54px;
-    align-items: center;
+.mag-vr {
+  right: 10px;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+}
+
+@media (max-width: 1200px) {
+  .mag-vl,
+  .mag-vr {
+    display: none;
   }
 }
 
-.mag-cover h3 {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(30px, 4.6vw, 60px);
-  line-height: 1.04;
-  letter-spacing: -0.024em;
-  transition: color 0.16s;
+/* заголовок рубрики или издания */
+
+.mag-title {
+  padding: clamp(44px, 8vh, 100px) 0 clamp(24px, 4vh, 44px);
 }
 
-.mag-cover:hover h3 {
+.mag-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.mag-title h1 {
+  font-size: clamp(52px, 10.5vw, 168px);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 0.86;
+}
+
+.mag-title-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 26px;
+}
+
+.mag-title-tags span {
+  font-size: 15px;
+  color: var(--dim);
+}
+
+.mag-all {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--mag-ink);
+  border-bottom: 1px solid var(--mag-ink);
+  padding-bottom: 5px;
+  transition: color 0.16s, border-color 0.16s;
+}
+
+.mag-all:hover {
+  color: var(--acc);
+  border-color: var(--acc);
+}
+
+/* главный материал */
+
+.mag-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 1px solid var(--mag-rule);
+  text-decoration: none;
+  color: inherit;
+}
+
+@media (min-width: 960px) {
+  .mag-hero {
+    grid-template-columns: 1.25fr 1fr;
+  }
+}
+
+.mag-hero-tx {
+  padding: 34px clamp(20px, 3vw, 44px) 34px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (min-width: 960px) {
+  .mag-hero-tx {
+    padding-left: 44px;
+  }
+}
+
+.mag-rub {
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
   color: var(--acc);
 }
 
-/* сетка карточек */
+.mag-hero h2 {
+  font-size: clamp(27px, 3.2vw, 46px);
+  font-weight: 700;
+  letter-spacing: -0.038em;
+  line-height: 1.08;
+  margin-top: 16px;
+}
 
+.mag-hero:hover h2 {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.mag-hero p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #3b3932;
+  margin-top: 18px;
+  max-width: 28em;
+}
+
+.mag-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid var(--mag-rule);
+}
+
+/* секции и сетка */
+
+.mag-sec {
+  padding: clamp(44px, 7vh, 88px) 0 0;
+}
+
+.mag-sh {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--mag-ink);
+}
+
+.mag-sh h3 {
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.mag-sh .mag-ln {
+  flex: 1;
+  height: 1px;
+  background: var(--mag-rule);
+}
+
+/* зазор в один пиксель на фоне линейки даёт волосяные разделители */
 .mag-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 34px 26px;
-  padding-top: 34px;
+  gap: 1px;
+  background: var(--mag-rule);
 }
 
 @media (min-width: 700px) {
   .mag-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-@media (min-width: 1020px) {
+@media (min-width: 1100px) {
   .mag-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 .mag-card {
-  display: block;
+  background: var(--mag);
+  padding: 24px 20px 28px;
   text-decoration: none;
-  color: var(--ink);
+  color: var(--mag-ink);
+  transition: background 0.16s;
 }
 
-.mag-card h3 {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(20px, 1.9vw, 25px);
-  line-height: 1.14;
-  letter-spacing: -0.018em;
+.mag-card:hover {
+  background: #fafaf8;
+}
+
+.mag-card h4 {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.026em;
+  line-height: 1.2;
+  margin-top: 10px;
+}
+
+.mag-card:hover h4 {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.mag-card-meta {
   margin-top: 14px;
-  transition: color 0.16s;
-}
-
-.mag-card:hover h3 {
-  color: var(--acc);
-}
-
-/* типографическая обложка вместо фотографии */
-
-.mag-visual {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  border: 1px solid var(--ink);
-  background: #efede7;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.mag-visual img {
+/* заглушка вместо фотографии: диагональная штриховка */
+
+.mag-im {
+  aspect-ratio: 4 / 3;
+  margin-bottom: 16px;
+  background: repeating-linear-gradient(135deg, #eae8e1 0 10px, #f3f1eb 10px 20px);
+  overflow: hidden;
+}
+
+.mag-hero .mag-im {
+  aspect-ratio: 3 / 2;
+  margin-bottom: 0;
+  background: repeating-linear-gradient(135deg, #e7e5de 0 12px, #f1efe9 12px 24px);
+}
+
+.mag-im img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
 }
 
-.mag-visual span {
-  font-size: clamp(30px, 4vw, 54px);
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  text-transform: uppercase;
-  color: var(--ink);
-  white-space: nowrap;
-  padding: 0 10px;
+/* полоса-разделитель внутри журнала */
+
+.mag-divider {
+  position: relative;
+  overflow: hidden;
+  height: clamp(90px, 11vw, 160px);
+  border-top: 1px solid var(--mag-ink);
+  border-bottom: 1px solid var(--mag-ink);
+  margin-top: clamp(44px, 7vh, 80px);
 }
 
-.mag-visual .mag-visual-no {
+.mag-divider span {
   position: absolute;
-  left: 12px;
-  top: 10px;
-  font-size: 9.5px;
-  letter-spacing: 0.26em;
-  font-weight: 400;
-  color: var(--dim);
+  left: -1.4vw;
+  top: 50%;
+  transform: translateY(-52%);
+  font-size: clamp(70px, 12vw, 168px);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  white-space: nowrap;
+  will-change: transform;
 }
 
-.mag-cover .mag-visual {
-  aspect-ratio: 16 / 10;
-}
+/* где ещё публикуюсь */
 
-.mag-cover .mag-visual span {
-  font-size: clamp(40px, 6.5vw, 96px);
-}
-
-.post-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  margin-bottom: 14px;
-}
-
-.post-desc {
-  font-size: clamp(15px, 1.3vw, 17px);
-  line-height: 1.62;
-  color: #3c3a33;
-  max-width: 33em;
-  margin-top: 14px;
-}
-
-/* подписка и продвижение */
-
-.blog-cta {
+.mag-else {
   display: grid;
-  gap: 20px;
-  padding: clamp(28px, 4vh, 40px) 0;
-  border-bottom: 1px solid var(--ink);
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--mag-rule);
 }
 
-@media (min-width: 780px) {
-  .blog-cta {
-    grid-template-columns: 1.2fr 1fr;
-    gap: 46px;
-    align-items: end;
+@media (min-width: 820px) {
+  .mag-else {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
-.blog-cta-title {
-  font-family: var(--font-serif);
-  font-size: clamp(22px, 2.4vw, 32px);
-  line-height: 1.16;
-  letter-spacing: -0.02em;
-}
-
-.share-link {
-  font-size: 9.5px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--dim);
+.mag-else a {
+  padding: 26px 14px 22px 0;
+  border-bottom: 1px solid var(--mag-rule);
   text-decoration: none;
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: 3px;
-  transition: color 0.16s, border-color 0.16s;
-  background: none;
-  cursor: pointer;
+  color: var(--mag-ink);
 }
 
-.share-link:hover {
-  color: var(--ink);
-  border-color: var(--ink);
+.mag-else a b {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.024em;
+  transition: color 0.16s;
+}
+
+.mag-else a:hover b {
+  color: var(--acc);
+}
+
+.mag-else a span {
+  display: block;
+  margin-top: 8px;
+}
+
+.mag-foot {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 26px 0 60px;
+  margin-top: 34px;
+  border-top: 2px solid var(--mag-ink);
 }
 
 /* ============ текст статьи ============ */

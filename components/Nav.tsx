@@ -55,6 +55,10 @@ export default function Nav() {
 
   const current = links.find((l) => l.href === pathname)?.label ?? links[0].label;
 
+  // Журнал живёт по своей визуальной системе и носит собственную шапку,
+  // поэтому навигацию портфолио на его страницах не показываем.
+  if (pathname === "/writing" || pathname.startsWith("/blog")) return null;
+
   return (
     <>
       {/* выходные данные */}

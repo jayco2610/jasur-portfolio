@@ -1,12 +1,15 @@
 // Отдельно от lib/blog.ts, потому что тот читает файлы и не может
 // попасть в браузерную сборку, а рубрики нужны и на клиенте.
 
+export const MAGAZINE_NAME = { ru: "Блокнот", en: "Notebook" };
+
 export const RUBRICS = [
-  { key: "marketing", ru: "Маркетинг", en: "Marketing" },
   { key: "product", ru: "Продукт", en: "Product" },
-  { key: "numbers", ru: "Цифры", en: "Numbers" },
+  { key: "marketing", ru: "Маркетинг", en: "Marketing" },
   { key: "ai", ru: "AI", en: "AI" },
-  { key: "personal", ru: "Личное", en: "Personal" },
+  { key: "process", ru: "Процесс", en: "Process" },
+  { key: "career", ru: "Карьера", en: "Career" },
+  { key: "tools", ru: "Инструменты", en: "Tools" },
 ] as const;
 
 export type RubricKey = (typeof RUBRICS)[number]["key"];

@@ -1,83 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import Band from "@/components/Band";
-import CountUp from "@/components/CountUp";
+import MagChrome from "@/components/magazine/MagChrome";
 import { useReveal } from "@/hooks/useReveal";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 import type { PostMeta } from "@/lib/blog";
-import { RUBRICS, rubricName } from "@/lib/rubrics";
-
-function postDate(date: string, ru: boolean): string {
-  if (!date) return "";
-  return new Date(date).toLocaleDateString(ru ? "ru-RU" : "en-US", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
-// Обложка материала. Если картинки нет, собираем её типографикой:
-// название рубрики крупно плюс номер, как на газетной полосе.
-function Visual({ post, lang, no }: { post: PostMeta; lang: "en" | "ru"; no: string }) {
-  return (
-    <div className="mag-visual">
-      {post.cover ? (
-        <img src={post.cover} alt="" />
-      ) : (
-        <>
-          <span className="mag-visual-no">{no}</span>
-          <span>{rubricName(post.rubric, lang)}</span>
-        </>
-      )}
-    </div>
-  );
-}
-
-// Материал номера: крупно, в две колонки.
-function MagCover({ post, lang, ru }: { post: PostMeta; lang: "en" | "ru"; ru: boolean }) {
-  const { ref, className } = useReveal<HTMLAnchorElement>(0);
-  return (
-    <Link ref={ref} href={`/blog/${post.slug}`} className={`mag-cover ${className}`}>
-      <Visual post={post} lang={lang} no="01" />
-      <div>
-        <div className="post-meta">
-          <span className="tiny">{rubricName(post.rubric, lang)}</span>
-          <span className="tiny">{postDate(post.date, ru)}</span>
-        </div>
-        <h3>{post.title}</h3>
-        <p className="post-desc">{post.description}</p>
-        <p className="tiny mt-6">{ru ? "Читать" : "Read"}</p>
-      </div>
-    </Link>
-  );
-}
-
-function MagCard({
-  post,
-  i,
-  lang,
-  ru,
-}: {
-  post: PostMeta;
-  i: number;
-  lang: "en" | "ru";
-  ru: boolean;
-}) {
-  const { ref, className } = useReveal<HTMLAnchorElement>(i);
-  return (
-    <Link ref={ref} href={`/blog/${post.slug}`} className={`mag-card ${className}`}>
-      <Visual post={post} lang={lang} no={String(i + 2).padStart(2, "0")} />
-      <div className="post-meta mt-3.5">
-        <span className="tiny">{rubricName(post.rubric, lang)}</span>
-        <span className="tiny">{postDate(post.date, ru)}</span>
-      </div>
-      <h3>{post.title}</h3>
-      <p className="post-desc !mt-3 !text-[14.5px]">{post.description}</p>
-    </Link>
-  );
-}
+import { rubricName, MAGAZINE_NAME } from "@/lib/rubrics";
 
 const published = [
   {
@@ -232,20 +161,59 @@ const channelsList = [
   },
 ];
 
-function ArticleRow({ a, i, lang, ru }: { a: (typeof published)[number]; i: number; lang: "en" | "ru"; ru: boolean }) {
-  const { ref, className } = useReveal<HTMLAnchorElement>(i);
+
+function shortDate(date: string, ru: boolean): string {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString(ru ? "ru-RU" : "en-US", {
+    day: "2-digit",
+    month: "long",
+  });
+}
+
+function Visual({ cover }: { cover?: string }) {
+  return <div className="mag-im">{cover && <img src={cover} alt="" />}</div>;
+}
+
+function Hero({ post, lang, ru }: { post: PostMeta; lang: "en" | "ru"; ru: boolean }) {
+  const { ref, className } = useReveal<HTMLAnchorElement>(0);
   return (
-    <a ref={ref} href={a.href} target="_blank" rel="noopener noreferrer" className={`row block ${className}`}>
-      <span className="tiny">B.{String(i + 1).padStart(2, "0")}</span>
-      <div>
-        <span className="row-title !text-[22px] md:!text-[28px]">{a.title[lang]}</span>
-        <div className="tiny mt-2.5">
-          {a.platform} · {a.lang}
+    <Link ref={ref} href={`/blog/${post.slug}`} className={`mag-hero ${className}`}>
+      <Visual cover={post.cover} />
+      <div className="mag-hero-tx">
+        <div className="mag-rub">{ru ? "Главное" : "Lead"}</div>
+        <h2>{post.title}</h2>
+        <p>{post.description}</p>
+        <div className="mag-hero-meta">
+          <span className="tiny">{shortDate(post.date, ru)}</span>
+          <span className="tiny">{rubricName(post.rubric, lang)}</span>
         </div>
       </div>
-      <p className="row-desc">{a.description[lang]}</p>
-      <span className="tiny">{ru ? "читать" : "read"} →</span>
-    </a>
+    </Link>
+  );
+}
+
+function Card({
+  post,
+  i,
+  lang,
+  ru,
+}: {
+  post: PostMeta;
+  i: number;
+  lang: "en" | "ru";
+  ru: boolean;
+}) {
+  const { ref, className } = useReveal<HTMLAnchorElement>(i);
+  return (
+    <Link ref={ref} href={`/blog/${post.slug}`} className={`mag-card ${className}`}>
+      <Visual cover={post.cover} />
+      <div className="mag-rub">{rubricName(post.rubric, lang)}</div>
+      <h4>{post.title}</h4>
+      <div className="mag-card-meta">
+        <span className="tiny">{shortDate(post.date, ru)}</span>
+        {post.tags[0] && <span className="tiny">{post.tags[0]}</span>}
+      </div>
+    </Link>
   );
 }
 
@@ -253,192 +221,113 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
   const { lang } = useLanguage();
   const w = t[lang].writing;
   const ru = lang === "ru";
-
   const [lead, ...rest] = posts;
-  // Показываем только те рубрики, в которых уже есть материалы,
-  // чтобы в меню не висели пустые разделы.
-  const usedRubrics = RUBRICS.map((r) => r.key).filter((key) =>
-    posts.some((p) => p.rubric === key)
-  );
 
   return (
-    <>
-      {/* ===== блог: собственная шапка издания =====
-          Показываем только когда есть статьи, иначе на сайте висела бы
-          пустая витрина, а публикации на площадках уезжали бы вниз. */}
-      {posts.length > 0 && (
-        <>
-          <div className="wrap">
-            <header className="blog-mast">
-              <div className="tiny mb-6">{ru ? "Блог · Жасур Ахмадалиев" : "Blog · Jasur Akhmadaliev"}</div>
-              <h1 className="blog-name">
-                {ru ? "Строю и " : "Building, "}
-                <em>{ru ? "рассказываю" : "out loud"}</em>
-              </h1>
-              <p className="blog-lede">
-                {ru
-                  ? "Продукт, AI и автоматизация. Пишу о том, что делаю сам: что заработало, что развалилось и сколько это стоило. Без пересказов чужих статей."
-                  : "Product, AI and automation. I write about what I actually build: what worked, what broke and what it cost. No rehashing of other people's posts."}
-              </p>
+    <div className="mag-root">
+      <MagChrome />
 
-              {usedRubrics.length > 0 && (
-                <nav className="mag-rubrics">
-                  {usedRubrics.map((key) => (
-                    <Link key={key} href={`/blog/tema/${key}`}>
-                      {rubricName(key, lang)}
-                    </Link>
-                  ))}
-                </nav>
-              )}
-            </header>
-          </div>
-
-          {/* материал номера */}
-          <div className="wrap">
-            {lead && <MagCover post={lead} lang={lang} ru={ru} />}
-          </div>
-
-          {/* актуальное */}
-          {rest.length > 0 && (
-            <div className="wrap">
-              <div className="mag-section">
-                <h2>{ru ? "Актуальное" : "Latest"}</h2>
-                <span className="tiny">{rest.length}</span>
-              </div>
-              <div className="mag-grid">
-                {rest.slice(0, 6).map((post, i) => (
-                  <MagCard key={post.slug} post={post} i={i} lang={lang} ru={ru} />
-                ))}
+      <div className="mag-w">
+        <div className="mag-title">
+          <div className="mag-title-row">
+            <div>
+              <h1>{MAGAZINE_NAME[lang]}</h1>
+              <div className="mag-title-tags">
+                <span>{ru ? "продукт и метрики" : "product and metrics"}</span>
+                <span>{ru ? "AI и автоматизация" : "AI and automation"}</span>
+                <span>{ru ? "что я строю прямо сейчас" : "what I am building right now"}</span>
               </div>
             </div>
-          )}
+            <a className="mag-all" href="/feed.xml">
+              RSS <span>↘</span>
+            </a>
+          </div>
+        </div>
 
-          {/* рубрики, в которых есть материалы */}
-          {usedRubrics.map((key) => {
-            const inRubric = posts.filter((p) => p.rubric === key);
-            if (inRubric.length === 0) return null;
-            return (
-              <div className="wrap" key={key}>
-                <div className="mag-section">
-                  <h2>{rubricName(key, lang)}</h2>
-                  <Link href={`/blog/tema/${key}`} className="tiny hover:text-ink transition-colors">
-                    {ru ? "Смотреть все" : "See all"}
-                  </Link>
+        {lead ? (
+          <>
+            <Hero post={lead} lang={lang} ru={ru} />
+
+            {rest.length > 0 && (
+              <div className="mag-sec">
+                <div className="mag-sh">
+                  <h3>{ru ? "Свежее" : "Latest"}</h3>
+                  <span className="mag-ln" />
+                  <span className="tiny">{String(rest.length).padStart(2, "0")}</span>
                 </div>
                 <div className="mag-grid">
-                  {inRubric.slice(0, 3).map((post, i) => (
-                    <MagCard key={post.slug} post={post} i={i} lang={lang} ru={ru} />
+                  {rest.slice(0, 9).map((post, i) => (
+                    <Card key={post.slug} post={post} i={i} lang={lang} ru={ru} />
                   ))}
                 </div>
               </div>
-            );
-          })}
-
-          <div className="wrap">
-            <div className="blog-cta">
-              <div>
-                <p className="blog-cta-title">
-                  {ru
-                    ? "Новые тексты сначала выходят в Telegram"
-                    : "New pieces land in Telegram first"}
-                </p>
-                <p className="post-desc">
-                  {ru
-                    ? "Там же разборы, черновики и то, что не дотянуло до статьи."
-                    : "Along with notes, drafts and everything that never became an article."}
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-6 items-end">
-                <a
-                  href="https://t.me/head_of_ceo"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="tiny !text-[11px] px-5 py-3 bg-ink text-paper hover:opacity-80 transition-opacity"
-                >
-                  @head_of_ceo
-                </a>
-                <a href="/feed.xml" className="share-link">
-                  RSS
-                </a>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* ===== опубликовано на площадках ===== */}
-      <Band word={ru ? "ТЕКСТЫ" : "TEXTS"} note={`02 — ${w.publishedLabel}`} />
-
-      <div className="wrap">
-        <section className="sec">
-          <div className="grid gap-9 items-end lg:grid-cols-[1.35fr_0.9fr] lg:gap-14">
-            <div>
-              <div className="sh">
-                <span className="tiny">02</span>
-                <h2>{w.publishedLabel}</h2>
-                <span className="tiny">{published.length}</span>
-              </div>
-              <p className="text-[clamp(15.5px,1.35vw,18px)] leading-[1.62] max-w-2xl pt-6">{w.statsDesc}</p>
-
-              <div className="nums mt-2">
-                {w.stats.map((s) => (
-                  <div className="num" key={s.value}>
-                    <CountUp value={s.value} />
-                    <span className="tiny">
-                      {s.label} · {s.sub}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <figure className="self-end max-w-[420px] lg:max-w-none">
-              <img src="/writing-photo.png" alt="" className="w-full block grayscale contrast-[1.04] mix-blend-multiply" />
-              <figcaption className="flex justify-between items-baseline mt-2.5 pt-2 border-t border-ink">
-                <span className="tiny">{ru ? "Рис. 00 — Чтение" : "Fig. 00 — Reading"}</span>
-                <span className="tiny">2026</span>
-              </figcaption>
-            </figure>
-          </div>
-
-          <div className="mt-10">
-            {published.map((a, i) => (
-              <ArticleRow key={a.href} a={a} i={i} lang={lang} ru={ru} />
-            ))}
-          </div>
-        </section>
+            )}
+          </>
+        ) : (
+          <p className="py-16 text-[16px] leading-[1.6] max-w-2xl">
+            {ru
+              ? "Первый материал выйдет здесь на днях."
+              : "The first piece lands here shortly."}
+          </p>
+        )}
       </div>
 
-      {/* ===== каналы ===== */}
-      <div className="wrap">
-        <section className="sec pb-24">
-          <div className="sh">
-            <span className="tiny">03</span>
-            <h2>{w.channelsLabel}</h2>
-            <span className="tiny">{channelsList.length}</span>
-          </div>
+      <div className="mag-divider">
+        <span>{ru ? "ГДЕ ЕЩЁ Я ПИШУ" : "PUBLISHED ELSEWHERE"}</span>
+      </div>
 
-          <div className="grid sm:grid-cols-2">
-            {channelsList.map((c) => (
+      <div className="mag-w">
+        <div className="mag-sec" style={{ paddingTop: 34 }}>
+          <div className="mag-sh">
+            <h3>{w.publishedLabel}</h3>
+            <span className="mag-ln" />
+            <span className="tiny">{String(published.length).padStart(2, "0")}</span>
+          </div>
+          <div className="mag-grid">
+            {published.slice(0, 6).map((a, i) => (
               <a
-                key={c.name}
-                href={c.href}
+                key={a.href}
+                href={a.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group pt-6 pr-6 pb-6 border-b border-rule-soft no-underline text-ink"
+                className="mag-card"
               >
-                <div className="flex items-baseline justify-between gap-3">
-                  <b className="inline-block font-bold px-1.5 -ml-1.5 pb-0.5 transition-colors group-hover:bg-ink group-hover:text-paper">
-                    {c.name}
-                  </b>
-                  <span className="tiny shrink-0">→</span>
+                <div className="mag-rub">{a.platform}</div>
+                <h4>{a.title[lang]}</h4>
+                <div className="mag-card-meta">
+                  <span className="tiny">{a.lang}</span>
+                  <span className="tiny">{ru ? "читать" : "read"}</span>
                 </div>
-                <p className="row-desc mt-2">{c.description[lang]}</p>
               </a>
             ))}
           </div>
-        </section>
+        </div>
+
+        <div className="mag-sec">
+          <div className="mag-sh">
+            <h3>{w.channelsLabel}</h3>
+            <span className="mag-ln" />
+            <span className="tiny">{String(channelsList.length).padStart(2, "0")}</span>
+          </div>
+          <div className="mag-else">
+            {channelsList.map((c) => (
+              <a key={c.name} href={c.href} target="_blank" rel="noopener noreferrer">
+                <b>{c.name}</b>
+                <span className="tiny">{c.description[lang]}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <footer className="mag-foot">
+          <span className="tiny">
+            {MAGAZINE_NAME[lang]} · {ru ? "издание Жасура Ахмадалиева" : "a Jasur Akhmadaliev publication"}
+          </span>
+          <Link href="/" className="tiny">
+            {ru ? "← В портфолио" : "← Back to portfolio"}
+          </Link>
+        </footer>
       </div>
-    </>
+    </div>
   );
 }

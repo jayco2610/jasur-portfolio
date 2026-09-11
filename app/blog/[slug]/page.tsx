@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPost, getAllSlugs, getAllPosts, formatDate, rubricName } from "@/lib/blog";
 import ShareLinks from "@/components/ShareLinks";
+import MagChrome from "@/components/magazine/MagChrome";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
 
@@ -77,12 +78,10 @@ export default async function BlogPost({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="wrap">
-        <div className="pt-11 pb-8">
-          <Link href="/writing" className="tiny hover:text-ink transition-colors">
-            ← {ru ? "Все статьи" : "All articles"}
-          </Link>
-        </div>
+      <div className="mag-root">
+        <MagChrome activeRubric={post.rubric} rightLabel={rubricName(post.rubric, post.lang)} />
+
+        <div className="mag-w pt-12">
 
         <article className="max-w-[46rem]">
           <div className="flex flex-wrap gap-x-5 gap-y-2 pb-6">
@@ -186,6 +185,16 @@ export default async function BlogPost({
         )}
 
         {others.length === 0 && <div className="pb-24" />}
+
+          <footer className="mag-foot">
+            <span className="tiny">
+              {ru ? "Блокнот · издание Жасура Ахмадалиева" : "Notebook · a Jasur Akhmadaliev publication"}
+            </span>
+            <Link href="/writing" className="tiny">
+              {ru ? "← Все материалы" : "← All pieces"}
+            </Link>
+          </footer>
+        </div>
       </div>
     </>
   );

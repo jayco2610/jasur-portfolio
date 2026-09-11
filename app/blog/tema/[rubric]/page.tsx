@@ -37,5 +37,5 @@ export default async function RubricPage({
 
   if (posts.length === 0) notFound();
 
-  return <RubricContent rubric={rubric} posts={posts} allRubrics={getUsedRubrics()} />;
+  return <RubricContent rubric={rubric} posts={posts} />;
 }
