@@ -82,11 +82,24 @@ export default function RubricContent({
           <span className="tiny">{String(posts.length).padStart(2, "0")}</span>
         </div>
 
-        <div className="mag-grid">
-          {posts.map((post, i) => (
-            <Card key={post.slug} post={post} i={i} lang={lang} ru={ru} />
-          ))}
-        </div>
+        {posts.length > 0 ? (
+          <div className="mag-grid">
+            {posts.map((post, i) => (
+              <Card key={post.slug} post={post} i={i} lang={lang} ru={ru} />
+            ))}
+          </div>
+        ) : (
+          <div className="mag-empty">
+            <p>
+              {ru
+                ? "В этой рубрике пока пусто. Материалы появятся здесь по мере выхода."
+                : "Nothing here yet. Pieces will show up as they are published."}
+            </p>
+            <Link href="/writing" className="mag-all">
+              {ru ? "Смотреть всё" : "See everything"} <span>↘</span>
+            </Link>
+          </div>
+        )}
 
         <footer className="mag-foot">
           <span className="tiny">

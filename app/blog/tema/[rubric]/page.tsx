@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPostsByRubric, getUsedRubrics, rubricName, RUBRICS } from "@/lib/blog";
+import { getPostsByRubric, rubricName, RUBRICS } from "@/lib/blog";
 import RubricContent from "./RubricContent";
 
+// Страницы делаем для всех рубрик, даже пустых: раздел в меню есть,
+// значит он обязан открываться, а не отдавать «страница не найдена».
 export function generateStaticParams() {
-  // Страницы делаем только для рубрик, где есть материалы.
-  return getUsedRubrics().map((rubric) => ({ rubric }));
+  return RUBRICS.map((r) => ({ rubric: r.key }));
 }
 
 export async function generateMetadata({
@@ -15,9 +16,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { rubric } = await params;
   const name = rubricName(rubric, "ru");
+  const isEmpty = getPostsByRubric(rubric).length === 0;
+
   return {
-    title: `${name} — Jasur Akhmadaliev`,
-    description: `Статьи в рубрике «${name}».`,
+    title: `${name} — Блокнот, блог Jasur Akhmadaliev`,
+    description: `Материалы в рубрике «${name}».`,
+    // Пустую рубрику в поиск не отдаём, чтобы не плодить тонкие страницы.
+    robots: isEmpty ? { index: false, follow: true } : undefined,
   };
 }
 
@@ -34,8 +39,6 @@ export default async function RubricPage({
     void readingMinutes;
     return meta;
   });
-
-  if (posts.length === 0) notFound();
 
   return <RubricContent rubric={rubric} posts={posts} />;
 }

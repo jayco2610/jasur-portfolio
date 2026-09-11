@@ -21,11 +21,12 @@ export default function MagChrome({
     <>
       <div className="mag-back">
         <div className="mag-w mag-back-in">
-          <Link href="/">
-            ← {ru ? "Жасур Ахмадалиев · портфолио" : "Jasur Akhmadaliev · portfolio"}
+          <Link href="/" className="mag-back-link">
+            <span aria-hidden="true">←</span>
+            {ru ? "Вернуться в портфолио" : "Back to portfolio"}
           </Link>
           <span className="tiny">
-            {name} · {ru ? "издание" : "publication"}
+            {name} · {ru ? "блог Жасура Ахмадалиева" : "a blog by Jasur Akhmadaliev"}
           </span>
         </div>
       </div>
@@ -49,6 +50,12 @@ export default function MagChrome({
               </Link>
             ))}
           </nav>
+          {/* Верхняя полоса уезжает при скролле, поэтому выход из журнала
+              дублируем в липкой шапке. */}
+          <Link href="/" className="mag-exit">
+            <span aria-hidden="true">←</span>
+            <span className="mag-exit-full">{ru ? "Портфолио" : "Portfolio"}</span>
+          </Link>
         </div>
       </div>
 
