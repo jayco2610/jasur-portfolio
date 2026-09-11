@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllPosts } from "@/lib/blog";
+import { getAllPosts, getUsedRubrics } from "@/lib/blog";
 
 const BASE_URL = "https://jasur-portfolio-pied.vercel.app";
 
@@ -36,5 +36,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
-  return [...staticPages, ...posts];
+  const rubrics: MetadataRoute.Sitemap = getUsedRubrics().map((rubric) => ({
+    url: `${BASE_URL}/blog/tema/${rubric}`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...posts, ...rubrics];
 }

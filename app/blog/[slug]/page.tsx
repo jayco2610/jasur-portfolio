@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPost, getAllSlugs, getAllPosts, formatDate } from "@/lib/blog";
+import { getPost, getAllSlugs, getAllPosts, formatDate, rubricName } from "@/lib/blog";
 import ShareLinks from "@/components/ShareLinks";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
@@ -86,6 +86,9 @@ export default async function BlogPost({
 
         <article className="max-w-[46rem]">
           <div className="flex flex-wrap gap-x-5 gap-y-2 pb-6">
+            <Link href={`/blog/tema/${post.rubric}`} className="tiny hover:text-ink transition-colors">
+              {rubricName(post.rubric, post.lang)}
+            </Link>
             <span className="tiny">{formatDate(post.date, post.lang)}</span>
             <span className="tiny">
               {post.readingMinutes} {ru ? "мин чтения" : "min read"}

@@ -7,6 +7,7 @@ import { useReveal } from "@/hooks/useReveal";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 import type { PostMeta } from "@/lib/blog";
+import { RUBRICS, rubricName } from "@/lib/rubrics";
 
 function postDate(date: string, ru: boolean): string {
   if (!date) return "";
@@ -17,33 +18,63 @@ function postDate(date: string, ru: boolean): string {
   });
 }
 
-// Свежая статья идёт крупно, как передовица издания.
-function PostLead({ post, ru }: { post: PostMeta; ru: boolean }) {
+// Обложка материала. Если картинки нет, собираем её типографикой:
+// название рубрики крупно плюс номер, как на газетной полосе.
+function Visual({ post, lang, no }: { post: PostMeta; lang: "en" | "ru"; no: string }) {
+  return (
+    <div className="mag-visual">
+      {post.cover ? (
+        <img src={post.cover} alt="" />
+      ) : (
+        <>
+          <span className="mag-visual-no">{no}</span>
+          <span>{rubricName(post.rubric, lang)}</span>
+        </>
+      )}
+    </div>
+  );
+}
+
+// Материал номера: крупно, в две колонки.
+function MagCover({ post, lang, ru }: { post: PostMeta; lang: "en" | "ru"; ru: boolean }) {
   const { ref, className } = useReveal<HTMLAnchorElement>(0);
   return (
-    <Link ref={ref} href={`/blog/${post.slug}`} className={`post-lead ${className}`}>
-      <div className="post-meta">
-        <span className="tiny">{postDate(post.date, ru)}</span>
-        {post.tags.length > 0 && <span className="tiny">{post.tags.join(" · ")}</span>}
-        <span className="tiny">{ru ? "свежее" : "latest"}</span>
+    <Link ref={ref} href={`/blog/${post.slug}`} className={`mag-cover ${className}`}>
+      <Visual post={post} lang={lang} no="01" />
+      <div>
+        <div className="post-meta">
+          <span className="tiny">{rubricName(post.rubric, lang)}</span>
+          <span className="tiny">{postDate(post.date, ru)}</span>
+        </div>
+        <h3>{post.title}</h3>
+        <p className="post-desc">{post.description}</p>
+        <p className="tiny mt-6">{ru ? "Читать" : "Read"}</p>
       </div>
-      <h3>{post.title}</h3>
-      <p className="post-desc">{post.description}</p>
-      <p className="tiny mt-5">{ru ? "Читать" : "Read"}</p>
     </Link>
   );
 }
 
-function PostItem({ post, i, ru }: { post: PostMeta; i: number; ru: boolean }) {
+function MagCard({
+  post,
+  i,
+  lang,
+  ru,
+}: {
+  post: PostMeta;
+  i: number;
+  lang: "en" | "ru";
+  ru: boolean;
+}) {
   const { ref, className } = useReveal<HTMLAnchorElement>(i);
   return (
-    <Link ref={ref} href={`/blog/${post.slug}`} className={`post-item ${className}`}>
-      <div className="post-meta">
+    <Link ref={ref} href={`/blog/${post.slug}`} className={`mag-card ${className}`}>
+      <Visual post={post} lang={lang} no={String(i + 2).padStart(2, "0")} />
+      <div className="post-meta mt-3.5">
+        <span className="tiny">{rubricName(post.rubric, lang)}</span>
         <span className="tiny">{postDate(post.date, ru)}</span>
-        {post.tags.length > 0 && <span className="tiny">{post.tags.join(" · ")}</span>}
       </div>
       <h3>{post.title}</h3>
-      <p className="post-desc">{post.description}</p>
+      <p className="post-desc !mt-3 !text-[14.5px]">{post.description}</p>
     </Link>
   );
 }
@@ -224,6 +255,11 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
   const ru = lang === "ru";
 
   const [lead, ...rest] = posts;
+  // Показываем только те рубрики, в которых уже есть материалы,
+  // чтобы в меню не висели пустые разделы.
+  const usedRubrics = RUBRICS.map((r) => r.key).filter((key) =>
+    posts.some((p) => p.rubric === key)
+  );
 
   return (
     <>
@@ -244,17 +280,59 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
                   ? "Продукт, AI и автоматизация. Пишу о том, что делаю сам: что заработало, что развалилось и сколько это стоило. Без пересказов чужих статей."
                   : "Product, AI and automation. I write about what I actually build: what worked, what broke and what it cost. No rehashing of other people's posts."}
               </p>
+
+              {usedRubrics.length > 0 && (
+                <nav className="mag-rubrics">
+                  {usedRubrics.map((key) => (
+                    <Link key={key} href={`/blog/tema/${key}`}>
+                      {rubricName(key, lang)}
+                    </Link>
+                  ))}
+                </nav>
+              )}
             </header>
           </div>
 
+          {/* материал номера */}
           <div className="wrap">
-            <section className="pb-2">
-              {lead && <PostLead post={lead} ru={ru} />}
-              {rest.map((post, i) => (
-                <PostItem key={post.slug} post={post} i={i} ru={ru} />
-              ))}
-            </section>
+            {lead && <MagCover post={lead} lang={lang} ru={ru} />}
           </div>
+
+          {/* актуальное */}
+          {rest.length > 0 && (
+            <div className="wrap">
+              <div className="mag-section">
+                <h2>{ru ? "Актуальное" : "Latest"}</h2>
+                <span className="tiny">{rest.length}</span>
+              </div>
+              <div className="mag-grid">
+                {rest.slice(0, 6).map((post, i) => (
+                  <MagCard key={post.slug} post={post} i={i} lang={lang} ru={ru} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* рубрики, в которых есть материалы */}
+          {usedRubrics.map((key) => {
+            const inRubric = posts.filter((p) => p.rubric === key);
+            if (inRubric.length === 0) return null;
+            return (
+              <div className="wrap" key={key}>
+                <div className="mag-section">
+                  <h2>{rubricName(key, lang)}</h2>
+                  <Link href={`/blog/tema/${key}`} className="tiny hover:text-ink transition-colors">
+                    {ru ? "Смотреть все" : "See all"}
+                  </Link>
+                </div>
+                <div className="mag-grid">
+                  {inRubric.slice(0, 3).map((post, i) => (
+                    <MagCard key={post.slug} post={post} i={i} lang={lang} ru={ru} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
 
           <div className="wrap">
             <div className="blog-cta">
