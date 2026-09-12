@@ -107,7 +107,7 @@ export default async function EpisodePage({
 
                 {ep.description && <p className="mag-art-lead">{ep.description}</p>}
 
-                <Player src={ep.audio} ru={ru} chapters={ep.chapters} />
+                <Player src={ep.audio} ru={ru} slug={ep.slug} chapters={ep.chapters} />
 
                 {ep.html && (
                   <div className="article-body mt-10" dangerouslySetInnerHTML={{ __html: ep.html }} />

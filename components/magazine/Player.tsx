@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { track } from "@vercel/analytics";
 
 function stamp(sec: number): string {
   if (!Number.isFinite(sec) || sec < 0) return "0:00";
@@ -14,10 +15,12 @@ function stamp(sec: number): string {
 export default function Player({
   src,
   ru,
+  slug,
   chapters = [],
 }: {
   src: string;
   ru: boolean;
+  slug: string;
   chapters?: { at: number; label: string; stamp: string }[];
 }) {
   const audio = useRef<HTMLAudioElement>(null);
@@ -25,13 +28,33 @@ export default function Player({
   const [at, setAt] = useState(0);
   const [total, setTotal] = useState(0);
   const [rate, setRate] = useState(1);
+  // Какие отметки уже отправлены. Иначе при перемотке назад
+  // одна и та же четверть засчитается несколько раз.
+  const sent = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     const el = audio.current;
     if (!el) return;
-    const onTime = () => setAt(el.currentTime);
+    const onTime = () => {
+      setAt(el.currentTime);
+      if (!el.duration) return;
+      const share = el.currentTime / el.duration;
+      for (const mark of [0.25, 0.5, 0.75]) {
+        const key = `p${mark}`;
+        if (share >= mark && !sent.current.has(key)) {
+          sent.current.add(key);
+          track("podcast_progress", { episode: slug, share: mark });
+        }
+      }
+    };
     const onMeta = () => setTotal(el.duration);
-    const onEnd = () => setPlaying(false);
+    const onEnd = () => {
+      setPlaying(false);
+      if (!sent.current.has("done")) {
+        sent.current.add("done");
+        track("podcast_finished", { episode: slug });
+      }
+    };
     el.addEventListener("timeupdate", onTime);
     el.addEventListener("loadedmetadata", onMeta);
     el.addEventListener("ended", onEnd);
@@ -48,6 +71,10 @@ export default function Player({
     if (el.paused) {
       void el.play();
       setPlaying(true);
+      if (!sent.current.has("start")) {
+        sent.current.add("start");
+        track("podcast_play", { episode: slug });
+      }
     } else {
       el.pause();
       setPlaying(false);
