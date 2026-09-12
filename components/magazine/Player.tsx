@@ -63,7 +63,7 @@ export default function Player({
       el.removeEventListener("loadedmetadata", onMeta);
       el.removeEventListener("ended", onEnd);
     };
-  }, []);
+  }, [slug]);
 
   function toggle() {
     const el = audio.current;

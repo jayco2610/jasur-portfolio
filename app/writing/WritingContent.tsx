@@ -322,7 +322,7 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
             <span className="tiny">{String(published.length).padStart(2, "0")}</span>
           </div>
           <div className="mag-grid">
-            {published.slice(0, 6).map((a, i) => (
+            {published.slice(0, 6).map((a) => (
               <a
                 key={a.href}
                 href={a.href}

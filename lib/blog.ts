@@ -22,6 +22,9 @@ export type PostMeta = {
   // Заполняется, только если текст сначала вышел на чужой площадке.
   // Тогда поисковик считает оригиналом её, а не наш сайт.
   canonical?: string;
+  // Ставит материал на первое место в журнале независимо от даты.
+  // Иначе, чтобы поднять статью наверх, пришлось бы врать датой.
+  featured?: boolean;
   // Обложка-постер показывается целиком, а не срезается в широкую полосу.
   // Для нарисованных обложек, где важна вся композиция и заголовок.
   coverFit?: "poster";
@@ -158,6 +161,7 @@ function parseFile(filename: string): Post {
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     cover: data.cover ? String(data.cover) : undefined,
     canonical: data.canonical ? String(data.canonical) : undefined,
+    featured: data.featured === true,
     coverFit: data.coverFit === "poster" ? "poster" : undefined,
     translation: data.translation ? String(data.translation) : undefined,
     draft: data.draft === true,
@@ -183,7 +187,10 @@ export function getAllPosts(): Post[] {
   return readFiles()
     .map(parseFile)
     .filter((p) => !p.draft)
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => {
+      if (a.featured !== b.featured) return a.featured ? -1 : 1;
+      return b.date.localeCompare(a.date);
+    });
 }
 
 export function getPost(slug: string): Post | null {
