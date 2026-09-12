@@ -6,6 +6,7 @@ lang: "ru"
 rubric: "ai"
 cover: "/blog/api-ploshchadok.jpg"
 tags: ["Автоматизация", "Контент", "API"]
+translation: "free-platform-apis-2026"
 draft: false
 ---
 

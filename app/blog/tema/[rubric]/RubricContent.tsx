@@ -50,8 +50,11 @@ export default function RubricContent({
   const { lang } = useLanguage();
   const ru = lang === "ru";
 
+  // Показываем только тексты на выбранном языке.
+  const mine = posts.filter((p) => p.lang === lang);
+
   // Метки материалов рубрики идут подзаголовками, как в журнальном развороте.
-  const tags = Array.from(new Set(posts.flatMap((p) => p.tags))).slice(0, 3);
+  const tags = Array.from(new Set(mine.flatMap((p) => p.tags))).slice(0, 3);
   const cover = rubricCover(rubric);
 
   return (
@@ -89,12 +92,12 @@ export default function RubricContent({
         <div className="mag-sh">
           <h3>{ru ? "В рубрике" : "In this section"}</h3>
           <span className="mag-ln" />
-          <span className="tiny">{String(posts.length).padStart(2, "0")}</span>
+          <span className="tiny">{String(mine.length).padStart(2, "0")}</span>
         </div>
 
-        {posts.length > 0 ? (
+        {mine.length > 0 ? (
           <div className="mag-grid">
-            {posts.map((post, i) => (
+            {mine.map((post, i) => (
               <Card key={post.slug} post={post} i={i} lang={lang} ru={ru} />
             ))}
           </div>

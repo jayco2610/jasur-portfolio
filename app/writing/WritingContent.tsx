@@ -221,7 +221,10 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
   const { lang } = useLanguage();
   const w = t[lang].writing;
   const ru = lang === "ru";
-  const [lead, ...rest] = posts;
+  // Показываем только тексты на том языке, который человек выбрал.
+  // Русская статья в английском журнале выглядит как чужая вставка.
+  const mine = posts.filter((p) => p.lang === lang);
+  const [lead, ...rest] = mine;
 
   return (
     <div className="mag-root">

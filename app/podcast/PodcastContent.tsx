@@ -54,8 +54,10 @@ export default function PodcastContent({ episodes }: { episodes: Episode[] }) {
   const ru = lang === "ru";
   const s = SHOW[lang];
 
-  const talks = episodes.filter((e) => e.kind === "talk");
-  const voices = episodes.filter((e) => e.kind === "voice");
+  // Слушают на одном языке, поэтому чужие выпуски в списке не показываем.
+  const mine = episodes.filter((e) => e.lang === lang);
+  const talks = mine.filter((e) => e.kind === "talk");
+  const voices = mine.filter((e) => e.kind === "voice");
 
   return (
     <div className="mag-root">
@@ -84,7 +86,6 @@ export default function PodcastContent({ episodes }: { episodes: Episode[] }) {
               <span className="tiny">
                 {ru ? "Слушать прямо здесь, ничего скачивать не нужно" : "Listen right here, nothing to install"}
               </span>
-              <a href="/podcast/feed.xml">RSS</a>
               <a href="https://t.me/head_of_ceo" target="_blank" rel="noopener noreferrer">
                 Telegram
               </a>
@@ -122,7 +123,7 @@ export default function PodcastContent({ episodes }: { episodes: Episode[] }) {
           </div>
         )}
 
-        {episodes.length === 0 && (
+        {mine.length === 0 && (
           <div className="pod-soon">
             <div className="pod-soon-im">
               {/* eslint-disable-next-line @next/next/no-img-element */}

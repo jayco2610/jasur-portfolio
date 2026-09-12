@@ -22,6 +22,9 @@ export type PostMeta = {
   // Заполняется, только если текст сначала вышел на чужой площадке.
   // Тогда поисковик считает оригиналом её, а не наш сайт.
   canonical?: string;
+  // Адрес того же текста на другом языке. Ставится в обоих файлах,
+  // чтобы ссылка работала в обе стороны.
+  translation?: string;
   draft?: boolean;
 };
 
@@ -152,6 +155,7 @@ function parseFile(filename: string): Post {
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     cover: data.cover ? String(data.cover) : undefined,
     canonical: data.canonical ? String(data.canonical) : undefined,
+    translation: data.translation ? String(data.translation) : undefined,
     draft: data.draft === true,
     html,
     headings,

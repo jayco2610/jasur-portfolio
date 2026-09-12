@@ -48,7 +48,9 @@ export default async function EpisodePage({
   if (!ep) notFound();
 
   const ru = ep.lang === "ru";
-  const others = getEpisodes().filter((e) => e.slug !== ep.slug).slice(0, 3);
+  const others = getEpisodes()
+    .filter((e) => e.slug !== ep.slug && e.lang === ep.lang)
+    .slice(0, 3);
   const voice = ep.kind === "voice";
 
   const jsonLd = {

@@ -60,9 +60,11 @@ export default async function BlogPost({
   if (!post) notFound();
 
   const ru = post.lang === "ru";
+  // В подборке «ещё почитать» показываем только тексты на языке этой статьи.
   const others = getAllPosts()
-    .filter((p) => p.slug !== post.slug)
+    .filter((p) => p.slug !== post.slug && p.lang === post.lang)
     .slice(0, 3);
+  const twin = post.translation ? getPost(post.translation) : null;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -109,6 +111,11 @@ export default async function BlogPost({
               {post.readingMinutes} {ru ? "мин чтения" : "min read"}
             </span>
             {post.tags.length > 0 && <span className="tiny">{post.tags.join(" · ")}</span>}
+            {twin && (
+              <Link href={`/blog/${twin.slug}`} className="tiny mag-twin">
+                {ru ? "Read in English" : "Читать по-русски"}
+              </Link>
+            )}
           </div>
 
           <h1 className="mag-art-h1">{post.title}</h1>
