@@ -9,6 +9,12 @@ const AUTHOR = "Jasur Akhmadaliev";
 // его сюда прямо перед подачей заявки в каталоги. Личную почту не ставим.
 const OWNER_EMAIL = "";
 
+// Лента собирается при сборке и дальше отдаётся как файл. Иначе на Vercel
+// функция не находит папку content: она не попадает в её сборку, потому что
+// путь к ней вычисляется в момент запроса.
+export const dynamic = "force-static";
+
+
 function escapeXml(s: string): string {
   return s
     .replace(/&/g, "&amp;")

@@ -2,6 +2,12 @@ import { getAllPosts } from "@/lib/blog";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
 
+// Лента собирается при сборке и дальше отдаётся как файл. Иначе на Vercel
+// функция не находит папку content: она не попадает в её сборку, потому что
+// путь к ней вычисляется в момент запроса.
+export const dynamic = "force-static";
+
+
 function escapeXml(s: string): string {
   return s
     .replace(/&/g, "&amp;")
