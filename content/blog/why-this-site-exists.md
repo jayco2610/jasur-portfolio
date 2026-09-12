@@ -4,7 +4,7 @@ date: "2026-09-12"
 description: "Who I am, what is here and how to use it. One page instead of a round of questions."
 lang: "en"
 rubric: "process"
-cover: "/blog/instruktsiya.jpg"
+cover: "/blog/zachem.jpg"
 tags: ["Guide", "Site"]
 translation: "zachem-etot-sayt"
 draft: false

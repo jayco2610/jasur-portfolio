@@ -706,11 +706,13 @@ a.row:hover .row-title {
 }
 
 /* зазор в один пиксель на фоне линейки даёт волосяные разделители */
+/* Линейки рисуем на самих карточках, а не фоном сетки. Иначе, когда
+   карточек меньше, чем колонок, пустая ячейка светится серым прямоугольником. */
 .mag-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1px;
-  background: var(--mag-rule);
+  align-items: start;
+  border-top: 1px solid var(--mag-rule);
 }
 
 @media (min-width: 700px) {
@@ -728,6 +730,7 @@ a.row:hover .row-title {
 .mag-card {
   background: var(--mag);
   padding: 24px 20px 28px;
+  border-bottom: 1px solid var(--mag-rule);
   text-decoration: none;
   color: var(--mag-ink);
   transition: background 0.16s;
@@ -772,12 +775,13 @@ a.row:hover .row-title {
   background: repeating-linear-gradient(135deg, #e7e5de 0 12px, #f1efe9 12px 24px);
 }
 
+/* Без обесцвечивания: обложка может быть снята специально в цвете,
+   и тогда цвет в ней и есть смысл. */
 .mag-im img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: 50% 0;
-  filter: grayscale(1);
 }
 
 /* полоса-разделитель внутри журнала */
@@ -1856,7 +1860,6 @@ a.row:hover .row-title {
   /* Снимки вертикальные, главное в них почти всегда сверху,
      поэтому широкая полоса режется снизу, а не по центру. */
   object-position: 50% 0;
-  filter: grayscale(1);
 }
 
 /* Полоса-обложка в шапке раздела */

@@ -4,7 +4,7 @@ date: "2026-09-12"
 description: "Кто я, что здесь лежит и как этим пользоваться. Одна страница вместо расспросов."
 lang: "ru"
 rubric: "process"
-cover: "/blog/instruktsiya.jpg"
+cover: "/blog/zachem.jpg"
 tags: ["Инструкция", "Сайт"]
 translation: "why-this-site-exists"
 draft: false
