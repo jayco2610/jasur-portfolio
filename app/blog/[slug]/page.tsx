@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { getPost, getAllSlugs, getAllPosts, formatDate, rubricName } from "@/lib/blog";
 import ShareLinks from "@/components/ShareLinks";
 import MagChrome from "@/components/magazine/MagChrome";
+import ArticleRail from "@/components/magazine/ArticleRail";
+import { MAGAZINE_NAME } from "@/lib/rubrics";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
 
@@ -87,13 +89,21 @@ export default async function BlogPost({
       <div className="mag-root">
         <MagChrome activeRubric={post.rubric} rightLabel={rubricName(post.rubric, post.lang)} />
 
-        <div className="mag-w pt-12">
+        <div className="mag-w">
 
-        <article className="max-w-[46rem]">
+        <nav className="mag-crumbs">
+          <Link href="/writing">{MAGAZINE_NAME[post.lang]}</Link>
+          <span>›</span>
+          <Link href={`/blog/tema/${post.rubric}`}>{rubricName(post.rubric, post.lang)}</Link>
+          <span>›</span>
+          <b>{ru ? "статья" : "article"}</b>
+        </nav>
+
+        <div className="mag-art">
+        <div className="mag-art-main">
+
+        <article>
           <div className="flex flex-wrap gap-x-5 gap-y-2 pb-6">
-            <Link href={`/blog/tema/${post.rubric}`} className="tiny hover:text-ink transition-colors">
-              {rubricName(post.rubric, post.lang)}
-            </Link>
             <span className="tiny">{formatDate(post.date, post.lang)}</span>
             <span className="tiny">
               {post.readingMinutes} {ru ? "мин чтения" : "min read"}
@@ -101,15 +111,9 @@ export default async function BlogPost({
             {post.tags.length > 0 && <span className="tiny">{post.tags.join(" · ")}</span>}
           </div>
 
-          <h1 className="text-[clamp(30px,4.4vw,52px)] leading-[1.02] tracking-[-0.04em] font-bold">
-            {post.title}
-          </h1>
+          <h1 className="mag-art-h1">{post.title}</h1>
 
-          {post.description && (
-            <p className="text-[clamp(16px,1.5vw,20px)] leading-[1.6] text-dim mt-6 pb-8 border-b border-ink">
-              {post.description}
-            </p>
-          )}
+          {post.description && <p className="mag-art-lead">{post.description}</p>}
 
           {post.canonical && (
             <p className="tiny normal-case tracking-normal text-[12.5px] mt-6 border-l-2 border-rule pl-4">
@@ -138,12 +142,33 @@ export default async function BlogPost({
           />
         </article>
 
-        <div className="max-w-[46rem] mt-14 pt-7 border-t border-ink">
+        {/* источники */}
+        {post.links.length > 0 && (
+          <section className="mag-sources">
+            <div className="mag-sh">
+              <h3>{ru ? "Источники" : "Sources"}</h3>
+              <span className="mag-ln" />
+              <span className="tiny">{String(post.links.length).padStart(2, "0")}</span>
+            </div>
+            <ol>
+              {post.links.map((l) => (
+                <li key={l.href}>
+                  <a href={l.href} target="_blank" rel="noopener noreferrer">
+                    {l.text}
+                  </a>
+                  <span>{l.host}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        <div className="mt-14 pt-7 border-t border-ink">
           <ShareLinks url={`${SITE}/blog/${post.slug}`} title={post.title} ru={ru} />
         </div>
 
         {/* автор */}
-        <div className="max-w-[46rem] mt-12 pt-8 border-t border-rule">
+        <div className="mt-12 pt-8 border-t border-rule">
           <div className="grid gap-6 sm:grid-cols-[92px_1fr] sm:gap-7 items-start">
             <img
               src="/portrait.jpg"
@@ -184,7 +209,7 @@ export default async function BlogPost({
 
         {/* другие статьи */}
         {others.length > 0 && (
-          <div className="max-w-[46rem] mt-14 pb-24">
+          <div className="mt-14 pb-24">
             <p className="tiny pb-2 border-b border-ink">{ru ? "Ещё почитать" : "Read next"}</p>
             {others.map((other) => (
               <Link key={other.slug} href={`/blog/${other.slug}`} className="post-item">
@@ -198,6 +223,16 @@ export default async function BlogPost({
         )}
 
         {others.length === 0 && <div className="pb-24" />}
+
+        </div>
+
+        <ArticleRail
+          headings={post.headings}
+          figures={post.figures}
+          links={post.links}
+          ru={ru}
+        />
+        </div>
 
           <footer className="mag-foot">
             <span className="tiny">
