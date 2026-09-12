@@ -5,6 +5,7 @@ import { getPost, getAllSlugs, getAllPosts, formatDate, rubricName } from "@/lib
 import ShareLinks from "@/components/ShareLinks";
 import MagChrome from "@/components/magazine/MagChrome";
 import ArticleRail from "@/components/magazine/ArticleRail";
+import NoTranslation from "@/components/magazine/NoTranslation";
 import { MAGAZINE_NAME } from "@/lib/rubrics";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
@@ -94,7 +95,11 @@ export default async function BlogPost({
       />
 
       <div className="mag-root">
-        <MagChrome activeRubric={post.rubric} rightLabel={rubricName(post.rubric, post.lang)} />
+        <MagChrome
+          activeRubric={post.rubric}
+          rightLabel={rubricName(post.rubric, post.lang)}
+          twinHref={twin ? `/blog/${twin.slug}` : undefined}
+        />
 
         <div className="mag-w">
 
@@ -126,6 +131,8 @@ export default async function BlogPost({
           <h1 className="mag-art-h1">{post.title}</h1>
 
           {post.description && <p className="mag-art-lead">{post.description}</p>}
+
+          {!twin && <NoTranslation postLang={post.lang} />}
 
           {post.canonical && (
             <p className="tiny normal-case tracking-normal text-[12.5px] mt-6 border-l-2 border-rule pl-4">

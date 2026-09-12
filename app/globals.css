@@ -436,6 +436,61 @@ a.row:hover .row-title {
 
 /* выход из журнала, продублированный в липкой шапке */
 
+/* Переключатель языка внутри журнала. Обе буквы видны всегда: так понятно,
+   что языка два и на каком вы сейчас, а не просто «есть какая-то кнопка». */
+
+.mag-head-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.mag-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: none;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  padding: 7px 11px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.mag-lang:hover {
+  border-color: #fff;
+}
+
+.mag-lang span {
+  color: rgba(255, 255, 255, 0.45);
+  transition: color 0.2s;
+}
+
+.mag-lang span.is-on {
+  color: #fff;
+}
+
+.mag-lang i {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Честная пометка, когда перевода у текста нет. */
+.mag-nolang {
+  margin-top: 18px;
+  padding: 10px 14px;
+  border-left: 2px solid var(--acc);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--dim);
+  background: #faf9f7;
+}
+
 .mag-exit {
   display: inline-flex;
   align-items: center;

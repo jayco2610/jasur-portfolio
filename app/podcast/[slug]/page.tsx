@@ -7,6 +7,7 @@ import { MAGAZINE_NAME } from "@/lib/rubrics";
 import MagChrome from "@/components/magazine/MagChrome";
 import Player from "@/components/magazine/Player";
 import ShareLinks from "@/components/ShareLinks";
+import NoTranslation from "@/components/magazine/NoTranslation";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
 
@@ -113,6 +114,8 @@ export default async function EpisodePage({
                 )}
 
                 {ep.description && <p className="mag-art-lead">{ep.description}</p>}
+
+                <NoTranslation postLang={ep.lang} />
 
                 <Player src={ep.audio} ru={ru} slug={ep.slug} chapters={ep.chapters} />
 

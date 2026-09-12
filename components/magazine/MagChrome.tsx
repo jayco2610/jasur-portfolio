@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import { RUBRICS, rubricName, MAGAZINE_NAME } from "@/lib/rubrics";
 
@@ -10,16 +11,26 @@ export default function MagChrome({
   activeRubric,
   rightLabel,
   section,
+  twinHref,
 }: {
   activeRubric?: string;
   rightLabel?: string;
   // Подкаст стоит рядом с рубриками, но рубрикой не является:
   // это другой вид материала, а не другая тема.
   section?: "podcast";
+  // Адрес этого же текста на другом языке. Если он есть, переключатель
+  // не просто меняет интерфейс, а уводит читателя на перевод.
+  twinHref?: string;
 }) {
-  const { lang } = useLanguage();
+  const { lang, toggle } = useLanguage();
+  const router = useRouter();
   const ru = lang === "ru";
   const name = MAGAZINE_NAME[lang];
+
+  function switchLang() {
+    toggle();
+    if (twinHref) router.push(twinHref);
+  }
 
   return (
     <>
@@ -58,11 +69,18 @@ export default function MagChrome({
             </Link>
           </nav>
           {/* Верхняя полоса уезжает при скролле, поэтому выход из журнала
-              дублируем в липкой шапке. */}
-          <Link href="/" className="mag-exit">
-            <span aria-hidden="true">←</span>
-            <span className="mag-exit-full">{ru ? "Портфолио" : "Portfolio"}</span>
-          </Link>
+              и смена языка дублируются в липкой шапке. */}
+          <div className="mag-head-right">
+            <button type="button" onClick={switchLang} className="mag-lang" aria-label="Toggle language">
+              <span className={ru ? "is-on" : ""}>RU</span>
+              <i aria-hidden="true">/</i>
+              <span className={ru ? "" : "is-on"}>EN</span>
+            </button>
+            <Link href="/" className="mag-exit">
+              <span aria-hidden="true">←</span>
+              <span className="mag-exit-full">{ru ? "Портфолио" : "Portfolio"}</span>
+            </Link>
+          </div>
         </div>
       </div>
 
