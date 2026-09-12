@@ -10,7 +10,7 @@ translation: "zachem-etot-sayt"
 draft: false
 ---
 
-My name is Jasur Akhmadaliev. I am a product manager. I live in Moscow, work a warehouse job and build what you are looking at on the side.
+My name is Jasur Akhmadaliev. I am a product manager. I live in Moscow and build what you are looking at.
 
 I built this site myself. It is about what I do, not about what I call myself.
 
@@ -67,7 +67,13 @@ It is not there for decoration. A recruiter would rather ask than read three pag
 
 ## What comes next
 
-I am building myself an admin panel: one window where a text is written and sent to every platform at once, and where the numbers come back. I run the build in the open, in the Process section. What worked and what fell apart will be written there.
+The podcast. Solo episodes when I have something to say myself. Conversations with guests who have something to say. Short voice notes when a topic does not carry a whole episode.
+
+Breakdowns. I take one thing and dig to the bottom: how it works, what it costs, what holds up and what only promises to. I will not be retelling the news, plenty of people do that already.
+
+Articles across the six sections above. My own work, my own numbers, my own failures.
+
+Everything new shows up here and in the channel.
 
 ## If you want to write
 
