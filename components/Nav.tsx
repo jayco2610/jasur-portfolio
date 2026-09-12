@@ -57,7 +57,7 @@ export default function Nav() {
 
   // Журнал живёт по своей визуальной системе и носит собственную шапку,
   // поэтому навигацию портфолио на его страницах не показываем.
-  if (pathname === "/writing" || pathname.startsWith("/blog")) return null;
+  if (pathname === "/writing" || pathname.startsWith("/blog") || pathname.startsWith("/podcast")) return null;
 
   return (
     <>

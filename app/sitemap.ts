@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts, getUsedRubrics } from "@/lib/blog";
+import { getEpisodes } from "@/lib/podcast";
 
 const BASE_URL = "https://jasur-portfolio-pied.vercel.app";
 
@@ -8,6 +9,7 @@ const routes = [
   { path: "/projects", priority: 0.8 },
   { path: "/services", priority: 0.8 },
   { path: "/writing", priority: 0.8 },
+  { path: "/podcast", priority: 0.8 },
   { path: "/resume", priority: 0.8 },
   { path: "/demos", priority: 0.7 },
   { path: "/demos/mia", priority: 0.6 },
@@ -43,5 +45,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...posts, ...rubrics];
+  const episodes: MetadataRoute.Sitemap = getEpisodes().map((ep) => ({
+    url: `${BASE_URL}/podcast/${ep.slug}`,
+    lastModified: ep.date ? new Date(ep.date) : lastModified,
+    changeFrequency: "monthly",
+    priority: 0.9,
+  }));
+
+  return [...staticPages, ...posts, ...rubrics, ...episodes];
 }

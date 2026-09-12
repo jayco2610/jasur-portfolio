@@ -9,9 +9,13 @@ import { RUBRICS, rubricName, MAGAZINE_NAME } from "@/lib/rubrics";
 export default function MagChrome({
   activeRubric,
   rightLabel,
+  section,
 }: {
   activeRubric?: string;
   rightLabel?: string;
+  // Подкаст стоит рядом с рубриками, но рубрикой не является:
+  // это другой вид материала, а не другая тема.
+  section?: "podcast";
 }) {
   const { lang } = useLanguage();
   const ru = lang === "ru";
@@ -37,7 +41,7 @@ export default function MagChrome({
             {ru ? "Б" : "N"}
           </Link>
           <nav className="mag-nav">
-            <Link href="/writing" data-on={!activeRubric}>
+            <Link href="/writing" data-on={!activeRubric && !section}>
               {ru ? "Всё" : "All"}
             </Link>
             {RUBRICS.map((r) => (
@@ -49,6 +53,9 @@ export default function MagChrome({
                 {rubricName(r.key, lang)}
               </Link>
             ))}
+            <Link href="/podcast" data-on={section === "podcast"} className="mag-nav-pod">
+              {ru ? "Подкаст" : "Podcast"}
+            </Link>
           </nav>
           {/* Верхняя полоса уезжает при скролле, поэтому выход из журнала
               дублируем в липкой шапке. */}

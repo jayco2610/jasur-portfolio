@@ -951,6 +951,504 @@ a.row:hover .row-title {
   transform: scale(1.03);
 }
 
+/* ── подкаст ─────────────────────────────────────────────────────── */
+
+.mag-nav-pod {
+  position: relative;
+}
+
+.mag-nav-pod::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--acc);
+  transform: translateY(-50%);
+}
+
+.pod-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(24px, 3.4vw, 46px);
+  padding: clamp(30px, 5vh, 52px) 0 clamp(30px, 5vh, 50px);
+  border-bottom: 1px solid var(--mag-ink);
+}
+
+@media (min-width: 860px) {
+  .pod-hero {
+    grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.pod-hero-im {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #111;
+}
+
+.pod-hero-im img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pod-hero-tx h1 {
+  font-size: clamp(34px, 5.4vw, 64px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 12px;
+}
+
+.pod-tagline {
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 1.7vw, 22px);
+  line-height: 1.45;
+  color: #3b3932;
+  margin-top: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--mag-rule);
+}
+
+.pod-about {
+  font-size: 15.5px;
+  line-height: 1.62;
+  color: #55524a;
+  margin-top: 18px;
+  max-width: 40em;
+}
+
+.pod-where {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 26px;
+}
+
+.pod-where a {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mag-ink);
+  text-decoration: none;
+  border: 1px solid var(--mag-ink);
+  padding: 8px 15px;
+  transition: background 0.16s, color 0.16s;
+}
+
+.pod-where a:hover {
+  background: var(--mag-ink);
+  color: #fff;
+}
+
+/* список выпусков */
+
+.pod-list {
+  border-top: 1px solid var(--mag-rule);
+}
+
+.pod-row {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--mag-rule);
+  text-decoration: none;
+  color: var(--mag-ink);
+}
+
+@media (min-width: 720px) {
+  .pod-row {
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 26px;
+    padding: 26px 0;
+  }
+}
+
+.pod-row-im {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #111;
+}
+
+.pod-row-im img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.2s;
+}
+
+/* Кружок с треугольником говорит, что это слушают, а не читают. */
+.pod-row-im i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: #111;
+  font-style: normal;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.pod-row:hover .pod-row-im i {
+  opacity: 1;
+}
+
+.pod-row:hover .pod-row-im img {
+  opacity: 0.72;
+}
+
+.pod-row-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.pod-row-tx h4 {
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.16;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.pod-row-tx p {
+  margin-top: 8px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #55524a;
+  max-width: 46em;
+}
+
+.pod-guest {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--mag-ink);
+}
+
+.pod-guest span {
+  color: var(--dim);
+}
+
+.pod-guest-big {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.pod-guest-big b {
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+
+.pod-guest-big > span:last-child {
+  font-size: 13px;
+  color: var(--dim);
+}
+
+/* плеер */
+
+.pod-player {
+  margin-top: 30px;
+  border: 1px solid var(--mag-ink);
+}
+
+.pod-player-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+}
+
+.pod-play {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 50%;
+  background: var(--mag-ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+
+.pod-play:hover {
+  background: var(--acc);
+}
+
+.pod-bar-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.pod-bar-wrap input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    var(--mag-ink) 0 var(--done, 0%),
+    var(--mag-rule) var(--done, 0%) 100%
+  );
+  cursor: pointer;
+}
+
+.pod-bar-wrap input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--acc);
+  border: none;
+}
+
+.pod-bar-wrap input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--acc);
+  border: none;
+}
+
+.pod-times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 7px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.pod-ctrl {
+  display: flex;
+  gap: 6px;
+}
+
+.pod-ctrl button {
+  border: 1px solid var(--mag-rule);
+  background: none;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--dim);
+  padding: 7px 9px;
+  cursor: pointer;
+  transition: border-color 0.16s, color 0.16s;
+  font-variant-numeric: tabular-nums;
+}
+
+.pod-ctrl button:hover {
+  border-color: var(--mag-ink);
+  color: var(--mag-ink);
+}
+
+.pod-chapters {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--mag-rule);
+}
+
+.pod-chapters li + li {
+  border-top: 1px solid var(--rule-soft);
+}
+
+.pod-chapters button {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  font: inherit;
+  padding: 11px 18px;
+  cursor: pointer;
+  color: var(--mag-ink);
+  transition: background 0.14s;
+}
+
+.pod-chapters button:hover {
+  background: #fafaf8;
+}
+
+.pod-chapters b {
+  flex: none;
+  width: 46px;
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--acc);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+.pod-chapters button.is-past b {
+  color: var(--faint);
+}
+
+.pod-chapters span {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* карточка шоу в правой полке */
+
+.pod-side img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  margin-bottom: 14px;
+}
+
+.pod-side b {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.pod-side > span {
+  display: block;
+  margin: 8px 0 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--dim);
+}
+
+/* полоса подкаста на главной журнала */
+
+.pod-strip {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: clamp(34px, 5vh, 56px);
+  border-top: 1px solid var(--mag-ink);
+  border-bottom: 1px solid var(--mag-ink);
+  text-decoration: none;
+  color: var(--mag-ink);
+}
+
+@media (min-width: 720px) {
+  .pod-strip {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+}
+
+.pod-strip-im {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #111;
+}
+
+.pod-strip-im img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.3, 0.8, 0.3, 1);
+}
+
+.pod-strip:hover .pod-strip-im img {
+  transform: scale(1.03);
+}
+
+.pod-strip-tx {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: clamp(22px, 3vw, 40px);
+}
+
+.pod-strip-tx b {
+  font-size: clamp(26px, 3.4vw, 42px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.pod-strip-tx > span:last-of-type {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: #55524a;
+  max-width: 32em;
+}
+
+.pod-strip-tx i {
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--acc);
+  margin-top: 4px;
+}
+
+/* пустой раздел, пока выпусков нет */
+
+.pod-soon {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(22px, 3vw, 40px);
+  align-items: center;
+  padding: clamp(34px, 6vh, 64px) 0;
+}
+
+@media (min-width: 860px) {
+  .pod-soon {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.pod-soon-im {
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: #111;
+}
+
+.pod-soon-im img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pod-soon-big {
+  font-size: clamp(22px, 2.8vw, 34px);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+
+.pod-soon-sm {
+  margin-top: 14px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: #55524a;
+  max-width: 34em;
+}
+
 /* ── разворот статьи ─────────────────────────────────────────────── */
 
 .mag-crumbs {

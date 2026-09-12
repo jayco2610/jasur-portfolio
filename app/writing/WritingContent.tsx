@@ -258,6 +258,23 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
           </div>
         </div>
 
+        <Link href="/podcast" className="pod-strip">
+          <div className="pod-strip-im">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/podcast/studio.jpg" alt="" loading="lazy" />
+          </div>
+          <div className="pod-strip-tx">
+            <span className="tiny">{ru ? "Подкаст" : "Podcast"}</span>
+            <b>Product Talks</b>
+            <span>
+              {ru
+                ? "Разговоры и голосовые про продукт, бизнес и AI. Первый выпуск пишется."
+                : "Conversations and voice notes on product, business and AI. First episode is being recorded."}
+            </span>
+            <i>{ru ? "Открыть →" : "Open →"}</i>
+          </div>
+        </Link>
+
         {lead ? (
           <>
             <Hero post={lead} lang={lang} ru={ru} />

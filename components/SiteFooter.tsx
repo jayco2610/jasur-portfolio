@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 // Подвал портфолио. У журнала свой, поэтому на его страницах не выводим.
 export default function SiteFooter() {
   const pathname = usePathname();
-  if (pathname === "/writing" || pathname.startsWith("/blog")) return null;
+  if (pathname === "/writing" || pathname.startsWith("/blog") || pathname.startsWith("/podcast")) return null;
 
   return (
     <footer className="wrap">
