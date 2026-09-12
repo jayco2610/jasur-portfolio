@@ -261,25 +261,6 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
           </div>
         </div>
 
-        <Link href="/podcast" className="pod-strip">
-          <div className="pod-strip-im">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/podcast/studio.jpg" alt="" loading="lazy" />
-          </div>
-          <div className="pod-strip-tx">
-            <span className="tiny">{ru ? "Подкаст" : "Podcast"}</span>
-            <b>
-              Jasur <em>/ Talks</em>
-            </b>
-            <span>
-              {ru
-                ? "Разговоры о работе, бизнесе, продуктах и жизни. С людьми, у которых есть что сказать."
-                : "Conversations about work, business, products and life. With people who have something to say."}
-            </span>
-            <i>{ru ? "Открыть →" : "Open →"}</i>
-          </div>
-        </Link>
-
         {lead ? (
           <>
             <Hero post={lead} lang={lang} ru={ru} />
@@ -306,6 +287,27 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
               : "Empty for now. Soon."}
           </p>
         )}
+
+        {/* Подкаст идёт чёрной полосой: это не статья, и выглядеть
+            он должен не как статья, иначе глаз их не различает. */}
+        <Link href="/podcast" className="pod-band">
+          <div className="pod-band-im">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/podcast/cover.jpg" alt="" loading="lazy" />
+          </div>
+          <div className="pod-band-tx">
+            <span className="pod-band-kicker">{ru ? "Подкаст" : "Podcast"}</span>
+            <b>
+              Jasur <em>/ Talks</em>
+            </b>
+            <span className="pod-band-desc">
+              {ru
+                ? "Разговоры о работе, бизнесе, продуктах и жизни. С людьми, у которых есть что сказать."
+                : "Conversations about work, business, products and life. With people who have something to say."}
+            </span>
+            <i>{ru ? "Слушать →" : "Listen →"}</i>
+          </div>
+        </Link>
       </div>
 
       <div className="mag-divider">

@@ -624,7 +624,7 @@ a.row:hover .row-title {
 
 @media (min-width: 960px) {
   .mag-hero {
-    grid-template-columns: 1.25fr 1fr;
+    grid-template-columns: 1.1fr 1fr;
   }
 }
 
@@ -769,8 +769,10 @@ a.row:hover .row-title {
   overflow: hidden;
 }
 
+/* Пониже, чем 3:2: главная карточка и так самая крупная на странице,
+   лишняя высота делает её тяжёлой, а не важной. */
 .mag-hero .mag-im {
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 16 / 10;
   margin-bottom: 0;
   background: repeating-linear-gradient(135deg, #e7e5de 0 12px, #f1efe9 12px 24px);
 }
@@ -1010,8 +1012,7 @@ a.row:hover .row-title {
 }
 
 /* Вторая половина названия красная, как на обложке. */
-.pod-hero-tx h1 em,
-.pod-strip-tx b em {
+.pod-hero-tx h1 em {
   font-style: normal;
   color: var(--acc);
 }
@@ -1381,69 +1382,88 @@ a.row:hover .row-title {
 
 /* полоса подкаста на главной журнала */
 
-.pod-strip {
+.pod-band {
   display: grid;
   grid-template-columns: 1fr;
-  margin-top: clamp(34px, 5vh, 56px);
-  border-top: 1px solid var(--mag-ink);
-  border-bottom: 1px solid var(--mag-ink);
+  margin-top: clamp(38px, 6vh, 66px);
+  background: #0c0c0b;
+  color: #fff;
   text-decoration: none;
-  color: var(--mag-ink);
 }
 
 @media (min-width: 720px) {
-  .pod-strip {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  .pod-band {
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
     align-items: stretch;
   }
 }
 
-.pod-strip-im {
-  aspect-ratio: 16 / 9;
+.pod-band-im {
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #111;
 }
 
-.pod-strip-im img {
+.pod-band-im img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.5s cubic-bezier(0.3, 0.8, 0.3, 1);
 }
 
-.pod-strip:hover .pod-strip-im img {
-  transform: scale(1.03);
+.pod-band:hover .pod-band-im img {
+  transform: scale(1.04);
 }
 
-.pod-strip-tx {
+.pod-band-tx {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 10px;
-  padding: clamp(22px, 3vw, 40px);
+  gap: 12px;
+  padding: clamp(26px, 3.4vw, 44px);
 }
 
-.pod-strip-tx b {
-  font-size: clamp(26px, 3.4vw, 42px);
-  line-height: 1;
-  letter-spacing: -0.04em;
+.pod-band-kicker {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #8d8a81;
+}
+
+.pod-band-tx b {
+  font-size: clamp(30px, 4.4vw, 54px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
   text-transform: uppercase;
 }
 
-.pod-strip-tx > span:last-of-type {
-  font-size: 14.5px;
-  line-height: 1.55;
-  color: #55524a;
-  max-width: 32em;
+.pod-band-tx b em {
+  font-style: normal;
+  color: var(--acc);
 }
 
-.pod-strip-tx i {
+.pod-band-desc {
+  font-size: 15px;
+  line-height: 1.55;
+  color: #b6b3aa;
+  max-width: 34em;
+}
+
+.pod-band-tx i {
   font-style: normal;
   font-size: 11px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--acc);
-  margin-top: 4px;
+  color: #fff;
+  border: 1px solid #3a3936;
+  padding: 11px 20px;
+  align-self: flex-start;
+  margin-top: 8px;
+  transition: background 0.16s, border-color 0.16s, color 0.16s;
+}
+
+.pod-band:hover .pod-band-tx i {
+  background: var(--acc);
+  border-color: var(--acc);
 }
 
 /* пустой раздел, пока выпусков нет */
