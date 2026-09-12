@@ -10,6 +10,11 @@ import ShareLinks from "@/components/ShareLinks";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
 
+// Кроме статей, собранных при сборке, никаких других адресов не существует.
+// Без этого Next пытается собрать незнакомый адрес прямо на сервере, а там
+// нет папки content, и вместо честной 404 читатель видит ошибку.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return getEpisodeSlugs().map((slug) => ({ slug }));
 }
