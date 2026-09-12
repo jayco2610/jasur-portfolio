@@ -2,17 +2,18 @@
 // попасть в браузерную сборку, а название и тип выпуска нужны и на клиенте.
 
 export const SHOW = {
-  name: "Product Talks",
+  name: "Jasur / Talks",
   cover: "/podcast/cover.jpg",
+  topics: ["Product", "Business", "Marketing", "AI", "Life"],
   ru: {
-    tagline: "Подкаст о том, как делать продукты, которые имеют значение.",
-    about:
-      "Разговоры и короткие голосовые про продукт, бизнес, маркетинг и AI. Без гостей ради гостей: зову тех, у кого есть что рассказать, и говорю сам, когда есть что сказать.",
+    tagline: "Разговоры о работе, бизнесе, продуктах и жизни.",
+    about: "С людьми, у которых есть что сказать.",
+    sign: "Jasur.",
   },
   en: {
-    tagline: "A podcast about building products that matter.",
-    about:
-      "Conversations and short voice notes on product, business, marketing and AI. No guests for the sake of guests: I invite people who have something to say, and speak myself when I do.",
+    tagline: "Conversations about work, business, products and life.",
+    about: "With people who have something to say.",
+    sign: "Jasur.",
   },
 };
 

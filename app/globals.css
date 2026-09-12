@@ -1005,6 +1005,42 @@ a.row:hover .row-title {
   margin-top: 12px;
 }
 
+/* Вторая половина названия красная, как на обложке. */
+.pod-hero-tx h1 em,
+.pod-strip-tx b em {
+  font-style: normal;
+  color: var(--acc);
+}
+
+.pod-sign {
+  margin-top: 16px;
+  padding-left: 34px;
+  position: relative;
+  font-size: 14px;
+  color: var(--dim);
+}
+
+.pod-sign::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 22px;
+  height: 1px;
+  background: var(--faint);
+}
+
+.pod-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-top: 24px;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
 .pod-tagline {
   font-family: var(--font-serif);
   font-size: clamp(17px, 1.7vw, 22px);

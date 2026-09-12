@@ -265,11 +265,13 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
           </div>
           <div className="pod-strip-tx">
             <span className="tiny">{ru ? "Подкаст" : "Podcast"}</span>
-            <b>Product Talks</b>
+            <b>
+              Jasur <em>/ Talks</em>
+            </b>
             <span>
               {ru
-                ? "Разговоры и голосовые про продукт, бизнес и AI. Первый выпуск пишется."
-                : "Conversations and voice notes on product, business and AI. First episode is being recorded."}
+                ? "Разговоры о работе, бизнесе, продуктах и жизни. С людьми, у которых есть что сказать."
+                : "Conversations about work, business, products and life. With people who have something to say."}
             </span>
             <i>{ru ? "Открыть →" : "Open →"}</i>
           </div>

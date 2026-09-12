@@ -69,15 +69,25 @@ export default function PodcastContent({ episodes }: { episodes: Episode[] }) {
           </div>
           <div className="pod-hero-tx">
             <div className="tiny">{ru ? "Подкаст" : "Podcast"}</div>
-            <h1>{SHOW.name}</h1>
+            <h1>
+              Jasur <em>/ Talks</em>
+            </h1>
             <p className="pod-tagline">{s.tagline}</p>
             <p className="pod-about">{s.about}</p>
+            <p className="pod-sign">{s.sign}</p>
+            <div className="pod-topics">
+              {SHOW.topics.map((topic) => (
+                <span key={topic}>{topic}</span>
+              ))}
+            </div>
             <div className="pod-where">
-              <span className="tiny">{ru ? "Слушать" : "Listen"}</span>
+              <span className="tiny">
+                {ru ? "Слушать прямо здесь, ничего скачивать не нужно" : "Listen right here, nothing to install"}
+              </span>
+              <a href="/podcast/feed.xml">RSS</a>
               <a href="https://t.me/head_of_ceo" target="_blank" rel="noopener noreferrer">
                 Telegram
               </a>
-              <span className="tiny">{ru ? "Остальные площадки скоро" : "More platforms soon"}</span>
             </div>
           </div>
         </div>

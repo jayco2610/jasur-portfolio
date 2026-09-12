@@ -18,5 +18,29 @@ export const metadata: Metadata = {
 };
 
 export default function PodcastPage() {
-  return <PodcastContent episodes={getEpisodes()} />;
+  const episodes = getEpisodes();
+
+  // Без этой разметки поисковик видит просто страницу с текстом
+  // и не понимает, что здесь можно слушать.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "PodcastSeries",
+    name: SHOW.name,
+    description: `${SHOW.ru.tagline} ${SHOW.ru.about}`,
+    url: `${SITE}/podcast`,
+    image: `${SITE}${SHOW.cover}`,
+    inLanguage: "ru",
+    webFeed: `${SITE}/podcast/feed.xml`,
+    author: { "@type": "Person", name: "Jasur Akhmadaliev", url: SITE },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
+      <PodcastContent episodes={episodes} />
+    </>
+  );
 }
