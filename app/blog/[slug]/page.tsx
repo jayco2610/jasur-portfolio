@@ -142,7 +142,7 @@ export default async function BlogPost({
           )}
 
           {post.cover && (
-            <div className="mag-lead-im">
+            <div className={`mag-lead-im${post.coverFit === "poster" ? " is-poster" : ""}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={post.cover} alt="" />
             </div>

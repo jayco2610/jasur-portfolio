@@ -1882,6 +1882,24 @@ a.row:hover .row-title {
   object-position: 50% 0;
 }
 
+/* Нарисованная обложка показывается целиком: у неё есть свой заголовок
+   и композиция, резать её в широкую полосу нечестно. */
+.mag-lead-im.is-poster {
+  aspect-ratio: auto;
+  background: none;
+  text-align: center;
+}
+
+.mag-lead-im.is-poster img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 82vh;
+  margin: 0 auto;
+  display: block;
+  object-fit: contain;
+}
+
 /* Полоса-обложка в шапке раздела */
 
 .mag-rub-band {
