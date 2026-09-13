@@ -55,18 +55,20 @@ export default function Consent() {
 
       {!asked && (
         <div className="consent" role="dialog" aria-live="polite">
-          <p>
-            {ru
-              ? "Считаю, какие страницы читают и где люди уходят. Это нужно, чтобы понимать, что писать дальше. Ничего личного не собираю и никому не передаю."
-              : "I count which pages get read and where people leave. It tells me what to write next. Nothing personal is collected and nothing is passed on."}
-          </p>
-          <div className="consent-btns">
-            <button type="button" onClick={() => decide("yes")} className="is-yes">
-              {ru ? "Можно" : "Allow"}
-            </button>
-            <button type="button" onClick={() => decide("no")}>
-              {ru ? "Не надо" : "No thanks"}
-            </button>
+          <div className="consent-in">
+            <p>
+              {ru
+                ? "Сайт использует куки, чтобы я видел, какие страницы читают и где люди уходят. Личных данных не собираю и никому не передаю."
+                : "This site uses cookies so I can see which pages get read and where people leave. No personal data is collected or passed on."}
+            </p>
+            <div className="consent-btns">
+              <button type="button" onClick={() => decide("no")} className="is-no">
+                {ru ? "Отклонить" : "Decline"}
+              </button>
+              <button type="button" onClick={() => decide("yes")} className="is-yes">
+                OK
+              </button>
+            </div>
           </div>
         </div>
       )}
