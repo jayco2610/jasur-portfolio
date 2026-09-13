@@ -784,10 +784,11 @@ a.row:hover .row-title {
 /* зазор в один пиксель на фоне линейки даёт волосяные разделители */
 /* Линейки рисуем на самих карточках, а не фоном сетки. Иначе, когда
    карточек меньше, чем колонок, пустая ячейка светится серым прямоугольником. */
+/* align-items по умолчанию, то есть stretch: карточки в одном ряду
+   получают одинаковую высоту и их нижние линейки совпадают. */
 .mag-grid {
   display: grid;
   grid-template-columns: 1fr;
-  align-items: start;
   border-top: 1px solid var(--mag-rule);
 }
 
@@ -804,12 +805,21 @@ a.row:hover .row-title {
 }
 
 .mag-card {
+  display: flex;
+  flex-direction: column;
   background: var(--mag);
   padding: 24px 20px 28px;
   border-bottom: 1px solid var(--mag-rule);
   text-decoration: none;
   color: var(--mag-ink);
   transition: background 0.16s;
+}
+
+/* Дата и метка всегда у нижнего края, на какой бы строке ни кончился
+   заголовок. Иначе в ряду они пляшут на разной высоте. */
+.mag-card .mag-card-meta {
+  margin-top: auto;
+  padding-top: 14px;
 }
 
 .mag-card:hover {
@@ -838,8 +848,10 @@ a.row:hover .row-title {
 
 /* заглушка вместо фотографии: диагональная штриховка */
 
+/* Одна пропорция на все карточки журнала: плитка разделов, главная статья
+   и карточки в списках. Разные пропорции рядом читаются как небрежность. */
 .mag-im {
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   margin-bottom: 16px;
   background: repeating-linear-gradient(135deg, #eae8e1 0 10px, #f3f1eb 10px 20px);
   overflow: hidden;

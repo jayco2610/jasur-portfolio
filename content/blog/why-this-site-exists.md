@@ -26,7 +26,7 @@ It is also a test on myself. I write about product and automation, so my own sit
 
 **The portfolio** is the first screen and four sections under it.
 
-**Projects** holds what I built and what is still alive: a platform for expats, an AI job-search system, a RAG assistant for a clinic. With numbers and links to the code.
+**Projects** holds what I built and what is still alive: [a platform for expats](https://expat-roadmap-sea.vercel.app), an AI job-search system, a RAG assistant for a clinic. With numbers and links to the code.
 
 **Services** says what I take on and what it costs.
 
@@ -37,6 +37,8 @@ It is also a test on myself. I write about product and automation, so my own sit
 ## Notebook
 
 This is the blog, but it lives as its own publication. Own masthead, own layout, own rules. You enter it from the portfolio and leave through the button at the top.
+
+![An article spread: text in the middle, chapters, images and links on the right](/blog/log-razvorot.jpg)
 
 Six sections, each about one thing:
 
@@ -50,6 +52,8 @@ Six sections, each about one thing:
 Some sections are still empty. I did not pad them with filler, they fill up as I go.
 
 Inside an article there is a rail on the right: chapters, images and every link the text mentions. You can jump to the part you need or take the links without rereading.
+
+![The chapter rail. The current one is highlighted while you read it](/blog/log-polka.jpg)
 
 ## Podcast
 

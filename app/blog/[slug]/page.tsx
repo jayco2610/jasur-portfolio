@@ -12,6 +12,16 @@ import { MAGAZINE_NAME } from "@/lib/rubrics";
 const SITE = "https://jasur-portfolio-pied.vercel.app";
 const OG = "/og-log.jpg";
 
+// В карточках по всему журналу дата короткая, без года. Полная дата стоит
+// только в шапке самой статьи. Один вид карточки — один формат даты.
+function shortDate(date: string, lang: "ru" | "en"): string {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString(lang === "ru" ? "ru-RU" : "en-US", {
+    day: "2-digit",
+    month: "long",
+  });
+}
+
 // Кроме статей, собранных при сборке, никаких других адресов не существует.
 // Без этого Next пытается собрать незнакомый адрес прямо на сервере, а там
 // нет папки content, и вместо честной 404 читатель видит ошибку.
@@ -248,7 +258,7 @@ export default async function BlogPost({
                   <div className="mag-rub">{rubricName(other.rubric, other.lang)}</div>
                   <h4>{other.title}</h4>
                   <div className="mag-card-meta">
-                    <span className="tiny">{formatDate(other.date, other.lang)}</span>
+                    <span className="tiny">{shortDate(other.date, other.lang)}</span>
                     {other.tags[0] && <span className="tiny">{other.tags[0]}</span>}
                   </div>
                 </Link>
