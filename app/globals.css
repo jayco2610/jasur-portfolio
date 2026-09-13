@@ -955,22 +955,36 @@ a.row:hover .row-title {
 
 /* карточки разделов с описанием */
 
+/* Линейки рисуются бордюрами карточек, а не фоном сетки с зазором в пиксель.
+   При трёх колонках браузер округляет их ширину, и такой зазор в одном месте
+   выходит толще, чем в другом. Бордюр всегда ровно один пиксель. */
 .mag-rub-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1px;
-  background: var(--mag-rule);
+  border-top: 1px solid var(--mag-rule);
 }
 
 @media (min-width: 640px) {
   .mag-rub-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .mag-rub-card:not(:nth-child(2n + 1)) {
+    border-left: 1px solid var(--mag-rule);
+  }
 }
 
 @media (min-width: 1020px) {
   .mag-rub-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .mag-rub-card:not(:nth-child(2n + 1)) {
+    border-left: 0;
+  }
+
+  .mag-rub-card:not(:nth-child(3n + 1)) {
+    border-left: 1px solid var(--mag-rule);
   }
 }
 
@@ -979,6 +993,7 @@ a.row:hover .row-title {
   overflow: hidden;
   background: var(--mag);
   padding: 22px 20px 24px;
+  border-bottom: 1px solid var(--mag-rule);
   text-decoration: none;
   color: var(--mag-ink);
   transition: background 0.16s;
