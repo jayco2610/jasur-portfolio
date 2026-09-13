@@ -118,12 +118,16 @@ export default function ResumePage() {
               </a>
             </div>
           </div>
+          {/* PDF сняты с сайта: их скачивает кто угодно, а что лежит внутри
+              файлов, пока не проверено. Вместо кнопки прямая связь. */}
           <div className="flex gap-3 shrink-0">
-            <a href="/resume.pdf" download className="tiny !text-[11px] px-5 py-3 bg-ink text-paper hover:opacity-80 transition-opacity">
-              {r.pdfEn}
-            </a>
-            <a href="/resume-ru.pdf" download className="tiny !text-[11px] px-5 py-3 border border-ink hover:bg-ink hover:text-paper transition-colors">
-              {r.pdfRu}
+            <a
+              href="https://t.me/biznesmind"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="tiny !text-[11px] px-5 py-3 bg-ink text-paper hover:opacity-80 transition-opacity"
+            >
+              {ru ? "Резюме по запросу" : "Resume on request"}
             </a>
           </div>
         </div>
