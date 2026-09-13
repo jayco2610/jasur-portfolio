@@ -40,3 +40,14 @@ export async function getNumber(key: string): Promise<number | null> {
   const v = (await command(["GET", key])) as string | null;
   return v == null ? null : Number(v);
 }
+
+// Добавляет значение в набор. Набор, а не список, потому что один и тот же
+// адрес, введённый дважды, не должен попасть в подписку два раза.
+// Возвращает 1, если адрес новый, 0 если уже был, null если хранилище недоступно.
+export async function addToSet(key: string, value: string): Promise<number | null> {
+  return (await command(["SADD", key, value])) as number | null;
+}
+
+export async function setSize(key: string): Promise<number | null> {
+  return (await command(["SCARD", key])) as number | null;
+}

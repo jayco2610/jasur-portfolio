@@ -1,0 +1,75 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
+import { useLanguage } from "@/context/LanguageContext";
+
+const KEY = "consent";
+export type Choice = "yes" | "no";
+
+// Аналитика не загружается, пока человек не разрешил. Не потому, что так
+// строже, а потому что Clarity пишет видеозапись экрана, и включать её
+// молча нечестно. Пока выбора нет, не грузится ничего.
+export default function Consent() {
+  const { lang } = useLanguage();
+  const ru = lang === "ru";
+  const [choice, setChoice] = useState<Choice | null>(null);
+  const [asked, setAsked] = useState(true);
+
+  useEffect(() => {
+    let saved: string | null = null;
+    try {
+      saved = localStorage.getItem(KEY);
+    } catch {
+      // Приватный режим или запрет на хранение. Тогда просто спрашиваем снова.
+    }
+    if (saved === "yes" || saved === "no") setChoice(saved);
+    setAsked(saved === "yes" || saved === "no");
+  }, []);
+
+  function decide(value: Choice) {
+    try {
+      localStorage.setItem(KEY, value);
+    } catch {
+      // Не сохранилось, значит спросим в следующий раз. Не страшно.
+    }
+    setChoice(value);
+    setAsked(true);
+  }
+
+  return (
+    <>
+      {choice === "yes" && (
+        <>
+          <Analytics />
+          <Script
+            id="clarity"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xeojrhfu6q");`,
+            }}
+          />
+        </>
+      )}
+
+      {!asked && (
+        <div className="consent" role="dialog" aria-live="polite">
+          <p>
+            {ru
+              ? "Считаю, какие страницы читают и где люди уходят. Это нужно, чтобы понимать, что писать дальше. Ничего личного не собираю и никому не передаю."
+              : "I count which pages get read and where people leave. It tells me what to write next. Nothing personal is collected and nothing is passed on."}
+          </p>
+          <div className="consent-btns">
+            <button type="button" onClick={() => decide("yes")} className="is-yes">
+              {ru ? "Можно" : "Allow"}
+            </button>
+            <button type="button" onClick={() => decide("no")}>
+              {ru ? "Не надо" : "No thanks"}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import MagChrome from "@/components/magazine/MagChrome";
+import Subscribe from "@/components/magazine/Subscribe";
 import { useLanguage } from "@/context/LanguageContext";
 import { useReveal } from "@/hooks/useReveal";
 import { MAGAZINE_NAME } from "@/lib/rubrics";
@@ -159,6 +160,8 @@ export default function PodcastContent({ episodes }: { episodes: Episode[] }) {
             </div>
           </div>
         )}
+
+        <Subscribe />
 
         <footer className="mag-foot">
           <span className="tiny">

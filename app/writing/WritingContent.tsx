@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import MagChrome from "@/components/magazine/MagChrome";
+import Subscribe from "@/components/magazine/Subscribe";
 import { useReveal } from "@/hooks/useReveal";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
@@ -356,6 +357,8 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
             ))}
           </div>
         </div>
+
+        <Subscribe />
 
         <footer className="mag-foot">
           <span className="tiny">

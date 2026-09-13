@@ -6,6 +6,7 @@ import ShareLinks from "@/components/ShareLinks";
 import MagChrome from "@/components/magazine/MagChrome";
 import ArticleRail from "@/components/magazine/ArticleRail";
 import NoTranslation from "@/components/magazine/NoTranslation";
+import Subscribe from "@/components/magazine/Subscribe";
 import { MAGAZINE_NAME } from "@/lib/rubrics";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
@@ -225,6 +226,8 @@ export default async function BlogPost({
             </div>
           </div>
         </div>
+
+        <Subscribe />
 
         {/* другие статьи */}
         {others.length > 0 && (
