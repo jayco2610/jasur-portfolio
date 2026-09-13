@@ -137,6 +137,41 @@ body {
   transition: color 0.25s ease, background 0.25s ease;
 }
 
+/* Ссылка на журнал в шапке портфолио. Чёрная плашка, потому что за ней
+   начинается другое место со своей чёрной шапкой: человек должен понять
+   это до клика, а не после. */
+.nav-mag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: 14px;
+  padding: 5px 11px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s;
+}
+
+.nav-mag i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--acc);
+  flex-shrink: 0;
+}
+
+.nav-mag:hover {
+  background: var(--acc);
+}
+
+.nav-mag:hover i {
+  background: #fff;
+}
+
 .run-status {
   display: flex;
   align-items: center;

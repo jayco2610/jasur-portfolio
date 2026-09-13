@@ -20,7 +20,6 @@ export default function Nav() {
     { href: "/projects", label: nav.projects },
     { href: "/services", label: nav.services },
     { href: "/demos", label: nav.demos },
-    { href: "/writing", label: nav.writing },
     { href: "/resume", label: nav.resume },
   ];
 
@@ -80,6 +79,12 @@ export default function Nav() {
                 {label}
               </Link>
             ))}
+            {/* Блокнот это не раздел портфолио, а отдельное издание.
+                Поэтому он стоит особняком и выглядит по-другому. */}
+            <Link href="/writing" className="nav-mag">
+              <i aria-hidden="true" />
+              {nav.writing}
+            </Link>
           </nav>
 
           <span className="tiny hidden md:block">{current}</span>
@@ -124,6 +129,12 @@ export default function Nav() {
                     </Link>
                   </li>
                 ))}
+                <li className="pt-3 mt-1 border-t border-rule">
+                  <Link href="/writing" className="nav-mag">
+                    <i aria-hidden="true" />
+                    {nav.writing}
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
