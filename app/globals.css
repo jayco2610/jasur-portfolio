@@ -992,7 +992,7 @@ a.row:hover .row-title {
   display: block;
   overflow: hidden;
   background: var(--mag);
-  padding: 22px 20px 24px;
+  padding: clamp(18px, 2vw, 26px);
   border-bottom: 1px solid var(--mag-rule);
   text-decoration: none;
   color: var(--mag-ink);
@@ -1006,9 +1006,13 @@ a.row:hover .row-title {
 /* Обложка раздела. Приглушена, пока на карточку не навели: снимок не должен
    спорить с текстом, ради которого человек сюда пришёл. */
 
+/* Снимок больше не выходит на края карточки. Фотографии сняты на белом,
+   и когда два таких кадра встречались впритык, их собственные светлые поля
+   сливались в широкую полосу, а линейка между ними казалась кривой.
+   Теперь между кадрами честный разворотный отступ, одинаковый везде. */
 .mag-rub-im {
   aspect-ratio: 16 / 10;
-  margin: -22px -20px 18px;
+  margin: 0 0 16px;
   overflow: hidden;
   background: repeating-linear-gradient(135deg, #eae8e1 0 10px, #f3f1eb 10px 20px);
 }
@@ -1645,6 +1649,79 @@ a.row:hover .row-title {
   background: var(--acc);
   border-color: var(--acc);
   color: #fff;
+}
+
+/* ── «ещё почитать» под статьёй ──────────────────────────────────── */
+
+.next-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 620px) {
+  .next-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(20px, 2.6vw, 34px);
+  }
+}
+
+.next-card {
+  display: block;
+  padding: 20px 0 24px;
+  border-bottom: 1px solid var(--rule-soft);
+  text-decoration: none;
+  color: var(--mag-ink);
+}
+
+.next-im {
+  aspect-ratio: 16 / 10;
+  margin-bottom: 14px;
+  overflow: hidden;
+  background: repeating-linear-gradient(135deg, #eae8e1 0 10px, #f3f1eb 10px 20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.next-im img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 0;
+  transition: opacity 0.2s;
+}
+
+.next-card:hover .next-im img {
+  opacity: 0.82;
+}
+
+/* Если обложки нет, в рамке стоит название рубрики, а не пустая штриховка. */
+.next-im span {
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.next-tx h3 {
+  margin-top: 7px;
+  font-size: clamp(17px, 1.9vw, 21px);
+  line-height: 1.14;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  transition: color 0.16s;
+}
+
+.next-card:hover .next-tx h3 {
+  color: var(--acc);
+}
+
+.next-tx p {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #55524a;
 }
 
 /* ── подписка ────────────────────────────────────────────────────── */
