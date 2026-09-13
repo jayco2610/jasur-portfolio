@@ -22,6 +22,9 @@ export type PostMeta = {
   // Заполняется, только если текст сначала вышел на чужой площадке.
   // Тогда поисковик считает оригиналом её, а не наш сайт.
   canonical?: string;
+  // Своя горизонтальная картинка для превью в мессенджерах и соцсетях.
+  // Обложка статьи для этого обычно не годится: она вертикальная.
+  ogImage?: string;
   // Ставит материал на первое место в журнале независимо от даты.
   // Иначе, чтобы поднять статью наверх, пришлось бы врать датой.
   featured?: boolean;
@@ -161,6 +164,7 @@ function parseFile(filename: string): Post {
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     cover: data.cover ? String(data.cover) : undefined,
     canonical: data.canonical ? String(data.canonical) : undefined,
+    ogImage: data.ogImage ? String(data.ogImage) : undefined,
     featured: data.featured === true,
     coverFit: data.coverFit === "poster" ? "poster" : undefined,
     translation: data.translation ? String(data.translation) : undefined,

@@ -6,6 +6,7 @@ lang: "ru"
 rubric: "career"
 cover: "/blog/ustal-ot-sovetov.jpg"
 coverFit: "poster"
+ogImage: "/og-ustal.jpg"
 featured: true
 tags: ["Карьера", "Мнение"]
 draft: false

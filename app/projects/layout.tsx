@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     title: "Проекты — Jasur Akhmadaliev",
     description: "Что построил: система поиска работы на AI, платформа для экспатов, RAG-ассистент клиники. С цифрами и кодом.",
     url: "https://jasur-portfolio-pied.vercel.app/projects",
+    // Свой блок openGraph перекрывает родительский целиком, поэтому
+    // картинку надо повторить здесь, иначе в репосте будет пустое место.
+    images: [{ url: "/og-jasur-2026.jpg", width: 1200, height: 630, alt: "Jasur Akhmadaliev" }],
   },
 };
 

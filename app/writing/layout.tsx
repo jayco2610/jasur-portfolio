@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     title: "Блокнот — Jasur Akhmadaliev",
     description: "Блог про продукт, маркетинг и AI. Только то, что делаю сам.",
     url: "https://jasur-portfolio-pied.vercel.app/writing",
+    // Свой блок openGraph перекрывает родительский целиком, поэтому
+    // картинку надо повторить здесь, иначе в репосте будет пустое место.
+    images: [{ url: "/og-jasur-2026.jpg", width: 1200, height: 630, alt: "Jasur Akhmadaliev" }],
   },
 };
 

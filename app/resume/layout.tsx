@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     title: "Резюме — Jasur Akhmadaliev",
     description: "Опыт, образование, навыки, проекты. PDF на русском и английском.",
     url: "https://jasur-portfolio-pied.vercel.app/resume",
+    // Свой блок openGraph перекрывает родительский целиком, поэтому
+    // картинку надо повторить здесь, иначе в репосте будет пустое место.
+    images: [{ url: "/og-jasur-2026.jpg", width: 1200, height: 630, alt: "Jasur Akhmadaliev" }],
   },
 };
 

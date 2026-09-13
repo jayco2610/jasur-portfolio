@@ -10,6 +10,7 @@ import Subscribe from "@/components/magazine/Subscribe";
 import { MAGAZINE_NAME } from "@/lib/rubrics";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
+const OG = "/og-jasur-2026.jpg";
 
 // Кроме статей, собранных при сборке, никаких других адресов не существует.
 // Без этого Next пытается собрать незнакомый адрес прямо на сервере, а там
@@ -44,15 +45,15 @@ export async function generateMetadata({
       url: `${SITE}/blog/${post.slug}`,
       // Свой блок openGraph перекрывает родительский целиком,
       // поэтому картинку надо повторить здесь, иначе репост будет пустым.
-      // Обложки статей вертикальные, в ленту соцсетей они не лезут,
-      // поэтому в репост всегда уходит общая горизонтальная карточка.
-      images: [{ url: "/og-cover.jpg", width: 1200, height: 630, alt: post.title }],
+      // Обложка статьи обычно вертикальная и в ленту не лезет, поэтому
+      // берём отдельную горизонтальную, а если её нет, общую по сайту.
+      images: [{ url: post.ogImage ?? OG, width: 1200, height: 630, alt: post.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
-      images: ["/og-cover.jpg"],
+      images: [post.ogImage ?? OG],
     },
   };
 }
