@@ -8,14 +8,17 @@ import Consent from "@/components/Consent";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jasur-portfolio-pied.vercel.app"),
-  title: "Jasur Akhmadaliev — Portfolio · PM · AI Builder",
+  // В заголовке для поиска обязательно слово «портфолио»: без него по запросу
+  // «джасур портфолио» первым выдавался репозиторий на Гитхабе, а не сайт.
+  // В превью для мессенджеров уходит хук, там ярлык не нужен.
+  title: "Jasur Akhmadaliev — портфолио продакт-менеджера",
   description:
-    "Portfolio of Jasur Akhmadaliev, a Product Manager building an AI system for his own career search. Showing it live.",
+    "Продукты и автоматизации, журнал Jasur / Log, подкаст Jasur / Talks. Всё своё.",
   openGraph: {
-    title: "Jasur Akhmadaliev — Portfolio · PM · AI Builder",
+    title: "Jasur Akhmadaliev — строю, пишу, говорю",
     description:
-      "Portfolio of Jasur Akhmadaliev, a Product Manager building an AI system for his own career search. Showing it live.",
-    siteName: "Jasur Akhmadaliev — Portfolio",
+      "Продукты и автоматизации, журнал Jasur / Log, подкаст Jasur / Talks. Всё своё.",
+    siteName: "Jasur Akhmadaliev",
     images: [{ url: "/og-log.jpg", width: 1200, height: 630, alt: "Jasur Akhmadaliev" }],
   },
   alternates: {
@@ -26,8 +29,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jasur Akhmadaliev — Portfolio · PM · AI Builder",
-    description: "Portfolio of Jasur Akhmadaliev, a Product Manager building an AI system for his own career search. Showing it live.",
+    title: "Jasur Akhmadaliev — строю, пишу, говорю",
+    description: "Продукты и автоматизации, журнал Jasur / Log, подкаст Jasur / Talks. Всё своё.",
     images: ["/og-log.jpg"],
   },
 };
