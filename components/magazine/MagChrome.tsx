@@ -48,8 +48,10 @@ export default function MagChrome({
 
       <div className="mag-head">
         <div className="mag-w mag-head-in">
+          {/* Косая черта из названия и есть знак издания: один символ,
+              одинаковый на обоих языках. */}
           <Link href="/writing" className="mag-logo" aria-label={name}>
-            {ru ? "Б" : "N"}
+            /
           </Link>
           <nav className="mag-nav">
             <Link href="/writing" data-on={!activeRubric && !section}>

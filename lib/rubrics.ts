@@ -1,7 +1,9 @@
 // Отдельно от lib/blog.ts, потому что тот читает файлы и не может
 // попасть в браузерную сборку, а рубрики нужны и на клиенте.
 
-export const MAGAZINE_NAME = { ru: "Блокнот", en: "Notebook" };
+// Название одинаковое на обоих языках: это имя собственное, как Jasur / Talks
+// у подкаста. Первая половина всегда чёрная, вторая красная.
+export const MAGAZINE_NAME = { ru: "Jasur / Log", en: "Jasur / Log" };
 
 export const RUBRICS = [
   {

@@ -270,7 +270,7 @@ export default async function BlogPost({
 
           <footer className="mag-foot">
             <span className="tiny">
-              {ru ? "Блокнот · издание Жасура Ахмадалиева" : "Notebook · a Jasur Akhmadaliev publication"}
+              {MAGAZINE_NAME[post.lang]}
             </span>
             <Link href="/writing" className="tiny">
               {ru ? "← Все материалы" : "← All pieces"}

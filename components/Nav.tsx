@@ -20,6 +20,8 @@ export default function Nav() {
     { href: "/projects", label: nav.projects },
     { href: "/services", label: nav.services },
     { href: "/demos", label: nav.demos },
+    // Блог помечен точкой: он в общем ряду, но ведёт в отдельное издание.
+    { href: "/writing", label: nav.writing, mark: true },
     { href: "/resume", label: nav.resume },
   ];
 
@@ -74,17 +76,16 @@ export default function Nav() {
       <header className="run">
         <div className="wrap run-in">
           <nav className="run-nav hidden md:flex">
-            {links.map(({ href, label }, i) => (
-              <Link key={href} href={href} data-active={pathname === href} className={glow === i ? "nav-glow" : ""}>
+            {links.map(({ href, label, mark }, i) => (
+              <Link
+                key={href}
+                href={href}
+                data-active={pathname === href}
+                className={`${glow === i ? "nav-glow" : ""}${mark ? " nav-mark" : ""}`}
+              >
                 {label}
               </Link>
             ))}
-            {/* Блокнот это не раздел портфолио, а отдельное издание.
-                Поэтому он стоит особняком и выглядит по-другому. */}
-            <Link href="/writing" className="nav-mag">
-              <i aria-hidden="true" />
-              {nav.writing}
-            </Link>
           </nav>
 
           <span className="tiny hidden md:block">{current}</span>
@@ -119,22 +120,16 @@ export default function Nav() {
           <div className="md:hidden border-t border-rule">
             <div className="wrap py-4">
               <ul className="flex flex-col gap-4">
-                {links.map(({ href, label }) => (
+                {links.map(({ href, label, mark }) => (
                   <li key={href}>
                     <Link
                       href={href}
-                      className={`tiny ${pathname === href ? "!text-ink" : ""}`}
+                      className={`tiny ${pathname === href ? "!text-ink" : ""}${mark ? " nav-mark" : ""}`}
                     >
                       {label}
                     </Link>
                   </li>
                 ))}
-                <li className="pt-3 mt-1 border-t border-rule">
-                  <Link href="/writing" className="nav-mag">
-                    <i aria-hidden="true" />
-                    {nav.writing}
-                  </Link>
-                </li>
               </ul>
             </div>
           </div>

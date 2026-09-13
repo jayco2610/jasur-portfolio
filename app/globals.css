@@ -137,39 +137,25 @@ body {
   transition: color 0.25s ease, background 0.25s ease;
 }
 
-/* Ссылка на журнал в шапке портфолио. Чёрная плашка, потому что за ней
-   начинается другое место со своей чёрной шапкой: человек должен понять
-   это до клика, а не после. */
-.nav-mag {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  margin-left: 14px;
-  padding: 5px 11px;
-  background: var(--ink);
-  color: var(--paper);
-  font-size: 9.5px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background 0.18s;
+/* Блог стоит в общем ряду, но за ним отдельное издание. Помечаем точкой
+   и чуть более тёмной надписью: заметно, но это по-прежнему пункт меню,
+   а не кнопка. */
+.nav-mark {
+  position: relative;
+  padding-left: 11px;
+  color: var(--ink) !important;
 }
 
-.nav-mag i {
+.nav-mark::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
   width: 4px;
   height: 4px;
   border-radius: 50%;
   background: var(--acc);
-  flex-shrink: 0;
-}
-
-.nav-mag:hover {
-  background: var(--acc);
-}
-
-.nav-mag:hover i {
-  background: #fff;
+  transform: translateY(-50%);
 }
 
 .run-status {
@@ -1121,6 +1107,7 @@ a.row:hover .row-title {
 }
 
 /* Вторая половина названия красная, как на обложке. */
+.mag-title h1 em,
 .pod-hero-tx h1 em {
   font-style: normal;
   color: var(--acc);

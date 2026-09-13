@@ -233,7 +233,9 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
 
       <div className="mag-w">
         <div className="mag-title">
-          <h1>{MAGAZINE_NAME[lang]}</h1>
+          <h1>
+            Jasur <em>/ Log</em>
+          </h1>
           <p className="mag-about">
             {ru
               ? "Пишу про то, что делаю сам. Что сработало, что развалилось, сколько стоило."
@@ -362,7 +364,7 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
 
         <footer className="mag-foot">
           <span className="tiny">
-            {MAGAZINE_NAME[lang]} · {ru ? "блог Жасура Ахмадалиева" : "a blog by Jasur Akhmadaliev"}
+            {MAGAZINE_NAME[lang]}
           </span>
           <span className="flex gap-6">
             <a href="/feed.xml" className="tiny">RSS</a>

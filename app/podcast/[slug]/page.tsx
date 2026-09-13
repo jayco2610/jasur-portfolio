@@ -185,8 +185,7 @@ export default async function EpisodePage({
 
           <footer className="mag-foot">
             <span className="tiny">
-              {MAGAZINE_NAME[ep.lang]} ·{" "}
-              {ru ? "издание Жасура Ахмадалиева" : "a Jasur Akhmadaliev publication"}
+              {MAGAZINE_NAME[ep.lang]}
             </span>
             <Link href="/podcast" className="tiny">
               {ru ? "← Все выпуски" : "← All episodes"}

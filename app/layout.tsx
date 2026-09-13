@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://jasur-portfolio-pied.vercel.app",
     types: {
-      "application/rss+xml": [{ url: "/feed.xml", title: "Блокнот · блог Жасура Ахмадалиева" }],
+      "application/rss+xml": [{ url: "/feed.xml", title: "Jasur / Log" }],
     },
   },
   twitter: {

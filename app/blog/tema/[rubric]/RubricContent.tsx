@@ -116,8 +116,7 @@ export default function RubricContent({
 
         <footer className="mag-foot">
           <span className="tiny">
-            {MAGAZINE_NAME[lang]} ·{" "}
-            {ru ? "издание Жасура Ахмадалиева" : "a Jasur Akhmadaliev publication"}
+            {MAGAZINE_NAME[lang]}
           </span>
           <Link href="/" className="tiny">
             {ru ? "← В портфолио" : "← Back to portfolio"}

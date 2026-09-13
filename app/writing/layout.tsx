@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Блокнот — Jasur Akhmadaliev",
+  title: "Jasur / Log — блог Жасура Ахмадалиева",
   description: "Блог про продукт, маркетинг и AI. Только то, что делаю сам.",
   alternates: { canonical: "https://jasur-portfolio-pied.vercel.app/writing" },
   openGraph: {
-    title: "Блокнот — Jasur Akhmadaliev",
+    title: "Jasur / Log — блог Жасура Ахмадалиева",
     description: "Блог про продукт, маркетинг и AI. Только то, что делаю сам.",
     url: "https://jasur-portfolio-pied.vercel.app/writing",
     // Свой блок openGraph перекрывает родительский целиком, поэтому

@@ -165,8 +165,7 @@ export default function PodcastContent({ episodes }: { episodes: Episode[] }) {
 
         <footer className="mag-foot">
           <span className="tiny">
-            {MAGAZINE_NAME[lang]} ·{" "}
-            {ru ? "издание Жасура Ахмадалиева" : "a Jasur Akhmadaliev publication"}
+            {MAGAZINE_NAME[lang]}
           </span>
           <Link href="/writing" className="tiny">
             {ru ? "← Все материалы" : "← All pieces"}

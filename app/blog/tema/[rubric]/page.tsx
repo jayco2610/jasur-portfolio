@@ -20,7 +20,7 @@ export async function generateMetadata({
   const isEmpty = getPostsByRubric(rubric).length === 0;
 
   return {
-    title: `${name} — Блокнот, блог Jasur Akhmadaliev`,
+    title: `${name} — Jasur / Log`,
     description: rubricDescription(rubric, "ru"),
     // Пустую рубрику в поиск не отдаём, чтобы не плодить тонкие страницы.
     robots: isEmpty ? { index: false, follow: true } : undefined,

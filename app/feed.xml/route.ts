@@ -38,7 +38,7 @@ export async function GET() {
 <?xml-stylesheet type="text/xsl" href="/feed.xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Блокнот · блог Жасура Ахмадалиева</title>
+    <title>Jasur / Log</title>
     <link>${SITE}/writing</link>
     <description>Продукт, маркетинг и AI. Только то, что я делаю сам.</description>
     <language>ru</language>
