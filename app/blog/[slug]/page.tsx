@@ -234,21 +234,22 @@ export default async function BlogPost({
         {others.length > 0 && (
           <div className="mt-14 pb-24">
             <p className="tiny pb-2 border-b border-ink">{ru ? "Ещё почитать" : "Read next"}</p>
-            <div className="next-grid">
+            {/* Те же карточки, что в рубриках: маленькие, квадратные,
+                единый вид по всему журналу. */}
+            <div className="mag-grid">
               {others.map((other) => (
-                <Link key={other.slug} href={`/blog/${other.slug}`} className="next-card">
-                  <div className="next-im">
-                    {other.cover ? (
+                <Link key={other.slug} href={`/blog/${other.slug}`} className="mag-card">
+                  <div className="mag-im">
+                    {other.cover && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={other.cover} alt="" loading="lazy" />
-                    ) : (
-                      <span aria-hidden="true">{rubricName(other.rubric, other.lang)}</span>
                     )}
                   </div>
-                  <div className="next-tx">
+                  <div className="mag-rub">{rubricName(other.rubric, other.lang)}</div>
+                  <h4>{other.title}</h4>
+                  <div className="mag-card-meta">
                     <span className="tiny">{formatDate(other.date, other.lang)}</span>
-                    <h3>{other.title}</h3>
-                    {other.description && <p>{other.description}</p>}
+                    {other.tags[0] && <span className="tiny">{other.tags[0]}</span>}
                   </div>
                 </Link>
               ))}
