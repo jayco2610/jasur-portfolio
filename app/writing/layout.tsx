@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Jasur / Log — блог Жасура Ахмадалиева",
-  description: "Блог про продукт, маркетинг и AI. Только то, что делаю сам.",
+  description: "Пишу про то, что делаю сам. Что сработало, что развалилось, сколько стоило.",
   alternates: { canonical: "https://jasur-portfolio-pied.vercel.app/writing" },
   openGraph: {
     title: "Jasur / Log — блог Жасура Ахмадалиева",
-    description: "Блог про продукт, маркетинг и AI. Только то, что делаю сам.",
+    description: "Пишу про то, что делаю сам. Что сработало, что развалилось, сколько стоило.",
     url: "https://jasur-portfolio-pied.vercel.app/writing",
     // Свой блок openGraph перекрывает родительский целиком, поэтому
     // картинку надо повторить здесь, иначе в репосте будет пустое место.

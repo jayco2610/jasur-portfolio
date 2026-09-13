@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: "Живые демо автоматизаций для локального бизнеса. Работают прямо в браузере, без установки.",
   alternates: { canonical: "https://jasur-portfolio-pied.vercel.app/demos" },
   openGraph: {
-    title: "Демо — Jasur Akhmadaliev",
+    title: "Шесть автоматизаций, которые можно потрогать",
     description: "Живые демо автоматизаций для локального бизнеса. Работают прямо в браузере, без установки.",
     url: "https://jasur-portfolio-pied.vercel.app/demos",
     // Свой блок openGraph перекрывает родительский целиком, поэтому
