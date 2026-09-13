@@ -1591,7 +1591,7 @@ a.row:hover .row-title {
 }
 
 .pod-soon-im {
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   background: #111;
 }
@@ -2198,8 +2198,10 @@ a.row:hover .row-title {
 
 /* Обложка статьи перед текстом */
 
+/* Та же пропорция, что у карточек: обложка статьи и её же превью
+   в списке должны быть одним кадром, а не двумя разными. */
 .mag-lead-im {
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 16 / 10;
   margin-top: 34px;
   overflow: hidden;
   background: repeating-linear-gradient(135deg, #eae8e1 0 12px, #f3f1eb 12px 24px);
