@@ -10,7 +10,7 @@ import Subscribe from "@/components/magazine/Subscribe";
 import { MAGAZINE_NAME } from "@/lib/rubrics";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
-const OG = "/og-jasur-2026.jpg";
+const OG = "/og-studio.jpg";
 
 // Кроме статей, собранных при сборке, никаких других адресов не существует.
 // Без этого Next пытается собрать незнакомый адрес прямо на сервере, а там

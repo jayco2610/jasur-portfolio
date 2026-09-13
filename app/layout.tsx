@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     description:
       "Portfolio of Jasur Akhmadaliev, a Product Manager building an AI system for his own career search. Showing it live.",
     siteName: "Jasur Akhmadaliev — Portfolio",
-    images: [{ url: "/og-jasur-2026.jpg", width: 1200, height: 630, alt: "Jasur Akhmadaliev" }],
+    images: [{ url: "/og-studio.jpg", width: 1200, height: 630, alt: "Jasur Akhmadaliev" }],
   },
   alternates: {
     canonical: "https://jasur-portfolio-pied.vercel.app",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Jasur Akhmadaliev — Portfolio · PM · AI Builder",
     description: "Portfolio of Jasur Akhmadaliev, a Product Manager building an AI system for his own career search. Showing it live.",
-    images: ["/og-jasur-2026.jpg"],
+    images: ["/og-studio.jpg"],
   },
 };
 
