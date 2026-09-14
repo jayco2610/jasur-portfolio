@@ -4,9 +4,9 @@ date: "2026-09-12"
 description: "On having to get everything done by twenty-five, on personal branding instead of work, and on the AI that will supposedly think for you."
 lang: "en"
 rubric: "career"
-cover: "/blog/ustal-ot-sovetov.jpg"
+cover: "/blog/tired-of-advice.jpg"
 coverFit: "poster"
-ogImage: "/og-ustal.jpg"
+ogImage: "/og-tired.jpg"
 featured: true
 tags: ["Career", "Opinion"]
 translation: "ustal-ot-sovetov"
