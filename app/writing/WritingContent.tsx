@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import MagChrome from "@/components/magazine/MagChrome";
+import Carousel from "@/components/magazine/Carousel";
 import Subscribe from "@/components/magazine/Subscribe";
 import { useReveal } from "@/hooks/useReveal";
 import { useLanguage } from "@/context/LanguageContext";
@@ -193,31 +194,6 @@ function Hero({ post, lang, ru }: { post: PostMeta; lang: "en" | "ru"; ru: boole
   );
 }
 
-function Card({
-  post,
-  i,
-  lang,
-  ru,
-}: {
-  post: PostMeta;
-  i: number;
-  lang: "en" | "ru";
-  ru: boolean;
-}) {
-  const { ref, className } = useReveal<HTMLAnchorElement>(i);
-  return (
-    <Link ref={ref} href={`/blog/${post.slug}`} className={`mag-card ${className}`}>
-      <Visual cover={post.cover} />
-      <div className="mag-rub">{rubricName(post.rubric, lang)}</div>
-      <h4>{post.title}</h4>
-      <div className="mag-card-meta">
-        <span className="tiny">{shortDate(post.date, ru)}</span>
-        {post.tags[0] && <span className="tiny">{post.tags[0]}</span>}
-      </div>
-    </Link>
-  );
-}
-
 export default function WritingContent({ posts }: { posts: PostMeta[] }) {
   const { lang, toggle } = useLanguage();
   const w = t[lang].writing;
@@ -281,11 +257,18 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
                   <span className="tiny">{String(rest.length).padStart(2, "0")}</span>
                 </div>
                 {rest.length > 0 ? (
-                  <div className="mag-grid">
-                    {rest.slice(0, 9).map((post, i) => (
-                      <Card key={post.slug} post={post} i={i} lang={lang} ru={ru} />
-                    ))}
-                  </div>
+                  <Carousel
+                    ru={ru}
+                    posts={rest.map((p) => ({
+                      slug: p.slug,
+                      title: p.title,
+                      date: p.date,
+                      lang: p.lang,
+                      rubric: p.rubric,
+                      cover: p.cover,
+                      tag: p.tags[0],
+                    }))}
+                  />
                 ) : (
                   <div className="mag-empty">
                     <p>

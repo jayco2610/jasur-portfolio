@@ -7,20 +7,11 @@ import MagChrome from "@/components/magazine/MagChrome";
 import ArticleRail from "@/components/magazine/ArticleRail";
 import NoTranslation from "@/components/magazine/NoTranslation";
 import Subscribe from "@/components/magazine/Subscribe";
+import Carousel from "@/components/magazine/Carousel";
 import { MAGAZINE_NAME } from "@/lib/rubrics";
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
 const OG = "/og-log.jpg";
-
-// В карточках по всему журналу дата короткая, без года. Полная дата стоит
-// только в шапке самой статьи. Один вид карточки — один формат даты.
-function shortDate(date: string, lang: "ru" | "en"): string {
-  if (!date) return "";
-  return new Date(date).toLocaleDateString(lang === "ru" ? "ru-RU" : "en-US", {
-    day: "2-digit",
-    month: "long",
-  });
-}
 
 // Кроме статей, собранных при сборке, никаких других адресов не существует.
 // Без этого Next пытается собрать незнакомый адрес прямо на сервере, а там
@@ -81,7 +72,7 @@ export default async function BlogPost({
   // В подборке «ещё почитать» показываем только тексты на языке этой статьи.
   const others = getAllPosts()
     .filter((p) => p.slug !== post.slug && p.lang === post.lang)
-    .slice(0, 3);
+    .slice(0, 8);
   const twin = post.translation ? getPost(post.translation) : null;
 
   const jsonLd = {
@@ -244,26 +235,20 @@ export default async function BlogPost({
         {others.length > 0 && (
           <div className="mt-14 pb-24">
             <p className="tiny pb-2 border-b border-ink">{ru ? "Ещё почитать" : "Read next"}</p>
-            {/* Те же карточки, что в рубриках: маленькие, квадратные,
-                единый вид по всему журналу. */}
-            <div className="mag-grid">
-              {others.map((other) => (
-                <Link key={other.slug} href={`/blog/${other.slug}`} className="mag-card">
-                  <div className="mag-im">
-                    {other.cover && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={other.cover} alt="" loading="lazy" />
-                    )}
-                  </div>
-                  <div className="mag-rub">{rubricName(other.rubric, other.lang)}</div>
-                  <h4>{other.title}</h4>
-                  <div className="mag-card-meta">
-                    <span className="tiny">{shortDate(other.date, other.lang)}</span>
-                    {other.tags[0] && <span className="tiny">{other.tags[0]}</span>}
-                  </div>
-                </Link>
-              ))}
-            </div>
+            {/* Лента по кругу, та же, что в «Свежем» на главной журнала. */}
+            <Carousel
+              narrow
+              ru={ru}
+              posts={others.map((o) => ({
+                slug: o.slug,
+                title: o.title,
+                date: o.date,
+                lang: o.lang,
+                rubric: o.rubric,
+                cover: o.cover,
+                tag: o.tags[0],
+              }))}
+            />
           </div>
         )}
 
