@@ -1754,12 +1754,16 @@ button.mag-all {
 
 .car-track {
   display: flex;
-  transition: transform 0.7s cubic-bezier(0.22, 0.8, 0.2, 1);
   will-change: transform;
 }
 
-.car-track.no-anim {
-  transition: none;
+/* Лента живая: за неё можно взяться и подкрутить. */
+.car--live .car-view {
+  cursor: grab;
+}
+
+.car--live .car-view:active {
+  cursor: grabbing;
 }
 
 /* Ширина карточки считается от ширины ленты, а не от содержимого:
@@ -1773,36 +1777,7 @@ button.mag-all {
 .car-slide .mag-card {
   width: 100%;
   user-select: none;
-}
-
-/* Счётчик и стрелки стоят по той же линии, что текст карточек. */
-.car-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px 0;
-}
-
-.car-btns {
-  display: flex;
-  gap: 8px;
-}
-
-.car-btns button {
-  width: 42px;
-  height: 42px;
-  border: 1px solid var(--mag-ink);
-  background: none;
-  font: inherit;
-  font-size: 15px;
-  color: var(--mag-ink);
-  cursor: pointer;
-  transition: background 0.16s, color 0.16s;
-}
-
-.car-btns button:hover {
-  background: var(--mag-ink);
-  color: #fff;
+  -webkit-user-drag: none;
 }
 
 /* ── подписка ────────────────────────────────────────────────────── */

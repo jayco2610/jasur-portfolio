@@ -3,16 +3,17 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import PostCard, { type CardPost } from "./PostCard";
 
-// Лента статей в одну строку, которая проворачивается по кругу на одну
-// карточку, как колёсико. Бесконечность сделана тремя копиями списка:
-// ездим по средней, а когда уехали в крайнюю, без анимации перескакиваем
-// обратно в среднюю на то же место. Глаз этого не видит.
+// Лента статей, которая крутится сама, непрерывно и с одной скоростью.
+// Бесконечность сделана тремя копиями списка: как только уехали на длину
+// одной копии, сдвигаемся обратно на неё же. Картинка при этом та же,
+// поэтому шва не видно.
+//
+// Мышкой или пальцем ленту можно подкрутить: во время протяжки она слушается
+// руки, после отпускания продолжает ехать сама с того же места.
 
-const AUTO_MS = 5000;
-const SWIPE_PX = 40;
+const SPEED = 26; // точек в секунду
+const SWIPE_PX = 8;
 
-// Системная настройка «меньше движения». Читается без эффекта, чтобы
-// не перерисовывать ленту лишний раз.
 const REDUCED = "(prefers-reduced-motion: reduce)";
 function subscribeReduced(cb: () => void) {
   const mq = window.matchMedia(REDUCED);
@@ -32,37 +33,26 @@ export default function Carousel({
 }) {
   const n = posts.length;
   const viewRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [slideW, setSlideW] = useState(0);
   const [perView, setPerView] = useState(3);
-  const [index, setIndex] = useState(n);
-  // Стартуем без анимации: пока ширина не измерена, лента не должна ехать.
-  const [animate, setAnimate] = useState(false);
-  const [paused, setPaused] = useState(false);
+  const offset = useRef(0);
+  const drag = useRef<{ x: number; from: number } | null>(null);
+  const moved = useRef(false);
+
   const reduced = useSyncExternalStore(
     subscribeReduced,
     () => window.matchMedia(REDUCED).matches,
     () => false
   );
-  const startX = useRef<number | null>(null);
-  const swiped = useRef(false);
 
   const loop = n > Math.floor(perView);
-
-  // Сменился язык, значит сменился и список: начинаем с первой карточки.
-  // Сбрасываем прямо при отрисовке, как советует React, а не эффектом.
-  const [prevN, setPrevN] = useState(n);
-  if (prevN !== n) {
-    setPrevN(n);
-    setAnimate(false);
-    setIndex(n);
-  }
+  const oneSet = slideW * n;
 
   const measure = useCallback(() => {
     const view = viewRef.current;
     if (!view) return;
     const per = parseFloat(getComputedStyle(view).getPropertyValue("--per")) || 3;
-    // При смене ширины переставляем без анимации, иначе лента дёргается.
-    setAnimate(false);
     setPerView(per);
     setSlideW(view.clientWidth / per);
   }, []);
@@ -76,130 +66,82 @@ export default function Carousel({
     return () => ro.disconnect();
   }, [measure]);
 
-  const step = useCallback(
-    (dir: 1 | -1) => {
-      if (!loop) return;
-      if (reduced) {
-        // Без анимации ехать некуда: сразу ставим нужную карточку в средней копии.
-        setAnimate(false);
-        setIndex((i) => ((((i + dir) % n) + n) % n) + n);
-        return;
+  // Движение крутится в requestAnimationFrame и пишет transform напрямую,
+  // без состояния React: иначе страница перерисовывалась бы шестьдесят раз в секунду.
+  useEffect(() => {
+    if (!loop || !oneSet) return;
+    const track = trackRef.current;
+    if (!track) return;
+
+    const norm = (v: number) => ((v % oneSet) + oneSet) % oneSet;
+    let last = performance.now();
+    let raf = 0;
+
+    const frame = (now: number) => {
+      const dt = Math.min(now - last, 100) / 1000;
+      last = now;
+      if (!drag.current && !reduced && !document.hidden) {
+        offset.current = norm(offset.current + SPEED * dt);
       }
-      setAnimate(true);
-      setIndex((i) => i + dir);
-    },
-    [loop, reduced, n]
-  );
-
-  // Уехали в крайнюю копию: без анимации возвращаемся в среднюю на то же место.
-  const settle = useCallback(() => {
-    if (index >= 2 * n || index < n) {
-      setAnimate(false);
-      setIndex((((index % n) + n) % n) + n);
-    }
-  }, [index, n]);
-
-  // Анимацию включаем обратно через два кадра, когда перескок уже отрисован.
-  useEffect(() => {
-    if (animate || reduced) return;
-    let second = 0;
-    const first = requestAnimationFrame(() => {
-      second = requestAnimationFrame(() => setAnimate(true));
-    });
-    return () => {
-      cancelAnimationFrame(first);
-      cancelAnimationFrame(second);
+      track.style.transform = `translate3d(${-offset.current}px, 0, 0)`;
+      raf = requestAnimationFrame(frame);
     };
-  }, [animate, reduced]);
-
-  useEffect(() => {
-    if (!loop || paused || reduced) return;
-    const id = setInterval(() => {
-      if (!document.hidden) step(1);
-    }, AUTO_MS);
-    return () => clearInterval(id);
-  }, [loop, paused, reduced, step]);
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, [loop, oneSet, reduced]);
 
   const items = loop ? [...posts, ...posts, ...posts] : posts;
-  const offset = loop ? index * slideW : 0;
-  const current = (((index - n) % n) + n) % n;
 
   return (
-    <div
-      className={`car${narrow ? " car--narrow" : ""}`}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onFocus={() => setPaused(true)}
-      onBlur={() => setPaused(false)}
-    >
+    <div className={`car${narrow ? " car--narrow" : ""}${loop ? " car--live" : ""}`}>
       <div
         ref={viewRef}
         className="car-view"
         onPointerDown={(e) => {
-          startX.current = e.clientX;
-          swiped.current = false;
-          setPaused(true);
+          if (!loop) return;
+          drag.current = { x: e.clientX, from: offset.current };
+          moved.current = false;
         }}
-        onPointerUp={(e) => {
-          if (startX.current !== null) {
-            const dx = e.clientX - startX.current;
-            if (Math.abs(dx) > SWIPE_PX) {
-              swiped.current = true;
-              step(dx < 0 ? 1 : -1);
-            }
+        onPointerMove={(e) => {
+          const d = drag.current;
+          if (!d || !oneSet) return;
+          const dx = e.clientX - d.x;
+          if (Math.abs(dx) > SWIPE_PX && !moved.current) {
+            moved.current = true;
+            // Держим указатель, чтобы протяжка не обрывалась, если увести его за край.
+            viewRef.current?.setPointerCapture(e.pointerId);
           }
-          startX.current = null;
-          // У пальца нет «увёл мышь», поэтому паузу снимаем сами.
-          if (e.pointerType !== "mouse") setPaused(false);
+          const next = d.from - dx;
+          offset.current = ((next % oneSet) + oneSet) % oneSet;
+        }}
+        onPointerUp={() => {
+          drag.current = null;
         }}
         onPointerCancel={() => {
-          startX.current = null;
-          setPaused(false);
+          drag.current = null;
         }}
-        // Свайп не должен заодно открывать статью, на которой начался.
+        // Протяжка не должна заодно открывать статью, на которой началась.
         onClickCapture={(e) => {
-          if (swiped.current) {
+          if (moved.current) {
             e.preventDefault();
             e.stopPropagation();
-            swiped.current = false;
+            moved.current = false;
           }
         }}
+        aria-label={ru ? "Лента статей" : "Article feed"}
       >
-        <div
-          className={`car-track${animate ? "" : " no-anim"}`}
-          style={{ transform: `translate3d(${-offset}px, 0, 0)` }}
-          onTransitionEnd={(e) => {
-            // Событие всплывает и от наведения на карточки, нужно только своё.
-            if (e.target === e.currentTarget && e.propertyName === "transform") settle();
-          }}
-        >
+        <div ref={trackRef} className="car-track">
           {items.map((post, i) => {
-            // Копии за краем недоступны с клавиатуры, иначе фокус уезжает в невидимое.
-            const visible = !loop || (i >= index && i < index + Math.ceil(perView));
+            // С клавиатуры доступна только первая копия, остальные её повтор.
+            const first = i < n;
             return (
-              <div key={`${post.slug}-${i}`} className="car-slide" aria-hidden={!visible}>
-                <PostCard post={post} tabIndex={visible ? undefined : -1} />
+              <div key={`${post.slug}-${i}`} className="car-slide" aria-hidden={!first}>
+                <PostCard post={post} tabIndex={first ? undefined : -1} />
               </div>
             );
           })}
         </div>
       </div>
-
-      {loop && (
-        <div className="car-bar">
-          <span className="tiny">
-            {String(current + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
-          </span>
-          <div className="car-btns">
-            <button type="button" onClick={() => step(-1)} aria-label={ru ? "Предыдущая" : "Previous"}>
-              ←
-            </button>
-            <button type="button" onClick={() => step(1)} aria-label={ru ? "Следующая" : "Next"}>
-              →
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
