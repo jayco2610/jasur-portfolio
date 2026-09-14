@@ -16,7 +16,7 @@ export async function GET() {
     translation: p.translation ?? null,
     cover: p.cover ?? null,
     featured: p.featured ?? false,
-    words: p.readingMinutes,
+    minutes: p.readingMinutes,
   }));
 
   const episodes = getEpisodes().map((e) => ({
