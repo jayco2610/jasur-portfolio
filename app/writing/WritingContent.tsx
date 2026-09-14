@@ -219,13 +219,16 @@ function Card({
 }
 
 export default function WritingContent({ posts }: { posts: PostMeta[] }) {
-  const { lang } = useLanguage();
+  const { lang, toggle } = useLanguage();
   const w = t[lang].writing;
   const ru = lang === "ru";
   // Показываем только тексты на том языке, который человек выбрал.
   // Русская статья в английском журнале выглядит как чужая вставка.
   const mine = posts.filter((p) => p.lang === lang);
   const [lead, ...rest] = mine;
+  // Сколько текстов есть только на другом языке. Нужно, чтобы блок «Свежее»
+  // не исчезал молча, а честно говорил, где остальное.
+  const elsewhere = posts.length - mine.length;
 
   return (
     <div className="mag-root">
@@ -268,18 +271,33 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
           <>
             <Hero post={lead} lang={lang} ru={ru} />
 
-            {rest.length > 0 && (
+            {/* Блок есть всегда, если есть что показать хоть на одном языке.
+                Иначе русский и английский журнал выглядят как два разных издания. */}
+            {(rest.length > 0 || elsewhere > 0) && (
               <div className="mag-sec">
                 <div className="mag-sh">
                   <h3>{ru ? "Свежее" : "Latest"}</h3>
                   <span className="mag-ln" />
                   <span className="tiny">{String(rest.length).padStart(2, "0")}</span>
                 </div>
-                <div className="mag-grid">
-                  {rest.slice(0, 9).map((post, i) => (
-                    <Card key={post.slug} post={post} i={i} lang={lang} ru={ru} />
-                  ))}
-                </div>
+                {rest.length > 0 ? (
+                  <div className="mag-grid">
+                    {rest.slice(0, 9).map((post, i) => (
+                      <Card key={post.slug} post={post} i={i} lang={lang} ru={ru} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="mag-empty">
+                    <p>
+                      {ru
+                        ? "Остальное пока только на английском."
+                        : "The rest is in Russian for now."}
+                    </p>
+                    <button type="button" onClick={toggle} className="mag-all">
+                      {ru ? "Читать на английском" : "Read in Russian"} <span>↘</span>
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </>

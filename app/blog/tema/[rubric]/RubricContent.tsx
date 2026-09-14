@@ -47,11 +47,12 @@ export default function RubricContent({
   rubric: string;
   posts: PostMeta[];
 }) {
-  const { lang } = useLanguage();
+  const { lang, toggle } = useLanguage();
   const ru = lang === "ru";
 
   // Показываем только тексты на выбранном языке.
   const mine = posts.filter((p) => p.lang === lang);
+  const elsewhere = posts.length - mine.length;
 
   // Метки материалов рубрики идут подзаголовками, как в журнальном развороте.
   const tags = Array.from(new Set(mine.flatMap((p) => p.tags))).slice(0, 3);
@@ -103,14 +104,25 @@ export default function RubricContent({
           </div>
         ) : (
           <div className="mag-empty">
-            <p>
-              {ru
-                ? "Здесь пока пусто."
-                : "Empty here for now."}
-            </p>
-            <Link href="/writing" className="mag-all">
-              {ru ? "Смотреть всё" : "See everything"} <span>↘</span>
-            </Link>
+            {elsewhere > 0 ? (
+              <>
+                <p>
+                  {ru
+                    ? "В этой рубрике тексты пока только на английском."
+                    : "This section is in Russian for now."}
+                </p>
+                <button type="button" onClick={toggle} className="mag-all">
+                  {ru ? "Читать на английском" : "Read in Russian"} <span>↘</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <p>{ru ? "Здесь пока пусто." : "Empty here for now."}</p>
+                <Link href="/writing" className="mag-all">
+                  {ru ? "Смотреть всё" : "See everything"} <span>↘</span>
+                </Link>
+              </>
+            )}
           </div>
         )}
 

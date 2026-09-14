@@ -688,6 +688,16 @@ a.row:hover .row-title {
   border-color: var(--acc);
 }
 
+/* Та же ссылка-подчёркивание, но кнопкой: переключает язык на месте. */
+button.mag-all {
+  background: none;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
 /* главный материал */
 
 .mag-hero {
