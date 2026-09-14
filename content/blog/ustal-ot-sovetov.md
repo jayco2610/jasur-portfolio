@@ -9,6 +9,7 @@ coverFit: "poster"
 ogImage: "/og-ustal.jpg"
 featured: true
 tags: ["Карьера", "Мнение"]
+translation: "tired-of-advice"
 draft: false
 ---
 

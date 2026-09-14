@@ -6,6 +6,7 @@ lang: "ru"
 rubric: "marketing"
 cover: "/blog/nol-prodazh.jpg"
 tags: ["Маркетинг", "Продажи"]
+translation: "two-products-zero-sales"
 draft: false
 ---
 
