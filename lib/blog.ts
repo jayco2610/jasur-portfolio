@@ -207,6 +207,15 @@ export function getPost(slug: string): Post | null {
   return post.draft ? null : post;
 }
 
+// Исходный markdown опубликованной статьи. Нужен админке, чтобы собирать версии
+// для площадок из того же текста, что видят читатели, а не из пересказа.
+export function getPostSource(slug: string): { meta: Post; markdown: string } | null {
+  const post = getPost(slug);
+  if (!post) return null;
+  const { content } = matter(fs.readFileSync(path.join(BLOG_DIR, `${slug}.md`), "utf8"));
+  return { meta: post, markdown: content.trim() };
+}
+
 export function getAllSlugs(): string[] {
   return getAllPosts().map((p) => p.slug);
 }
