@@ -6,6 +6,9 @@ import { Analytics } from "@vercel/analytics/next";
 import { useLanguage } from "@/context/LanguageContext";
 
 const KEY = "consent";
+// Номер проекта Clarity для этого сайта. У каждого сайта свой, иначе данные лягут в одну кучу.
+// Портфолио: yj4ivfasb0. Сайт экспатов: xeojrhfu6q. ABCX: yj4jeugol8.
+const CLARITY = "yj4ivfasb0";
 export type Choice = "yes" | "no";
 
 // Аналитика не загружается, пока человек не разрешил. Не потому, что так
@@ -47,7 +50,7 @@ export default function Consent() {
             id="clarity"
             strategy="afterInteractive"
             dangerouslySetInnerHTML={{
-              __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","xeojrhfu6q");`,
+              __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${CLARITY}");`,
             }}
           />
         </>
