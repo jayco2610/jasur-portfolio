@@ -410,6 +410,6 @@ export async function POST(req: NextRequest) {
   if (content) return NextResponse.json({ content });
 
   const ru = lastUser ? /[а-яё]/i.test(lastUser.content) : false;
-  const content = lastReason === "daily" ? (ru ? DAILY_RU : DAILY_EN) : ru ? BUSY_RU : BUSY_EN;
-  return NextResponse.json({ content });
+  const fallback = lastReason === "daily" ? (ru ? DAILY_RU : DAILY_EN) : ru ? BUSY_RU : BUSY_EN;
+  return NextResponse.json({ content: fallback });
 }
