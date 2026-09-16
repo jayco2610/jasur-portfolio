@@ -176,6 +176,20 @@ async function freeModels(): Promise<string[]> {
 
 type Message = { role: "user" | "assistant"; content: string };
 
+// Причина отказа: дневной лимит бесплатных моделей или перегрузка. У аккаунта
+// без пополнений OpenRouter даёт 50 бесплатных запросов в сутки на весь
+// аккаунт, и их делят все сайты, где стоит этот ключ.
+let lastReason: "daily" | "busy" = "busy";
+
+function noteReason(status: number, body: string) {
+  if (status === 429 && /per-?day|daily|free-models-per-day|daily limit/i.test(body)) lastReason = "daily";
+}
+
+const BUSY_EN = "All models are busy right now. Try again in a minute.";
+const BUSY_RU = "Модели сейчас перегружены. Попробуйте через минуту.";
+const DAILY_EN = "The free daily limit is used up. Try again tomorrow, or write to Jasur: https://t.me/biznesmind";
+const DAILY_RU = "Бесплатный лимит на сегодня исчерпан. Попробуйте завтра или напишите Жасуру: https://t.me/biznesmind";
+
 async function askModel(model: string, messages: Message[], apiKey: string, signal: AbortSignal): Promise<string> {
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
@@ -196,15 +210,24 @@ async function askModel(model: string, messages: Message[], apiKey: string, sign
       reasoning: { effort: "low", exclude: true },
     }),
   });
-  if (!res.ok) throw new Error(`${res.status} ${(await res.text()).slice(0, 120)}`);
+  if (!res.ok) {
+    const body = (await res.text()).slice(0, 300);
+    noteReason(res.status, body);
+    throw new Error(`${res.status} ${body.slice(0, 120)}`);
+  }
   const data = await res.json();
   const text: unknown = data?.choices?.[0]?.message?.content;
-  if (typeof text !== "string" || !text.trim()) throw new Error("пустой ответ");
+  if (typeof text !== "string" || !text.trim()) {
+    const err = JSON.stringify(data?.error ?? "").slice(0, 300);
+    noteReason(Number(data?.error?.code) || 0, err);
+    throw new Error(`пустой ответ ${err.slice(0, 120)}`);
+  }
   return text.trim();
 }
 
 async function answer(messages: Message[], apiKey: string): Promise<string | null> {
   const started = Date.now();
+  lastReason = "busy";
   const models = await freeModels();
   for (let i = 0; i < models.length; i += BATCH) {
     const left = TOTAL_BUDGET_MS - (Date.now() - started);
@@ -386,5 +409,7 @@ export async function POST(req: NextRequest) {
   const content = await answer(messages, apiKey);
   if (content) return NextResponse.json({ content });
 
-  return NextResponse.json({ content: "All models are busy right now. Try again in a minute." });
+  const ru = lastUser ? /[а-яё]/i.test(lastUser.content) : false;
+  const content = lastReason === "daily" ? (ru ? DAILY_RU : DAILY_EN) : ru ? BUSY_RU : BUSY_EN;
+  return NextResponse.json({ content });
 }
