@@ -45,7 +45,11 @@ export default async function Stats({ searchParams }: { searchParams: Promise<{ 
     return (
       <main style={{ padding: "60px 24px", maxWidth: 720, margin: "0 auto" }}>
         <h1>Счётчик</h1>
-        <p>Страница открывается по личной ссылке с ключом.</p>
+        <p>
+          {!secret
+            ? "Ключ не задан в настройках проекта: добавьте переменную STATS_KEY в Vercel и нажмите Redeploy."
+            : "Ключ в ссылке не совпадает с тем, что задан в настройках проекта."}
+        </p>
       </main>
     );
   }
