@@ -138,18 +138,48 @@ When a message asks for anything in the REFUSED list, or anything off-topic, rep
 - English: "I can only answer questions about Jasur's professional background. Ask me about his experience, projects, skills, or services."
 - Russian: "Я отвечаю только на вопросы о профессиональном опыте Жасура. Спросите про его опыт, проекты, навыки или услуги."`;
 
-const FREE_MODELS = [
-  "meta-llama/llama-3.3-70b-instruct:free",
-  "openai/gpt-oss-120b:free",
-  "google/gemma-4-31b-it:free",
-  "qwen/qwen3-next-80b-a3b-instruct:free",
-];
+// Бесплатные модели OpenRouter регулярно меняются и часто перегружены:
+// зашитые названия через пару месяцев перестают существовать, а живые модели
+// отвечают 429. Поэтому список берём у самого OpenRouter (кэш на час) и
+// спрашиваем по три модели сразу, забирая первый готовый ответ.
+const PREFERRED = [/gemma-4-26b/, /gemma-4-31b/, /glm-5/, /nemotron-3-super-120b/, /llama.*70b/, /qwen.*(72b|80b|235b)/];
+const SKIP = /safety|code|coder|vision|audio|embed|guard|nano|lightning/i;
+const FALLBACK = ["google/gemma-4-31b-it:free"];
+const MODEL_TIMEOUT_MS = 24_000;
+const TOTAL_BUDGET_MS = 55_000;
+const BATCH = 3;
+let modelCache: { at: number; ids: string[] } | null = null;
+
+export const maxDuration = 60;
+
+async function freeModels(): Promise<string[]> {
+  if (modelCache && Date.now() - modelCache.at < 3_600_000) return modelCache.ids;
+  try {
+    const res = await fetch("https://openrouter.ai/api/v1/models", { cache: "no-store" });
+    const data = await res.json();
+    const all: { id: string; context_length?: number }[] = Array.isArray(data?.data) ? data.data : [];
+    const free = all
+      .filter((m) => m.id.endsWith(":free") && !SKIP.test(m.id) && (m.context_length ?? 0) >= 16000)
+      .map((m) => m.id);
+    const ranked = [...PREFERRED.flatMap((re) => free.filter((id) => re.test(id))), ...free]
+      .filter((id, i, arr) => arr.indexOf(id) === i)
+      .slice(0, 9);
+    if (ranked.length) {
+      modelCache = { at: Date.now(), ids: ranked };
+      return ranked;
+    }
+  } catch {
+    // ниже запасной список
+  }
+  return FALLBACK;
+}
 
 type Message = { role: "user" | "assistant"; content: string };
 
-async function tryModel(model: string, messages: Message[], apiKey: string) {
+async function askModel(model: string, messages: Message[], apiKey: string, signal: AbortSignal): Promise<string> {
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
+    signal,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
@@ -159,14 +189,47 @@ async function tryModel(model: string, messages: Message[], apiKey: string) {
     body: JSON.stringify({
       model,
       messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
-      max_tokens: 512,
+      max_tokens: 1200,
       temperature: 0.7,
+      // Бесплатные модели сейчас рассуждающие: без этого они тратят весь лимит
+      // токенов на размышления и возвращают пустой ответ.
+      reasoning: { effort: "low", exclude: true },
     }),
   });
-
+  if (!res.ok) throw new Error(`${res.status} ${(await res.text()).slice(0, 120)}`);
   const data = await res.json();
-  if (!res.ok) return null;
-  return data?.choices?.[0]?.message?.content ?? null;
+  const text: unknown = data?.choices?.[0]?.message?.content;
+  if (typeof text !== "string" || !text.trim()) throw new Error("пустой ответ");
+  return text.trim();
+}
+
+async function answer(messages: Message[], apiKey: string): Promise<string | null> {
+  const started = Date.now();
+  const models = await freeModels();
+  for (let i = 0; i < models.length; i += BATCH) {
+    const left = TOTAL_BUDGET_MS - (Date.now() - started);
+    if (left < 6_000) break;
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), Math.min(MODEL_TIMEOUT_MS, left));
+    try {
+      return await Promise.any(
+        models.slice(i, i + BATCH).map(async (model) => {
+          try {
+            return await askModel(model, messages, apiKey, ctl.signal);
+          } catch (e) {
+            console.warn(`[JasurGPT] ${model}: ${e instanceof Error ? e.message || e.name : "ошибка"}`);
+            throw e;
+          }
+        })
+      );
+    } catch {
+      // вся тройка не справилась, пробуем следующую
+    } finally {
+      clearTimeout(timer);
+      ctl.abort();
+    }
+  }
+  return null;
 }
 
 // --- Basic abuse protection ---
@@ -320,14 +383,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ content: "API key not configured." });
   }
 
-  for (const model of FREE_MODELS) {
-    try {
-      const content = await tryModel(model, messages, apiKey);
-      if (content) return NextResponse.json({ content });
-    } catch {
-      // try next model
-    }
-  }
+  const content = await answer(messages, apiKey);
+  if (content) return NextResponse.json({ content });
 
   return NextResponse.json({ content: "All models are busy right now. Try again in a minute." });
 }
