@@ -5,6 +5,7 @@ import SiteFooter from "@/components/SiteFooter";
 import JasurGPT from "@/components/JasurGPT";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Consent from "@/components/Consent";
+import Pulse from "@/components/Pulse";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jasur-portfolio-pied.vercel.app"),
@@ -49,6 +50,7 @@ export default function RootLayout({
           <SiteFooter />
           <JasurGPT />
           <Consent />
+          <Pulse />
         </LanguageProvider>
 
       </body>

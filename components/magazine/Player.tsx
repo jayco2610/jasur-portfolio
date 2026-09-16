@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { track } from "@vercel/analytics";
+import { hit } from "@/components/Pulse";
 
 function stamp(sec: number): string {
   if (!Number.isFinite(sec) || sec < 0) return "0:00";
@@ -74,6 +75,7 @@ export default function Player({
       if (!sent.current.has("start")) {
         sent.current.add("start");
         track("podcast_play", { episode: slug });
+        hit("podcast_play");
       }
     } else {
       el.pause();

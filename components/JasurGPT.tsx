@@ -1,5 +1,6 @@
 "use client";
 
+import { hit } from "@/components/Pulse";
 import { useState, useRef, useEffect } from "react";
 import BlockedBadge from "@/components/BlockedBadge";
 
@@ -29,6 +30,7 @@ export default function JasurGPT() {
   }, [open]);
 
   async function send(text: string) {
+    hit("chat_ask");
     if (!text.trim() || loading) return;
     const userMsg: Message = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);

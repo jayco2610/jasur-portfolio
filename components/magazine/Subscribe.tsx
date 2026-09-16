@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { track } from "@vercel/analytics";
+import { hit } from "@/components/Pulse";
 import { useLanguage } from "@/context/LanguageContext";
 
 type State = "idle" | "sending" | "done" | "bad" | "off";
@@ -26,6 +27,7 @@ export default function Subscribe() {
         setState("done");
         setEmail("");
         track("subscribe_email");
+        hit("subscribe");
       } else {
         const data = (await res.json()) as { reason?: string };
         setState(data.reason === "off" ? "off" : "bad");
@@ -52,7 +54,7 @@ export default function Subscribe() {
           target="_blank"
           rel="noopener noreferrer"
           className="sub-tg"
-          onClick={() => track("subscribe_telegram")}
+          onClick={() => { track("subscribe_telegram"); hit("telegram_click"); }}
         >
           <span>{ru ? "Читать в Телеграме" : "Follow on Telegram"}</span>
           <i aria-hidden="true">→</i>
