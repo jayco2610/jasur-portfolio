@@ -4,6 +4,8 @@ date: "2026-09-17"
 description: "Product manager pay in Russia by grade, Moscow versus the regions, and why hh.ru and Habr Career differ threefold. Verified data only, with sources."
 lang: "en"
 rubric: "career"
+cover: "/blog/product-manager-salary-russia-2026.jpg"
+ogImage: "/og-product-manager-salary-russia-2026.jpg"
 tags: ["Career", "Salaries", "Product"]
 translation: "skolko-zarabatyvaet-prodakt-menedzher-2026"
 draft: false

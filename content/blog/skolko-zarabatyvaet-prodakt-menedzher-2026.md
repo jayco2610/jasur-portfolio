@@ -4,6 +4,8 @@ date: "2026-09-17"
 description: "Зарплата продакт-менеджера по грейдам, Москва и регионы, почему hh.ru и Хабр Карьера расходятся в три раза. Только проверенные данные с источниками."
 lang: "ru"
 rubric: "career"
+cover: "/blog/skolko-zarabatyvaet-prodakt-menedzher-2026.jpg"
+ogImage: "/og-skolko-zarabatyvaet-prodakt-menedzher-2026.jpg"
 tags: ["Карьера", "Зарплаты", "Продукт"]
 translation: "product-manager-salary-russia-2026"
 draft: false
