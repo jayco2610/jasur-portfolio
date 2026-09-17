@@ -81,12 +81,25 @@ export default async function BlogPost({
     headline: post.title,
     description: post.description,
     datePublished: post.date,
+    dateModified: post.date,
     inLanguage: post.lang,
+    ...(post.cover || post.ogImage ? { image: `${SITE}${post.ogImage ?? post.cover}` } : {}),
+    keywords: post.tags.join(", "),
+    // Автор с должностью и профилями: поисковикам и нейросетям так проще понять, кто пишет и почему ему верить.
     author: {
       "@type": "Person",
       name: "Jasur Akhmadaliev",
+      jobTitle: "Product Manager",
       url: SITE,
+      sameAs: [
+        "https://www.linkedin.com/in/jasur-akhmadaliev/",
+        "https://t.me/head_of_ceo",
+        "https://vc.ru/id5991727",
+        "https://dev.to/jasurakhmadaliev",
+        "https://github.com/jayco2610",
+      ],
     },
+    publisher: { "@type": "Person", name: "Jasur Akhmadaliev", url: SITE },
     mainEntityOfPage: post.canonical ?? `${SITE}/blog/${post.slug}`,
   };
 
