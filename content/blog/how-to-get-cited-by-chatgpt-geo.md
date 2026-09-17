@@ -4,6 +4,8 @@ date: "2026-09-17"
 description: "What actually gets a site into ChatGPT, Perplexity and Google AI answers: the GEO study, Ahrefs and SE Ranking data, and what Google and Yandex say."
 lang: "en"
 rubric: "ai"
+cover: "/blog/how-to-get-cited-by-chatgpt-geo.jpg"
+ogImage: "/og-how-to-get-cited-by-chatgpt-geo.jpg"
 tags: ["AI", "GEO", "SEO"]
 translation: "kak-popast-v-otvety-chatgpt-i-alisy"
 draft: false

@@ -4,6 +4,8 @@ date: "2026-09-17"
 description: "Что поднимает сайт в ответах ChatGPT, Алисы и Perplexity: исследование GEO, данные Ahrefs и SE Ranking, правила Google и Яндекса."
 lang: "ru"
 rubric: "ai"
+cover: "/blog/kak-popast-v-otvety-chatgpt-i-alisy.jpg"
+ogImage: "/og-kak-popast-v-otvety-chatgpt-i-alisy.jpg"
 tags: ["AI", "GEO", "SEO"]
 translation: "how-to-get-cited-by-chatgpt-geo"
 draft: false
