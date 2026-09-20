@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { upstashConfigured, incr } from "@/lib/upstash";
 import { isRateLimited } from "@/lib/rateLimit";
-import { getAllPosts } from "@/lib/blog";
-import { getEpisodeSlugs } from "@/lib/podcast";
 
 // Свой счётчик действий. Считает только названия событий и даты: ни адресов,
 // ни куки, ни личных данных. Нужен потому, что аналитика Vercel на бесплатном
@@ -18,10 +16,12 @@ const ACTIONS = new Set([
 ]);
 
 const DAY_TTL = 60 * 60 * 24 * 40;
+const PATH_TTL = 60 * 60 * 24 * 400;
 const SAFE = /^[a-z0-9/\-_]{1,60}$/;
 
-// Считаем только страницы, которые на сайте правда есть. Иначе кто угодно
-// мог бы насоздавать в базе сколько угодно вечных записей чужими адресами.
+// Считаем только страницы разумного вида: раздел из списка ниже либо статья,
+// выпуск подкаста, рубрика или демо. Читать список статей с диска здесь нельзя:
+// в серверной функции этих файлов нет, и счётчик падал с ошибкой.
 const PAGES = new Set([
   "home",
   "blog",
@@ -34,19 +34,8 @@ const PAGES = new Set([
   "stats",
   "privacy",
 ]);
-let known: Set<string> | null = null;
-function knownPage(slug: string): boolean {
-  if (PAGES.has(slug)) return true;
-  if (slug.startsWith("demos-") && /^[a-z-]{1,40}$/.test(slug)) return true;
-  if (slug.startsWith("blog-tema-") && /^[a-z-]{1,40}$/.test(slug)) return true;
-  if (!known) {
-    known = new Set([
-      ...getAllPosts().map((p) => `blog-${p.slug}`),
-      ...getEpisodeSlugs().map((slug) => `podcast-${slug}`),
-    ]);
-  }
-  return known.has(slug);
-}
+const SECTIONS = /^(blog|podcast|demos|blog-tema)-[a-z0-9][a-z0-9-]{0,58}$/;
+const knownPage = (slug: string) => PAGES.has(slug) || SECTIONS.test(slug);
 
 export async function POST(req: NextRequest) {
   if (!upstashConfigured()) return NextResponse.json({ ok: false });
@@ -73,6 +62,10 @@ export async function POST(req: NextRequest) {
     const slug = path === "/" ? "home" : path.replace(/^\//, "").replace(/\//g, "-");
     if (knownPage(slug)) keys.push(`jp:path:${slug}:total`, `jp:path:${slug}:${day}`);
   }
-  await Promise.all(keys.map((k) => incr(k, k.endsWith("total") ? undefined : DAY_TTL)));
+  // Общие итоги живут вечно, а итоги по отдельным страницам чуть больше года:
+  // тогда случайный мусор в базе сам исчезает и не занимает место навсегда.
+  await Promise.all(
+    keys.map((k) => incr(k, k.endsWith("total") ? (k.startsWith("jp:path:") ? PATH_TTL : undefined) : DAY_TTL))
+  );
   return NextResponse.json({ ok: true });
 }
