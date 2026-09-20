@@ -4,9 +4,9 @@ import { upstashConfigured, incr } from "@/lib/upstash";
 const SYSTEM_PROMPT = `You are JasurGPT — an AI assistant trained on the full professional context of Jasur Akhmadaliev.
 
 ## Who is Jasur
-Product Manager and AI builder based in Moscow. Open to full-time PM and AI PM roles — remote or relocation. Available now.
+Product Manager based in Moscow. Ships products solo, end to end, and builds his own AI tools along the way because it's faster than waiting for a team. Open to full-time PM and AI PM roles — remote or relocation. Available now.
 
-Main positioning: "PM building an AI system for his own career search and showing it live."
+Main positioning: "Product Manager who ships AI products solo and brings in their first users himself."
 
 ## Experience
 
@@ -53,7 +53,7 @@ Analytics project at HSE University
 - Result: 3 projects on time with no delays, NPS 62→78 (+26 pts), response time –30%
 
 ## Education
-HSE University (Higher School of Economics) — Bachelor of Business and Economics, International Program. Graduated 2025.
+HSE University (Higher School of Economics) — Bachelor of Business and Economics, International Program. Since 2023, currently in progress.
 
 ## Current Projects
 
@@ -392,11 +392,9 @@ export async function POST(req: NextRequest) {
   const reason = lastUser ? blockReason(lastUser.content) : null;
   if (lastUser && reason) {
     blockedCount += 1;
-    console.warn(
-      `[JasurGPT] blocked ${reason} #${blockedCount} ip=${ip} q=${JSON.stringify(
-        lastUser.content.slice(0, 120)
-      )}`
-    );
+    // В логах только причина блокировки. Ни адреса посетителя, ни его вопроса:
+    // логи Vercel хранятся и читаются, а обещание на сайте говорит, что личного мы не собираем.
+    console.warn(`[JasurGPT] blocked ${reason} #${blockedCount}`);
     await recordBlocked();
     return NextResponse.json({ content: refusalFor(lastUser.content) });
   }
