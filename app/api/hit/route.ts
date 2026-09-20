@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { upstashConfigured, incr } from "@/lib/upstash";
 import { isRateLimited } from "@/lib/rateLimit";
 import { getAllPosts } from "@/lib/blog";
+import { getEpisodeSlugs } from "@/lib/podcast";
 
 // Свой счётчик действий. Считает только названия событий и даты: ни адресов,
 // ни куки, ни личных данных. Нужен потому, что аналитика Vercel на бесплатном
@@ -21,12 +22,28 @@ const SAFE = /^[a-z0-9/\-_]{1,60}$/;
 
 // Считаем только страницы, которые на сайте правда есть. Иначе кто угодно
 // мог бы насоздавать в базе сколько угодно вечных записей чужими адресами.
-const PAGES = new Set(["home", "blog", "podcast", "about", "now", "stats", "privacy"]);
+const PAGES = new Set([
+  "home",
+  "blog",
+  "podcast",
+  "projects",
+  "resume",
+  "services",
+  "writing",
+  "demos",
+  "stats",
+  "privacy",
+]);
 let known: Set<string> | null = null;
 function knownPage(slug: string): boolean {
   if (PAGES.has(slug)) return true;
+  if (slug.startsWith("demos-") && /^[a-z-]{1,40}$/.test(slug)) return true;
+  if (slug.startsWith("blog-tema-") && /^[a-z-]{1,40}$/.test(slug)) return true;
   if (!known) {
-    known = new Set(getAllPosts().flatMap((p) => [`blog-${p.slug}`, `podcast-${p.slug}`]));
+    known = new Set([
+      ...getAllPosts().map((p) => `blog-${p.slug}`),
+      ...getEpisodeSlugs().map((slug) => `podcast-${slug}`),
+    ]);
   }
   return known.has(slug);
 }
