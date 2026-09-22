@@ -23,18 +23,18 @@ export const t = {
 
     hero: {
       title: "Welcome.",
-      bio: "My name is Jasur Akhmadaliev — Product Manager and AI builder. I've shipped products at Instameal (food delivery), IDF Lab (B2B SaaS), and Synergia, and graduated from HSE University. I'm currently building an AI system for my own job search — and publishing every step publicly. Browse my projects below or ask JasurGPT in the corner anything about my work.",
+      bio: "My name is Jasur Akhmadaliev — Product Manager and AI builder. I've shipped products at Instameal (food delivery), IDF Lab (B2B SaaS), and Synergia, and I'm studying at HSE University. I'm currently building an AI system for my own job search — and publishing every step publicly. Browse my projects below or ask JasurGPT in the corner anything about my work.",
       viewProjects: "View projects",
       resume: "Resume",
       scroll: "Scroll",
 
       kicker: "01 — Introduction",
       l1: "I build",
-      l2: "systems",
-      l3: "that run without a human",
-      deckA: "Built the first one ",
-      deckMark: "for my own job search",
-      deckB: ". Forty-seven vacancies, a letter in eighty seconds, zero manual steps.",
+      l2: "products",
+      l3: "bring the users myself",
+      deckA: "Latest one — ",
+      deckMark: "abcx",
+      deckB: ". One week. One person. Upload sales, get the patterns.",
       deck2:
         "Everything below is deployed and running right now. These are not slides from a deck — they are tools I use every day.",
       figCap: "Fig. 00 — Frontispiece",
@@ -57,8 +57,8 @@ export const t = {
       aboutP2:
         "That's been the pattern for years now. The companies changed — food delivery, business software, marketing — the substance didn't.",
       aboutP3:
-        "Right now I run a product department. In parallel I'm building things on language models: one of them is looking for a job for me right now, while you're reading this.",
-      aboutTag: "Looking for a product role",
+        "Right now I build AI products on my own, end to end, and bring in their first users myself. One of them is looking for a job for me right now, while you're reading this.",
+      aboutTag: "Open to work.",
       gptHint: "Have questions about my experience or projects?",
       gptCta: "Ask JasurGPT — button in the bottom right corner.",
       allProjects: "All projects →",
@@ -243,8 +243,8 @@ export const t = {
       pdfRu: "PDF — RU",
       education: "Education",
       hse: "HSE University (Higher School of Economics)",
-      hseLocation: "Moscow · 2023–2025",
-      hseDegree: "Bachelor of Business and Economics, International Program · Graduated 2025",
+      hseLocation: "Moscow · Since 2023",
+      hseDegree: "Bachelor of Business and Economics, International Program · In progress",
       certifications: "Certifications",
       experience: "Experience",
       projects: "Projects",
@@ -253,7 +253,7 @@ export const t = {
       about: "About",
       certPreview: "Certificate Preview",
       aboutText:
-        "Product Manager who takes products all the way to users — from Customer Discovery to production. Shipped solo: Expat Roadmap SEA (Next.js, Supabase) — a relocation platform with five product areas. AI Career System (Claude, n8n, Telegram) — processed 47 vacancies, 80 seconds to a finished letter, zero manual steps. Mia — a RAG assistant for a dental clinic that answers only from the clinic's documents. Currently building an AI agent for business analytics. I write about the process openly: blog in the Top 3 on VC.ru, 40K+ views on Habr, channel @head_of_ceo.",
+        "Product Manager who takes products all the way to users — from Customer Discovery to production. Shipped solo: Expat Roadmap SEA (Next.js, Supabase) — a relocation platform with five product areas. AI Career System (Claude, n8n, Telegram) — processed 47 vacancies, 80 seconds to a finished letter, zero manual steps. Mia — a RAG assistant for a dental clinic that answers only from the clinic's documents. Currently building an AI agent for business analytics. I write about the process openly: blog in the Top 3 on VC.ru, 21K views on Habr, channel @head_of_ceo.",
       contentBullets: [
         "Publishing publicly about AI experiments, product thinking, and job search process",
         "Dzen: 67% read-through rate; Threads: ~15,000 views per thread",
@@ -441,18 +441,18 @@ export const t = {
 
     hero: {
       title: "Привет.",
-      bio: "Меня зовут Жасур Ахмадалиев — продакт-менеджер и AI-разработчик. Запускал продукты в Instameal (фудтех), IDF Lab (B2B SaaS) и Synergia, окончил ВШЭ. Сейчас строю AI-систему для собственного поиска работы — и публикую каждый шаг открыто. Смотрите проекты ниже или задайте любой вопрос о моей работе JasurGPT в углу экрана.",
+      bio: "Меня зовут Жасур Ахмадалиев — продакт-менеджер и AI-разработчик. Запускал продукты в Instameal (фудтех), IDF Lab (B2B SaaS) и Synergia, учусь в ВШЭ. Сейчас строю AI-систему для собственного поиска работы — и публикую каждый шаг открыто. Смотрите проекты ниже или задайте любой вопрос о моей работе JasurGPT в углу экрана.",
       viewProjects: "Посмотреть проекты",
       resume: "Резюме",
       scroll: "Листать",
 
       kicker: "01 — Введение",
       l1: "Строю",
-      l2: "системы",
-      l3: "которые работают без человека",
-      deckA: "Первую построил ",
-      deckMark: "для собственного поиска работы",
-      deckB: ". Сорок семь вакансий, письмо за восемьдесят секунд, ноль ручных шагов.",
+      l2: "продукты",
+      l3: "сам привожу людей",
+      deckA: "Последний — ",
+      deckMark: "abcx",
+      deckB: ". Неделя. Один человек. Загружаете продажи — получаете закономерности.",
       deck2:
         "Всё, что показано ниже, запущено и работает прямо сейчас. Это не кейсы из презентации, а инструменты, которыми я пользуюсь каждый день.",
       figCap: "Рис. 00 — Фронтиспис",
@@ -475,8 +475,8 @@ export const t = {
       aboutP2:
         "Так уже несколько лет. Компании менялись — доставка еды, софт для бизнеса, маркетинг, — суть не менялась.",
       aboutP3:
-        "Сейчас руковожу продуктовым отделом. Параллельно строю штуки на нейросетях: одна из них ищет мне работу прямо сейчас, пока вы это читаете.",
-      aboutTag: "Ищу продуктовую работу",
+        "Сейчас сам собираю AI-продукты от начала до конца и сам привожу к ним первых людей. Один из них ищет мне работу прямо сейчас, пока вы это читаете.",
+      aboutTag: "Открыт к работе.",
       gptHint: "Есть вопросы об опыте или проектах?",
       gptCta: "Спросите JasurGPT — кнопка в правом нижнем углу.",
       allProjects: "Все проекты →",
@@ -655,8 +655,8 @@ export const t = {
       pdfRu: "PDF — RU",
       education: "Образование",
       hse: "НИУ ВШЭ (Высшая школа экономики)",
-      hseLocation: "Москва · 2023–2025",
-      hseDegree: "Бакалавр бизнеса и экономики, Международная программа · Окончил 2025",
+      hseLocation: "Москва · С 2023",
+      hseDegree: "Бакалавр бизнеса и экономики, Международная программа · В процессе обучения",
       certifications: "Сертификаты",
       experience: "Опыт работы",
       projects: "Проекты",
@@ -665,7 +665,7 @@ export const t = {
       about: "О себе",
       certPreview: "Предпросмотр сертификата",
       aboutText:
-        "Продакт-менеджер, который доводит продукт до пользователей — от Customer Discovery до продакшена. Запустил соло: Expat Roadmap SEA (Next.js, Supabase) — платформа релокации с пятью продуктовыми направлениями. AI Career System (Claude, n8n, Telegram) — обработала 47 вакансий, время до готового письма 80 секунд, ручных шагов ноль. Mia — RAG-ассистент для стоматологии, отвечает только по документам клиники. В разработке — AI-агент для бизнес-аналитики. О процессе пишу открыто: блог в Топ-3 на VC.ru, 40K+ просмотров на Хабре, канал @head_of_ceo.",
+        "Продакт-менеджер, который доводит продукт до пользователей — от Customer Discovery до продакшена. Запустил соло: Expat Roadmap SEA (Next.js, Supabase) — платформа релокации с пятью продуктовыми направлениями. AI Career System (Claude, n8n, Telegram) — обработала 47 вакансий, время до готового письма 80 секунд, ручных шагов ноль. Mia — RAG-ассистент для стоматологии, отвечает только по документам клиники. В разработке — AI-агент для бизнес-аналитики. О процессе пишу открыто: блог в Топ-3 на VC.ru, 21K просмотров на Хабре, канал @head_of_ceo.",
       contentBullets: [
         "Пишу публично об AI-экспериментах, продуктовом мышлении и поиске работы",
         "Дзен: 67% дочитываемость; Threads: ~15 000 просмотров на тред",
