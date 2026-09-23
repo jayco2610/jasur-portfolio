@@ -15,7 +15,7 @@ function shortDate(date: string, ru: boolean): string {
   });
 }
 
-function Row({
+function Card({
   post,
   i,
   lang,
@@ -28,15 +28,14 @@ function Row({
 }) {
   const { ref, className } = useReveal<HTMLAnchorElement>(i);
   return (
-    <Link ref={ref} href={`/blog/${post.slug}`} className={`mag-row ${className}`}>
-      <span className="mag-row-meta">
-        <span className="mag-row-date">{shortDate(post.date, ru)}</span>
-        <span className="mag-row-rub">{post.tags[0] ?? rubricName(post.rubric, lang)}</span>
-      </span>
+    <Link ref={ref} href={`/blog/${post.slug}`} className={`mag-card ${className}`}>
+      <div className="mag-im">{post.cover && <img src={post.cover} alt="" />}</div>
+      <div className="mag-rub">{rubricName(post.rubric, lang)}</div>
       <h4>{post.title}</h4>
-      <span className="mag-row-go" aria-hidden="true">
-        →
-      </span>
+      <div className="mag-card-meta">
+        <span className="tiny">{shortDate(post.date, ru)}</span>
+        {post.tags[0] && <span className="tiny">{post.tags[0]}</span>}
+      </div>
     </Link>
   );
 }
@@ -98,9 +97,9 @@ export default function RubricContent({
         </div>
 
         {mine.length > 0 ? (
-          <div className="mag-rows">
+          <div className="mag-grid">
             {mine.map((post, i) => (
-              <Row key={post.slug} post={post} i={i} lang={lang} ru={ru} />
+              <Card key={post.slug} post={post} i={i} lang={lang} ru={ru} />
             ))}
           </div>
         ) : (
