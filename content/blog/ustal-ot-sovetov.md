@@ -4,9 +4,9 @@ date: "2026-09-12"
 description: "Про то, что к двадцати пяти надо всё успеть, про личный бренд вместо работы и про ИИ, который якобы подумает за вас."
 lang: "ru"
 rubric: "career"
-cover: "/blog/ustal-ot-sovetov.jpg"
+cover: "/blog/ustal-ot-sovetov-mudnkfdq.jpg"
 coverFit: "poster"
-ogImage: "/og-ustal.jpg"
+ogImage: "/og-ustal-ot-sovetov-mudnkfdq.jpg"
 featured: true
 tags: ["Карьера", "Мнение"]
 translation: "tired-of-advice"
