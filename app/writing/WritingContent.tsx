@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import MagChrome from "@/components/magazine/MagChrome";
 import Carousel from "@/components/magazine/Carousel";
@@ -206,6 +207,22 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
   // не исчезал молча, а честно говорил, где остальное.
   const elsewhere = posts.length - mine.length;
 
+  // Пилюли-фильтр по рубрикам и поиск по всем статьям на выбранном языке.
+  const [rubric, setRubric] = useState<string>("all");
+  const [q, setQ] = useState("");
+  const found = useMemo(() => {
+    const query = q.trim().toLowerCase();
+    return mine.filter((p) => {
+      if (rubric !== "all" && p.rubric !== rubric) return false;
+      if (!query) return true;
+      return (
+        p.title.toLowerCase().includes(query) ||
+        p.description.toLowerCase().includes(query) ||
+        p.tags.some((tag) => tag.toLowerCase().includes(query))
+      );
+    });
+  }, [mine, rubric, q]);
+
   return (
     <div className="mag-root">
       <MagChrome />
@@ -241,6 +258,56 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
               </Link>
             ))}
           </div>
+        </div>
+
+        {/* Пилюли-рубрики и поиск по всем статьям на выбранном языке. */}
+        <div className="mag-sec">
+          <div className="mag-sh">
+            <h3>{ru ? "Все статьи" : "All articles"}</h3>
+            <span className="mag-ln" />
+            <span className="tiny">{String(found.length).padStart(2, "0")}</span>
+          </div>
+          <div className="mag-filter-pills">
+            <button type="button" className={`mag-pill${rubric === "all" ? " on" : ""}`} onClick={() => setRubric("all")}>
+              {ru ? "Всё" : "All"}
+            </button>
+            {RUBRICS.filter((r) => mine.some((p) => p.rubric === r.key)).map((r) => (
+              <button
+                key={r.key}
+                type="button"
+                className={`mag-pill${rubric === r.key ? " on" : ""}`}
+                onClick={() => setRubric(r.key)}
+              >
+                {rubricName(r.key, lang)}
+              </button>
+            ))}
+          </div>
+          <div className="mag-search">
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder={ru ? "Найти статью по названию или теме" : "Find an article by title or topic"}
+            />
+            <span>{ru ? "Поиск" : "Search"}</span>
+          </div>
+          {found.length > 0 ? (
+            <div className="mag-rows">
+              {found.map((post) => (
+                <Link key={post.slug} href={`/blog/${post.slug}`} className="mag-row">
+                  <span className="mag-row-meta">
+                    <span className="mag-row-date">{shortDate(post.date, ru)}</span>
+                    <span className="mag-row-rub">{post.tags[0] ?? rubricName(post.rubric, lang)}</span>
+                  </span>
+                  <h4>{post.title}</h4>
+                  <span className="mag-row-go" aria-hidden="true">
+                    →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="mag-empty">{ru ? "По этому запросу и рубрике ничего нет." : "Nothing matches this search and section."}</p>
+          )}
         </div>
 
         {lead ? (

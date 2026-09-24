@@ -814,6 +814,160 @@ button.mag-all {
   }
 }
 
+/* Пилюли-фильтр по рубрикам и поиск по всем статьям. */
+.mag-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.mag-pill {
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  padding: 9px 18px;
+  border: 1px solid var(--mag-ink);
+  background: transparent;
+  color: var(--mag-ink);
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.mag-pill:hover {
+  border-color: var(--acc);
+  color: var(--acc);
+}
+
+.mag-pill.on {
+  background: var(--mag-ink);
+  color: var(--mag);
+  border-color: var(--mag-ink);
+}
+
+.mag-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--mag-ink);
+  border-radius: 999px;
+  padding: 5px 6px 5px 20px;
+  margin-bottom: 8px;
+  max-width: 480px;
+}
+
+.mag-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--mag-ink);
+  padding: 9px 0;
+}
+
+.mag-search input::placeholder {
+  color: var(--faint);
+}
+
+.mag-search span {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mag);
+  background: var(--acc);
+  padding: 10px 16px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* список строчками, без обложек: дата и рубрика слева, заголовок
+   занимает всю ширину. Используется в поиске по всем статьям. */
+.mag-rows {
+  border-top: 1px solid var(--mag-rule);
+}
+
+.mag-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 22px;
+  align-items: center;
+  gap: 22px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--mag-rule);
+  text-decoration: none;
+  color: var(--mag-ink);
+  transition: background 0.16s;
+}
+
+.mag-row:hover {
+  background: #fafaf8;
+}
+
+.mag-row-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mag-row-date {
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.mag-row-rub {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--acc);
+}
+
+.mag-row h4 {
+  font-size: clamp(17px, 1.9vw, 21px);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  line-height: 1.28;
+}
+
+.mag-row:hover h4 {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.mag-row-go {
+  font-size: 18px;
+  color: var(--mag-rule);
+  justify-self: end;
+  transition: color 0.16s, transform 0.16s;
+}
+
+.mag-row:hover .mag-row-go {
+  color: var(--acc);
+  transform: translateX(3px);
+}
+
+@media (max-width: 699px) {
+  .mag-row {
+    grid-template-columns: 1fr 20px;
+    gap: 4px 10px;
+    padding: 18px 0;
+  }
+  .mag-row-meta {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .mag-row-go {
+    align-self: start;
+  }
+  .mag-search {
+    max-width: none;
+  }
+}
+
 .mag-card {
   display: flex;
   flex-direction: column;
