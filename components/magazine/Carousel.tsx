@@ -11,7 +11,7 @@ import PostCard, { type CardPost } from "./PostCard";
 // Мышкой или пальцем ленту можно подкрутить: во время протяжки она слушается
 // руки, после отпускания продолжает ехать сама с того же места.
 
-const SPEED = 26; // точек в секунду
+const SPEED = 0; // точек в секунду. Ноль: лента не крутится сама, только руками
 const SWIPE_PX = 8;
 
 const REDUCED = "(prefers-reduced-motion: reduce)";
