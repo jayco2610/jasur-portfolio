@@ -210,16 +210,6 @@ export const t = {
           github: "https://github.com/jayco2610/claude-outreach-system",
           demo: "/demos/career",
         },
-        {
-          name: "Personal Brandbook",
-          status: "shipped",
-          stack: ["Canva", "PDF", "GitHub Pages"],
-          description:
-            "10-page brand portfolio covering positioning, experience with real metrics, services with pricing, and project case studies including Expat Roadmap SEA and Portfolio + JasurGPT.",
-          metrics: ["10 pages", "Services with pricing", "Expat Roadmap case study"],
-          link: "/brandbook.pdf",
-          github: "https://github.com/jayco2610/jasur-brandbook",
-        },
       ],
       repos: [
         {
@@ -251,12 +241,6 @@ export const t = {
           description:
             "This site, with JasurGPT — an AI assistant trained on full professional context. Next.js + OpenRouter, $0/month infrastructure.",
           url: "https://github.com/jayco2610/jasur-portfolio",
-        },
-        {
-          name: "jasur-brandbook",
-          description:
-            "Personal brandbook as an HTML-to-PDF pipeline: positioning, services, and project case studies.",
-          url: "https://github.com/jayco2610/jasur-brandbook",
         },
       ],
     },
@@ -654,16 +638,6 @@ export const t = {
           github: "https://github.com/jayco2610/claude-outreach-system",
           demo: "/demos/career",
         },
-        {
-          name: "Personal Brandbook",
-          status: "запущен",
-          stack: ["Canva", "PDF", "GitHub Pages"],
-          description:
-            "10-страничное брендовое портфолио: позиционирование, опыт с реальными метриками, услуги с ценами, кейсы проектов Expat Roadmap SEA и Portfolio + JasurGPT.",
-          metrics: ["10 страниц", "Услуги с ценами", "Кейс Expat Roadmap"],
-          link: "/brandbook.pdf",
-          github: "https://github.com/jayco2610/jasur-brandbook",
-        },
       ],
       repos: [
         {
@@ -690,11 +664,6 @@ export const t = {
           name: "jasur-portfolio",
           description: "Этот сайт с JasurGPT — AI-ассистентом на полном профессиональном контексте. Next.js + OpenRouter, $0 в месяц.",
           url: "https://github.com/jayco2610/jasur-portfolio",
-        },
-        {
-          name: "jasur-brandbook",
-          description: "Personal brandbook как HTML-в-PDF пайплайн: позиционирование, услуги и кейсы проектов.",
-          url: "https://github.com/jayco2610/jasur-brandbook",
         },
       ],
     },
