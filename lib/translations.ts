@@ -78,6 +78,13 @@ export const t = {
       ],
       projects: [
         {
+          name: "abcx",
+          status: "live",
+          desc: "Product memory: log features with a hypothesis and a metric, upload sales or product data, and see where the funnel breaks. RICE and EEV lite scoring built in, plus an AI agent that answers from your own data.",
+          tags: ["Next.js", "OpenRouter", "Upstash"],
+          link: "https://abcx-eight.vercel.app",
+        },
+        {
           name: "AI Career System",
           status: "live",
           desc: "End-to-end job search automation. Claude + n8n + Google Sheets + Telegram. Vacancy in → cover letter out in 80 seconds.",
@@ -116,6 +123,20 @@ export const t = {
       openSourceDesc: "AI systems, tools, and products I built — all public on GitHub.",
       allRepos: "All repos on GitHub →",
       projects: [
+        {
+          name: "abcx",
+          status: "live",
+          stack: ["Next.js", "OpenRouter", "Upstash", "Vercel"],
+          description:
+            "Product memory for solo builders and small teams. Log a feature with a hypothesis and a metric, upload product or sales events, and abcx finds the funnel drops, the bad days, and the features that do not hold users. RICE and EEV lite scoring is built into every feature card, plus an AI agent that answers questions from your own product data, not guesses.",
+          metrics: [
+            "Free, no signup",
+            "RICE and EEV lite scoring on every feature",
+            "AI agent answers from your own data",
+          ],
+          link: "https://abcx-eight.vercel.app",
+          github: undefined,
+        },
         {
           name: "Portfolio + JasurGPT",
           status: "live",
@@ -501,6 +522,13 @@ export const t = {
       ],
       projects: [
         {
+          name: "abcx",
+          status: "в работе",
+          desc: "Память продукта: фиксируете фичи с гипотезой и метрикой, загружаете продажи или события — видите, где рвётся воронка. RICE и EEV lite встроены, плюс AI-агент отвечает по вашим же данным.",
+          tags: ["Next.js", "OpenRouter", "Upstash"],
+          link: "https://abcx-eight.vercel.app",
+        },
+        {
           name: "AI Career System",
           status: "в работе",
           desc: "Автоматизация поиска работы от начала до конца. Claude + n8n + Google Sheets + Telegram. Вакансия на входе → сопроводительное письмо за 80 секунд.",
@@ -539,6 +567,20 @@ export const t = {
       openSourceDesc: "AI-системы, инструменты и продукты — всё открыто на GitHub.",
       allRepos: "Все репозитории на GitHub →",
       projects: [
+        {
+          name: "abcx",
+          status: "в работе",
+          stack: ["Next.js", "OpenRouter", "Upstash", "Vercel"],
+          description:
+            "Память продукта для тех, кто строит соло или маленькой командой. Фиксируете фичу с гипотезой и метрикой, загружаете события продукта или продаж — abcx находит обрывы в воронке, провальные дни и фичи, которые не держат людей. RICE и EEV lite встроены в карточку каждой фичи, плюс AI-агент отвечает на вопросы по вашим же данным, а не гадает.",
+          metrics: [
+            "Бесплатно, без регистрации",
+            "RICE и EEV lite на каждой фиче",
+            "Агент отвечает по вашим данным",
+          ],
+          link: "https://abcx-eight.vercel.app",
+          github: undefined,
+        },
         {
           name: "Портфолио + JasurGPT",
           status: "в работе",

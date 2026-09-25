@@ -24,36 +24,50 @@ It is also a test on myself. I write about product and automation, so my own sit
 
 ## What is where
 
-**The portfolio** is the first screen and four sections under it.
+**[The portfolio](/)** is the first screen and four sections under it.
 
-**Projects** holds what I built and what is still alive: a platform for expats, an AI job-search system, a RAG assistant for a clinic. With numbers and links to the code.
+![The portfolio's front screen: headline, the latest project abcx, and a photo](/blog/why-portfolio.jpg)
 
-**Services** says what I take on and what it costs.
+**[Projects](/projects)** holds what I built and what is still alive: a platform for expats, an AI job-search system, a RAG assistant for a clinic. With numbers and links to the code.
 
-**Demos** has six automations for ordinary businesses. A clinic, a cafe, a stadium, a till, reviews. Everything runs on the page, nothing to install. It is the fastest way to understand what I mean when I say "automation".
+![Projects section: what got built, with stack and numbers](/blog/why-projects.jpg)
 
-**Resume** is the resume. Russian and English, the PDF downloads.
+**[Services](/services)** says what I take on and what it costs.
 
-## Notebook
+![Services section: what I take on and what it costs](/blog/why-services.jpg)
+
+**[Demos](/demos)** has six automations for ordinary businesses. A clinic, a cafe, a stadium, a till, reviews. Everything runs on the page, nothing to install. It is the fastest way to understand what I mean when I say "automation".
+
+![Demos section: automations for real businesses, running right in the browser](/blog/why-demos.jpg)
+
+**[Resume](/resume)** is the resume. Russian and English, the PDF downloads.
+
+![Resume section: resume in two languages, PDF downloads](/blog/why-resume.jpg)
+
+## [Notebook](/writing)
 
 This is the blog, but it lives as its own publication. Own masthead, own layout, own rules. You enter it from the portfolio and leave through the button at the top.
 
+![The Notebook: the journal lives as its own publication with its own masthead](/blog/why-blocknot.jpg)
+
 Six sections, each about one thing:
 
-- **Product.** What to build, what to drop and why. On my own projects.
-- **Marketing.** How to sell what you built. What worked, what burned money.
-- **AI.** Models, prompts, pipelines. What actually holds up in use.
-- **Process.** How the work is wired. Automation, routine, a build diary.
-- **Career.** Resumes, interviews, negotiation. All of it first-hand.
-- **Tools.** Tools and real prices. What earns its keep, what only looks free.
+- **[Product](/blog/tema/product).** What to build, what to drop and why. On my own projects.
+- **[Marketing](/blog/tema/marketing).** How to sell what you built. What worked, what burned money.
+- **[AI](/blog/tema/ai).** Models, prompts, pipelines. What actually holds up in use.
+- **[Process](/blog/tema/process).** How the work is wired. Automation, routine, a build diary.
+- **[Career](/blog/tema/career).** Resumes, interviews, negotiation. All of it first-hand.
+- **[Tools](/blog/tema/tools).** Tools and real prices. What earns its keep, what only looks free.
 
 Some sections are still empty. I did not pad them with filler, they fill up as I go.
 
 Inside an article there is a rail on the right: chapters, images and every link the text mentions. You can jump to the part you need or take the links without rereading.
 
-## Podcast
+## [Podcast](/podcast)
 
 It is called Jasur / Talks. Conversations about work, business, products and life with people who have something to say. Plus short voice notes when I have something to say myself.
+
+![The Jasur / Talks podcast page](/blog/why-podcast.jpg)
 
 You listen on the page, one button. Nothing to download, nowhere to go.
 
@@ -62,6 +76,8 @@ The first episode is being recorded.
 ## The button in the bottom right
 
 That is JasurGPT. Ask about my experience, projects or skills and get an answer. It runs on my own materials, answers to the point and does not invent things that did not happen.
+
+![JasurGPT open, with ready-made questions about experience and projects](/blog/why-jasurgpt.jpg)
 
 It is not there for decoration. A recruiter would rather ask than read three pages.
 
