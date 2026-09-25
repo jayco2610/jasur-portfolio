@@ -38,6 +38,11 @@ export const t = {
       deck2:
         "Everything below is deployed and running right now. These are not slides from a deck — they are tools I use every day.",
       figCap: "Fig. 00 — Frontispiece",
+      journalKicker: "From the log",
+      journalTitle: "Why this site exists",
+      journalDesc: "Who I am, what is here and how to use it.",
+      journalSlug: "why-this-site-exists",
+      journalCover: "/blog/why.jpg",
     },
 
     home: {
@@ -456,6 +461,11 @@ export const t = {
       deck2:
         "Всё, что показано ниже, запущено и работает прямо сейчас. Это не кейсы из презентации, а инструменты, которыми я пользуюсь каждый день.",
       figCap: "Рис. 00 — Фронтиспис",
+      journalKicker: "Из дневника",
+      journalTitle: "Зачем этот сайт",
+      journalDesc: "Кто я, что здесь лежит и как этим пользоваться.",
+      journalSlug: "zachem-etot-sayt",
+      journalCover: "/blog/zachem.jpg",
     },
 
     home: {

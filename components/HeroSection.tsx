@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Mark from "@/components/Mark";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
@@ -28,6 +29,26 @@ export default function HeroSection() {
             </p>
             <p className="text-[14.5px] text-dim border-t border-ink pt-3.5">{hero.deck2}</p>
           </div>
+
+          {/* Тизер на статью «Зачем этот сайт»: люди на портфолио должны узнать
+              про дневник, не заходя в него специально. Обложка та же, что у статьи,
+              клик ведёт прямо в неё, а не на список журнала. */}
+          <Link
+            href={`/blog/${hero.journalSlug}`}
+            className="mt-6 flex items-center gap-4 border-t border-rule pt-4 group"
+          >
+            <span className="w-16 h-10 flex-none overflow-hidden bg-paper">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={hero.journalCover} alt="" className="w-full h-full object-cover grayscale" />
+            </span>
+            <span className="min-w-0">
+              <span className="tiny block mb-1">{hero.journalKicker}</span>
+              <span className="block">
+                <b className="font-bold group-hover:underline underline-offset-4">{hero.journalTitle}</b>
+                <span className="text-dim"> — {hero.journalDesc}</span>
+              </span>
+            </span>
+          </Link>
         </div>
 
         <figure className="self-end max-w-[420px] lg:max-w-none">
