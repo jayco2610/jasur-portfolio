@@ -26,6 +26,15 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Страница никогда не должна двигаться вбок целиком: на телефоне это
+   ощущается как сломанный сайт, даже если поехал на пару сотен пикселей
+   всего один элемент (например баннер cookie шире экрана). */
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 body {
   background: var(--paper);
   color: var(--ink);
@@ -1791,6 +1800,9 @@ button.mag-all {
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
   z-index: 90;
   background: var(--paper);
   border-top: 1px solid var(--ink);
