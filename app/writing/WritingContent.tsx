@@ -9,7 +9,7 @@ import { useReveal } from "@/hooks/useReveal";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 import type { PostMeta } from "@/lib/blog";
-import { RUBRICS, rubricName, rubricDescription, MAGAZINE_NAME } from "@/lib/rubrics";
+import { RUBRICS, rubricName, MAGAZINE_NAME } from "@/lib/rubrics";
 
 const published = [
   {
@@ -239,29 +239,10 @@ export default function WritingContent({ posts }: { posts: PostMeta[] }) {
           </p>
         </div>
 
-        {/* О чём каждый раздел */}
+        {/* Пилюли-рубрики и поиск по всем статьям на выбранном языке.
+            Раньше здесь была сетка из шести плиток с фото по разделам,
+            теперь вместо неё фильтр и поиск делают то же самое компактнее. */}
         <div className="mag-sec" style={{ paddingTop: 0 }}>
-          <div className="mag-sh">
-            <h3>{ru ? "Разделы" : "Sections"}</h3>
-            <span className="mag-ln" />
-            <span className="tiny">{String(RUBRICS.length).padStart(2, "0")}</span>
-          </div>
-          <div className="mag-rub-grid">
-            {RUBRICS.map((r) => (
-              <Link key={r.key} href={`/blog/tema/${r.key}`} className="mag-rub-card">
-                <div className="mag-rub-im">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={r.cover} alt="" loading="lazy" />
-                </div>
-                <b>{rubricName(r.key, lang)}</b>
-                <span>{rubricDescription(r.key, lang)}</span>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Пилюли-рубрики и поиск по всем статьям на выбранном языке. */}
-        <div className="mag-sec">
           <div className="mag-sh">
             <h3>{ru ? "Все статьи" : "All articles"}</h3>
             <span className="mag-ln" />
