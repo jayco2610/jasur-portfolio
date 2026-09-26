@@ -43,13 +43,23 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
       <LogChrome activeRubric={activeRubric} onRubricChange={setActiveRubric} />
 
       <div>
-        <section className="nm-wrap nm-ptop">
-          <h1 className="nm-h1-p">Log</h1>
-          <div className="nm-lead">
-            <p>
-              Пишу про то, что делаю сам. Что сработало, что развалилось,
-              сколько стоило.
-            </p>
+        <section className="nm-log-hero">
+          <div className="nm-log-hero-in">
+            <div className="nm-log-hero-text">
+              <h1 className="nm-h1-p">Log</h1>
+              <div className="nm-lead">
+                <p>
+                  Пишу про то, что делаю сам. Что сработало, что развалилось,
+                  сколько стоило.
+                </p>
+              </div>
+            </div>
+            <Photo
+              className="nm-log-hero-photo"
+              src="/new/log-bg.jpg"
+              alt="Log"
+              ratio="4:5"
+            />
           </div>
         </section>
 

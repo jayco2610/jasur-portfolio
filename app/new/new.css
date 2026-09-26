@@ -1538,6 +1538,58 @@
   }
 }
 
+/* ============ Первый экран Log ============
+   Двухколоночный макет: слева заголовок и описание, справа фотография.
+   На узких экранах складывается в одну колонку. */
+
+.nm-log-hero {
+  padding-left: max(var(--nm-pad), calc((100vw - 1440px) / 2 + var(--nm-pad)));
+  padding-top: clamp(36px, 6vw, 84px);
+  padding-bottom: clamp(48px, 8vw, 110px);
+}
+
+.nm-log-hero-in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 1fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+.nm-log-hero-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.nm-log-hero-photo {
+  width: 100%;
+}
+
+.nm-log-hero-photo.nm-ph {
+  background: transparent;
+  border: none;
+}
+
+/* Адаптив Log: на узких экранах две колонки становятся одной */
+@media (max-width: 860px) {
+  .nm-log-hero {
+    padding-left: var(--nm-pad);
+  }
+
+  .nm-log-hero-in {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(26px, 5vw, 40px);
+  }
+
+  .nm-log-hero-text {
+    padding-right: var(--nm-pad);
+  }
+
+  .nm-log-hero-photo {
+    width: calc(100% + var(--nm-pad));
+    margin-left: calc(-1 * var(--nm-pad));
+  }
+}
+
 /* ============ Шапка издания (Log) ============
    Отдельная система для страницы /new/log: чёрная липкая шапка,
    рубрики, переключатель языка. Заменяет общую шапку сайта (Chrome). */
