@@ -627,7 +627,7 @@
 }
 
 .nm-sect {
-  padding-top: clamp(44px, 6.5vw, 96px);
+  padding-top: clamp(20px, 2.8vw, 36px);
 }
 
 /* ---- Log: сетка карточек ---- */
@@ -1677,15 +1677,16 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #fff;
-  opacity: 0.72;
+  color: #0c0c0b;
+  background: #fff;
   padding: 7px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  transition: opacity 0.2s, border-color 0.2s;
+  border: 1px solid #fff;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
 .nm-log-exit:hover {
-  opacity: 1;
+  background: transparent;
+  color: #fff;
   border-color: #fff;
 }
 
