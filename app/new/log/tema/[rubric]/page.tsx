@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import Photo from "../../../Photo";
 import { NewFooter } from "../../../Chrome";
 import LogChrome from "../../../LogChrome";
@@ -22,6 +21,13 @@ import { RUBRICS, rubricName, rubricDescription, rubricCover } from "@/lib/rubri
 
    Страница серверная. Файлы читает lib/blog через posts.ts, реагируют
    на нажатия только шапка и заглушки картинок, каждая сама по себе. */
+
+/* Кроме шести рубрик из lib/rubrics.ts, никаких других адресов не существует.
+   Без этой строки Next пытается собрать незнакомый адрес прямо на сервере,
+   а там нет папки content, и вместо честной 404 читатель видит ошибку. Живая
+   страница рубрики этой пометки не имеет и на выдуманном адресе действительно
+   отдаёт 500 (проверено запросом), поэтому здесь она стоит с самого начала. */
+export const dynamicParams = false;
 
 // Страницы делаем для всех рубрик, даже пустых: раздел в шапке есть, значит он
 // обязан открываться, а не отдавать «страница не найдена».
@@ -48,10 +54,9 @@ export default async function NewLogRubric({
 }: {
   params: Promise<{ rubric: string }>;
 }) {
+  // Сюда доходят только шесть ключей из generateStaticParams: остальное
+  // отсекает dynamicParams выше, своей проверки здесь уже не нужно.
   const { rubric } = await params;
-  // Проверка идёт до чтения файлов: выдуманный адрес должен отдавать 404,
-  // а не падать где-то внутри разбора content/blog.
-  if (!RUBRICS.some((r) => r.key === rubric)) notFound();
 
   const name = rubricName(rubric, "ru");
   const cover = rubricCover(rubric);
