@@ -23,7 +23,7 @@ export const metadata: Metadata = {
    спрятав его, мы перестали бы видеть собственные ошибки. */
 const isolate = `
 body > *:not(main):not(nextjs-portal) { display: none !important; }
-body { background: #ffffff !important; }
+body { background: #f9f9f7 !important; }
 `;
 
 export default function NewLayout({

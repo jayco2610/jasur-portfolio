@@ -13,22 +13,10 @@ const NUMS = [
 ];
 
 const BRANCHES = [
-  { t: "Log", c: "тексты и подкаст", img: "/new/branch-log.jpg" },
-  {
-    t: "Работы",
-    c: "шесть собранных продуктов",
-    img: "/new/branch-works.jpg",
-  },
-  {
-    t: "Мастерская",
-    c: "закрытый канал",
-    img: "/new/branch-workshop.jpg",
-  },
-  {
-    t: "Обо мне",
-    c: "опыт и контакты",
-    img: "/new/branch-about.jpg",
-  },
+  { t: "Log", c: "тексты и подкаст" },
+  { t: "Работы", c: "шесть собранных продуктов" },
+  { t: "Мастерская", c: "закрытый канал" },
+  { t: "Обо мне", c: "опыт и контакты" },
 ];
 
 const FRESH = [
@@ -96,7 +84,7 @@ export default function NewHome() {
             <div className="nm-hero-text">
               <h1 className="nm-h1">
                 <span>Вы пришли</span>
-                <span>понять,</span>
+                <span>понять</span>
                 <span>кто это</span>
               </h1>
 
@@ -117,7 +105,7 @@ export default function NewHome() {
               className="nm-hero-photo"
               src="/new/hero.jpg"
               alt="Jasur Akhmadaliev"
-              ratio="3:2"
+              ratio="1:1"
             />
           </div>
         </section>
@@ -147,12 +135,6 @@ export default function NewHome() {
           <div>
             {BRANCHES.map((b) => (
               <a key={b.t} className="nm-branch" href="#">
-                <Photo
-                  className="nm-branch-photo"
-                  src={b.img}
-                  alt={b.t}
-                  ratio="16:10"
-                />
                 <span className="nm-branch-text">
                   <span className="nm-branch-t">{b.t}</span>
                   <span className="nm-branch-c">{b.c}</span>
