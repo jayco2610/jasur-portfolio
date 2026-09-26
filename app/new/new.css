@@ -860,7 +860,7 @@
 
 .nm-pod-ph {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
 }
 
@@ -1550,7 +1550,7 @@
 
 .nm-log-hero-in {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 1fr);
   gap: clamp(28px, 5vw, 72px);
   align-items: center;
 }
@@ -1558,6 +1558,15 @@
 .nm-log-hero-text {
   display: flex;
   flex-direction: column;
+}
+
+.nm-log-hero-photo {
+  width: 100%;
+}
+
+.nm-log-hero-photo.nm-ph {
+  background: transparent;
+  border: none;
 }
 
 /* Адаптив Log: на узких экранах две колонки становятся одной */
@@ -1573,6 +1582,11 @@
 
   .nm-log-hero-text {
     padding-right: var(--nm-pad);
+  }
+
+  .nm-log-hero-photo {
+    width: calc(100% + var(--nm-pad));
+    margin-left: calc(-1 * var(--nm-pad));
   }
 }
 

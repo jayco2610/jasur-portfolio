@@ -54,6 +54,12 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
                 </p>
               </div>
             </div>
+            <Photo
+              className="nm-log-hero-photo"
+              src="/new/log-bg.jpg"
+              alt="Log"
+              ratio="4:5"
+            />
           </div>
         </section>
 
@@ -109,9 +115,9 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
           <Link className="nm-pod" href="/podcast">
             <Photo
               className="nm-pod-ph"
-              src="/new/log-bg.jpg"
+              src={SHOW.cover}
               alt={SHOW.name}
-              ratio="4:5"
+              ratio="1:1"
             />
             <span className="nm-pod-tx">
               <span className="nm-sec-t nm-pod-k">Подкаст</span>
