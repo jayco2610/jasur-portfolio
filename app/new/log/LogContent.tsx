@@ -47,8 +47,8 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
           <h1 className="nm-h1-p">Log</h1>
           <div className="nm-lead">
             <p>
-              Бортжурнал: запись хода, а не готовые выводы. Что собираю, что
-              считаю, где ошибся.
+              Пишу про то, что делаю сам. Что сработало, что развалилось,
+              сколько стоило.
             </p>
           </div>
         </section>
@@ -57,7 +57,7 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
           <>
             {/* Главная статья: единственное место на странице, где у материала
                 есть описание. Дальше только заголовки. */}
-            <section className="nm-wrap nm-sect">
+            <section className="nm-wrap nm-sect nm-sect-log">
               <p className="nm-sec-t">Главное</p>
               <a className="nm-big" href={lead.href}>
                 <Photo
@@ -81,7 +81,7 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
               <>
                 {/* Лента обложек. Идёт сразу за главной статьёй.
                     Карусель показывает материалы в движущихся обложках. */}
-                <section className="nm-wrap nm-sect">
+                <section className="nm-wrap nm-sect nm-sect-log">
                   <p className="nm-sec-t">
                     Свежее · {String(rest.length).padStart(2, "0")}
                   </p>
@@ -91,7 +91,7 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
             )}
           </>
         ) : (
-          <section className="nm-wrap nm-sect">
+          <section className="nm-wrap nm-sect nm-sect-log">
             <p className="nm-empty">
               В этой рубрике пока ничего нет. Скоро будет.
             </p>
@@ -101,7 +101,7 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
         {/* Подкаст: промо-полоса, а не список выпусков. Выпусков в проекте
             ноль, и придумывать их нельзя. Название, описание и обложка берутся
             из lib/show.ts, то есть оттуда же, откуда их берёт живой сайт. */}
-        <section className="nm-wrap nm-sect">
+        <section className="nm-wrap nm-sect nm-sect-log">
           <Link className="nm-pod" href="/podcast">
             <Photo
               className="nm-pod-ph"
@@ -120,7 +120,7 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
           </Link>
         </section>
 
-        <section className="nm-wrap nm-sect">
+        <section className="nm-wrap nm-sect nm-sect-log">
           <p className="nm-sec-t">
             Где ещё я пишу · {String(PUBLISHED.length).padStart(2, "0")}
           </p>
@@ -142,7 +142,7 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
           </div>
         </section>
 
-        <section className="nm-wrap nm-sect">
+        <section className="nm-wrap nm-sect nm-sect-log">
           <p className="nm-sec-t">
             Каналы · {String(CHANNELS.length).padStart(2, "0")}
           </p>
@@ -162,7 +162,7 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
           </div>
         </section>
 
-        <section className="nm-wrap nm-sect">
+        <section className="nm-wrap nm-sect nm-sect-log">
           <Subscribe />
         </section>
 

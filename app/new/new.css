@@ -627,6 +627,11 @@
 }
 
 .nm-sect {
+  padding-top: clamp(44px, 6.5vw, 96px);
+}
+
+/* Log: уменьшенный отступ сверху для сжатия зазора */
+.nm-sect-log {
   padding-top: clamp(20px, 2.8vw, 36px);
 }
 
