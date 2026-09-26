@@ -1,4 +1,6 @@
 import Photo from "./Photo";
+import { NewHeader, NewFooter } from "./Chrome";
+import { ruCardPosts } from "./posts";
 
 /* Макет новой главной по ТЗ «13 — Новая архитектура».
    Блоки идут сверху вниз в том же порядке, что в документе:
@@ -13,65 +15,20 @@ const NUMS = [
 ];
 
 const BRANCHES = [
-  { t: "Log", c: "тексты и подкаст" },
-  { t: "Работы", c: "шесть собранных продуктов" },
-  { t: "Мастерская", c: "закрытый канал" },
-  { t: "Обо мне", c: "опыт и контакты" },
-];
-
-const FRESH = [
-  {
-    cover: "/blog/skolko-zarabatyvaet-prodakt-menedzher-2026.jpg",
-    date: "17 сентября 2026",
-    rubric: "Карьера",
-    title: "Сколько зарабатывает продакт-менеджер в России в 2026 году",
-    href: "/blog/skolko-zarabatyvaet-prodakt-menedzher-2026",
-  },
-  {
-    cover: "/blog/kak-popast-v-otvety-chatgpt-i-alisy.jpg",
-    date: "17 сентября 2026",
-    rubric: "AI",
-    title: "Как попасть в ответы ChatGPT и Алисы: GEO в 2026 году",
-    href: "/blog/kak-popast-v-otvety-chatgpt-i-alisy",
-  },
-  {
-    cover: "/blog/ne-znayu.jpg",
-    date: "14 сентября 2026",
-    rubric: "AI",
-    title: "Лучшее, что умеет мой ассистент, это сказать «не знаю»",
-    href: "/blog/ne-znayu",
-  },
+  { t: "Log", c: "тексты и подкаст", href: "/new/log" },
+  { t: "Работы", c: "шесть собранных продуктов", href: "/new/works" },
+  { t: "Мастерская", c: "закрытый канал", href: "/new/workshop" },
+  { t: "Обо мне", c: "опыт и контакты", href: "/new/about" },
 ];
 
 export default function NewHome() {
+  // Три самых свежих русских материала. Список читается из content/blog,
+  // а не переписывается руками.
+  const fresh = ruCardPosts().slice(0, 3);
+
   return (
     <>
-      {/* служебная полоса: её на живом сайте не будет */}
-      <div className="nm-lab">
-        <div className="nm-wrap nm-lab-in">
-          <span className="nm-lab-note">Макет · новая главная · /new</span>
-        </div>
-      </div>
-
-      {/* ——— блок 0. Шапка ——— */}
-      <header className="nm-head">
-        <div className="nm-wrap nm-head-in">
-          <a className="nm-logo" href="#">
-            Jasur Akhmadaliev
-          </a>
-          <nav className="nm-nav">
-            <a href="#">Log</a>
-            <a href="#">Работы</a>
-            <a href="#">Мастерская</a>
-            <a href="#">Обо мне</a>
-          </nav>
-          {/* переключатель языка нерабочий, только вид */}
-          <div className="nm-lang">
-            <span className="is-on">RU</span>
-            <span className="is-off">EN</span>
-          </div>
-        </div>
-      </header>
+      <NewHeader />
 
       {/* корневой layout сайта уже даёт <main>, второй вкладывать нельзя */}
       <div>
@@ -134,7 +91,7 @@ export default function NewHome() {
           <p className="nm-sec-t">Куда дальше</p>
           <div>
             {BRANCHES.map((b) => (
-              <a key={b.t} className="nm-branch" href="#">
+              <a key={b.t} className="nm-branch" href={b.href}>
                 <span className="nm-branch-text">
                   <span className="nm-branch-t">{b.t}</span>
                   <span className="nm-branch-c">{b.c}</span>
@@ -151,8 +108,8 @@ export default function NewHome() {
         <section className="nm-wrap nm-fresh">
           <p className="nm-sec-t">Свежее</p>
           <div className="nm-cards">
-            {FRESH.map((c) => (
-              <a key={c.title} className="nm-card" href={c.href}>
+            {fresh.map((c) => (
+              <a key={c.slug} className="nm-card" href={c.href}>
                 <Photo src={c.cover} alt={c.title} ratio="16:10" />
                 <span className="nm-card-meta">
                   {c.date} · {c.rubric}
@@ -162,42 +119,12 @@ export default function NewHome() {
             ))}
           </div>
           <p className="nm-more">
-            <a href="/writing">Все материалы в Log</a>
+            <a href="/new/log">Все материалы в Log</a>
           </p>
         </section>
 
         {/* ——— блок 5. Контакты и подвал ——— */}
-        <section className="nm-wrap nm-contacts">
-          <h2 className="nm-h2">Пишите</h2>
-
-          <div className="nm-cline">
-            <span className="nm-cline-k">Написать</span>
-            <a
-              className="nm-cline-v nm-ink-link"
-              href="https://t.me/biznesmind"
-            >
-              @biznesmind
-            </a>
-          </div>
-
-          <div className="nm-cline">
-            <span className="nm-cline-k">Читать</span>
-            <a className="nm-cline-v" href="https://t.me/head_of_ceo">
-              @head_of_ceo
-            </a>
-          </div>
-
-          <p className="nm-small">
-            <a href="#">почта</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">GitHub</a>
-          </p>
-
-          <footer className="nm-foot">
-            <span>2026</span>
-            <span>Jasur Akhmadaliev</span>
-          </footer>
-        </section>
+        <NewFooter />
       </div>
     </>
   );

@@ -571,6 +571,297 @@
   color: var(--nm-dim);
 }
 
+/* ============================================================
+   Внутренние страницы веток: Log, Работы, Мастерская, Обо мне.
+
+   Ни одна не вводит новых приёмов: те же линейки как разделители, тот же
+   Unbounded в заголовках, тот же воздух. Общие блоки (шапка, цифры,
+   карточки, контакты, подвал) переиспользуются как есть, чтобы списки на
+   разных страницах нельзя было развести по высоте и формату даты.
+   ============================================================ */
+
+/* Активный пункт в шапке. Подчёркивание, а не цвет: цвет на странице
+   живёт только в изображениях маскота. */
+.nm-nav a.is-here {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+}
+
+/* ---- первый экран внутренней страницы ---- */
+
+.nm-ptop {
+  padding-top: clamp(34px, 5vw, 72px);
+  padding-bottom: clamp(30px, 4vw, 56px);
+}
+
+/* Кегль ниже, чем у h1 главной: там заголовок разбит на три короткие
+   строки и стоит в половину ширины, здесь строки длинные и на 1440
+   при большем размере первая строка вылезала за колонку. */
+.nm-h1-p {
+  font-family: var(--nm-display);
+  font-weight: 700;
+  font-size: clamp(28px, 4.6vw, 68px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.nm-lead {
+  border-top: 1px solid var(--nm-rule);
+  margin-top: clamp(22px, 2.8vw, 36px);
+  padding-top: clamp(16px, 2vw, 26px);
+  max-width: 62ch;
+}
+
+.nm-lead p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.nm-lead p + p {
+  margin-top: 12px;
+}
+
+.nm-sect {
+  padding-top: clamp(44px, 6.5vw, 96px);
+}
+
+/* ---- Log: сетка карточек ---- */
+
+/* Отдельно от .nm-cards на главной: там ровно три карточки в одном ряду и
+   на планшете их сразу кладут в столбик, здесь материалов много и ряд по
+   два ещё имеет смысл. Классы самой карточки те же. */
+.nm-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(26px, 3.4vw, 50px) clamp(20px, 3vw, 44px);
+  align-items: start;
+}
+
+/* Высота карточек в сетке обязана совпадать, поэтому заголовок держит две
+   строки. Селектор из двух классов намеренно: в @media на 860px правило
+   .nm-card-t { min-height: 0 } обнуляет это для главной, и по
+   специфичности оно не должно доставать до сетки Log. */
+.nm-grid .nm-card-t {
+  min-height: 2.4em;
+}
+
+/* ---- Работы и опыт: строка с двумя колонками ---- */
+
+.nm-work {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.45fr);
+  gap: clamp(14px, 2.4vw, 40px);
+  padding: clamp(18px, 2.4vw, 32px) 0;
+  border-top: 1px solid var(--nm-rule);
+}
+
+.nm-work:last-child {
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-work-n {
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(21px, 2.6vw, 38px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.nm-work-b > * {
+  margin: 0;
+}
+
+.nm-work-d {
+  font-size: 14px;
+  line-height: 1.55;
+  max-width: 54ch;
+}
+
+/* Стек: сухая строка через точки, не набор плашек. Плашки дали бы
+   скругления и заливки, которых на странице нет нигде. */
+.nm-work-s {
+  margin-top: 14px;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-work-l {
+  margin-top: 18px;
+}
+
+.nm-work-l a {
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--nm-ink);
+  padding-bottom: 3px;
+}
+
+.nm-work-l a:hover {
+  color: var(--nm-dim);
+  border-color: var(--nm-dim);
+}
+
+/* Опыт — те же строки, но названия компаний длиннее названий продуктов
+   («Консалтинговый проект, фриланс»), поэтому кегль ниже. */
+.nm-exp .nm-work-n {
+  font-size: clamp(19px, 1.9vw, 27px);
+}
+
+/* ---- Мастерская: что внутри ---- */
+
+.nm-item {
+  padding: clamp(18px, 2.4vw, 32px) 0;
+  border-top: 1px solid var(--nm-rule);
+}
+
+.nm-item:last-child {
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-item-t {
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(20px, 2.4vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.nm-item-d {
+  margin: 12px 0 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  max-width: 68ch;
+}
+
+/* Четвёртая строка это опция, а не одна из трёх групп. Отделена воздухом
+   и двойной линейкой сверху, без заливки и без рамки по кругу. */
+.nm-item.is-opt {
+  margin-top: clamp(18px, 2.2vw, 28px);
+  border-top: 3px double var(--nm-rule);
+}
+
+/* ---- Мастерская: для кого и для кого нет ---- */
+
+.nm-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 3.4vw, 56px);
+  border-top: 1px solid var(--nm-rule);
+  padding-top: clamp(20px, 2.6vw, 34px);
+}
+
+.nm-two-t {
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(16px, 1.55vw, 22px);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.nm-two-d {
+  margin: 14px 0 0;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+/* ---- Мастерская: состояние приёма и кнопка ---- */
+
+.nm-state {
+  border-top: 1px solid var(--nm-ink);
+  padding-top: clamp(24px, 3vw, 40px);
+}
+
+.nm-state-t {
+  font-family: var(--nm-display);
+  font-weight: 700;
+  /* Нижняя граница не 30px, а 26: на 360 точках «ПРИОСТАНОВЛЕН» не
+     помещалось в строку целиком и переносилось с одной буквой на
+     следующей строке. */
+  font-size: clamp(26px, 5vw, 72px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.nm-state-d {
+  margin: clamp(16px, 2vw, 24px) 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 46ch;
+}
+
+.nm-btn-w {
+  margin: clamp(26px, 3.2vw, 40px) 0 0;
+}
+
+/* Прямоугольник без скруглений и без тени. Инверсия по наведению — весь
+   эффект целиком. */
+.nm-btn {
+  display: inline-block;
+  padding: 16px clamp(20px, 3vw, 38px);
+  background: var(--nm-ink);
+  border: 1px solid var(--nm-ink);
+  color: var(--nm-paper);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.nm-btn:hover {
+  background: transparent;
+  color: var(--nm-ink);
+}
+
+/* ---- Обо мне ---- */
+
+/* Как первый экран главной: секция несёт только левый отступ, портрет
+   справа доходит до настоящего края окна. */
+.nm-about-top {
+  padding-left: max(var(--nm-pad), calc((100vw - 1440px) / 2 + var(--nm-pad)));
+}
+
+.nm-about-in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.66fr);
+  gap: clamp(28px, 5vw, 72px);
+  /* По верхнему краю, а не по нижнему: портрет 4:5 заметно выше текстового
+     блока, и при выравнивании по низу над заголовком повисала пустая
+     четверть экрана. */
+  align-items: start;
+}
+
+.nm-about-photo {
+  width: 100%;
+}
+
+/* Значения в строках «Образование» и «Языки» текстовым кеглем: это факты,
+   а не заголовки, и крупный Unbounded здесь спорил бы с именами компаний
+   в блоке опыта выше. */
+.nm-cline-s {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
 /* ============ адаптив ============ */
 
 /* цифры: пять в ряд не помещаются, перестраиваем на три и на две.
@@ -591,6 +882,12 @@
   }
   .nm-nums > *:nth-child(n + 4) {
     border-top: 1px solid var(--nm-rule);
+  }
+
+  /* три обложки 16:10 в ряд на планшете дают карточку шириной около
+     двухсот точек, заголовок в ней рвётся на четыре строки */
+  .nm-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -641,6 +938,31 @@
   .nm-card-t {
     min-height: 0;
   }
+
+  /* строки работ и опыта складываются: название сверху, тело под ним */
+  .nm-work {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .nm-two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* портрет в «Обо мне» ведёт себя как фото первого экрана главной:
+     текст добирает себе правый отступ, картинка выходит к обоим краям */
+  .nm-about-in {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(26px, 5vw, 40px);
+    align-items: start;
+  }
+  .nm-about-in > *:first-child {
+    padding-right: var(--nm-pad);
+  }
+  .nm-about-photo {
+    width: calc(100% + var(--nm-pad));
+    margin-left: calc(-1 * var(--nm-pad));
+  }
 }
 
 @media (max-width: 720px) {
@@ -672,5 +994,17 @@
   .nm-foot {
     flex-direction: column;
     gap: 8px;
+  }
+
+  .nm-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* в один столбец выравнивать высоты нечем и незачем */
+  .nm-grid .nm-card-t {
+    min-height: 0;
+  }
+  .nm-btn {
+    display: block;
+    text-align: center;
   }
 }
