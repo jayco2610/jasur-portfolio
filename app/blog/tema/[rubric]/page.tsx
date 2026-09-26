@@ -4,6 +4,11 @@ import { getPostsByRubric, rubricName, RUBRICS } from "@/lib/blog";
 import { rubricDescription } from "@/lib/rubrics";
 import RubricContent from "./RubricContent";
 
+// Кроме рубрик, собранных при сборке, никаких других адресов не существует.
+// Без этого Next пытается собрать незнакомый адрес прямо на сервере, а там
+// нет папки content, и вместо честной 404 читатель видит ошибку.
+export const dynamicParams = false;
+
 // Страницы делаем для всех рубрик, даже пустых: раздел в меню есть,
 // значит он обязан открываться, а не отдавать «страница не найдена».
 export function generateStaticParams() {
