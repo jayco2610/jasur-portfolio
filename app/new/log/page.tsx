@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { NewHeader } from "../Chrome";
 import { ruCardPosts } from "../posts";
 import LogContent from "./LogContent";
 
@@ -14,15 +13,13 @@ export const metadata: Metadata = {
 
    Здесь только чтение файлов: lib/blog ходит в файловую систему, а значит
    работает на сервере. Всё, что умеет реагировать на нажатия (фильтр рубрик,
-   лента, форма подписки), живёт в LogContent. */
+   лента, форма подписки), живёт в LogContent.
+
+   Общая шапка сайта (Chrome) не показывается: блог открывается как отдельное
+   издание со своей собственной шапкой (LogChrome). */
 
 export default function NewLog() {
   const posts = ruCardPosts();
 
-  return (
-    <>
-      <NewHeader here="Log" />
-      <LogContent posts={posts} />
-    </>
-  );
+  return <LogContent posts={posts} />;
 }

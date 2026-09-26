@@ -4,11 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import Photo from "../Photo";
 import { NewFooter } from "../Chrome";
+import LogChrome from "../LogChrome";
 import type { CardPost } from "../posts";
 import Carousel from "./Carousel";
 import Subscribe from "./Subscribe";
 import { PUBLISHED, CHANNELS } from "./elsewhere";
-import { RUBRICS } from "@/lib/rubrics";
 import { SHOW } from "@/lib/show";
 
 /* Страница Log целиком: издание, а не список ссылок.
@@ -25,12 +25,10 @@ import { SHOW } from "@/lib/show";
    материала, а не другая тема. Поэтому он отделён линейкой и ведёт на
    /podcast, как и на живой странице, а не фильтрует список. */
 
-const ALL = "all";
-
 export default function LogContent({ posts }: { posts: CardPost[] }) {
-  const [rubric, setRubric] = useState<string>(ALL);
+  const [activeRubric, setActiveRubric] = useState<string | null>(null);
 
-  const shown = rubric === ALL ? posts : posts.filter((p) => p.rubricKey === rubric);
+  const shown = activeRubric === null ? posts : posts.filter((p) => p.rubricKey === activeRubric);
 
   /* Крупной первой встаёт статья с флагом featured, как на живой странице:
      флаг для того и заведён, чтобы поднять материал наверх, не меняя ему
@@ -39,40 +37,10 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
   const lead = shown.find((p) => p.featured) ?? shown[0];
   const rest = shown.filter((p) => p.slug !== lead?.slug);
 
-  // Рубрики без статей в строке не показываем: раздел, который открывается
-  // пустым, честнее не предлагать вовсе.
-  const used = RUBRICS.filter((r) => posts.some((p) => p.rubricKey === r.key));
-
   return (
     <>
-      {/* Вторая строка под общей шапкой сайта. Своего логотипа у издания
-          здесь нет: Log это раздел, и знак у него общий с сайтом. */}
-      <nav className="nm-rubs" aria-label="Рубрики">
-        <div className="nm-wrap nm-rubs-in">
-          <button
-            type="button"
-            className={`nm-rub${rubric === ALL ? " is-on" : ""}`}
-            aria-pressed={rubric === ALL}
-            onClick={() => setRubric(ALL)}
-          >
-            Всё
-          </button>
-          {used.map((r) => (
-            <button
-              key={r.key}
-              type="button"
-              className={`nm-rub${rubric === r.key ? " is-on" : ""}`}
-              aria-pressed={rubric === r.key}
-              onClick={() => setRubric(r.key)}
-            >
-              {r.ru}
-            </button>
-          ))}
-          <Link className="nm-rub nm-rub-pod" href="/podcast">
-            Подкаст
-          </Link>
-        </div>
-      </nav>
+      {/* Чёрная липкая шапка издания с рубриками и выходом в портфолио */}
+      <LogChrome activeRubric={activeRubric} onRubricChange={setActiveRubric} />
 
       <div>
         <section className="nm-wrap nm-ptop">

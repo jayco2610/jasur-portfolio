@@ -1532,3 +1532,166 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ============ Шапка издания (Log) ============
+   Отдельная система для страницы /new/log: чёрная липкая шапка,
+   рубрики, переключатель языка. Заменяет общую шапку сайта (Chrome). */
+
+.nm-log-head {
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  background: #0c0c0b;
+  color: #fff;
+}
+
+.nm-log-head-in {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 44px);
+}
+
+/* Логотип издания: квадрат со слешем */
+.nm-log-logo {
+  width: 58px;
+  height: 58px;
+  background: #fff;
+  color: #0c0c0b;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+/* Навигация по рубрикам */
+.nm-log-nav {
+  display: flex;
+  gap: clamp(14px, 2.2vw, 32px);
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nm-log-nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* Кнопка рубрики */
+.nm-log-nav-btn {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+  background: none;
+  border: none;
+  text-decoration: none;
+  white-space: nowrap;
+  opacity: 0.78;
+  padding: 22px 0;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.2s;
+}
+
+.nm-log-nav-btn:hover,
+.nm-log-nav-btn.is-on {
+  opacity: 1;
+}
+
+.nm-log-nav-btn.is-on {
+  box-shadow: inset 0 -2px 0 #d6451f;
+}
+
+/* Подкаст отделён точкой, не рубрика */
+.nm-log-nav-pod {
+  position: relative;
+  padding-left: 16px;
+}
+
+.nm-log-nav-pod::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #d6451f;
+  transform: translateY(-50%);
+}
+
+/* Блок справа: переключатель языка и выход */
+.nm-log-head-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Переключатель языка */
+.nm-log-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: none;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  padding: 7px 11px;
+  cursor: pointer;
+  color: #fff;
+  transition: border-color 0.2s;
+}
+
+.nm-log-lang:hover {
+  border-color: #fff;
+}
+
+.nm-log-lang span {
+  color: rgba(255, 255, 255, 0.45);
+  transition: color 0.2s;
+}
+
+.nm-log-lang span.is-on {
+  color: #fff;
+}
+
+.nm-log-lang i {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Кнопка выхода в портфолио */
+.nm-log-exit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fff;
+  opacity: 0.72;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.nm-log-exit:hover {
+  opacity: 1;
+  border-color: #fff;
+}
+
+/* На мобильных скрывается полный текст */
+@media (max-width: 760px) {
+  .nm-log-exit-full {
+    display: none;
+  }
+}
