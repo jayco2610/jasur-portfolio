@@ -1,0 +1,651 @@
+/* ============================================================
+   Стили макета новой главной. Только для страницы /new.
+
+   Правило изоляции: КАЖДЫЙ селектор в этом файле начинается с .nm
+   Файл подключается из app/new/layout.tsx, то есть загружается только
+   на маршруте /new, но даже если бы он попал на другие страницы,
+   зацепиться ему там не за что.
+
+   Никаких теней, градиентов, скруглений, анимаций и переходов.
+   Разделители только линейками, ритм держат воздух и масштаб.
+   ============================================================ */
+
+.nm {
+  /* ---- палитра ---- */
+  --nm-paper: #ffffff;
+  --nm-ink: #0b0b0b;
+  --nm-dim: #8c8c8c;
+  --nm-rule: #dcdcdc;
+
+  /* Красный акцент убран со страницы: цвет теперь живёт только в
+     изображениях маскота внутри веток. Переменная --nm-red раньше
+     использовалась в трёх местах (точка статуса, знак перехода в
+     ветках при наведении, телеграм для связи) — везде заменена на
+     var(--nm-ink). Оставлена закомментированной на случай, если
+     решение снова поменяется:
+     --nm-red: #e0361d; */
+
+  /* ---- шрифтовая пара, зафиксирована ---- */
+  --nm-display: var(--nm-f-unbounded), system-ui, sans-serif;
+  --nm-text: var(--nm-f-onest), system-ui, sans-serif;
+
+  background: var(--nm-paper);
+  color: var(--nm-ink);
+  font-family: var(--nm-text);
+  font-size: 16px;
+  line-height: 1.45;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.nm ::selection {
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-wrap {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-inline: clamp(18px, 4.5vw, 72px);
+}
+
+/* ============ заглушки под ненайденные фотографии ============
+   Базовый класс для всех фото на странице. Стоит здесь, ДО любого
+   блока с собственной шириной для фото (например .nm-branch-photo),
+   намеренно: правило конкретного блока должно идти позже в файле,
+   иначе при равной специфичности (у обоих один класс) побеждает то,
+   что ниже по каскаду — а не то, что "более специфично выглядит".
+   Именно так .nm-ph { width: 100% } раньше перебивал
+   .nm-branch-photo { width: clamp(...) } на широких экранах: этот
+   блок был в конце файла, то есть позже .nm-branch-photo. ============ */
+
+.nm-ph {
+  position: relative;
+  width: 100%;
+  background: #f1f1f1;
+  border: 1px solid var(--nm-rule);
+  overflow: hidden;
+}
+
+.nm-ph img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nm-ph-note {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  color: #9b9b9b;
+  word-break: break-word;
+}
+
+.nm-ph-note b {
+  font-weight: 500;
+  color: #6f6f6f;
+  letter-spacing: 0.02em;
+}
+
+/* ============ служебная полоса макета ============ */
+
+.nm-lab {
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  background: var(--nm-ink);
+  color: #ffffff;
+}
+
+.nm-lab-in {
+  display: flex;
+  align-items: center;
+  height: 34px;
+}
+
+.nm-lab-note {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============ блок 0. Шапка ============ */
+
+.nm-head {
+  position: sticky;
+  top: 34px;
+  z-index: 60;
+  background: var(--nm-paper);
+  border-bottom: 1px solid var(--nm-ink);
+}
+
+.nm-head-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 64px;
+}
+
+.nm-logo {
+  font-family: var(--nm-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.nm-nav {
+  display: flex;
+  gap: clamp(14px, 2.4vw, 34px);
+}
+
+.nm-nav a {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.nm-nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.nm-lang {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.nm-lang .is-on {
+  font-weight: 700;
+}
+
+.nm-lang .is-off {
+  color: var(--nm-dim);
+}
+
+/* ============ блок 1. Первый экран ============ */
+
+.nm-hero {
+  padding-top: clamp(36px, 6vw, 84px);
+  padding-bottom: clamp(48px, 8vw, 110px);
+}
+
+/* Две колонки примерно поровну: слева текст, справа фото во всю высоту
+   строки. Строка растёт под более высокий элемент — обычно это фото
+   (4:5 на половине ширины уже сам по себе высокий), поэтому текст
+   центрируется по вертикали относительно него, а не наоборот. */
+.nm-hero-in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 1fr);
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+
+.nm-hero-text {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Заголовок набран под половину ширины экрана, а не под всю: клампы ниже,
+   чем были бы для полноширинного h1, иначе на широких экранах строка
+   "Вы пришли" не помещается в колонку и распирает сетку. */
+.nm-h1 {
+  font-family: var(--nm-display);
+  font-weight: 700;
+  font-size: clamp(32px, 5.6vw, 92px);
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.nm-h1 span {
+  display: block;
+}
+
+.nm-hero-meta {
+  border-top: 1px solid var(--nm-rule);
+  margin-top: clamp(24px, 3vw, 40px);
+  padding-top: clamp(18px, 2.2vw, 28px);
+}
+
+.nm-sub {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  max-width: 34ch;
+}
+
+.nm-status {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.nm-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--nm-ink);
+  flex: none;
+}
+
+.nm-hero-photo {
+  width: 100%;
+}
+
+/* ============ блок 2. Цифры ============ */
+
+.nm-nums {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-top: 1px solid var(--nm-ink);
+}
+
+.nm-nums > * {
+  padding: clamp(26px, 3vw, 38px) clamp(10px, 1.4vw, 20px) clamp(30px, 3.4vw, 44px) clamp(14px, 1.8vw, 24px);
+  border-left: 1px solid var(--nm-rule);
+}
+
+.nm-nums > *:nth-child(5n + 1) {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.nm-num-a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.nm-num-v {
+  display: block;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(27px, 3.3vw, 46px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.nm-num-a:hover .nm-num-v {
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-thickness: 1px;
+}
+
+.nm-num-k {
+  display: block;
+  margin-top: 13px;
+  font-size: 10.5px;
+  line-height: 1.4;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+/* ============ блок 3. Ветки ============ */
+
+.nm-sec-t {
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+  margin: 0 0 clamp(20px, 2.6vw, 34px);
+}
+
+.nm-branches {
+  padding-top: clamp(40px, 6vw, 80px);
+}
+
+/* Строка — фото, название с подписью под ним тем же левым краем, знак
+   перехода справа. Никакой отдельной колонки под номер или подпись:
+   подпись живёт внутри текстового блока, а не рядом с ним. */
+.nm-branch {
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2.2vw, 28px);
+  padding: clamp(10px, 1.4vw, 18px) 0;
+  border-top: 1px solid var(--nm-rule);
+  text-decoration: none;
+  color: inherit;
+}
+
+.nm-branch:last-child {
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-branch-photo {
+  flex: none;
+  width: clamp(60px, 7.5vw, 116px);
+}
+
+.nm-branch-text {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2px, 0.5vw, 6px);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.nm-branch-t {
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(22px, 3.8vw, 60px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+
+.nm-branch-c {
+  font-size: 11.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+  overflow-wrap: break-word;
+}
+
+.nm-branch-a {
+  flex: none;
+  font-size: clamp(17px, 1.9vw, 26px);
+  line-height: 1;
+  color: var(--nm-rule);
+}
+
+.nm-branch:hover .nm-branch-a {
+  color: var(--nm-ink);
+}
+
+.nm-branch:hover .nm-branch-c {
+  color: var(--nm-ink);
+}
+
+/* ============ блок 4. Свежее ============ */
+
+.nm-fresh {
+  padding-top: clamp(60px, 9vw, 130px);
+}
+
+.nm-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 44px);
+  align-items: start;
+}
+
+.nm-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nm-card-meta {
+  display: block;
+  margin-top: 15px;
+  font-size: 10.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+/* Высота карточек обязана совпадать: описаний нет, а заголовок жёстко
+   занимает две строки независимо от длины. Три карточки в ряду всегда
+   одного роста, даже если заголовок короткий. */
+.nm-card-t {
+  margin-top: 10px;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(16px, 1.45vw, 21px);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.4em;
+}
+
+.nm-card:hover .nm-card-t {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+.nm-more {
+  margin-top: clamp(28px, 3.4vw, 46px);
+  padding-top: clamp(16px, 2vw, 24px);
+  border-top: 1px solid var(--nm-rule);
+}
+
+.nm-more a {
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--nm-ink);
+  padding-bottom: 3px;
+}
+
+.nm-more a:hover {
+  color: var(--nm-dim);
+  border-color: var(--nm-dim);
+}
+
+/* ============ блок 5. Контакты и подвал ============ */
+
+.nm-contacts {
+  padding-top: clamp(70px, 11vw, 160px);
+}
+
+.nm-h2 {
+  font-family: var(--nm-display);
+  font-weight: 700;
+  font-size: clamp(42px, 10vw, 148px);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin: 0 0 clamp(30px, 4vw, 56px);
+}
+
+.nm-cline {
+  display: grid;
+  grid-template-columns: clamp(86px, 10vw, 158px) minmax(0, 1fr);
+  gap: clamp(14px, 2vw, 28px);
+  align-items: baseline;
+  padding: clamp(16px, 2.2vw, 28px) 0;
+  border-top: 1px solid var(--nm-rule);
+}
+
+.nm-cline:last-of-type {
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-cline-k {
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-cline-v {
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(21px, 3.4vw, 46px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nm-cline-v:hover {
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  text-decoration-thickness: 1px;
+}
+
+.nm-ink-link {
+  color: var(--nm-ink);
+}
+
+.nm-small {
+  margin-top: clamp(20px, 2.4vw, 30px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  font-size: 12px;
+  color: var(--nm-dim);
+}
+
+.nm-small a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--nm-rule);
+  padding-bottom: 2px;
+}
+
+.nm-small a:hover {
+  color: var(--nm-ink);
+  border-color: var(--nm-ink);
+}
+
+.nm-foot {
+  margin-top: clamp(60px, 9vw, 120px);
+  border-top: 1px solid var(--nm-ink);
+  padding: 20px 0 clamp(36px, 5vw, 64px);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+/* ============ адаптив ============ */
+
+/* цифры: пять в ряд не помещаются, перестраиваем на три и на две.
+   Везде одинаковая специфичность селекторов, иначе правило из более
+   широкого медиазапроса перебивает более узкое. */
+@media (max-width: 1040px) {
+  .nm-nums {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .nm-nums > *:nth-child(3n + 1) {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .nm-nums > *:nth-child(3n + 2),
+  .nm-nums > *:nth-child(3n + 3) {
+    border-left: 1px solid var(--nm-rule);
+    padding-left: clamp(14px, 1.8vw, 24px);
+  }
+  .nm-nums > *:nth-child(n + 4) {
+    border-top: 1px solid var(--nm-rule);
+  }
+}
+
+@media (max-width: 860px) {
+  .nm-head-in {
+    flex-wrap: wrap;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    row-gap: 12px;
+  }
+  .nm-logo {
+    order: 1;
+  }
+  .nm-lang {
+    order: 2;
+  }
+  .nm-nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .nm-nav a {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+
+  .nm-hero-in {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(26px, 5vw, 40px);
+  }
+
+  .nm-cards {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(30px, 6vw, 44px);
+  }
+  .nm-card-t {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .nm-branch {
+    gap: clamp(10px, 3vw, 18px);
+  }
+  .nm-branch-photo {
+    width: clamp(52px, 18vw, 80px);
+  }
+}
+
+@media (max-width: 620px) {
+  .nm-nums {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .nm-nums > *:nth-child(2n + 1) {
+    border-left: 0;
+    padding-left: 0;
+  }
+  .nm-nums > *:nth-child(2n + 2) {
+    border-left: 1px solid var(--nm-rule);
+    padding-left: 16px;
+  }
+  .nm-nums > *:nth-child(n + 3) {
+    border-top: 1px solid var(--nm-rule);
+  }
+
+  .nm-cline {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .nm-foot {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
