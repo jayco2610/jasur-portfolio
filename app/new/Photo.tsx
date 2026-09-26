@@ -54,9 +54,17 @@ export default function Photo({
       className={className ? `nm-ph ${className}` : "nm-ph"}
       style={{ aspectRatio: RATIO[ratio] }}
     >
+      {/* draggable={false}: внутри едущей ленты обложек на Log попытка
+          подкрутить её мышью иначе превращается в перетаскивание картинки. */}
       {!failed && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={alt} ref={check} onError={() => setFailed(true)} />
+        <img
+          src={src}
+          alt={alt}
+          ref={check}
+          onError={() => setFailed(true)}
+          draggable={false}
+        />
       )}
       {failed && (
         <span className="nm-ph-note">

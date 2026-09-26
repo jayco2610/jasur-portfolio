@@ -650,6 +650,453 @@
   min-height: 2.4em;
 }
 
+/* ---- Log: рубрики второй строкой под шапкой ---- */
+
+/* Полоса во всю ширину, как сама шапка, с колонкой .nm-wrap внутри: иначе
+   линейка под рубриками кончалась бы раньше линейки под шапкой, и два
+   разделителя подряд не совпали бы по длине.
+
+   Не липкая: шапка уже занимает 34 + 64 точки сверху, и второй липкий слой
+   под ней на телефоне, где шапка переносит навигацию на вторую строку,
+   отъедал бы треть экрана. */
+.nm-rubs {
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-rubs-in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px clamp(14px, 2.2vw, 30px);
+  padding-block: 13px;
+}
+
+/* Кнопка, а не ссылка: фильтр меняет содержимое этой же страницы. Внешне от
+   пунктов шапки не отличается, поэтому все собственные стили кнопки
+   (рамка, фон, шрифт, отступы) сбрасываются руками. */
+.nm-rub {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.nm-rub:hover {
+  color: var(--nm-ink);
+}
+
+/* Выбранная рубрика отмечена насыщенностью и подчёркиванием, а не цветом:
+   цвет на странице живёт только внутри обложек. */
+.nm-rub.is-on {
+  color: var(--nm-ink);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+}
+
+/* Подкаст не рубрика, а другой вид материала, и ведёт он на другую страницу.
+   Отделён линейкой слева, чтобы его не читали как восьмую тему. */
+.nm-rub-pod {
+  margin-left: auto;
+  padding-left: clamp(14px, 2.2vw, 30px);
+  border-left: 1px solid var(--nm-rule);
+}
+
+/* ---- Log: главная статья ---- */
+
+.nm-big {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  gap: clamp(20px, 3.4vw, 60px);
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  border-top: 1px solid var(--nm-ink);
+  padding-top: clamp(20px, 2.6vw, 36px);
+}
+
+.nm-big-ph {
+  width: 100%;
+}
+
+.nm-big-tx {
+  display: block;
+}
+
+.nm-big-k {
+  display: block;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-big-t {
+  display: block;
+  margin-top: clamp(12px, 1.4vw, 18px);
+  font-family: var(--nm-display);
+  font-weight: 700;
+  font-size: clamp(24px, 3.2vw, 46px);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  overflow-wrap: break-word;
+}
+
+.nm-big:hover .nm-big-t {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
+}
+
+.nm-big-d {
+  display: block;
+  margin-top: clamp(14px, 1.6vw, 20px);
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 48ch;
+}
+
+.nm-big-m {
+  display: block;
+  margin-top: clamp(16px, 2vw, 26px);
+  padding-top: 14px;
+  border-top: 1px solid var(--nm-rule);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+/* ---- Log: лента обложек ---- */
+
+/* Ширина карточки задаётся через --per: сколько штук видно в кадре. Число
+   читает сам компонент через getComputedStyle, поэтому точки перелома живут
+   здесь, в стилях, а не продублированы в коде. */
+.nm-car-view {
+  --per: 1.15;
+  overflow: hidden;
+  /* Вертикальную прокрутку страницы пальцем лента не перехватывает. */
+  touch-action: pan-y;
+}
+
+@media (min-width: 700px) {
+  .nm-car-view {
+    --per: 2;
+  }
+}
+
+@media (min-width: 1100px) {
+  .nm-car-view {
+    --per: 3;
+  }
+}
+
+.nm-car-track {
+  display: flex;
+  will-change: transform;
+}
+
+/* Лента живая: за неё можно взяться и подкрутить. */
+.nm-car.is-live .nm-car-view {
+  cursor: grab;
+}
+
+.nm-car.is-live .nm-car-view:active {
+  cursor: grabbing;
+}
+
+/* Промежуток между карточками сделан внутренним отступом слайда, а не gap:
+   gap прибавился бы к ширине, посчитанной как ширина кадра делить на --per,
+   и лента поехала бы с рывком на стыке копий. При box-sizing: border-box
+   отступ входит в flex-basis, то есть шаг остаётся ровным. */
+.nm-car-slide {
+  flex: 0 0 calc(100% / var(--per));
+  min-width: 0;
+  display: flex;
+  padding-right: clamp(20px, 3vw, 44px);
+}
+
+.nm-car-slide .nm-card {
+  width: 100%;
+  user-select: none;
+}
+
+/* ---- Log: полоса подкаста ---- */
+
+/* Полоса, а не карточка: подкаст стоит между статьями и внешними
+   публикациями, и обе соседние сетки собраны из обложек 16:10. Квадратная
+   обложка плюс линейки сверху и снизу отличают полосу от них сразу, без
+   заливки и без рамки по кругу. */
+.nm-pod {
+  display: grid;
+  grid-template-columns: clamp(120px, 15vw, 210px) minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 46px);
+  align-items: center;
+  padding: clamp(22px, 3vw, 40px) 0;
+  border-top: 1px solid var(--nm-ink);
+  border-bottom: 1px solid var(--nm-ink);
+  text-decoration: none;
+  color: inherit;
+}
+
+.nm-pod-ph {
+  width: 100%;
+}
+
+.nm-pod-tx {
+  display: block;
+}
+
+.nm-pod-k {
+  display: block;
+  margin: 0;
+}
+
+.nm-pod-t {
+  display: block;
+  margin-top: clamp(8px, 1vw, 14px);
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(22px, 3.2vw, 44px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.nm-pod:hover .nm-pod-t {
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  text-decoration-thickness: 1px;
+}
+
+.nm-pod-d {
+  display: block;
+  margin-top: clamp(12px, 1.4vw, 18px);
+  font-size: 14.5px;
+  line-height: 1.55;
+  max-width: 54ch;
+}
+
+.nm-pod-go {
+  display: inline-block;
+  margin-top: clamp(16px, 2vw, 24px);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--nm-ink);
+  padding-bottom: 3px;
+}
+
+.nm-pod:hover .nm-pod-go {
+  color: var(--nm-dim);
+  border-color: var(--nm-dim);
+}
+
+/* ---- Log: где ещё я пишу ---- */
+
+/* Без обложек: у чужих площадок их нет, а подставлять свои значило бы
+   выдавать внешнюю публикацию за материал сайта. Держит ряд линейка сверху
+   каждой строки, высоты выравнивает заголовок в две строки. */
+.nm-ext {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 clamp(20px, 3vw, 44px);
+}
+
+.nm-ext-a {
+  display: block;
+  padding: clamp(16px, 2vw, 24px) 0;
+  border-top: 1px solid var(--nm-rule);
+  text-decoration: none;
+  color: inherit;
+}
+
+.nm-ext-p {
+  display: block;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-ext-t {
+  display: -webkit-box;
+  margin-top: 11px;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(15px, 1.35vw, 19px);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 3.75em;
+}
+
+.nm-ext-a:hover .nm-ext-t {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+/* ---- Log: каналы ---- */
+
+.nm-ch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 clamp(20px, 3vw, 44px);
+}
+
+.nm-ch-a {
+  display: block;
+  padding: clamp(15px, 1.9vw, 22px) 0;
+  border-top: 1px solid var(--nm-rule);
+  text-decoration: none;
+  color: inherit;
+}
+
+.nm-ch-n {
+  display: block;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(16px, 1.5vw, 21px);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.nm-ch-a:hover .nm-ch-n {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+.nm-ch-d {
+  display: block;
+  margin-top: 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--nm-dim);
+}
+
+/* ---- Log: подписка ---- */
+
+.nm-subs {
+  border: 1px solid var(--nm-ink);
+  padding: clamp(22px, 3.4vw, 46px);
+}
+
+.nm-subs-t {
+  font-family: var(--nm-display);
+  font-weight: 700;
+  font-size: clamp(22px, 3.2vw, 44px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.nm-subs-d {
+  margin: clamp(12px, 1.6vw, 18px) 0 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  max-width: 48ch;
+}
+
+/* Ширина ограничена: поле для почты во всю колонку в 1300 точек выглядит
+   как опечатка, а не как поле на одно слово. */
+.nm-subs-ways {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: clamp(12px, 1.6vw, 20px);
+  margin-top: clamp(20px, 2.6vw, 32px);
+  max-width: 660px;
+}
+
+/* Поле и кнопка одной высотой и одной линейкой: это одна деталь, разрезанная
+   пополам, а не две рядом стоящие. */
+.nm-subs-mail {
+  display: flex;
+  flex: 1 1 280px;
+  min-width: 0;
+  border: 1px solid var(--nm-ink);
+}
+
+.nm-subs-mail input {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: none;
+  border: 0;
+  padding: 0 16px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--nm-ink);
+}
+
+.nm-subs-mail input::placeholder {
+  color: var(--nm-dim);
+}
+
+.nm-subs-mail input:focus {
+  outline: none;
+  background: #f1f1ee;
+}
+
+.nm-subs-mail button {
+  flex: none;
+  appearance: none;
+  background: none;
+  border: 0;
+  border-left: 1px solid var(--nm-ink);
+  padding: 16px clamp(16px, 2.4vw, 28px);
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nm-ink);
+  cursor: pointer;
+}
+
+.nm-subs-mail button:hover:not(:disabled) {
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-subs-mail button:disabled {
+  color: var(--nm-dim);
+  cursor: default;
+}
+
+.nm-subs-note {
+  margin: clamp(14px, 1.8vw, 20px) 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--nm-dim);
+}
+
+/* Пустая рубрика. Строка, а не картинка с текстом: сказать «пока ничего нет»
+   можно одной фразой. */
+.nm-empty {
+  margin: 0;
+  padding: clamp(30px, 5vw, 60px) 0;
+  border-top: 1px solid var(--nm-rule);
+  border-bottom: 1px solid var(--nm-rule);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
 /* ---- Работы и опыт: строка с двумя колонками ---- */
 
 .nm-work {
@@ -889,6 +1336,12 @@
   .nm-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  /* заголовки внешних публикаций длинные (одна строка в девяносто знаков),
+     в трёх колонках на планшете они уже не читаются */
+  .nm-ext {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 860px) {
@@ -949,6 +1402,16 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* Log: главная статья складывается, обложка над текстом. Каналы в две
+     колонки давали строку с описанием в четыре слова. */
+  .nm-big {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(18px, 4vw, 28px);
+  }
+  .nm-ch {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   /* портрет в «Обо мне» ведёт себя как фото первого экрана главной:
      текст добирает себе правый отступ, картинка выходит к обоим краям */
   .nm-about-in {
@@ -1006,5 +1469,43 @@
   .nm-btn {
     display: block;
     text-align: center;
+  }
+
+  /* Log на телефоне */
+
+  /* Подкаст не может держать квадратную обложку во всю ширину экрана: она
+     заняла бы экран целиком и полоса перестала бы быть полосой. */
+  .nm-pod {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .nm-pod-ph {
+    max-width: 190px;
+  }
+
+  .nm-ext {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* в один столбец выравнивать высоты нечем и незачем */
+  .nm-ext-t {
+    min-height: 0;
+  }
+
+  /* Подкаст в строке рубрик перестаёт прижиматься к правому краю: при
+     переносе он оказывался один на своей строке далеко от остальных. */
+  .nm-rub-pod {
+    margin-left: 0;
+  }
+
+  /* Телеграм и почта встают друг под друга, каждый во всю ширину.
+
+     Сетка, а не flex-direction: column. Колонка с переносом считает свою
+     ширину по самому широкому содержимому, и на 360 точках кнопка «Читать
+     в телеграме» растягивала обе строки до 326 точек при доступных 315 —
+     страница получала семь точек прокрутки вбок. Колонка сетки, наоборот,
+     задаёт ширину сама, а текст в кнопке переносится. */
+  .nm-subs-ways {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
