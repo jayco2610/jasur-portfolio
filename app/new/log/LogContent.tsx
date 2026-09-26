@@ -56,9 +56,9 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
             </div>
             <Photo
               className="nm-log-hero-photo"
-              src="/new/log-bg.jpg"
+              src="/new/log-hero.png"
               alt="Log"
-              ratio="4:5"
+              ratio="1:1"
             />
           </div>
         </section>
