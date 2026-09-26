@@ -23,7 +23,8 @@ import { SHOW } from "@/lib/show";
 
    Подкаст стоит в той же строке, но рубрикой не является: это другой вид
    материала, а не другая тема. Поэтому он отделён линейкой и ведёт на
-   /podcast, как и на живой странице, а не фильтрует список. */
+   /new/podcast, то есть на страницу подкаста внутри макета, а не фильтрует
+   список. */
 
 export default function LogContent({ posts }: { posts: CardPost[] }) {
   const [activeRubric, setActiveRubric] = useState<string | null>(null);
@@ -112,7 +113,7 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
             ноль, и придумывать их нельзя. Название, описание и обложка берутся
             из lib/show.ts, то есть оттуда же, откуда их берёт живой сайт. */}
         <section className="nm-wrap nm-sect nm-sect-log">
-          <Link className="nm-pod" href="/podcast">
+          <Link className="nm-pod" href="/new/podcast">
             <Photo
               className="nm-pod-ph"
               src={SHOW.cover}
