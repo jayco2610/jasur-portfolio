@@ -10,12 +10,20 @@ import { useState } from "react";
    системы на сервере. Так заглушка исчезает сразу после того, как файл
    положили и страница обновилась, и одинаково работает и в dev, и в сборке. */
 
-type Ratio = "4:5" | "16:10" | "1:1";
+type Ratio = "4:5" | "16:10" | "1:1" | "3:2";
 
 const RATIO: Record<Ratio, string> = {
   "4:5": "4 / 5",
   "16:10": "16 / 10",
   "1:1": "1 / 1",
+  "3:2": "3 / 2",
+};
+
+const SIZE: Record<Ratio, string> = {
+  "4:5": "1200 × 1500",
+  "16:10": "1600 × 1000",
+  "1:1": "1400 × 1400",
+  "3:2": "1536 × 1024",
 };
 
 export default function Photo({
@@ -44,7 +52,7 @@ export default function Photo({
         <span className="nm-ph-note">
           <b>public{src}</b>
           <span>
-            {ratio} {ratio === "4:5" ? "1200 × 1500" : ratio === "16:10" ? "1600 × 1000" : "1400 × 1400"}
+            {ratio} {SIZE[ratio]}
           </span>
         </span>
       )}

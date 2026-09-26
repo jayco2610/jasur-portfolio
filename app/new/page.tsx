@@ -87,8 +87,11 @@ export default function NewHome() {
 
       {/* корневой layout сайта уже даёт <main>, второй вкладывать нельзя */}
       <div>
-        {/* ——— блок 1. Первый экран ——— */}
-        <section className="nm-wrap nm-hero">
+        {/* ——— блок 1. Первый экран ———
+            Без .nm-wrap: секция сама держит только левый отступ, чтобы
+            фото справа могло дойти до настоящего края окна (см. .nm-hero
+            в new.css). */}
+        <section className="nm-hero">
           <div className="nm-hero-in">
             <div className="nm-hero-text">
               <h1 className="nm-h1">
@@ -112,9 +115,9 @@ export default function NewHome() {
 
             <Photo
               className="nm-hero-photo"
-              src="/new/portret.jpg"
+              src="/new/hero.jpg"
               alt="Jasur Akhmadaliev"
-              ratio="4:5"
+              ratio="3:2"
             />
           </div>
         </section>
