@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import Photo from "../Photo";
 import { NewFooter } from "../Chrome";
@@ -11,37 +8,29 @@ import Subscribe from "./Subscribe";
 import { PUBLISHED, CHANNELS } from "./elsewhere";
 import { SHOW } from "@/lib/show";
 
-/* Страница Log целиком: издание, а не список ссылок.
+/* Страница Log целиком: издание, а не список ссылок. Показывает все материалы.
 
-   Клиентский компонент, потому что рубрики фильтруют список на месте. На
-   живой странице каждая рубрика это отдельный адрес /blog/tema/[ключ], и
-   переход перезагружает страницу; здесь Log это раздел одного сайта, и уводить
-   читателя со страницы, чтобы показать те же карточки, незачем. Правило
-   отбора при этом буквально то же, что в lib/blog.getPostsByRubric:
-   p.rubric === ключ. Список статей приходит готовым из page.tsx, файлы читает
-   сервер.
+   Своего состояния у страницы нет, поэтому компонент серверный. Рубрики
+   фильтром на месте больше не работают: у каждой темы свой адрес
+   /new/log/tema/[ключ], как на живом сайте, и отбор живёт там. Список статей
+   приходит готовым из page.tsx, файлы читает сервер.
 
-   Подкаст стоит в той же строке, но рубрикой не является: это другой вид
-   материала, а не другая тема. Поэтому он отделён линейкой и ведёт на
-   /new/podcast, то есть на страницу подкаста внутри макета, а не фильтрует
-   список. */
+   Подкаст стоит в той же строке шапки, но рубрикой не является: это другой вид
+   материала, а не другая тема. Поэтому он отделён точкой и ведёт на
+   /new/podcast, то есть на страницу подкаста внутри макета. */
 
 export default function LogContent({ posts }: { posts: CardPost[] }) {
-  const [activeRubric, setActiveRubric] = useState<string | null>(null);
-
-  const shown = activeRubric === null ? posts : posts.filter((p) => p.rubricKey === activeRubric);
-
   /* Крупной первой встаёт статья с флагом featured, как на живой странице:
      флаг для того и заведён, чтобы поднять материал наверх, не меняя ему
-     дату. Если помеченной нет (а внутри отдельной рубрики её может не быть),
-     берём самую свежую. Порядок остального списка при этом всегда по дате. */
-  const lead = shown.find((p) => p.featured) ?? shown[0];
-  const rest = shown.filter((p) => p.slug !== lead?.slug);
+     дату. Если помеченной нет, берём самую свежую. Порядок остального списка
+     при этом всегда по дате. */
+  const lead = posts.find((p) => p.featured) ?? posts[0];
+  const rest = posts.filter((p) => p.slug !== lead?.slug);
 
   return (
     <>
       {/* Чёрная липкая шапка издания с рубриками и выходом в портфолио */}
-      <LogChrome activeRubric={activeRubric} onRubricChange={setActiveRubric} />
+      <LogChrome />
 
       <div>
         <section className="nm-log-hero">
@@ -103,9 +92,9 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
           </>
         ) : (
           <section className="nm-wrap nm-sect nm-sect-log">
-            <p className="nm-empty">
-              В этой рубрике пока ничего нет. Скоро будет.
-            </p>
+            {/* Срабатывает только если статей нет вообще: рубрики теперь
+                отбирают материалы на своих страницах, а не здесь. */}
+            <p className="nm-empty">Статей пока нет. Скоро будут.</p>
           </section>
         )}
 
