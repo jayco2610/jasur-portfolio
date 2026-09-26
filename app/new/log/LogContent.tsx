@@ -111,29 +111,13 @@ export default function LogContent({ posts }: { posts: CardPost[] }) {
 
             {rest.length > 0 && (
               <>
-                {/* Лента обложек. Идёт сразу за главной статьёй и до сетки:
-                    сначала страница показывает, что материалы разные на вид,
-                    и только потом даёт их списком. */}
-                <section className="nm-wrap nm-sect">
-                  <p className="nm-sec-t">Обложки</p>
-                  <Carousel posts={rest} />
-                </section>
-
+                {/* Лента обложек. Идёт сразу за главной статьёй.
+                    Карусель показывает материалы в движущихся обложках. */}
                 <section className="nm-wrap nm-sect">
                   <p className="nm-sec-t">
                     Свежее · {String(rest.length).padStart(2, "0")}
                   </p>
-                  <div className="nm-grid">
-                    {rest.map((p) => (
-                      <a key={p.slug} className="nm-card" href={p.href}>
-                        <Photo src={p.cover} alt={p.title} ratio="16:10" />
-                        <span className="nm-card-meta">
-                          {p.date} · {p.rubric}
-                        </span>
-                        <span className="nm-card-t">{p.title}</span>
-                      </a>
-                    ))}
-                  </div>
+                  <Carousel posts={rest} />
                 </section>
               </>
             )}
