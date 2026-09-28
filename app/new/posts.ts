@@ -1,4 +1,4 @@
-import { getAllPosts, formatDate, rubricName } from "@/lib/blog";
+import { getAllPosts, formatDate, rubricName, type Post } from "@/lib/blog";
 
 /* Материалы для макета берутся из тех же файлов content/blog, что и живой
    сайт, через lib/blog. Руками список не переписывается: как только выйдет
@@ -13,7 +13,7 @@ export type CardPost = {
   href: string;
   cover: string;
   date: string;
-  /* Название рубрики по-русски: то, что читатель видит в карточке. */
+  /* Название рубрики на языке статьи: то, что читатель видит в карточке. */
   rubric: string;
   /* Ключ рубрики: то, по чему страница Log фильтрует список. Держим рядом
      с названием, потому что фильтр и подпись обязаны совпадать — если
@@ -30,12 +30,42 @@ export type CardPost = {
   featured: boolean;
 };
 
+/* Адрес статьи внутри макета. Одно место на весь /new: карточки на главной,
+   на Log, в рубриках, в ленте «ещё почитать» и перевод в шапке статьи
+   собираются отсюда. Пока здесь стоял /blog/, каждая карточка уводила
+   читателя из нового оформления в старое. */
+export function articleHref(slug: string): string {
+  return `/new/blog/${slug}`;
+}
+
 /* Формат даты по ТЗ один на весь сайт: «17 сентября 2026».
    lib/formatDate отдаёт русскую дату через toLocaleDateString, а он в ru-RU
    всегда дописывает « г.». Отрезаем именно этот хвост, а не форматируем дату
-   заново: названия месяцев остаются на совести платформы, а не наши. */
-function ruDate(date: string): string {
-  return formatDate(date, "ru").replace(/\s*г\.\s*$/, "");
+   заново: названия месяцев остаются на совести платформы, а не наши.
+   Английская дата остаётся такой, как её пишет живая страница статьи:
+   «September 17, 2026». */
+export function cardDate(date: string, lang: "ru" | "en"): string {
+  const d = formatDate(date, lang);
+  return lang === "ru" ? d.replace(/\s*г\.\s*$/, "") : d;
+}
+
+/* Одна карточка из одной статьи. Язык подписи и даты берётся из самой
+   статьи, поэтому английская лента под английской статьёй не получит
+   русских слов. */
+export function toCard(p: Post): CardPost {
+  return {
+    slug: p.slug,
+    href: articleHref(p.slug),
+    // Обложка есть у всех текущих материалов; если у нового её не будет,
+    // Photo покажет заглушку с нужным размером, а не битую картинку.
+    cover: p.cover ?? "",
+    date: cardDate(p.date, p.lang),
+    rubric: rubricName(p.rubric, p.lang),
+    rubricKey: p.rubric,
+    title: p.title,
+    description: p.description,
+    featured: p.featured === true,
+  };
 }
 
 /* Только русские и только опубликованные. Английские версии живут по своим
@@ -49,17 +79,5 @@ export function ruCardPosts(): CardPost[] {
   return getAllPosts()
     .filter((p) => p.lang === "ru")
     .sort((a, b) => b.date.localeCompare(a.date))
-    .map((p) => ({
-      slug: p.slug,
-      href: `/blog/${p.slug}`,
-      // Обложка есть у всех текущих материалов; если у нового её не будет,
-      // Photo покажет заглушку с нужным размером, а не битую картинку.
-      cover: p.cover ?? "",
-      date: ruDate(p.date),
-      rubric: rubricName(p.rubric, "ru"),
-      rubricKey: p.rubric,
-      title: p.title,
-      description: p.description,
-      featured: p.featured === true,
-    }));
+    .map(toCard);
 }

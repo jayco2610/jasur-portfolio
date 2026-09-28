@@ -36,7 +36,18 @@ function subscribeReduced(cb: () => void) {
   return () => mq.removeEventListener("change", cb);
 }
 
-export default function Carousel({ posts }: { posts: CardPost[] }) {
+export default function Carousel({
+  posts,
+  narrow = false,
+  label = "Лента обложек",
+}: {
+  posts: CardPost[];
+  /* В колонке статьи места меньше, там в кадре две карточки, а не три.
+     Так же было на живой странице статьи (car--narrow). */
+  narrow?: boolean;
+  /* Подпись для читалки экрана: под английской статьёй она английская. */
+  label?: string;
+}) {
   const n = posts.length;
   const viewRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -98,7 +109,7 @@ export default function Carousel({ posts }: { posts: CardPost[] }) {
   const items = loop ? [...posts, ...posts, ...posts] : posts;
 
   return (
-    <div className={`nm-car${loop ? " is-live" : ""}`}>
+    <div className={`nm-car${narrow ? " nm-car--narrow" : ""}${loop ? " is-live" : ""}`}>
       <div
         ref={viewRef}
         className="nm-car-view"
@@ -133,7 +144,7 @@ export default function Carousel({ posts }: { posts: CardPost[] }) {
             moved.current = false;
           }
         }}
-        aria-label="Лента обложек"
+        aria-label={label}
       >
         <div ref={trackRef} className="nm-car-track">
           {items.map((post, i) => {

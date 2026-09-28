@@ -20,10 +20,22 @@ export const metadata: Metadata = {
    удаляется вместе с layout и сайт возвращается к обычному виду.
 
    nextjs-portal не трогаем: это оверлей ошибок в режиме разработки,
-   спрятав его, мы перестали бы видеть собственные ошибки. */
+   спрятав его, мы перестали бы видеть собственные ошибки.
+
+   Третья строка чинит липкие элементы. globals.css ставит html и body
+   overflow-x: hidden, чтобы страница не ездила вбок. У body от этого
+   появляется собственная прокрутка (браузер делает overflow-y: auto), и
+   всё position: sticky внутри прилипает к body, который никогда не
+   прокручивается, а не к окну. Поэтому шапки макета (.nm-lab, .nm-head,
+   .nm-log-head) и полка статьи уезжали вместе со страницей, хотя задуманы
+   липкими. На живом сайте ровно та же поломка (шапка журнала и полка
+   статьи тоже не липнут), но globals.css общий, и чинить его отсюда нельзя.
+   overflow-x: clip режет вбок так же, как hidden, но собственной прокрутки
+   не создаёт. Боковую прокрутку всё так же держит html. */
 const isolate = `
 body > *:not(main):not(nextjs-portal) { display: none !important; }
 body { background: #f9f9f7 !important; }
+body { overflow-x: clip !important; overflow-y: visible !important; }
 `;
 
 export default function NewLayout({

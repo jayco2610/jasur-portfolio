@@ -57,28 +57,32 @@ export function NewHeader({ here }: { here?: string }) {
 }
 
 /* Блок 5 по ТЗ: контакты разделены по действию, формы нет, в подвале
-   год и имя. Один и тот же на всех пяти страницах. */
-export function NewFooter() {
+   год и имя. Один и тот же на всех страницах.
+
+   Английский вариант нужен только под английскими статьями: остальной
+   макет русский. Адреса те же, меняются одни подписи. */
+export function NewFooter({ lang = "ru" }: { lang?: "ru" | "en" }) {
+  const ru = lang === "ru";
   return (
     <section className="nm-wrap nm-contacts">
-      <h2 className="nm-h2">Пишите</h2>
+      <h2 className="nm-h2">{ru ? "Пишите" : "Write"}</h2>
 
       <div className="nm-cline">
-        <span className="nm-cline-k">Написать</span>
+        <span className="nm-cline-k">{ru ? "Написать" : "Message"}</span>
         <a className="nm-cline-v nm-ink-link" href="https://t.me/biznesmind">
           @biznesmind
         </a>
       </div>
 
       <div className="nm-cline">
-        <span className="nm-cline-k">Читать</span>
+        <span className="nm-cline-k">{ru ? "Читать" : "Read"}</span>
         <a className="nm-cline-v" href="https://t.me/head_of_ceo">
           @head_of_ceo
         </a>
       </div>
 
       <p className="nm-small">
-        <a href="mailto:jasurakhmadaliev283@gmail.com">почта</a>
+        <a href="mailto:jasurakhmadaliev283@gmail.com">{ru ? "почта" : "email"}</a>
         <a href="https://www.linkedin.com/in/jasur-akhmadaliev">LinkedIn</a>
         <a href="https://github.com/jayco2610">GitHub</a>
       </p>

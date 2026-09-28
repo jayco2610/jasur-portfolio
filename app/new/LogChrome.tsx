@@ -2,11 +2,24 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage, type Lang } from "@/context/LanguageContext";
 import { RUBRICS, rubricName, MAGAZINE_NAME } from "@/lib/rubrics";
 
-/* Шапка издания. Стоит на списке Log, на странице рубрики и на странице
-   подкаста: подкаст это часть того же издания, а не отдельный раздел сайта.
+/* Что шапке нужно знать, когда она стоит над статьёй. На списке, в рубрике
+   и в подкасте проп не передаётся, и шапка ведёт себя как раньше. */
+export type ArticleContext = {
+  /* Язык самой статьи. Над статьёй шапка говорит на её языке и отмечает
+     его в переключателе: переключатель здесь про текст, а не про интерфейс. */
+  lang: Lang;
+  /* Рубрика статьи: подсвечивается в строке рубрик. */
+  rubric: string;
+  /* Адрес парной статьи на другом языке. Нет пары — переключатель неактивен. */
+  twinHref?: string;
+};
+
+/* Шапка издания. Стоит на списке Log, на странице рубрики, на странице
+   подкаста и над каждой статьёй: подкаст и статьи это части того же
+   издания, а не отдельные разделы сайта.
 
    Рубрики это ссылки на отдельные адреса /new/log/tema/[ключ], как на живом
    сайте (components/magazine/MagChrome.tsx). Раньше это были кнопки,
@@ -15,14 +28,80 @@ import { RUBRICS, rubricName, MAGAZINE_NAME } from "@/lib/rubrics";
 
    Подсветка берётся из адреса, а не из состояния в памяти: адрес и есть
    состояние. Поэтому при возврате браузером назад подсветка не может
-   разойтись с тем, что на странице, и шапке больше не нужны пропсы. */
-export default function LogChrome() {
-  const { lang, toggle } = useLanguage();
+   разойтись с тем, что на странице.
+
+   Исключение одно: страница статьи. Её адрес /new/blog/[slug] ни с одной
+   рубрикой не совпадает, поэтому рубрику статьи шапке сообщает сама
+   страница через проп article. Проверка по адресу при этом остаётся как
+   была, проп только добавляет подсветку и не отменяет её. aria-current
+   ставится по-прежнему только по адресу: статья не является страницей
+   рубрики, читалка экрана не должна говорить «текущая страница: Процесс».
+
+   Переключатель языка над статьёй работает как на живой странице статьи
+   (components/magazine/MagChrome.tsx): если у текста есть перевод, он
+   уводит на перевод и заодно переключает язык интерфейса. Одно отличие:
+   живая шапка переключает язык вслепую (toggle), и если человек пришёл
+   по ссылке на английскую статью с русским интерфейсом, отметка в
+   переключателе и язык текста расходились навсегда. Здесь отметка стоит
+   на языке статьи, а при переходе интерфейс ставится ровно в язык перевода.
+   Если перевода нет, переключатель неактивен и никуда не ведёт. */
+export default function LogChrome({ article }: { article?: ArticleContext } = {}) {
+  const { lang: uiLang, toggle } = useLanguage();
   const pathname = usePathname();
+  const lang = article?.lang ?? uiLang;
   const ru = lang === "ru";
   const name = MAGAZINE_NAME[lang];
 
   const cls = (on: boolean) => `nm-log-nav-btn${on ? " is-on" : ""}`;
+
+  const langMarks = (
+    <>
+      <span className={ru ? "is-on" : ""}>RU</span>
+      <i aria-hidden="true">/</i>
+      <span className={ru ? "" : "is-on"}>EN</span>
+    </>
+  );
+
+  let langSwitch;
+  if (!article) {
+    langSwitch = (
+      <button
+        type="button"
+        onClick={toggle}
+        className="nm-log-lang"
+        aria-label="Toggle language"
+      >
+        {langMarks}
+      </button>
+    );
+  } else if (article.twinHref) {
+    const target: Lang = article.lang === "ru" ? "en" : "ru";
+    langSwitch = (
+      <Link
+        href={article.twinHref}
+        className="nm-log-lang"
+        hrefLang={target}
+        aria-label={ru ? "Read in English" : "Читать по-русски"}
+        // Интерфейс идёт следом за текстом: на английской статье и списки,
+        // и подписи дальше будут английскими.
+        onClick={() => {
+          if (uiLang !== target) toggle();
+        }}
+      >
+        {langMarks}
+      </Link>
+    );
+  } else {
+    langSwitch = (
+      <span
+        className="nm-log-lang is-off"
+        aria-disabled="true"
+        title={ru ? "Перевода пока нет" : "No translation yet"}
+      >
+        {langMarks}
+      </span>
+    );
+  }
 
   return (
     <div className="nm-log-head">
@@ -43,13 +122,14 @@ export default function LogChrome() {
           </Link>
           {RUBRICS.map((r) => {
             const href = `/new/log/tema/${r.key}`;
-            const on = pathname === href;
+            const here = pathname === href;
+            const on = here || article?.rubric === r.key;
             return (
               <Link
                 key={r.key}
                 href={href}
                 className={cls(on)}
-                aria-current={on ? "page" : undefined}
+                aria-current={here ? "page" : undefined}
               >
                 {rubricName(r.key, lang)}
               </Link>
@@ -66,16 +146,7 @@ export default function LogChrome() {
 
         {/* Переключатель языка и выход */}
         <div className="nm-log-head-right">
-          <button
-            type="button"
-            onClick={toggle}
-            className="nm-log-lang"
-            aria-label="Toggle language"
-          >
-            <span className={ru ? "is-on" : ""}>RU</span>
-            <i aria-hidden="true">/</i>
-            <span className={ru ? "" : "is-on"}>EN</span>
-          </button>
+          {langSwitch}
           <Link href="/new" className="nm-log-exit">
             <span aria-hidden="true">←</span>
             <span className="nm-log-exit-full">

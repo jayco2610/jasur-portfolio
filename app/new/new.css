@@ -2014,3 +2014,858 @@
     gap: clamp(18px, 4vw, 28px);
   }
 }
+
+/* ============ Мастерская: зазор под первым экраном ============
+   Нижний отступ первого экрана (.nm-hero) складывался с верхним отступом
+   раздела «Что внутри» (.nm-sect), и между фото и разделом стояло около
+   двухсот точек пустоты. Оба отступа урезаны вдвое модификаторами только
+   на этой странице: .nm-hero и .nm-sect общие для главной и других веток,
+   их не трогаем. */
+
+.nm-hero.nm-hero--ws {
+  padding-bottom: clamp(24px, 4vw, 55px);
+}
+
+.nm-sect.nm-sect--ws {
+  padding-top: clamp(22px, 3.25vw, 48px);
+}
+
+/* ============ Страница статьи ============
+   /new/blog/[slug]. Состав блоков как у живой статьи, оформление макета:
+   Unbounded в заголовках, Onest в тексте, линейки вместо рамок и заливок.
+   Оранжевого на странице нет: в издании он живёт только в шапке, и там
+   он и остаётся (отметка рубрики статьи). */
+
+/* Переключатель языка над статьёй бывает ссылкой на перевод и бывает
+   неактивным, когда перевода нет. На списке Log он по-прежнему кнопка. */
+.nm-log-lang[href] {
+  text-decoration: none;
+}
+
+.nm-log-lang.is-off {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.nm-log-lang.is-off:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ---- хлебные крошки ---- */
+
+.nm-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  padding-top: clamp(22px, 2.6vw, 34px);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-crumbs a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.nm-crumbs a:hover {
+  color: var(--nm-ink);
+}
+
+.nm-crumbs b {
+  font-weight: 500;
+  color: var(--nm-ink);
+}
+
+/* ---- разворот: колонка текста и полка ---- */
+
+/* Кегль основного текста и ширина колонки завязаны друг на друга: колонка
+   равна 34 кеглям. Так в строке остаётся одно и то же число знаков на любом
+   экране (замер: около 65 в русском тексте и около 72 в английском), а не
+   растёт при уменьшении кегля. На колонке в 43rem было 73 и 81. */
+.nm-art {
+  --nm-art-fs: clamp(16.5px, 1.25vw, 18px);
+  --nm-art-col: calc(var(--nm-art-fs) * 34);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  padding-top: clamp(22px, 2.6vw, 34px);
+}
+
+.nm-art-main {
+  min-width: 0;
+  max-width: var(--nm-art-col);
+}
+
+@media (min-width: 1100px) {
+  .nm-art {
+    grid-template-columns: minmax(0, 1fr) 286px;
+    align-items: start;
+  }
+
+  /* Колонка текста стоит по центру своей части разворота, а не липнет
+     к левому краю: полка справа уравновешивает её. */
+  .nm-art-main {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+/* ---- шапка статьи ---- */
+
+.nm-art-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-art-twin {
+  color: var(--nm-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--nm-ink);
+  padding-bottom: 2px;
+}
+
+.nm-art-twin:hover {
+  color: var(--nm-dim);
+  border-color: var(--nm-dim);
+}
+
+/* Заголовок строчными, как заголовки статей в карточках и в «Главном» на
+   Log: названия статей длинные, прописными они превращаются в стену. */
+.nm-art-h1 {
+  margin: clamp(16px, 2vw, 24px) 0 0;
+  font-family: var(--nm-display);
+  font-weight: 700;
+  font-size: clamp(28px, 3.3vw, 46px);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  overflow-wrap: break-word;
+}
+
+.nm-art-lead {
+  margin: clamp(16px, 2vw, 22px) 0 0;
+  padding-bottom: clamp(20px, 2.4vw, 28px);
+  border-bottom: 1px solid var(--nm-ink);
+  font-size: clamp(17px, 1.45vw, 20px);
+  line-height: 1.5;
+}
+
+.nm-nolang {
+  margin: 18px 0 0;
+  padding: 4px 0 4px 14px;
+  border-left: 2px solid var(--nm-ink);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--nm-dim);
+}
+
+.nm-art-orig {
+  margin: 20px 0 0;
+  padding-left: 14px;
+  border-left: 1px solid var(--nm-rule);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--nm-dim);
+}
+
+.nm-art-orig a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.nm-art-orig a:hover {
+  color: var(--nm-ink);
+}
+
+/* Обложка той же пропорции, что карточки. Снимки в обложках вертикальные,
+   главное в них сверху, поэтому полоса режется снизу, а не по центру. */
+.nm-art-cover {
+  margin-top: clamp(24px, 3vw, 36px);
+}
+
+.nm-art-cover img {
+  object-position: 50% 0;
+}
+
+/* Нарисованная обложка-постер показывается целиком: у неё своя композиция
+   и свой заголовок, резать её в полосу нечестно. */
+.nm-art-poster {
+  margin-top: clamp(24px, 3vw, 36px);
+}
+
+.nm-art-poster img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 82vh;
+  margin: 0 auto;
+}
+
+/* ---- текст статьи ----
+   Разметка приходит из markdown готовым html, поэтому стили вешаются на
+   теги внутри .nm-body. Вертикальный ритм держит один отступ между любыми
+   соседними блоками, заголовки и иллюстрации получают больше воздуха. */
+
+.nm-body {
+  margin-top: clamp(28px, 3.4vw, 44px);
+  font-size: var(--nm-art-fs);
+  line-height: 1.7;
+  overflow-wrap: break-word;
+}
+
+.nm-body > * {
+  margin: 0;
+}
+
+.nm-body > * + * {
+  margin-top: 1.15em;
+}
+
+.nm-body h2 {
+  margin-top: 2.1em;
+  padding-top: 0.85em;
+  border-top: 1px solid var(--nm-ink);
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(20px, 1.85vw, 27px);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+}
+
+.nm-body h3 {
+  margin-top: 1.8em;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.nm-body h2 + *,
+.nm-body h3 + * {
+  margin-top: 0.8em;
+}
+
+/* Заголовки уходят под липкую шапку издания, если не оставить запас. */
+.nm-body h2,
+.nm-body h3,
+.nm-body .nm-fig {
+  scroll-margin-top: 80px;
+}
+
+.nm-body a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--nm-dim);
+}
+
+.nm-body a:hover {
+  text-decoration-color: var(--nm-ink);
+}
+
+.nm-body strong {
+  font-weight: 700;
+}
+
+.nm-body ul,
+.nm-body ol {
+  padding-left: 1.4em;
+}
+
+.nm-body ul {
+  list-style: none;
+}
+
+.nm-body ul > li {
+  position: relative;
+}
+
+/* Маркер списка тот же квадрат, что точка статуса на главной. */
+.nm-body ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.15em;
+  top: 0.7em;
+  width: 5px;
+  height: 5px;
+  background: var(--nm-ink);
+}
+
+.nm-body ol {
+  list-style: decimal;
+}
+
+.nm-body ol > li::marker {
+  color: var(--nm-dim);
+  font-size: 0.9em;
+}
+
+.nm-body li + li {
+  margin-top: 0.5em;
+}
+
+.nm-body li > p {
+  margin: 0;
+}
+
+.nm-body li > p + p {
+  margin-top: 0.6em;
+}
+
+.nm-body blockquote {
+  margin-top: 1.8em;
+  padding-left: 22px;
+  border-left: 2px solid var(--nm-ink);
+  font-size: 1.12em;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.nm-body blockquote + * {
+  margin-top: 1.8em;
+}
+
+.nm-body blockquote p {
+  margin: 0;
+}
+
+.nm-body blockquote p + p {
+  margin-top: 0.8em;
+}
+
+.nm-body code {
+  font-size: 0.88em;
+  background: #efefec;
+  padding: 2px 5px;
+}
+
+.nm-body pre {
+  border: 1px solid var(--nm-rule);
+  padding: 18px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.nm-body pre code {
+  background: none;
+  padding: 0;
+}
+
+.nm-body hr {
+  border: 0;
+  border-top: 1px solid var(--nm-rule);
+  margin: 2.4em 0;
+}
+
+.nm-body img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Таблица живёт в своём блоке с прокруткой: на телефоне четыре колонки
+   цифр не помещаются, и прокручиваться должна таблица, а не страница. */
+.nm-body .nm-tbl {
+  overflow-x: auto;
+}
+
+.nm-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88em;
+  line-height: 1.45;
+}
+
+.nm-body th,
+.nm-body td {
+  text-align: left;
+  vertical-align: top;
+  padding: 10px 16px 10px 0;
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-body th:last-child,
+.nm-body td:last-child {
+  padding-right: 0;
+}
+
+.nm-body th {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+  border-bottom-color: var(--nm-ink);
+}
+
+/* ---- иллюстрации в тексте ----
+   Номер и подпись собирает lib/blog. Тонкая рамка как у скриншотов в
+   «Работах»: светлый скриншот на светлой странице без неё расплывается. */
+
+.nm-body .nm-fig {
+  margin-top: 2em;
+}
+
+.nm-body .nm-fig + * {
+  margin-top: 2em;
+}
+
+.nm-fig img {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--nm-rule);
+}
+
+.nm-fig figcaption {
+  margin-top: 10px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--nm-dim);
+}
+
+.nm-fig figcaption b {
+  margin-right: 6px;
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nm-ink);
+}
+
+/* ---- блоки после текста ---- */
+
+.nm-art-sec {
+  margin-top: clamp(44px, 5.4vw, 72px);
+}
+
+/* Подписка в колонке статьи уже, чем на всю ширину Log: заголовок ниже,
+   иначе «ЧТОБЫ НЕ ПРОПУСТИТЬ» не помещается в строку. */
+.nm-art-sec .nm-subs-t {
+  font-size: clamp(22px, 2.4vw, 32px);
+}
+
+/* источники */
+
+.nm-src ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: nm-src;
+}
+
+.nm-src li {
+  counter-increment: nm-src;
+  position: relative;
+  padding: 14px 0 14px 36px;
+  border-top: 1px solid var(--nm-rule);
+}
+
+.nm-src li:last-child {
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-src li::before {
+  content: counter(nm-src, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 17px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--nm-dim);
+}
+
+.nm-src a {
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--nm-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--nm-rule);
+  overflow-wrap: anywhere;
+}
+
+.nm-src a:hover {
+  text-decoration-color: var(--nm-ink);
+}
+
+.nm-src span {
+  display: block;
+  margin-top: 5px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+/* поделиться */
+
+.nm-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--nm-ink);
+}
+
+.nm-share-k {
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-share-a {
+  appearance: none;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--nm-ink);
+  padding: 0 0 3px;
+  font: inherit;
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nm-ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nm-share-a:hover {
+  color: var(--nm-dim);
+  border-color: var(--nm-dim);
+}
+
+/* автор */
+
+.nm-author {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: clamp(18px, 2.4vw, 28px);
+  align-items: start;
+  margin-top: clamp(36px, 4.4vw, 56px);
+  padding-top: clamp(22px, 2.6vw, 32px);
+  border-top: 1px solid var(--nm-rule);
+}
+
+/* Тот же портрет, что в «Обо мне», и так же в чёрно-белом. */
+.nm-author-ph {
+  display: block;
+  width: 92px;
+  height: 92px;
+  object-fit: cover;
+  object-position: 50% 22%;
+  filter: grayscale(1) contrast(1.06);
+}
+
+.nm-author-n {
+  margin: 0;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.nm-author-d {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 46ch;
+}
+
+.nm-author-l {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  margin: 16px 0 0;
+}
+
+.nm-author-l a {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nm-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--nm-ink);
+  padding-bottom: 3px;
+}
+
+.nm-author-l a:hover {
+  color: var(--nm-dim);
+  border-color: var(--nm-dim);
+}
+
+/* ещё почитать */
+
+/* В колонке статьи в кадре две карточки и на широком экране: три обложки
+   в колонку в семьсот точек мельчат. */
+@media (min-width: 1100px) {
+  .nm-car--narrow .nm-car-view {
+    --per: 2;
+  }
+}
+
+/* Карточки в ленте одного роста, нижние линейки на одной линии. Слайды
+   ленты уже тянутся до самого высокого (flex), карточка тянется внутри
+   слайда, а её содержимое сделано одинаковым по высоте: подпись в одну
+   строку, заголовок ровно в две, и так на любой ширине, в том числе там,
+   где общее правило для узких экранов снимает высоту заголовка. */
+.nm-next .nm-card {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-next .nm-card-meta {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nm-next .nm-card-t {
+  min-height: 2.4em;
+}
+
+/* нижняя строка издания */
+
+.nm-art-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 20px;
+  margin-top: clamp(48px, 6vw, 88px);
+  padding-top: 18px;
+  border-top: 1px solid var(--nm-ink);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-art-foot a {
+  color: var(--nm-ink);
+  text-decoration: none;
+}
+
+.nm-art-foot a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---- полка: главы, картинки, ссылки ----
+   На широком экране стоит справа и едет вместе с текстом, на узком
+   поднимается над статьёй, как на живой странице. */
+
+.nm-rail {
+  min-width: 0;
+  order: -1;
+}
+
+@media (max-width: 1099px) {
+  .nm-rail {
+    max-width: var(--nm-art-col);
+  }
+}
+
+@media (min-width: 1100px) {
+  .nm-rail {
+    order: 0;
+    position: sticky;
+    top: 78px;
+    max-height: calc(100vh - 98px);
+    overflow-y: auto;
+    padding-bottom: 20px;
+  }
+}
+
+.nm-rail-in {
+  border-top: 1px solid var(--nm-ink);
+  padding-top: 14px;
+}
+
+/* Вкладки одной деталью, разрезанной на части, как поле и кнопка
+   подписки: общая рамка, внутренние линейки, выбранная залита. */
+.nm-rail-tabs {
+  display: flex;
+  margin-bottom: 16px;
+  border: 1px solid var(--nm-ink);
+}
+
+.nm-rail-tabs button {
+  flex: 1 1 0;
+  min-width: 0;
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 10px 4px;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--nm-dim);
+  cursor: pointer;
+}
+
+.nm-rail-tabs button + button {
+  border-left: 1px solid var(--nm-ink);
+}
+
+.nm-rail-tabs button i {
+  font-style: normal;
+}
+
+.nm-rail-tabs button:hover {
+  color: var(--nm-ink);
+}
+
+.nm-rail-tabs button.is-on {
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-toc {
+  display: flex;
+  flex-direction: column;
+}
+
+.nm-toc a {
+  padding: 8px 0 8px 14px;
+  border-left: 2px solid var(--nm-rule);
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--nm-ink);
+  text-decoration: none;
+}
+
+.nm-toc a.is-sub {
+  padding-left: 28px;
+  font-size: 12.5px;
+}
+
+.nm-toc a:hover {
+  border-color: var(--nm-dim);
+}
+
+/* Текущая глава: чёрная линейка и полужирный. */
+.nm-toc a.is-here {
+  border-color: var(--nm-ink);
+  font-weight: 500;
+}
+
+.nm-rail-figs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.nm-rail-figs a {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  color: var(--nm-ink);
+  text-decoration: none;
+}
+
+.nm-rail-figs img {
+  display: block;
+  width: 80px;
+  height: 50px;
+  object-fit: cover;
+  object-position: 50% 0;
+  border: 1px solid var(--nm-rule);
+}
+
+.nm-rail-figs b {
+  display: block;
+  font-weight: 500;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nm-rail-figs em {
+  display: block;
+  margin-top: 4px;
+  font-style: normal;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--nm-dim);
+}
+
+.nm-rail-figs a:hover em {
+  color: var(--nm-ink);
+}
+
+.nm-rail-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: nm-rl;
+}
+
+.nm-rail-links li {
+  counter-increment: nm-rl;
+  position: relative;
+  padding: 10px 0 10px 26px;
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-rail-links li::before {
+  content: counter(nm-rl);
+  position: absolute;
+  left: 0;
+  top: 11px;
+  font-size: 11px;
+  color: var(--nm-dim);
+}
+
+.nm-rail-links a {
+  font-size: 13px;
+  line-height: 1.38;
+  color: var(--nm-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--nm-rule);
+  overflow-wrap: anywhere;
+}
+
+.nm-rail-links a:hover {
+  text-decoration-color: var(--nm-ink);
+}
+
+.nm-rail-links span {
+  display: block;
+  margin-top: 4px;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+/* ---- статья на телефоне ---- */
+
+@media (max-width: 620px) {
+  /* Портрет над текстом, как на живой странице: рядом с ним на телефоне
+     под описание оставалось двести с небольшим точек. */
+  .nm-author {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

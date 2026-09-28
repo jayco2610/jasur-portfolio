@@ -13,11 +13,18 @@ import { useState } from "react";
 
    Событий аналитики здесь нет намеренно, в отличие от старого компонента:
    /new это макет, и его нажатия не должны подмешиваться в цифры живого
-   сайта. При переносе на прод вернуть track/hit. */
+   сайта. При переносе на прод вернуть track/hit.
+
+   Английские подписи дословно из живого компонента
+   (components/magazine/Subscribe.tsx): блок стоит и под английскими
+   статьями, и русские слова там были бы дырой в переводе. Язык приходит
+   пропом от страницы, а не из интерфейса: под английским текстом подписка
+   английская, что бы ни было выбрано в переключателе раньше. */
 
 type State = "idle" | "sending" | "done" | "bad" | "off";
 
-export default function Subscribe() {
+export default function Subscribe({ lang = "ru" }: { lang?: "ru" | "en" }) {
+  const ru = lang === "ru";
   const [email, setEmail] = useState("");
   const [state, setState] = useState<State>("idle");
 
@@ -45,10 +52,11 @@ export default function Subscribe() {
 
   return (
     <section className="nm-subs">
-      <h2 className="nm-subs-t">Чтобы не пропустить</h2>
+      <h2 className="nm-subs-t">{ru ? "Чтобы не пропустить" : "So you do not miss it"}</h2>
       <p className="nm-subs-d">
-        Новая статья или выпуск подкаста, ничего больше. Рассылки по расписанию
-        не будет.
+        {ru
+          ? "Новая статья или выпуск подкаста, ничего больше. Рассылки по расписанию не будет."
+          : "A new piece or a podcast episode, nothing else. No scheduled newsletter."}
       </p>
 
       <div className="nm-subs-ways">
@@ -58,7 +66,7 @@ export default function Subscribe() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Читать в телеграме
+          {ru ? "Читать в телеграме" : "Follow on Telegram"}
         </a>
 
         <form className="nm-subs-mail" onSubmit={send}>
@@ -69,23 +77,26 @@ export default function Subscribe() {
               setEmail(e.target.value);
               if (state !== "idle" && state !== "sending") setState("idle");
             }}
-            placeholder="Почта"
-            aria-label="Почта"
+            placeholder={ru ? "Почта" : "Email"}
+            aria-label={ru ? "Почта" : "Email"}
             required
             disabled={state === "done"}
           />
           <button type="submit" disabled={state === "sending" || state === "done"}>
-            {state === "sending" ? "…" : "Подписаться"}
+            {state === "sending" ? "…" : ru ? "Подписаться" : "Subscribe"}
           </button>
         </form>
       </div>
 
       {state !== "idle" && state !== "sending" && (
         <p className="nm-subs-note">
-          {state === "done" && "Готово. Напишу, когда выйдет новое."}
-          {state === "bad" && "Проверьте адрес."}
+          {state === "done" &&
+            (ru ? "Готово. Напишу, когда выйдет новое." : "Done. I will write when something new is out.")}
+          {state === "bad" && (ru ? "Проверьте адрес." : "Check the address.")}
           {state === "off" &&
-            "Подписка по почте сейчас не работает. В телеграме точно не пропустите."}
+            (ru
+              ? "Подписка по почте сейчас не работает. В телеграме точно не пропустите."
+              : "Email signup is down right now. Telegram works.")}
         </p>
       )}
     </section>

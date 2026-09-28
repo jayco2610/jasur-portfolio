@@ -44,8 +44,10 @@ export default function NewWorkshop() {
       <div>
         {/* Первый экран устроен как на главной: секция без .nm-wrap, текст
             слева, фото справа доходит до края окна (классы .nm-hero*).
-            Кадр целиком, со своим фоном, прямые края, без обработки. */}
-        <section className="nm-hero">
+            Кадр целиком, со своим фоном, прямые края, без обработки.
+            Модификатор --ws урезает нижний отступ: здесь он складывался
+            с верхним отступом «Что внутри» в двести точек пустоты. */}
+        <section className="nm-hero nm-hero--ws">
           <div className="nm-hero-in">
             <div className="nm-hero-text">
               <h1 className="nm-h1-p">
@@ -71,7 +73,7 @@ export default function NewWorkshop() {
         </section>
 
         {/* ——— блок 2. Что внутри ——— */}
-        <section className="nm-wrap nm-sect">
+        <section className="nm-wrap nm-sect nm-sect--ws">
           <p className="nm-sec-t">Что внутри</p>
           <div>
             {INSIDE.map((i) => (
