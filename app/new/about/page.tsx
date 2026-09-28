@@ -80,7 +80,7 @@ export default function NewAbout() {
               className="nm-about-photo"
               src="/new/portret.jpg"
               alt="Jasur Akhmadaliev"
-              ratio="4:5"
+              ratio="2:3"
             />
           </div>
         </section>
