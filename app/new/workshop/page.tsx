@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Photo from "../Photo";
 import { NewHeader, NewFooter } from "../Chrome";
 
 export const metadata: Metadata = {
@@ -41,17 +42,31 @@ export default function NewWorkshop() {
       <NewHeader here="Мастерская" />
 
       <div>
-        <section className="nm-wrap nm-ptop">
-          <h1 className="nm-h1-p">
-            Запустил шесть проектов.
-            <br />
-            Разбираю каждый
-          </h1>
-          <div className="nm-lead">
-            <p>
-              Что делал, где ошибся, сколько это стоило. Если вы запускаете
-              первый, половину моих граблей вы обойдёте.
-            </p>
+        {/* Первый экран устроен как на главной: секция без .nm-wrap, текст
+            слева, фото справа доходит до края окна (классы .nm-hero*).
+            Кадр целиком, со своим фоном, прямые края, без обработки. */}
+        <section className="nm-hero">
+          <div className="nm-hero-in">
+            <div className="nm-hero-text">
+              <h1 className="nm-h1-p">
+                Запустил шесть проектов.
+                <br />
+                Разбираю каждый
+              </h1>
+              <div className="nm-lead">
+                <p>
+                  Что делал, где ошибся, сколько это стоило. Если вы запускаете
+                  первый, половину моих граблей вы обойдёте.
+                </p>
+              </div>
+            </div>
+
+            <Photo
+              className="nm-hero-photo"
+              src="/new/workshop.jpg"
+              alt="Человек в металлическом лифте нажимает кнопку этажа"
+              ratio="1:1"
+            />
           </div>
         </section>
 

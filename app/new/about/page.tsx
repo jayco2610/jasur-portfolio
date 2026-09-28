@@ -60,28 +60,38 @@ export default function NewAbout() {
       <NewHeader here="Обо мне" />
 
       <div>
-        <section className="nm-ptop nm-about-top">
-          <div className="nm-about-in">
-            <div>
-              <h1 className="nm-h1-p">Обо мне</h1>
-              <div className="nm-lead">
-                <p>
-                  Меня зовут Жасур. Продакт-менеджер: собираю продукты в
-                  одиночку, код, дизайн и тексты делаю сам.
-                </p>
-                <p>
-                  Всё, что собрал, лежит в «Работах», а как это собиралось и что
-                  из этого вышло — в Log, вместе с цифрами.
-                </p>
-              </div>
-            </div>
+        {/* Подача портрета взята со старой страницы (app/page.tsx, раздел
+            «О себе»): заголовок, под линейкой две колонки, слева портрет
+            на треть ширины с подписью «Рис. 01 — Москва / 2026», справа
+            текст. Имени в тексте страницы нет, решение Жасура; в шапке и
+            подвале оно остаётся, это общая обвязка всех страниц. */}
+        <section className="nm-wrap nm-ptop">
+          <h1 className="nm-h1-p">Обо мне</h1>
 
-            <Photo
-              className="nm-about-photo"
-              src="/new/portret.jpg"
-              alt="Jasur Akhmadaliev"
-              ratio="2:3"
-            />
+          <div className="nm-about-in">
+            <figure className="nm-about-fig">
+              <Photo
+                className="nm-about-photo"
+                src="/new/portret.jpg"
+                alt="Портрет"
+                ratio="2:3"
+              />
+              <figcaption className="nm-about-cap">
+                <span>Рис. 01 — Москва</span>
+                <span>2026</span>
+              </figcaption>
+            </figure>
+
+            <div className="nm-about-tx">
+              <p>
+                Продакт-менеджер: собираю продукты в одиночку, код, дизайн и
+                тексты делаю сам.
+              </p>
+              <p>
+                Всё, что собрал, лежит в «Работах», а как это собиралось и что
+                из этого вышло — в Log, вместе с цифрами.
+              </p>
+            </div>
           </div>
         </section>
 

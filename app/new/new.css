@@ -1127,6 +1127,59 @@
   border-color: var(--nm-dim);
 }
 
+/* ---- Работы: карточки со скриншотами ---- */
+
+/* grid-auto-rows: 1fr делает все ряды ростом с самый высокий, то есть
+   карточки одной высоты не только в ряду, но и между рядами. Линейки
+   сетка не рисует, фон под ячейками пустой: шесть карточек при трёх и
+   двух колонках заполняют ряды без дыр. */
+.nm-wk {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: clamp(36px, 4.4vw, 64px) clamp(20px, 3vw, 44px);
+}
+
+.nm-wk-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Рамка у скриншотов остаётся от .nm-ph, тонкая и одинаковая у всех:
+   скриншот светлого сайта на светлой странице без неё расплывается. */
+.nm-wk-shot {
+  display: block;
+}
+
+.nm-wk-n {
+  margin: clamp(16px, 1.8vw, 22px) 0 0;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(19px, 1.8vw, 26px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+
+.nm-wk-d {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.nm-wk-card .nm-work-s {
+  margin-bottom: 0;
+}
+
+/* «Открыть» прижата к низу: при равной высоте карточек ссылки стоят на
+   одной линии, как бы ни различались описания. */
+.nm-wk-l {
+  margin: auto 0 0;
+  padding-top: 18px;
+}
+
 /* Опыт — те же строки, но названия компаний длиннее названий продуктов
    («Консалтинговый проект, фриланс»), поэтому кегль ниже. */
 .nm-exp .nm-work-n {
@@ -1247,29 +1300,65 @@
 
 /* ---- Обо мне ---- */
 
-/* Как первый экран главной: секция несёт только левый отступ, портрет
-   справа доходит до настоящего края окна. */
-.nm-about-top {
-  padding-left: max(var(--nm-pad), calc((100vw - 1440px) / 2 + var(--nm-pad)));
-}
-
+/* Подача как на старой странице: под заголовком линейка, под ней две
+   колонки. Портрет занимает треть контентной колонки (около 410 точек на
+   1440), текст остальные две трети. Портрет больше не доходит до края
+   окна: секция сидит в обычном .nm-wrap. */
 .nm-about-in {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.66fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   gap: clamp(28px, 5vw, 72px);
-  /* По верхнему краю, а не по нижнему: портрет 2:3 заметно выше текстового
-     блока, и при выравнивании по низу над заголовком повисала пустая
-     четверть экрана. */
+  /* По верхнему краю: портрет 2:3 заметно выше текста. */
   align-items: start;
+  border-top: 1px solid var(--nm-rule);
+  margin-top: clamp(22px, 2.8vw, 36px);
+  padding-top: clamp(20px, 2.6vw, 34px);
 }
 
-/* Тот же приём, что у .nm-hero-photo: фон портрета подогнан под фон
-   страницы, серая подложка и рамка заглушки из .nm-ph под настоящим
-   кадром не нужны и не должны быть видны. */
+.nm-about-fig {
+  margin: 0;
+}
+
+/* Серая подложка и рамка заглушки из .nm-ph под настоящим кадром не нужны.
+   Чёрно-белый фильтром, а не отдельным файлом, как на старой странице:
+   grayscale плюс лёгкий контраст, чтобы серый не выглядел выцветшим. */
 .nm-about-photo {
   width: 100%;
   background: transparent;
   border: none;
+}
+
+.nm-about-photo img {
+  filter: grayscale(1) contrast(1.06);
+}
+
+/* Подпись в формате старой страницы: слева номер рисунка и место, справа год. */
+.nm-about-cap {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+/* Кегль крупнее обычного .nm-lead: рядом с портретом в шестьсот точек
+   высотой пятнадцатый кегль терялся. Размер тот же, что у текста рядом с
+   портретом на старой странице. */
+.nm-about-tx {
+  max-width: 62ch;
+}
+
+.nm-about-tx p {
+  margin: 0;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.65;
+}
+
+.nm-about-tx p + p {
+  margin-top: 16px;
 }
 
 /* Значения в строках «Образование» и «Языки» текстовым кеглем: это факты,
@@ -1311,6 +1400,11 @@
   /* заголовки внешних публикаций длинные (одна строка в девяносто знаков),
      в трёх колонках на планшете они уже не читаются */
   .nm-ext {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* работы: три скриншота в ряд на планшете мельчат, два читаются */
+  .nm-wk {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -1383,19 +1477,14 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  /* портрет в «Обо мне» ведёт себя как фото первого экрана главной:
-     текст добирает себе правый отступ, картинка выходит к обоим краям */
+  /* портрет в «Обо мне»: сверху, во всю ширину колонки, но не выше
+     разумного: на планшете 2:3 во всю ширину занял бы полтора экрана */
   .nm-about-in {
     grid-template-columns: minmax(0, 1fr);
-    gap: clamp(26px, 5vw, 40px);
-    align-items: start;
+    gap: clamp(22px, 5vw, 34px);
   }
-  .nm-about-in > *:first-child {
-    padding-right: var(--nm-pad);
-  }
-  .nm-about-photo {
-    width: calc(100% + var(--nm-pad));
-    margin-left: calc(-1 * var(--nm-pad));
+  .nm-about-fig {
+    max-width: 440px;
   }
 }
 
@@ -1436,6 +1525,13 @@
   /* в один столбец выравнивать высоты нечем и незачем */
   .nm-grid .nm-card-t {
     min-height: 0;
+  }
+
+  /* работы в один столбец: равнять высоту не с кем, а 1fr оставил бы
+     пустоту внутри коротких карточек */
+  .nm-wk {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
   }
   .nm-btn {
     display: block;
