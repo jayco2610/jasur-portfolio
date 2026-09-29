@@ -6,7 +6,7 @@ import LeftoversDemo from "./LeftoversDemo";
 export default function NewLeftoversDemo() {
   return (
     <>
-      <NewHeader here="Работы" />
+      <NewHeader here="works" />
       <div>
         <LeftoversDemo />
         <NewFooter />

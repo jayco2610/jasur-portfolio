@@ -26,7 +26,9 @@ type Demo = {
   shot: string;
   name: { en: string; ru: string };
   desc: { en: string; ru: string };
-  tags: string[];
+  /* Метки тоже на двух языках: на старой странице они оставались русскими
+     и в английском каталоге («Кассы», «Алерты», «СБП»). */
+  tags: { en: string[]; ru: string[] };
   live: boolean;
 };
 
@@ -39,7 +41,10 @@ const productDemos: Demo[] = [
       en: "An assistant that answers patients only from the clinic's documents. Step-by-step walkthrough plus the live assistant on Hugging Face.",
       ru: "Ассистент, который отвечает пациентам только по документам клиники. Пошаговый разбор плюс живой ассистент на Hugging Face.",
     },
-    tags: ["RAG", "Hugging Face", "не выдумывает"],
+    tags: {
+      en: ["RAG", "Hugging Face", "does not make things up"],
+      ru: ["RAG", "Hugging Face", "не выдумывает"],
+    },
     live: true,
   },
   {
@@ -50,7 +55,7 @@ const productDemos: Demo[] = [
       en: "My own job search automation: vacancy link in, tailored cover letter out in ~80 seconds. Watch a real run step by step.",
       ru: "Автоматизация моего собственного поиска работы: на входе ссылка на вакансию, на выходе письмо за ~80 секунд. Прогон по шагам.",
     },
-    tags: ["Claude", "n8n", "Telegram"],
+    tags: { en: ["Claude", "n8n", "Telegram"], ru: ["Claude", "n8n", "Telegram"] },
     live: false,
   },
 ];
@@ -64,7 +69,7 @@ const demos: Demo[] = [
       en: "A fan scans a QR on the seat, pays via SBP without getting up, and picks the order up at a separate window. The stand serves ~30% more checks per break.",
       ru: "Болельщик сканирует QR на кресле, платит через СБП не вставая с места и забирает заказ в отдельном окне. Точка пропускает на ~30% больше чеков за перерыв.",
     },
-    tags: ["Telegram WebApp", "СБП", "QR"],
+    tags: { en: ["Telegram WebApp", "SBP", "QR"], ru: ["Telegram WebApp", "СБП", "QR"] },
     live: false,
   },
   {
@@ -75,7 +80,7 @@ const demos: Demo[] = [
       en: "At 7:30 pm AI looks at the counter, writes a push, and sends it to loyal customers nearby. Write-offs go to zero.",
       ru: "В 19:30 ИИ смотрит на витрину, пишет пуш и отправляет его лояльным клиентам рядом. Списания уходят в ноль.",
     },
-    tags: ["iiko", "AI", "Push"],
+    tags: { en: ["iiko", "AI", "Push"], ru: ["iiko", "AI", "Push"] },
     live: true,
   },
   {
@@ -86,7 +91,7 @@ const demos: Demo[] = [
       en: "Check voids, deleted items, and suspicious discounts trigger an instant Telegram alert to the owner: who, where, how much.",
       ru: "Отмены чеков, удаления позиций и подозрительные скидки мгновенно летят алертом владельцу в Telegram: кто, где и на сколько.",
     },
-    tags: ["Кассы", "Telegram", "Алерты"],
+    tags: { en: ["POS", "Telegram", "Alerts"], ru: ["Кассы", "Telegram", "Алерты"] },
     live: false,
   },
   {
@@ -97,7 +102,7 @@ const demos: Demo[] = [
       en: "AI drafts replies to Yandex Maps and 2GIS reviews in the venue's tone. The manager only approves.",
       ru: "ИИ готовит ответы на отзывы в Яндекс Картах и 2ГИС в тоне заведения. Менеджер только утверждает.",
     },
-    tags: ["Яндекс", "2ГИС", "AI"],
+    tags: { en: ["Yandex", "2GIS", "AI"], ru: ["Яндекс", "2ГИС", "AI"] },
     live: true,
   },
 ];
@@ -130,7 +135,7 @@ function DemoCard({
     <Link href={demo.href} className="nm-dm-card">
       <Photo src={demo.shot} alt="" ratio="16:10" />
       <h3 className="nm-dm-card-n">{demo.name[lang]}</h3>
-      <p className="nm-dm-card-s">{demo.tags.join(" · ")}</p>
+      <p className="nm-dm-card-s">{demo.tags[lang].join(" · ")}</p>
       <p className="nm-dm-card-d">{demo.desc[lang]}</p>
       <p className="nm-dm-card-f">
         <span>

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Photo from "../Photo";
 import { NewHeader, NewFooter } from "../Chrome";
+import { ByLang } from "../Lang";
+import { WORKS, type Lang, type WorkKey } from "../strings";
 
 export const metadata: Metadata = {
   title: "Работы · макет",
@@ -18,10 +20,17 @@ export const metadata: Metadata = {
    только там, где они действительно есть, отдельного блока под них нет.
 
    Скриншоты в public/new/works сняты с живых адресов, окно 1600 × 1000,
-   первый экран, ширина 1200. Два исключения: Mia снята с демо на сайте
-   (/demos/mia), потому что пространство на Hugging Face спит и показывает
-   кнопку перезапуска; JasurGPT снят с главной живого сайта с открытым
-   чатом.
+   первый экран, файл 1200 × 750. JasurGPT снят с главной живого сайта с
+   открытым чатом.
+
+   Три карточки ведут в демо внутри макета, и их кадры сняты оттуда же, а не
+   со старого дизайна (переснято 29 сентября 2026, то же окно и тот же размер
+   файла): каталог (/new/demos) первым экраном, с заголовком и началом
+   карточек демо; Mia (/new/demos/mia) и AI Career System (/new/demos/career)
+   после прогона сценария, кадр от выделенной мысли до результата. У Mia
+   задан первый вопрос, видны найденные фрагменты и ответ в телефоне; у
+   Career System пройден весь пайплайн. Пустое демо на картинке не говорит,
+   что это за вещь.
 
    Куда ведёт «Открыть». Демо, Mia и AI Career System открываются в макете
    (/new/demos...), чтобы человек не выпадал в старый дизайн. Mia раньше
@@ -31,89 +40,52 @@ export const metadata: Metadata = {
    Отдельного адреса у чата нет: он открывается кнопкой в углу любой
    страницы живого сайта, ни параметра в адресе, ни якоря он не слушает.
    Поэтому ссылка ведёт на главную живого сайта, где кнопка есть. В макете
-   кнопки нет: layout.tsx прячет всё, что общий layout кладёт вне <main>. */
+   кнопки нет: layout.tsx прячет всё, что общий layout кладёт вне <main>.
 
-const WORKS = [
-  {
-    name: "abcx",
-    shot: "/new/works/abcx.jpg",
-    what:
-      "Память продукта для тех, кто строит соло или маленькой командой: фиксируете фичу с гипотезой и метрикой, загружаете события, abcx показывает обрывы в воронке и фичи, которые не держат людей.",
-    stack: ["Next.js", "OpenRouter", "Upstash", "Vercel"],
-    href: "https://abcx-eight.vercel.app",
-  },
-  {
-    name: "Expat Roadmap SEA",
-    shot: "/new/works/expat.jpg",
-    what:
-      "Платформа для переезда в Юго-Восточную Азию: визы и города, жильё, комьюнити, события, работа. Пять продуктовых направлений, собраны в одиночку.",
-    stack: ["Next.js", "Supabase", "Vercel", "TypeScript"],
-    href: "https://expat-roadmap-sea.vercel.app",
-  },
-  {
-    name: "AI Career System",
-    shot: "/new/works/career.jpg",
-    what:
-      "Поиск работы без ручных шагов: ссылка на вакансию уходит в телеграм, система разбирает описание, сравнивает с резюме и отдаёт готовое письмо. 47 вакансий, 80 секунд до письма.",
-    stack: ["Claude", "n8n", "Google Sheets", "Telegram"],
-    href: "/new/demos/career",
-  },
-  {
-    name: "Mia",
-    shot: "/new/works/mia.jpg",
-    what:
-      "Ассистент для стоматологической клиники: цены, услуги, часы, процедуры. Отвечает только по документам клиники и показывает, из какого фрагмента собран ответ.",
-    stack: ["Python", "RAG", "Groq", "Gradio", "Hugging Face"],
-    href: "/new/demos/mia",
-  },
-  {
-    name: "JasurGPT",
-    shot: "/new/works/jasurgpt.jpg",
-    what:
-      "Чат на моём сайте для тех, кому проще спросить, чем читать резюме: отвечает про опыт и проекты по собранному личному контексту.",
-    stack: ["Next.js", "OpenRouter", "Vercel", "TypeScript"],
-    href: "/",
-  },
-  {
-    name: "Демо автоматизаций",
-    shot: "/new/works/demos.jpg",
-    what:
-      "Четыре демо для локального бизнеса, работают в браузере с телефона: предзаказ с трибуны, слив вечерних остатков, алерты о фроде на кассе, ответы на отзывы в картах.",
-    stack: ["Next.js", "OpenRouter", "Telegram WebApp", "СБП"],
-    href: "/new/demos",
-  },
+   Тексты карточек на двух языках лежат в strings.ts, здесь только то, что от
+   языка не зависит: порядок, скриншот, адрес. Тело собирается дважды, и
+   ByLang показывает то, что выбрано в переключателе. */
+
+/* Порядок карточек и то, что от языка не зависит. */
+const ORDER: { key: WorkKey; shot: string; href: string }[] = [
+  { key: "abcx", shot: "/new/works/abcx.jpg", href: "https://abcx-eight.vercel.app" },
+  { key: "expat", shot: "/new/works/expat.jpg", href: "https://expat-roadmap-sea.vercel.app" },
+  { key: "career", shot: "/new/works/career.jpg", href: "/new/demos/career" },
+  { key: "mia", shot: "/new/works/mia.jpg", href: "/new/demos/mia" },
+  { key: "jasurgpt", shot: "/new/works/jasurgpt.jpg", href: "/" },
+  { key: "demos", shot: "/new/works/demos.jpg", href: "/new/demos" },
 ];
 
-export default function NewWorks() {
+function Body({ lang }: { lang: Lang }) {
+  const s = WORKS[lang];
+
   return (
     <>
-      <NewHeader here="Работы" />
+      <section className="nm-wrap nm-ptop">
+        <h1 className="nm-h1-p">
+          {s.h1.map((line, i) => (
+            <span key={line}>
+              {i > 0 && <br />}
+              {line}
+            </span>
+          ))}
+        </h1>
+        <div className="nm-lead">
+          <p>{s.lead}</p>
+        </div>
+      </section>
 
-      <div>
-        <section className="nm-wrap nm-ptop">
-          <h1 className="nm-h1-p">
-            Шесть штук,
-            <br />
-            собранных
-            <br />
-            в одиночку
-          </h1>
-          <div className="nm-lead">
-            <p>
-              Код, дизайн, тексты. Всё работает, всё открывается по ссылке.
-            </p>
-          </div>
-        </section>
-
-        {/* Карточки сеткой, скриншот 16:10 сверху. Все одной высоты: ряды
-            сетки равны самому высокому (grid-auto-rows: 1fr в .nm-wk), а
-            «Открыть» прижата к низу карточки. Скриншот ведёт туда же, куда
-            «Открыть»; для чтения с экрана он скрыт, чтобы ссылка не
-            звучала дважды. */}
-        <section className="nm-wrap nm-sect">
-          <div className="nm-wk">
-            {WORKS.map((w) => (
-              <article key={w.name} className="nm-wk-card">
+      {/* Карточки сеткой, скриншот 16:10 сверху. Все одной высоты: ряды
+          сетки равны самому высокому (grid-auto-rows: 1fr в .nm-wk), а
+          «Открыть» прижата к низу карточки. Скриншот ведёт туда же, куда
+          «Открыть»; для чтения с экрана он скрыт, чтобы ссылка не
+          звучала дважды. */}
+      <section className="nm-wrap nm-sect">
+        <div className="nm-wk">
+          {ORDER.map((w) => {
+            const t = s.items[w.key];
+            return (
+              <article key={w.key} className="nm-wk-card">
                 <a
                   className="nm-wk-shot"
                   href={w.href}
@@ -122,17 +94,28 @@ export default function NewWorks() {
                 >
                   <Photo src={w.shot} alt="" ratio="16:10" />
                 </a>
-                <h2 className="nm-wk-n">{w.name}</h2>
-                <p className="nm-wk-d">{w.what}</p>
-                <p className="nm-work-s">{w.stack.join(" · ")}</p>
+                <h2 className="nm-wk-n">{t.name}</h2>
+                <p className="nm-wk-d">{t.what}</p>
+                <p className="nm-work-s">{t.stack.join(" · ")}</p>
                 <p className="nm-work-l nm-wk-l">
-                  <a href={w.href}>Открыть</a>
+                  <a href={w.href}>{s.open}</a>
                 </p>
               </article>
-            ))}
-          </div>
-        </section>
+            );
+          })}
+        </div>
+      </section>
+    </>
+  );
+}
 
+export default function NewWorks() {
+  return (
+    <>
+      <NewHeader here="works" />
+
+      <div>
+        <ByLang ru={<Body lang="ru" />} en={<Body lang="en" />} />
         <NewFooter />
       </div>
     </>

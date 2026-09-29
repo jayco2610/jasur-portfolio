@@ -124,6 +124,13 @@ function rnd(min: number, max: number) {
 
 type FeedOrder = { id: string; sum: number; yours?: boolean };
 
+/* Номер заказа хранится с русской буквой (Б-41), на английском показывается
+   латиницей (B-41): иначе в английском демо оставалась кириллица. Меняется
+   только подпись, сами номера и их порядок те же. */
+function orderLabel(id: string, lang: "en" | "ru"): string {
+  return lang === "en" ? id.replace(/^Б-/, "B-") : id;
+}
+
 export default function PreorderDemo() {
   const { lang } = useLanguage();
   const c = copy[lang];
@@ -303,7 +310,7 @@ export default function PreorderDemo() {
               <p className="nm-dm-seat" style={{ marginTop: 10 }}>
                 {c.orderNumber}
               </p>
-              <p className="nm-dm-order-no">{myNumber}</p>
+              <p className="nm-dm-order-no">{orderLabel(myNumber, lang)}</p>
               <p className="nm-dm-small" style={{ color: "var(--nm-ink)" }}>
                 {c.pickup}
               </p>
@@ -374,7 +381,7 @@ export default function PreorderDemo() {
             {feed.map((o, i) => (
               <div key={`${o.id}-${i}`} className={`nm-dm-feed-i${o.yours ? " is-hot" : ""}`}>
                 <span className={o.yours ? undefined : "is-dim"}>
-                  {o.yours ? <b>{o.id}</b> : o.id}
+                  {o.yours ? <b>{orderLabel(o.id, lang)}</b> : orderLabel(o.id, lang)}
                   {o.yours ? ` · ${c.yourOrder}` : ""}
                 </span>
                 <span className="is-dim">{o.sum.toLocaleString("ru-RU")} ₽</span>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./new.css";
 import { unbounded, onest } from "./fonts";
+import { LangAttr } from "./Lang";
 
 export const metadata: Metadata = {
   title: "Макет новой главной",
@@ -44,6 +45,7 @@ export default function NewLayout({
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: isolate }} />
+      <LangAttr />
       <div
         id="nm-root"
         className={`nm ${unbounded.variable} ${onest.variable}`}

@@ -6,7 +6,7 @@ import ReviewsDemo from "./ReviewsDemo";
 export default function NewReviewsDemo() {
   return (
     <>
-      <NewHeader here="Работы" />
+      <NewHeader here="works" />
       <div>
         <ReviewsDemo />
         <NewFooter />

@@ -6,7 +6,7 @@ import MiaDemo from "./MiaDemo";
 export default function NewMiaDemo() {
   return (
     <>
-      <NewHeader here="Работы" />
+      <NewHeader here="works" />
       <div>
         <MiaDemo />
         <NewFooter />

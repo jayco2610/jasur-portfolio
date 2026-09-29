@@ -6,7 +6,7 @@ import PreorderDemo from "./PreorderDemo";
 export default function NewPreorderDemo() {
   return (
     <>
-      <NewHeader here="Работы" />
+      <NewHeader here="works" />
       <div>
         <PreorderDemo />
         <NewFooter />

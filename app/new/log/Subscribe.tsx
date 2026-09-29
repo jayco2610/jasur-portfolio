@@ -52,7 +52,7 @@ export default function Subscribe({ lang = "ru" }: { lang?: "ru" | "en" }) {
 
   return (
     <section className="nm-subs">
-      <h2 className="nm-subs-t">{ru ? "Чтобы не пропустить" : "So you do not miss it"}</h2>
+      <h2 className="nm-subs-t">{ru ? "Чтобы не пропустить" : "Catch the next one"}</h2>
       <p className="nm-subs-d">
         {ru
           ? "Новая статья или выпуск подкаста, ничего больше. Рассылки по расписанию не будет."

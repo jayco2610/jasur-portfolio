@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Photo from "../Photo";
 import { NewHeader, NewFooter } from "../Chrome";
+import { ByLang } from "../Lang";
+import { WORKSHOP, type Lang } from "../strings";
 
 export const metadata: Metadata = {
   title: "Мастерская · макет",
@@ -12,124 +14,101 @@ export const metadata: Metadata = {
 
    Цены на странице нет: показывается только состояние приёма. Кнопка ведёт
    в никуда (href="#"), потому что телеграм-бота под лист ожидания ещё нет.
-   Ставить сюда почту вместо бота нельзя: решение по каналу сбора принято. */
+   Ставить сюда почту вместо бота нельзя: решение по каналу сбора принято.
 
-const INSIDE = [
-  {
-    t: "Как собирается",
-    d: "Разборы моих инструментов по шагам: JasurGPT, RAG-ассистент, боты, автоматизации. Что использовал, сколько стоило, где сломалось.",
-  },
-  {
-    t: "Как находятся деньги",
-    d: "Связи, посредничество, темы, которые прилетают. Уголь, брусчатка, NFC-метки для локального бизнеса. Что сработало, что нет и почему.",
-  },
-  {
-    t: "Что происходит у меня",
-    d: "Цифры по каждой публикации, сколько собрал и сколько не собрал, что пробую на этой неделе. Без монтажа.",
-  },
-];
+   Тексты на двух языках лежат в strings.ts. Тело собирается дважды, и
+   ByLang показывает то, что выбрано в переключателе.
 
-// Четвёртая строка — опция, а не одна из трёх групп. Потолок в пять человек
-// относится только к ней, в сам канал заходит кто угодно.
-const OPTION = {
-  t: "Час на вашу задачу",
-  d: "Один-два раза в месяц разбираю чью-то задачу: собираю инструмент, смотрю цифры, придумываю подачу. Беру пять человек, больше не вытяну: три смены в неделю и десять-двенадцать часов на всё остальное.",
-};
+   Четвёртая строка «Что внутри» — опция, а не одна из трёх групп. Потолок
+   в пять человек относится только к ней, в сам канал заходит кто угодно. */
+
+function Body({ lang }: { lang: Lang }) {
+  const s = WORKSHOP[lang];
+
+  return (
+    <>
+      {/* Первый экран устроен как на главной: секция без .nm-wrap, текст
+          слева, фото справа доходит до края окна (классы .nm-hero*).
+          Кадр целиком, со своим фоном, прямые края, без обработки.
+          Модификатор --ws урезает нижний отступ: здесь он складывался
+          с верхним отступом «Что внутри» в двести точек пустоты. */}
+      <section className="nm-hero nm-hero--ws">
+        <div className="nm-hero-in">
+          <div className="nm-hero-text">
+            <h1 className="nm-h1-p">
+              {s.h1[0]}
+              <br />
+              {s.h1[1]}
+            </h1>
+            <div className="nm-lead">
+              <p>{s.lead}</p>
+            </div>
+          </div>
+
+          <Photo
+            className="nm-hero-photo"
+            src="/new/workshop.jpg"
+            alt={s.photoAlt}
+            ratio="1:1"
+          />
+        </div>
+      </section>
+
+      {/* ——— блок 2. Что внутри ——— */}
+      <section className="nm-wrap nm-sect nm-sect--ws">
+        <p className="nm-sec-t">{s.inside}</p>
+        <div>
+          {s.items.map((i) => (
+            <div key={i.t} className="nm-item">
+              <h2 className="nm-item-t">{i.t}</h2>
+              <p className="nm-item-d">{i.d}</p>
+            </div>
+          ))}
+          <div className="nm-item is-opt">
+            <h2 className="nm-item-t">{s.option.t}</h2>
+            <p className="nm-item-d">{s.option.d}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ——— блок 3. Для кого и для кого нет ——— */}
+      <section className="nm-wrap nm-sect">
+        <p className="nm-sec-t">{s.forWhom}</p>
+        <div className="nm-two">
+          <div>
+            <h2 className="nm-two-t">{s.yesT}</h2>
+            <p className="nm-two-d">{s.yesD}</p>
+          </div>
+          <div>
+            <h2 className="nm-two-t">{s.noT}</h2>
+            <p className="nm-two-d">{s.noD}</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ——— блоки 4 и 5. Состояние приёма и кнопка ——— */}
+      <section className="nm-wrap nm-sect">
+        <div className="nm-state">
+          <h2 className="nm-state-t">{s.stateT}</h2>
+          <p className="nm-state-d">{s.stateD}</p>
+          <p className="nm-btn-w">
+            <a className="nm-btn" href="#">
+              {s.button}
+            </a>
+          </p>
+        </div>
+      </section>
+    </>
+  );
+}
 
 export default function NewWorkshop() {
   return (
     <>
-      <NewHeader here="Мастерская" />
+      <NewHeader here="workshop" />
 
       <div>
-        {/* Первый экран устроен как на главной: секция без .nm-wrap, текст
-            слева, фото справа доходит до края окна (классы .nm-hero*).
-            Кадр целиком, со своим фоном, прямые края, без обработки.
-            Модификатор --ws урезает нижний отступ: здесь он складывался
-            с верхним отступом «Что внутри» в двести точек пустоты. */}
-        <section className="nm-hero nm-hero--ws">
-          <div className="nm-hero-in">
-            <div className="nm-hero-text">
-              <h1 className="nm-h1-p">
-                Запустил шесть проектов.
-                <br />
-                Разбираю каждый
-              </h1>
-              <div className="nm-lead">
-                <p>
-                  Что делал, где ошибся, сколько это стоило. Если вы запускаете
-                  первый, половину моих граблей вы обойдёте.
-                </p>
-              </div>
-            </div>
-
-            <Photo
-              className="nm-hero-photo"
-              src="/new/workshop.jpg"
-              alt="Человек в металлическом лифте нажимает кнопку этажа"
-              ratio="1:1"
-            />
-          </div>
-        </section>
-
-        {/* ——— блок 2. Что внутри ——— */}
-        <section className="nm-wrap nm-sect nm-sect--ws">
-          <p className="nm-sec-t">Что внутри</p>
-          <div>
-            {INSIDE.map((i) => (
-              <div key={i.t} className="nm-item">
-                <h2 className="nm-item-t">{i.t}</h2>
-                <p className="nm-item-d">{i.d}</p>
-              </div>
-            ))}
-            <div className="nm-item is-opt">
-              <h2 className="nm-item-t">{OPTION.t}</h2>
-              <p className="nm-item-d">{OPTION.d}</p>
-            </div>
-          </div>
-        </section>
-
-        {/* ——— блок 3. Для кого и для кого нет ——— */}
-        <section className="nm-wrap nm-sect">
-          <p className="nm-sec-t">Для кого</p>
-          <div className="nm-two">
-            <div>
-              <h2 className="nm-two-t">
-                Для тех, кто уже что-то запускает или вот-вот начнёт.
-              </h2>
-              <p className="nm-two-d">
-                Вы собираете первый продукт, ищете, на чём заработать, и хотите
-                видеть чужой процесс без монтажа. Вам не нужна мотивация, вам
-                нужно посмотреть, как оно выглядит изнутри у того, кто идёт на
-                шаг впереди.
-              </p>
-            </div>
-            <div>
-              <h2 className="nm-two-t">Не для тех, кто ищет схему.</h2>
-              <p className="nm-two-d">
-                Здесь нет готовых способов заработать и нет гарантий, что у вас
-                получится. Сам ещё не разбогател. Как разбогатею, подниму цену.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ——— блоки 4 и 5. Состояние приёма и кнопка ——— */}
-        <section className="nm-wrap nm-sect">
-          <div className="nm-state">
-            <h2 className="nm-state-t">Поток приостановлен</h2>
-            <p className="nm-state-d">
-              Открою, когда смогу вести нормально. Оставьте контакт, напишу
-              первым.
-            </p>
-            <p className="nm-btn-w">
-              <a className="nm-btn" href="#">
-                Оставить контакт
-              </a>
-            </p>
-          </div>
-        </section>
-
+        <ByLang ru={<Body lang="ru" />} en={<Body lang="en" />} />
         <NewFooter />
       </div>
     </>

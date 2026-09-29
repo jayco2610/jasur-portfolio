@@ -10,7 +10,7 @@ import Catalog from "./Catalog";
 export default function NewDemos() {
   return (
     <>
-      <NewHeader here="Работы" />
+      <NewHeader here="works" />
 
       <div>
         <Catalog />

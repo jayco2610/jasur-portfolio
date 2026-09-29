@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Photo from "../../../Photo";
 import { NewFooter } from "../../../Chrome";
 import LogChrome from "../../../LogChrome";
-import { ruCardPosts } from "../../../posts";
+import { cardPosts } from "../../../posts";
+import { ByLang } from "../../../Lang";
+import { LOG, type Lang } from "../../../strings";
 import { RUBRICS, rubricName, rubricDescription, rubricCover } from "@/lib/rubrics";
 
 /* Страница отдельной рубрики внутри макета: /new/log/tema/[ключ].
@@ -20,7 +22,11 @@ import { RUBRICS, rubricName, rubricDescription, rubricCover } from "@/lib/rubri
    а не отдельной темы.
 
    Страница серверная. Файлы читает lib/blog через posts.ts, реагируют
-   на нажатия только шапка и заглушки картинок, каждая сама по себе. */
+   на нажатия только шапка и заглушки картинок, каждая сама по себе.
+
+   Тело собирается дважды, русское и английское: название и описание темы
+   на двух языках лежат в lib/rubrics.ts, статьи отбираются по языку, как на
+   Log. Какое тело показать, решает ByLang по выбранному языку. */
 
 /* Кроме шести рубрик из lib/rubrics.ts, никаких других адресов не существует.
    Без этой строки Next пытается собрать незнакомый адрес прямо на сервере,
@@ -49,6 +55,67 @@ export async function generateMetadata({
   };
 }
 
+function Body({ rubric, lang }: { rubric: string; lang: Lang }) {
+  const s = LOG[lang];
+  const name = rubricName(rubric, lang);
+  const cover = rubricCover(rubric);
+  /* Правило отбора буквально то же, что в lib/blog.getPostsByRubric:
+     p.rubric === ключ. Порядок и формат даты приходят из posts.ts, то есть
+     карточки здесь и карточки на Log собраны из одного списка. */
+  const posts = cardPosts(lang).filter((p) => p.rubricKey === rubric);
+
+  return (
+    <>
+      {/* Первый экран той же геометрии, что у Log: текст слева, картинка
+          справа. Меняются только название, описание и сама картинка. */}
+      <section className="nm-log-hero">
+        <div className="nm-log-hero-in">
+          <div className="nm-log-hero-text">
+            <h1 className="nm-h1-p">{name}</h1>
+            <div className="nm-lead">
+              <p>{rubricDescription(rubric, lang)}</p>
+            </div>
+          </div>
+          {cover && (
+            <Photo
+              className="nm-log-hero-photo"
+              src={cover}
+              alt={name}
+              ratio="1:1"
+            />
+          )}
+        </div>
+      </section>
+
+      <section className="nm-wrap nm-sect nm-sect-log">
+        <p className="nm-sec-t">
+          {s.inRubric} · {String(posts.length).padStart(2, "0")}
+        </p>
+
+        {posts.length > 0 ? (
+          <div className="nm-grid">
+            {posts.map((p) => (
+              <a key={p.slug} className="nm-card" href={p.href}>
+                <Photo src={p.cover} alt={p.title} ratio="16:10" />
+                <span className="nm-card-meta">
+                  {p.date} · {p.rubric}
+                </span>
+                <span className="nm-card-t">{p.title}</span>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p className="nm-empty">{s.rubricEmpty}</p>
+        )}
+
+        <p className="nm-more">
+          <a href="/new/log">{s.more}</a>
+        </p>
+      </section>
+    </>
+  );
+}
+
 export default async function NewLogRubric({
   params,
 }: {
@@ -58,66 +125,15 @@ export default async function NewLogRubric({
   // отсекает dynamicParams выше, своей проверки здесь уже не нужно.
   const { rubric } = await params;
 
-  const name = rubricName(rubric, "ru");
-  const cover = rubricCover(rubric);
-  /* Правило отбора буквально то же, что в lib/blog.getPostsByRubric:
-     p.rubric === ключ. Порядок и формат даты приходят из posts.ts, то есть
-     карточки здесь и карточки на Log собраны из одного списка. */
-  const posts = ruCardPosts().filter((p) => p.rubricKey === rubric);
-
   return (
     <>
       <LogChrome />
 
       <div>
-        {/* Первый экран той же геометрии, что у Log: текст слева, картинка
-            справа. Меняются только название, описание и сама картинка. */}
-        <section className="nm-log-hero">
-          <div className="nm-log-hero-in">
-            <div className="nm-log-hero-text">
-              <h1 className="nm-h1-p">{name}</h1>
-              <div className="nm-lead">
-                <p>{rubricDescription(rubric, "ru")}</p>
-              </div>
-            </div>
-            {cover && (
-              <Photo
-                className="nm-log-hero-photo"
-                src={cover}
-                alt={name}
-                ratio="1:1"
-              />
-            )}
-          </div>
-        </section>
-
-        <section className="nm-wrap nm-sect nm-sect-log">
-          <p className="nm-sec-t">
-            В рубрике · {String(posts.length).padStart(2, "0")}
-          </p>
-
-          {posts.length > 0 ? (
-            <div className="nm-grid">
-              {posts.map((p) => (
-                <a key={p.slug} className="nm-card" href={p.href}>
-                  <Photo src={p.cover} alt={p.title} ratio="16:10" />
-                  <span className="nm-card-meta">
-                    {p.date} · {p.rubric}
-                  </span>
-                  <span className="nm-card-t">{p.title}</span>
-                </a>
-              ))}
-            </div>
-          ) : (
-            <p className="nm-empty">
-              В этой рубрике пока ничего нет. Скоро будет.
-            </p>
-          )}
-
-          <p className="nm-more">
-            <a href="/new/log">Все материалы в Log</a>
-          </p>
-        </section>
+        <ByLang
+          ru={<Body rubric={rubric} lang="ru" />}
+          en={<Body rubric={rubric} lang="en" />}
+        />
 
         <NewFooter />
       </div>

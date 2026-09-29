@@ -95,7 +95,7 @@ const copy = {
     subtitle:
       "An assistant for a dental clinic that answers patients only from the clinic's own documents. Below is a step-by-step simulation of how it works inside; the live assistant is one click away.",
     pitch:
-      "A knowledge base becomes an assistant that works round the clock and doesn't invent prices. Every answer is assembled from a document fragment. No fragment — no answer.",
+      "A knowledge base becomes an assistant that works round the clock and doesn't invent prices. Every answer is assembled from a document fragment. No fragment, no answer.",
     hint: "Pick a patient question under the phone and watch the answer get built from documents.",
     step1: "Knowledge base",
     step1desc: "The clinic's documents are split into fragments and indexed",

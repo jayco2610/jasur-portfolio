@@ -19,6 +19,13 @@ type Review = {
   text: { en: string; ru: string };
 };
 
+/* Название площадки на языке демо: на английском «Яндекс» и «2ГИС»
+   оставались кириллицей. */
+const SOURCE: Record<"Яндекс" | "2ГИС", { en: string; ru: string }> = {
+  Яндекс: { en: "Yandex", ru: "Яндекс" },
+  "2ГИС": { en: "2GIS", ru: "2ГИС" },
+};
+
 const REVIEWS: Review[] = [
   {
     id: "r1",
@@ -219,7 +226,7 @@ export default function ReviewsDemo() {
                 <p className="nm-dm-rev-n">{r.name[lang]}</p>
                 <Stars rating={r.rating} />
               </div>
-              <span className="nm-dm-src">{r.source}</span>
+              <span className="nm-dm-src">{SOURCE[r.source][lang]}</span>
             </div>
             <p className="nm-dm-rev-t is-dim">{r.text[lang]}</p>
 

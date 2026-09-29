@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import { ruCardPosts } from "../posts";
+import { cardPosts } from "../posts";
+import { NewFooter } from "../Chrome";
+import LogChrome from "../LogChrome";
+import { ByLang } from "../Lang";
 import LogContent from "./LogContent";
 
 export const metadata: Metadata = {
@@ -12,18 +15,28 @@ export const metadata: Metadata = {
    обложек, свежее, подкаст, внешние публикации, каналы, подписка.
 
    Здесь только чтение файлов: lib/blog ходит в файловую систему, а значит
-   работает на сервере. Всё, что умеет реагировать на нажатия (шапка, лента
-   обложек, форма подписки), собрано из отдельных клиентских компонентов
-   внутри LogContent.
-
-   Рубрики со страницы список больше не фильтруют: у каждой темы свой адрес
-   /new/log/tema/[ключ], как на живом сайте. Здесь показываются все статьи.
+   работает на сервере. Тело собирается дважды, из русских и из английских
+   статей, и ByLang показывает то, что выбрано в переключателе. Всё, что
+   умеет реагировать на нажатия (шапка, лента обложек, форма подписки),
+   собрано из отдельных клиентских компонентов.
 
    Общая шапка сайта (Chrome) не показывается: блог открывается как отдельное
    издание со своей собственной шапкой (LogChrome). */
 
 export default function NewLog() {
-  const posts = ruCardPosts();
+  return (
+    <>
+      {/* Чёрная липкая шапка издания с рубриками и выходом в портфолио */}
+      <LogChrome />
 
-  return <LogContent posts={posts} />;
+      <div>
+        <ByLang
+          ru={<LogContent lang="ru" posts={cardPosts("ru")} />}
+          en={<LogContent lang="en" posts={cardPosts("en")} />}
+        />
+
+        <NewFooter />
+      </div>
+    </>
+  );
 }

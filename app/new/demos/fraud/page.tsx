@@ -6,7 +6,7 @@ import FraudDemo from "./FraudDemo";
 export default function NewFraudDemo() {
   return (
     <>
-      <NewHeader here="Работы" />
+      <NewHeader here="works" />
       <div>
         <FraudDemo />
         <NewFooter />

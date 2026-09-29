@@ -6,7 +6,7 @@ import CareerDemo from "./CareerDemo";
 export default function NewCareerDemo() {
   return (
     <>
-      <NewHeader here="Работы" />
+      <NewHeader here="works" />
       <div>
         <CareerDemo />
         <NewFooter />

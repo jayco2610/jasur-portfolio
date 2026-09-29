@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Photo from "../Photo";
 import { NewHeader, NewFooter } from "../Chrome";
+import { ByLang } from "../Lang";
+import { ABOUT, type Lang } from "../strings";
 
 export const metadata: Metadata = {
   title: "Обо мне · макет",
@@ -18,110 +20,80 @@ export const metadata: Metadata = {
    диплома нет. Тот же текст надо будет поправить в lib/translations.ts,
    в PDF-резюме и в контексте JasurGPT, иначе расхождение останется.
 
-   JasurGPT на эту страницу не ставится: решение, где он живёт, отложено. */
+   JasurGPT на эту страницу не ставится: решение, где он живёт, отложено.
 
-const EXPERIENCE = [
-  {
-    name: "Braiden Consulting",
-    what: "AI-проджект-менеджер. Внедрял ИИ в процессы компании.",
-  },
-  {
-    name: "Synergia",
-    what: "Вёл сорок клиентов, собирал требования, следил за сроками. NPS вырос с 62 до 78, время ответа снизилось на треть.",
-  },
-  {
-    name: "Instameal",
-    what: "Фудтех-стартап, запуск с нуля. Кастдев, MVP из бота и сайта, первые платящие. Около четырёхсот пользователей, до первого заказа доходили сорок процентов. Координировал команду из восьми человек.",
-  },
-  {
-    name: "Yonma Yon",
-    what: "MVP: лендинг и телеграм-бот. Больше десяти пользовательских интервью, сто пятьдесят пользователей, открыл B2B-направление.",
-  },
-  {
-    name: "IDF Lab",
-    what: "RFM-сегментация клиентской базы для внешнего заказчика, рекомендации по удержанию.",
-  },
-  {
-    name: "Консалтинговый проект, фриланс",
-    what: "Аудит закупок и операционных данных, автоматизированная отчётность по категориям затрат. Затраты снизились примерно на восемнадцать процентов.",
-  },
-];
+   Тексты на двух языках лежат в strings.ts. Тело собирается дважды, и
+   ByLang показывает то, что выбрано в переключателе. */
 
-const LANGS = [
-  "Русский — родной",
-  "Узбекский — родной",
-  "Английский — профессиональный",
-  "Турецкий — B2",
-];
+function Body({ lang }: { lang: Lang }) {
+  const s = ABOUT[lang];
+
+  return (
+    <>
+      {/* Подача портрета взята со старой страницы (app/page.tsx, раздел
+          «О себе»): заголовок, под линейкой две колонки, слева портрет
+          на треть ширины с подписью «Рис. 01 — Москва / 2026», справа
+          текст. Имени в тексте страницы нет, решение Жасура; в шапке и
+          подвале оно остаётся, это общая обвязка всех страниц. */}
+      <section className="nm-wrap nm-ptop">
+        <h1 className="nm-h1-p">{s.h1}</h1>
+
+        <div className="nm-about-in">
+          <figure className="nm-about-fig">
+            <Photo
+              className="nm-about-photo"
+              src="/new/portret.jpg"
+              alt={s.photoAlt}
+              ratio="2:3"
+            />
+            <figcaption className="nm-about-cap">
+              <span>{s.cap}</span>
+              <span>2026</span>
+            </figcaption>
+          </figure>
+
+          <div className="nm-about-tx">
+            <p>{s.p1}</p>
+            <p>{s.p2}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="nm-wrap nm-sect">
+        <p className="nm-sec-t">{s.exp}</p>
+        <div className="nm-exp">
+          {s.experience.map((e) => (
+            <article key={e.name} className="nm-work">
+              <h2 className="nm-work-n">{e.name}</h2>
+              <div className="nm-work-b">
+                <p className="nm-work-d">{e.what}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="nm-wrap nm-sect">
+        <div className="nm-cline">
+          <span className="nm-cline-k">{s.edu}</span>
+          <span className="nm-cline-s">{s.eduV}</span>
+        </div>
+        <div className="nm-cline">
+          <span className="nm-cline-k">{s.langs}</span>
+          <span className="nm-cline-s">{s.langsV.join(" · ")}</span>
+        </div>
+      </section>
+    </>
+  );
+}
 
 export default function NewAbout() {
   return (
     <>
-      <NewHeader here="Обо мне" />
+      <NewHeader here="about" />
 
       <div>
-        {/* Подача портрета взята со старой страницы (app/page.tsx, раздел
-            «О себе»): заголовок, под линейкой две колонки, слева портрет
-            на треть ширины с подписью «Рис. 01 — Москва / 2026», справа
-            текст. Имени в тексте страницы нет, решение Жасура; в шапке и
-            подвале оно остаётся, это общая обвязка всех страниц. */}
-        <section className="nm-wrap nm-ptop">
-          <h1 className="nm-h1-p">Обо мне</h1>
-
-          <div className="nm-about-in">
-            <figure className="nm-about-fig">
-              <Photo
-                className="nm-about-photo"
-                src="/new/portret.jpg"
-                alt="Портрет"
-                ratio="2:3"
-              />
-              <figcaption className="nm-about-cap">
-                <span>Рис. 01 — Москва</span>
-                <span>2026</span>
-              </figcaption>
-            </figure>
-
-            <div className="nm-about-tx">
-              <p>
-                Продакт-менеджер: собираю продукты в одиночку, код, дизайн и
-                тексты делаю сам.
-              </p>
-              <p>
-                Всё, что собрал, лежит в «Работах», а как это собиралось и что
-                из этого вышло — в Log, вместе с цифрами.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="nm-wrap nm-sect">
-          <p className="nm-sec-t">Опыт</p>
-          <div className="nm-exp">
-            {EXPERIENCE.map((e) => (
-              <article key={e.name} className="nm-work">
-                <h2 className="nm-work-n">{e.name}</h2>
-                <div className="nm-work-b">
-                  <p className="nm-work-d">{e.what}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="nm-wrap nm-sect">
-          <div className="nm-cline">
-            <span className="nm-cline-k">Образование</span>
-            <span className="nm-cline-s">
-              НИУ ВШЭ, бизнес и экономика, 2023-2025
-            </span>
-          </div>
-          <div className="nm-cline">
-            <span className="nm-cline-k">Языки</span>
-            <span className="nm-cline-s">{LANGS.join(" · ")}</span>
-          </div>
-        </section>
-
+        <ByLang ru={<Body lang="ru" />} en={<Body lang="en" />} />
         <NewFooter />
       </div>
     </>
