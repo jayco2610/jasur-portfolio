@@ -1,0 +1,1604 @@
+/* ============================================================
+   Демо в макете: каталог /new/demos и шесть демо внутри него.
+
+   Правило изоляции то же, что в new.css: каждый селектор начинается с .nm,
+   ключевые кадры тоже названы с приставкой nm-dm-. Файл подключается из
+   app/new/demos/layout.tsx и больше нигде.
+
+   Система та же, что во всём макете: Unbounded в заголовках и цифрах,
+   Onest в тексте, чёрное на светлом, разделители линейками в один пиксель.
+   Ни теней, ни градиентов, ни скруглений. Цвета из переменных .nm.
+
+   Одно отличие от остальных страниц макета: внутри демо остаются
+   анимации. Там они не украшение, а поведение: крутится ожидание ответа,
+   шаги пайплайна появляются по одному, ответ печатается. Статичная
+   обвязка вокруг (каталог, заголовки, подписи) не анимируется, как и
+   весь остальной макет. При системной настройке «меньше движения» всё
+   движение выключается.
+   ============================================================ */
+
+/* ============ каталог ============ */
+
+/* Строка заголовка раздела: номер слева, заголовок, число справа, под ней
+   чёрная линейка. Состав тот же, что у строки .sh на старой странице. */
+.nm-dm-sh {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: clamp(12px, 2vw, 28px);
+  align-items: baseline;
+  padding-bottom: clamp(14px, 1.8vw, 22px);
+  border-bottom: 1px solid var(--nm-ink);
+}
+
+.nm-dm-no {
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Вторая половина заголовка на старой странице набрана курсивом с
+   засечками. Засечек в макете нет, поэтому голос меняется весом. */
+.nm-dm-h1-soft {
+  font-weight: 400;
+}
+
+.nm-dm-h2 {
+  margin: 0;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(20px, 2.4vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+
+.nm-dm-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(22px, 4vw, 56px);
+  padding-top: clamp(20px, 2.6vw, 34px);
+  align-items: start;
+}
+
+.nm-dm-intro p {
+  margin: 0;
+}
+
+.nm-dm-intro-t {
+  font-size: clamp(15.5px, 1.35vw, 18px);
+  line-height: 1.6;
+  max-width: 62ch;
+}
+
+.nm-dm-intro-n {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--nm-dim);
+  border-top: 1px solid var(--nm-ink);
+  padding-top: 14px;
+}
+
+/* Все карточки каталога лежат в одной сетке вместе с заголовками разделов.
+   Так ряды с карточками можно сделать ровно одной высоты по всему каталогу,
+   а не только внутри раздела: у рядов стоит 1fr, и все они вырастают до
+   самого высокого. Строки заголовков идут как auto и остаются по содержимому.
+   Шаблон рядов собирается в Catalog.tsx из числа карточек в разделах
+   (переменная --nm-dm-rows), поэтому новое демо не ломает раскладку. */
+.nm-dm-cat {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: var(--nm-dm-rows, none);
+  gap: clamp(28px, 3.4vw, 48px) clamp(20px, 3vw, 44px);
+}
+
+.nm-dm-cat > .nm-dm-sh {
+  grid-column: 1 / -1;
+}
+
+.nm-dm-cat > .nm-dm-sh.is-next {
+  margin-top: clamp(26px, 4.4vw, 64px);
+}
+
+/* Карточка целиком ссылка, как строка на старой странице. */
+.nm-dm-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nm-dm-card-n {
+  margin: clamp(16px, 1.8vw, 22px) 0 0;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(19px, 1.8vw, 26px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  overflow-wrap: break-word;
+}
+
+.nm-dm-card:hover .nm-dm-card-n {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+}
+
+.nm-dm-card-s {
+  margin: 10px 0 0;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-dm-card-d {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+  max-width: 60ch;
+}
+
+/* Нижняя строка прижата к низу карточки: при равной высоте карточек
+   линейки и подписи стоят на одной линии во всём ряду. */
+.nm-dm-card-f {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.nm-dm-card-f span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--nm-rule);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.nm-dm-card-f i {
+  font-style: normal;
+  color: var(--nm-dim);
+}
+
+.nm-dm-card-f b {
+  font-weight: 500;
+}
+
+.nm-dm-card:hover .nm-dm-card-f span {
+  border-color: var(--nm-ink);
+}
+
+/* ============ обвязка страницы демо ============ */
+
+/* Ширина текстовой колонки одна на всё: подводка, выделенная мысль,
+   подсказка, оговорка и колонки интерфейса без телефона. На старой
+   странице это max-w-2xl, 672 точки. Когда у каждого блока была своя
+   ширина в ch, правые края лесенкой расходились на три длины: ch считается
+   от кегля, а кегли у этих блоков разные. */
+.nm-dm {
+  --nm-dm-measure: 42rem;
+  padding-top: clamp(22px, 2.8vw, 36px);
+}
+
+.nm-dm .nm-lead {
+  max-width: var(--nm-dm-measure);
+}
+
+.nm-dm-back {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+  text-decoration: none;
+}
+
+.nm-dm-back:hover {
+  color: var(--nm-ink);
+}
+
+.nm-dm-kicker {
+  margin: clamp(24px, 3.2vw, 44px) 0 14px;
+  font-size: 10.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-dm-pitch {
+  margin: 20px 0 0;
+  max-width: var(--nm-dm-measure);
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.62;
+}
+
+/* Выделение маркером, как на старой странице, только без заливки по
+   прокрутке: плашка стоит сразу. */
+.nm-dm-pitch mark {
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+  padding: 1px 6px 2px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.nm-dm-hint {
+  margin: 20px 0 0;
+  max-width: var(--nm-dm-measure);
+  padding-top: 12px;
+  border-top: 1px solid var(--nm-rule);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Сам интерфейс демо отделён от текста чёрной линейкой. */
+.nm-dm-stage {
+  margin-top: clamp(30px, 4vw, 52px);
+  padding-top: clamp(24px, 3vw, 36px);
+  border-top: 1px solid var(--nm-ink);
+}
+
+.nm-dm-foot {
+  margin: clamp(36px, 4.4vw, 56px) 0 0;
+  max-width: var(--nm-dm-measure);
+  padding-top: 14px;
+  border-top: 1px solid var(--nm-rule);
+  font-size: 10.5px;
+  line-height: 1.6;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+/* ============ общие детали интерфейса ============ */
+
+.nm-dm-label {
+  margin: 0 0 12px;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-dm-note {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-dm-mt {
+  margin-top: clamp(24px, 3vw, 34px);
+}
+
+/* Колонка интерфейса без телефона рядом не растягивается на всю ширину:
+   строки в 1300 точек не читаются. */
+.nm-dm-w {
+  max-width: var(--nm-dm-measure);
+}
+
+.nm-dm-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 22px;
+}
+
+.nm-dm-row.is-tight {
+  gap: 8px;
+}
+
+/* Кнопки: прямоугольник без скруглений, инверсия по наведению, как .nm-btn
+   в остальном макете, только мельче: это кнопки интерфейса, а не призыв. */
+.nm-dm-btn,
+.nm-dm-btn2 {
+  display: inline-block;
+  padding: 12px 20px;
+  border: 1px solid var(--nm-ink);
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nm-dm-btn:hover:not(:disabled) {
+  background: transparent;
+  color: var(--nm-ink);
+}
+
+.nm-dm-btn2 {
+  background: transparent;
+  color: var(--nm-ink);
+  border-color: var(--nm-rule);
+}
+
+.nm-dm-btn2:hover:not(:disabled) {
+  border-color: var(--nm-ink);
+}
+
+.nm-dm-btn2.is-on {
+  background: var(--nm-ink);
+  border-color: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-dm-btn.is-s,
+.nm-dm-btn2.is-s {
+  padding: 8px 14px;
+  font-size: 10.5px;
+}
+
+.nm-dm-btn:disabled,
+.nm-dm-btn2:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.nm-dm-link {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nm-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--nm-ink);
+  padding-bottom: 3px;
+}
+
+.nm-dm-link:hover {
+  color: var(--nm-dim);
+  border-color: var(--nm-dim);
+}
+
+.nm-dm-err {
+  margin: 10px 0 0;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+/* Цифры: та же строка, что блок цифр на главной макета, только мельче.
+   Чёрная линейка сверху, ячейки разделены серыми. */
+.nm-dm-nums {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--nm-ink);
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-dm-nums > div {
+  min-width: 0;
+  padding: 16px 10px 16px 16px;
+  border-left: 1px solid var(--nm-rule);
+}
+
+.nm-dm-nums > div:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.nm-dm-num-v {
+  display: block;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: clamp(16px, 1.9vw, 26px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dm-num-v.is-off {
+  color: var(--nm-dim);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.nm-dm-num-k {
+  display: block;
+  margin-top: 8px;
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+/* Панель: рамка в один пиксель. Серая в покое, чёрная, когда шаг идёт
+   или уже сработал. */
+.nm-dm-panel {
+  border: 1px solid var(--nm-rule);
+  padding: clamp(16px, 2vw, 22px);
+  min-width: 0;
+}
+
+.nm-dm-panel.is-on {
+  border-color: var(--nm-ink);
+}
+
+.nm-dm-panel-t {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.nm-dm-panel-d {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--nm-dim);
+}
+
+.nm-dm-stack > * + * {
+  margin-top: 12px;
+}
+
+/* Цитата из документа, письмо, ответ заведения: линейка слева. */
+.nm-dm-quote {
+  margin: 12px 0 0;
+  padding: 2px 0 2px 14px;
+  border-left: 1px solid var(--nm-ink);
+}
+
+.nm-dm-quote p {
+  margin: 0;
+}
+
+.nm-dm-quote-k {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+  margin-bottom: 4px !important;
+}
+
+.nm-dm-quote-t {
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+/* Две колонки: интерфейс и телефон. На узком экране друг под другом,
+   телефон по центру. */
+.nm-dm-split {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.nm-dm-grow {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .nm-dm-split {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: clamp(40px, 4.4vw, 64px);
+  }
+  .nm-dm-grow {
+    flex: 1 1 0;
+  }
+}
+
+/* Лента событий и заказов: коробка с собственной прокруткой. */
+.nm-dm-feed {
+  overflow-y: auto;
+  border: 1px solid var(--nm-rule);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  scrollbar-width: thin;
+  scrollbar-color: var(--nm-ink) var(--nm-rule);
+}
+
+.nm-dm-feed-i {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 10px;
+  padding: 5px 8px;
+  flex: none;
+}
+
+.nm-dm-feed-i .is-dim {
+  color: var(--nm-dim);
+}
+
+.nm-dm-feed-i .is-end {
+  margin-left: auto;
+}
+
+/* Подозрительное событие и свой заказ в ленте: строка в инверсии.
+   Раньше их красил оранжевый, в макете цвета нет. */
+.nm-dm-feed-i.is-hot {
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-dm-feed-i.is-hot .is-dim {
+  color: #b9b9b9;
+}
+
+.nm-dm-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nm-dm-list li {
+  display: flex;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid var(--nm-rule);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.nm-dm-list li:last-child {
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+/* Эмодзи в данных демо (иконки файлов, меню, аватар бота) остаются, но
+   без цвета: в макете цвет живёт только в фотографиях. */
+.nm-dm-emo {
+  filter: grayscale(1);
+}
+
+/* Ожидание: квадрат с одной пустой стороной крутится. Круга без
+   скругления не бывает, а квадрат читается как «идёт работа» не хуже. */
+.nm-dm-spin {
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--nm-ink);
+  border-top-color: transparent;
+  animation: nm-dm-spin 0.9s linear infinite;
+}
+
+.nm-dm-spin.is-l {
+  width: 34px;
+  height: 34px;
+}
+
+.nm-dm-in {
+  animation: nm-dm-in 0.4s ease both;
+}
+
+@keyframes nm-dm-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes nm-dm-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nm-dm-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* ============ телефон ============ */
+
+/* Корпус: чёрная рамка в пиксель, без скруглений и тени. Узнаётся по
+   пропорции, строке состояния и вырезу сверху. */
+.nm-dm-phone {
+  width: 300px;
+  max-width: 100%;
+  flex: none;
+  align-self: center;
+  border: 1px solid var(--nm-ink);
+  background: var(--nm-paper);
+}
+
+@media (min-width: 1024px) {
+  .nm-dm-phone {
+    align-self: flex-start;
+  }
+}
+
+.nm-dm-screen {
+  position: relative;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.nm-dm-status {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 16px 6px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  flex: none;
+}
+
+.nm-dm-notch {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 84px;
+  height: 17px;
+  transform: translateX(-50%);
+  background: var(--nm-ink);
+}
+
+.nm-dm-batt {
+  display: inline-block;
+  width: 13px;
+  height: 7px;
+  margin-right: 4px;
+  border: 1px solid var(--nm-ink);
+  vertical-align: 0;
+}
+
+.nm-dm-screen-in {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Полоска «домой» внизу экрана. */
+.nm-dm-home {
+  flex: none;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nm-dm-home::before {
+  content: "";
+  width: 96px;
+  height: 1px;
+  background: var(--nm-ink);
+}
+
+/* ---- чат внутри телефона ---- */
+
+.nm-dm-chat-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--nm-rule);
+  border-bottom: 1px solid var(--nm-rule);
+  flex: none;
+}
+
+.nm-dm-ava {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--nm-ink);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.nm-dm-ava.is-s {
+  width: 26px;
+  height: 26px;
+  font-size: 11px;
+}
+
+.nm-dm-chat-t {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.nm-dm-chat-s {
+  margin: 2px 0 0;
+  font-size: 10px;
+  color: var(--nm-dim);
+}
+
+.nm-dm-chat {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--nm-ink) var(--nm-rule);
+}
+
+.nm-dm-empty {
+  margin: 32px 0 0;
+  font-size: 11px;
+  color: var(--nm-dim);
+  text-align: center;
+}
+
+/* Пузыри без скруглений: входящее в серой рамке слева, своё залито чёрным
+   справа. Читаются по стороне и заливке, скругление для этого не нужно. */
+.nm-dm-msg {
+  flex: none;
+  max-width: 88%;
+  padding: 8px 11px;
+  border: 1px solid var(--nm-rule);
+  font-size: 12px;
+  line-height: 1.42;
+  align-self: flex-start;
+}
+
+.nm-dm-msg p {
+  margin: 0;
+}
+
+.nm-dm-msg.is-wide {
+  max-width: 92%;
+}
+
+.nm-dm-msg.is-out {
+  align-self: flex-end;
+  background: var(--nm-ink);
+  border-color: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-dm-msg-k {
+  font-weight: 700;
+  margin-bottom: 3px !important;
+}
+
+.nm-dm-msg-d {
+  font-size: 11px;
+  color: var(--nm-dim);
+  margin-top: 2px !important;
+}
+
+.nm-dm-msg-m {
+  font-size: 10px;
+  color: var(--nm-dim);
+  text-align: right;
+  margin-top: 4px !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dm-opts {
+  flex: none;
+  padding: 10px;
+  border-top: 1px solid var(--nm-rule);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nm-dm-opt {
+  width: 100%;
+  padding: 8px 11px;
+  border: 1px solid var(--nm-rule);
+  background: transparent;
+  color: var(--nm-ink);
+  font: inherit;
+  font-size: 11.5px;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nm-dm-opt:hover:not(:disabled) {
+  border-color: var(--nm-ink);
+}
+
+.nm-dm-opt.is-on {
+  background: var(--nm-ink);
+  border-color: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-dm-opt:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ============ AI Career System ============ */
+
+.nm-dm-step-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nm-dm-step-no {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--nm-rule);
+  color: var(--nm-dim);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dm-step-no.is-run {
+  border-color: var(--nm-ink);
+  color: var(--nm-ink);
+}
+
+.nm-dm-step-no.is-done {
+  background: var(--nm-ink);
+  border-color: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-dm-step-n {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.nm-dm-step-n.is-idle,
+.nm-dm-step-d.is-idle {
+  color: #b5b5b5;
+}
+
+.nm-dm-step-h .nm-dm-spin {
+  margin-left: auto;
+}
+
+.nm-dm-step-d {
+  margin: 4px 0 0 36px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--nm-dim);
+}
+
+.nm-dm-step-x {
+  margin: 12px 0 0 36px;
+}
+
+.nm-dm-vac {
+  display: inline-block;
+  padding: 9px 12px;
+  border: 1px solid var(--nm-rule);
+  max-width: 100%;
+}
+
+.nm-dm-vac p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.nm-dm-vac p + p {
+  margin-top: 3px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-dm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.nm-dm-chips span {
+  padding: 4px 8px;
+  border: 1px solid var(--nm-rule);
+  font-size: 11px;
+}
+
+.nm-dm-match p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.nm-dm-match p + p {
+  margin-top: 4px;
+}
+
+.nm-dm-match .is-gap {
+  color: var(--nm-dim);
+}
+
+.nm-dm-match .is-score {
+  padding-top: 4px;
+  font-weight: 700;
+}
+
+.nm-dm-sheet {
+  display: flex;
+  width: max-content;
+  border: 1px solid var(--nm-rule);
+  font-size: 11px;
+}
+
+.nm-dm-sheet span {
+  padding: 6px 12px;
+  border-left: 1px solid var(--nm-rule);
+  white-space: nowrap;
+}
+
+.nm-dm-sheet span:first-child {
+  border-left: 0;
+}
+
+.nm-dm-scroll-x {
+  overflow-x: auto;
+}
+
+.nm-dm-done-t {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ============ Фрод-контроль касс ============ */
+
+.nm-dm-feed.is-events {
+  height: 340px;
+}
+
+.nm-dm-list .nm-dm-mark {
+  flex: none;
+}
+
+/* ============ Слив остатков ============ */
+
+.nm-dm-tbl {
+  border: 1px solid var(--nm-rule);
+  overflow-x: auto;
+}
+
+.nm-dm-tbl table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dm-tbl th {
+  padding: 10px 12px;
+  font-weight: 400;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+  text-align: right;
+  border-bottom: 1px solid var(--nm-rule);
+  white-space: nowrap;
+}
+
+.nm-dm-tbl td {
+  padding: 10px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--nm-rule);
+  white-space: nowrap;
+}
+
+.nm-dm-tbl th:first-child,
+.nm-dm-tbl td:first-child {
+  text-align: left;
+  white-space: normal;
+}
+
+.nm-dm-tbl tr:last-child td {
+  border-bottom: 0;
+  font-weight: 700;
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+
+.nm-dm-people {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nm-dm-person {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--nm-rule);
+  font-size: 12.5px;
+}
+
+.nm-dm-person .is-dim {
+  color: var(--nm-dim);
+}
+
+.nm-dm-person .is-end {
+  margin-left: auto;
+  font-weight: 500;
+}
+
+/* Пуш на экране блокировки */
+.nm-dm-lock {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 40px 12px 0;
+}
+
+.nm-dm-push {
+  border: 1px solid var(--nm-ink);
+  background: var(--nm-paper);
+  padding: 11px 13px;
+}
+
+.nm-dm-push-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.nm-dm-push-h .nm-dm-ava {
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
+}
+
+.nm-dm-push-a {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-dm-push-m {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--nm-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dm-push-t {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.nm-dm-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+}
+
+.nm-dm-center .nm-dm-empty {
+  margin: 0;
+}
+
+/* ============ Mia ============ */
+
+.nm-dm-docs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.nm-dm-docs div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--nm-rule);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.nm-dm-sim {
+  max-width: 300px;
+  margin: 14px auto 0;
+  text-align: center;
+}
+
+.nm-dm-phone-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+}
+
+@media (min-width: 1024px) {
+  .nm-dm-phone-col {
+    align-self: flex-start;
+  }
+}
+
+.nm-dm-phone-col .nm-dm-phone {
+  align-self: center;
+}
+
+.nm-dm-wait {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--nm-dim);
+}
+
+/* ============ Предзаказ ============ */
+
+.nm-dm-qr {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.nm-dm-qr-box {
+  padding: 10px;
+  border: 1px solid var(--nm-ink);
+  background: #ffffff;
+}
+
+.nm-dm-qr-box svg {
+  display: block;
+}
+
+.nm-dm-qr-box.is-scan {
+  animation: nm-dm-pulse 0.9s ease-in-out infinite;
+}
+
+.nm-dm-seat {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-dm-small {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--nm-dim);
+}
+
+.nm-dm-menu {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--nm-ink) var(--nm-rule);
+}
+
+.nm-dm-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--nm-rule);
+}
+
+.nm-dm-item-e {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.nm-dm-item-n {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.nm-dm-item-p {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--nm-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dm-qty {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nm-dm-qty button {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--nm-rule);
+  background: transparent;
+  color: var(--nm-ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.nm-dm-qty button:hover {
+  border-color: var(--nm-ink);
+}
+
+.nm-dm-qty button.is-add {
+  background: var(--nm-ink);
+  border-color: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-dm-qty span {
+  width: 16px;
+  text-align: center;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dm-phone-foot {
+  flex: none;
+  padding: 10px 12px;
+  border-top: 1px solid var(--nm-rule);
+}
+
+.nm-dm-phone-foot .nm-dm-btn {
+  width: 100%;
+}
+
+.nm-dm-pay {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 14px 0;
+}
+
+.nm-dm-pay-t {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.nm-dm-bank {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--nm-rule);
+  background: transparent;
+  color: var(--nm-ink);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nm-dm-bank:hover {
+  border-color: var(--nm-ink);
+}
+
+.nm-dm-order {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.nm-dm-order p {
+  margin: 0;
+}
+
+.nm-dm-order-no {
+  font-family: var(--nm-display);
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.nm-dm-state {
+  padding: 4px 10px;
+  border: 1px solid var(--nm-rule);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-dm-state.is-ready {
+  background: var(--nm-ink);
+  border-color: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-dm-textbtn {
+  margin-top: 8px;
+  padding: 0 0 2px;
+  border: 0;
+  border-bottom: 1px solid var(--nm-dim);
+  background: transparent;
+  color: var(--nm-dim);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.nm-dm-textbtn:hover {
+  color: var(--nm-ink);
+  border-color: var(--nm-ink);
+}
+
+.nm-dm-biz-h {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 16px;
+  margin-bottom: 14px;
+}
+
+.nm-dm-biz-h .nm-dm-label {
+  margin: 0;
+}
+
+.nm-dm-timer {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--nm-dim);
+}
+
+.nm-dm-timer b {
+  color: var(--nm-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dm-bar-k {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 5px;
+  font-size: 11.5px;
+  color: var(--nm-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dm-bar-k b {
+  color: var(--nm-ink);
+}
+
+.nm-dm-bar {
+  height: 8px;
+  border: 1px solid var(--nm-rule);
+}
+
+.nm-dm-bar i {
+  display: block;
+  height: 100%;
+  background: #bdbdbd;
+}
+
+.nm-dm-bar i.is-ink {
+  background: var(--nm-ink);
+}
+
+.nm-dm-bars > * + * {
+  margin-top: 12px;
+}
+
+.nm-dm-feed.is-orders {
+  height: 180px;
+}
+
+.nm-dm-feed.is-orders .nm-dm-feed-i {
+  justify-content: space-between;
+}
+
+/* ============ Отзывы ============ */
+
+/* На старой странице отзывы были шире остального текста (768 точек против
+   672). В макете та же колонка, что у подводки и оговорки: иначе правый
+   край карточек отзывов не совпадал с линейками над и под ними. */
+.nm-dm-reviews {
+  max-width: var(--nm-dm-measure);
+}
+
+/* Подпись в строке с кнопками стоит на одной линии с ними, без нижнего
+   поля, которое у подписи над блоком. */
+.nm-dm-label.nm-dm-tone-k {
+  margin: 0 4px 0 0;
+}
+
+.nm-dm-err.nm-dm-tone-err {
+  margin: 0 0 0 6px;
+}
+
+.nm-dm-rev-n.nm-dm-custom-t {
+  margin-bottom: 12px;
+}
+
+.nm-dm-rev-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.nm-dm-rev-n {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.nm-dm-stars {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.nm-dm-stars i {
+  font-style: normal;
+  color: #c9c9c9;
+}
+
+.nm-dm-src {
+  margin-left: auto;
+  padding: 3px 8px;
+  border: 1px solid var(--nm-ink);
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.nm-dm-rev-t {
+  margin: 0 0 14px;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.nm-dm-rev-t.is-dim {
+  color: #555555;
+}
+
+.nm-dm-area {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--nm-rule);
+  background: var(--nm-paper);
+  color: var(--nm-ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+}
+
+.nm-dm-area::placeholder {
+  color: #aaaaaa;
+}
+
+.nm-dm-area:focus {
+  outline: none;
+  border-color: var(--nm-ink);
+}
+
+.nm-dm-rate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.nm-dm-rate .nm-dm-btn {
+  margin-left: auto;
+}
+
+.nm-dm-star {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #c9c9c9;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.nm-dm-star.is-on {
+  color: var(--nm-ink);
+}
+
+.nm-dm-star:hover {
+  color: #555555;
+}
+
+/* Малый отступ сверху для строк внутри панели. Стоит в конце файла, чтобы
+   перебить нулевые поля у классов строк выше. */
+.nm-dm-mts {
+  margin-top: 12px;
+}
+
+/* ============ адаптив ============ */
+
+@media (max-width: 860px) {
+  .nm-dm-intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  /* Каталог в один столбец: равнять карточки не с кем. */
+  .nm-dm-cat {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+
+  .nm-dm-sh {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .nm-dm-sh > .nm-dm-no:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .nm-dm-docs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nm-dm-step-d,
+  .nm-dm-step-x {
+    margin-left: 0;
+  }
+
+  .nm-dm-nums > div {
+    padding-left: 10px;
+    padding-right: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nm-dm-in,
+  .nm-dm-spin,
+  .nm-dm-qr-box.is-scan {
+    animation: none;
+  }
+}

@@ -99,17 +99,36 @@ export async function generateMetadata({
      картинки больше не достают;
    - таблицы оборачиваем в блок с прокруткой: широкая таблица на телефоне
      иначе распирает страницу вбок;
-   - внутренние ссылки на статьи, рубрики, сам Log, подкаст и главную ведут
-     в макет, а не на живые страницы. Ссылка на статью меняется, только если
-     такая статья есть: адреса картинок /blog/*.jpg под правило не попадают,
-     потому что стоят в src, а не в href. Разделы, которых в макете нет
-     (проекты, услуги, демо, резюме), остаются живыми адресами;
+   - внутренние ссылки на статьи, рубрики, сам Log, подкаст, демо и главную
+     ведут в макет, а не на живые страницы. Ссылка на статью меняется, только
+     если такая статья есть: адреса картинок /blog/*.jpg под правило не
+     попадают, потому что стоят в src, а не в href. Демо в текстах бывают
+     и относительными (/demos), и полным адресом живого сайта
+     (https://jasur-portfolio-pied.vercel.app/demos/mia): меняются оба,
+     см. demoHref. Разделы, которых в макете нет (проекты, услуги, резюме),
+     остаются живыми адресами;
    - пробелы внутри чисел («165 000») и перед знаком рубля становятся
      неразрывными: в узкой колонке таблицы на телефоне «165 000–300 000 ₽»
      рвался посреди числа, и «000 ₽» уезжало на отдельную строку. */
+/* Ссылка на демо, относительная или полным адресом живого сайта, ведёт в
+   макет: /demos/mia становится /new/demos/mia. Любая другая ссылка
+   возвращается как была. Отдельной функцией, потому что тот же адрес стоит
+   ещё в двух местах, кроме текста: в списке источников под статьёй и на
+   полке справа. Полные адреса lib/blog считает внешними и открывает в новой
+   вкладке; это поведение живой страницы, оно сохраняется, меняется только
+   адрес. */
+const DEMO_RE = /^(?:https:\/\/jasur-portfolio-pied\.vercel\.app)?\/demos(\/[a-z0-9-]+)?\/?(?=$|[?#])/;
+function demoHref(href: string): string {
+  return href.replace(DEMO_RE, (_m, name?: string) => `/new/demos${name ?? ""}`);
+}
+
 function adapt(html: string, slugs: Set<string>): string {
   return html
     .replace(/<figure class="mag-fig"/g, '<figure class="nm-fig"')
+    .replace(/href="([^"]*)"/g, (m, href: string) => {
+      const to = demoHref(href);
+      return to === href ? m : `href="${to}"`;
+    })
     .replace(/<table>/g, '<div class="nm-tbl"><table>')
     .replace(/<\/table>/g, "</table></div>")
     .replace(/href="\/blog\/tema\/([a-z0-9-]+)"/g, 'href="/new/log/tema/$1"')
@@ -142,6 +161,9 @@ export default async function NewArticle({
   const twin = post.translation ? getPost(post.translation) : null;
   const twinHref = twin ? articleHref(twin.slug) : undefined;
   const html = adapt(post.html, new Set(all.map((p) => p.slug)));
+  // Источники под статьёй и полка справа собраны из тех же ссылок текста,
+  // поэтому ссылки на демо в них ведут туда же, куда в тексте.
+  const links = post.links.map((l) => ({ ...l, href: demoHref(l.href) }));
   const rubric = rubricName(post.rubric, post.lang);
   const live = `${SITE}/blog/${post.slug}`;
 
@@ -242,13 +264,13 @@ export default async function NewArticle({
                 <div className="nm-body" dangerouslySetInnerHTML={{ __html: html }} />
               </article>
 
-              {post.links.length > 0 && (
+              {links.length > 0 && (
                 <section className="nm-art-sec nm-src">
                   <p className="nm-sec-t">
-                    {ru ? "Источники" : "Sources"} · {String(post.links.length).padStart(2, "0")}
+                    {ru ? "Источники" : "Sources"} · {String(links.length).padStart(2, "0")}
                   </p>
                   <ol>
-                    {post.links.map((l) => (
+                    {links.map((l) => (
                       <li key={l.href}>
                         <a href={l.href} target="_blank" rel="noopener noreferrer">
                           {l.text}
@@ -314,7 +336,7 @@ export default async function NewArticle({
             <Rail
               headings={post.headings}
               figures={post.figures}
-              links={post.links}
+              links={links}
               ru={ru}
             />
           </div>
