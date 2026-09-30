@@ -159,12 +159,19 @@ function useOverlay({
     } catch {
       coarse = false;
     }
-    if (!coarse) inputRef.current?.focus({ preventScroll: true });
+    /* Через таймер: если вступление пропустили кликом, браузер после
+       этого клика сам ставит фокус на слой и перебил бы поле ввода. */
+    const t = window.setTimeout(() => {
+      if (!coarse) inputRef.current?.focus({ preventScroll: true });
+    }, 0);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("keydown", onKey);
+    };
   }, [phase, inputRef]);
 
   return phase;
@@ -262,8 +269,8 @@ function Subtitle({ text, instant }: { text: string; instant: boolean }) {
   useEffect(() => {
     const plan = cards.map((c) => ({
       len: c.length,
-      type: instant ? 0 : c.length * 30,
-      hold: Math.max(1500, c.length * 52),
+      type: instant ? 0 : c.length * 24,
+      hold: Math.max(1400, c.length * 48),
     }));
     let raf = 0;
     const t0 = performance.now();
