@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Photo from "../Photo";
 import { NewHeader, NewFooter } from "../Chrome";
 import { ByLang } from "../Lang";
-import { WORKS, type Lang, type WorkKey } from "../strings";
+import { WORKS, CHROME, type Lang, type WorkKey } from "../strings";
+import { pageMeta, SITE_NAME } from "../meta";
 
-export const metadata: Metadata = {
-  title: "Работы · макет",
-  robots: { index: false, follow: false },
-};
+// Описание: заголовок страницы одной фразой и подводка под ним.
+export const metadata: Metadata = pageMeta({
+  title: `${CHROME.ru.nav.works} · ${SITE_NAME}`,
+  description: `${WORKS.ru.h1.join(" ")}. ${WORKS.ru.lead}`,
+});
 
 /* Ветка 02 по ТЗ. Задача страницы: показать руки, а не продать продукты.
 

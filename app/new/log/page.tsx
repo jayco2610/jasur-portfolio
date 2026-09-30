@@ -4,11 +4,14 @@ import { NewFooter } from "../Chrome";
 import LogChrome from "../LogChrome";
 import { ByLang } from "../Lang";
 import LogContent from "./LogContent";
+import { LOG } from "../strings";
+import { pageMeta } from "../meta";
+import { MAGAZINE_NAME } from "@/lib/rubrics";
 
-export const metadata: Metadata = {
-  title: "Log · макет",
-  robots: { index: false, follow: false },
-};
+export const metadata: Metadata = pageMeta({
+  title: MAGAZINE_NAME.ru,
+  description: LOG.ru.lead,
+});
 
 /* Ветка 01 по ТЗ, перенесённая целиком со старой страницы /writing: издание,
    а не сетка карточек. Порядок блоков тот же — рубрики, главное, лента

@@ -5,7 +5,8 @@ import LogChrome from "../../../LogChrome";
 import { cardPosts } from "../../../posts";
 import { ByLang } from "../../../Lang";
 import { LOG, type Lang } from "../../../strings";
-import { RUBRICS, rubricName, rubricDescription, rubricCover } from "@/lib/rubrics";
+import { RUBRICS, rubricName, rubricDescription, rubricCover, MAGAZINE_NAME } from "@/lib/rubrics";
+import { pageMeta } from "../../../meta";
 
 /* Страница отдельной рубрики внутри макета: /new/log/tema/[ключ].
 
@@ -48,11 +49,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { rubric } = await params;
 
-  return {
-    title: `${rubricName(rubric, "ru")} · Log · макет`,
-    // Макет не должен попасть в поиск, как и остальные страницы /new.
-    robots: { index: false, follow: false },
-  };
+  return pageMeta({
+    title: `${rubricName(rubric, "ru")} · ${MAGAZINE_NAME.ru}`,
+    description: rubricDescription(rubric, "ru"),
+  });
 }
 
 function Body({ rubric, lang }: { rubric: string; lang: Lang }) {

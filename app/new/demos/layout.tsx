@@ -1,14 +1,9 @@
-import type { Metadata } from "next";
 import "./demos.css";
 
 /* Каталог демо и шесть демо в новом оформлении: перенос app/demos.
 
-   Как и на старом сайте, заголовок вкладки задаётся здесь один на весь
-   раздел: у старых страниц демо своих заголовков нет. */
-export const metadata: Metadata = {
-  title: "Демо · макет",
-  robots: { index: false, follow: false },
-};
+   Заголовок вкладки и описание у каждой страницы раздела свои: у каталога
+   в demos/page.tsx, у демо в их page.tsx (собираются из demos/list.ts). */
 
 export default function DemosLayout({
   children,

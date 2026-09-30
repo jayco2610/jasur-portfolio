@@ -2,14 +2,20 @@ import type { Metadata } from "next";
 import "./new.css";
 import { unbounded, onest } from "./fonts";
 import { LangAttr } from "./Lang";
+import { HOME } from "./strings";
+import { pageMeta, SITE_NAME } from "./meta";
 
-export const metadata: Metadata = {
-  title: "Макет новой главной",
-  description: "Локальный макет для просмотра. Не продакшен.",
-  // Макет не должен попасть в поиск: он живёт рядом с живым сайтом
-  // и в выдаче выглядел бы как второй, сломанный вариант главной.
-  robots: { index: false, follow: false },
-};
+/* Запасные значения на случай страницы, которая не задала своих: имя вместо
+   «Макет новой главной» и описание главной. У каждой страницы макета свои
+   заголовок и описание (см. meta.ts).
+
+   Макет не должен попасть в поиск: он живёт рядом с живым сайтом и в выдаче
+   выглядел бы как второй, сломанный вариант главной. noindex стоит в
+   pageMeta. */
+export const metadata: Metadata = pageMeta({
+  title: SITE_NAME,
+  description: HOME.ru.sub,
+});
 
 /* Корневой layout сайта оборачивает каждую страницу своей шапкой, подвалом,
    JasurGPT, баннером согласия и пульсом. Убрать их можно только на уровне

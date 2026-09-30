@@ -1,8 +1,18 @@
+import type { Metadata } from "next";
 import Photo from "./Photo";
 import { NewHeader, NewFooter } from "./Chrome";
 import { ByLang } from "./Lang";
 import { cardPosts } from "./posts";
 import { HOME, CHROME, type Lang, type NavKey } from "./strings";
+import { pageMeta, SITE_NAME } from "./meta";
+
+/* Слово «портфолио» в заголовке вкладки оставлено по той же причине, что
+   на живой главной (app/layout.tsx): без него по запросу «джасур портфолио»
+   первым выдавался репозиторий на Гитхабе. */
+export const metadata: Metadata = pageMeta({
+  title: `${SITE_NAME} · портфолио`,
+  description: HOME.ru.sub,
+});
 
 /* Макет новой главной по ТЗ «13 — Новая архитектура».
    Блоки идут сверху вниз в том же порядке, что в документе:

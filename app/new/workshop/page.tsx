@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Photo from "../Photo";
 import { NewHeader, NewFooter } from "../Chrome";
 import { ByLang } from "../Lang";
-import { WORKSHOP, type Lang } from "../strings";
+import { WORKSHOP, CHROME, type Lang } from "../strings";
+import { pageMeta, SITE_NAME } from "../meta";
 
-export const metadata: Metadata = {
-  title: "Мастерская · макет",
-  robots: { index: false, follow: false },
-};
+// Описание: заголовок страницы и подводка под ним.
+export const metadata: Metadata = pageMeta({
+  title: `${CHROME.ru.nav.workshop} · ${SITE_NAME}`,
+  description: `${WORKSHOP.ru.h1.join(". ")}. ${WORKSHOP.ru.lead}`,
+});
 
 /* Ветка 03 по ТЗ, единственная новая сущность в конструкции.
    Все тексты взяты из ТЗ дословно, ничего не переписано.

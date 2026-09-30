@@ -9,11 +9,12 @@ import { cardDate } from "../posts";
 import { PODCAST, type Lang } from "../strings";
 import { getEpisodes } from "@/lib/podcast";
 import { SHOW, type Episode } from "@/lib/show";
+import { pageMeta } from "../meta";
 
-export const metadata: Metadata = {
-  title: "Подкаст · макет",
-  robots: { index: false, follow: false },
-};
+export const metadata: Metadata = pageMeta({
+  title: `${PODCAST.ru.kicker} · ${SHOW.name}`,
+  description: `${SHOW.ru.tagline} ${SHOW.ru.about}`,
+});
 
 /* Страница подкаста в макете. Перенос старой /podcast: блоки те же и в том же
    порядке — шапка издания, первый экран с названием и описанием шоу, темы,

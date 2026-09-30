@@ -10,6 +10,7 @@ import NoTranslation from "../../blog/NoTranslation";
 import { cardDate } from "../../posts";
 import { PODCAST } from "../../strings";
 import Player from "../Player";
+import { RSS, SITE_NAME } from "../../meta";
 
 /* Страница выпуска подкаста в макете: /new/podcast/[slug].
 
@@ -71,12 +72,14 @@ export async function generateMetadata({
   const live = `${SITE}/podcast/${ep.slug}`;
 
   return {
-    title: `${ep.title} · ${SHOW.name} · макет`,
+    title: { absolute: `${ep.title} · ${SHOW.name}` },
     description: ep.description,
     robots: { index: false, follow: false },
-    alternates: { canonical: live },
+    alternates: { canonical: live, types: RSS },
     openGraph: {
       type: "article",
+      siteName: SITE_NAME,
+      locale: ep.lang === "ru" ? "ru_RU" : "en_US",
       title: ep.title,
       description: ep.description,
       publishedTime: ep.date,

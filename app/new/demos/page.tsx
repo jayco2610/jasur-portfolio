@@ -1,5 +1,14 @@
+import type { Metadata } from "next";
 import { NewHeader, NewFooter } from "../Chrome";
 import Catalog from "./Catalog";
+import { pageMeta, SITE_NAME } from "../meta";
+import { t } from "@/lib/translations";
+
+// Описание: подводка каталога, та же строка, что под заголовком страницы.
+export const metadata: Metadata = pageMeta({
+  title: `${t.ru.demos.label} · ${SITE_NAME}`,
+  description: t.ru.demos.intro,
+});
 
 /* Каталог демо в макете: /new/demos. Раньше «Работы» вели на /demos
    старого сайта, и человек выпадал из нового дизайна.

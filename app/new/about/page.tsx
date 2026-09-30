@@ -3,11 +3,13 @@ import Photo from "../Photo";
 import { NewHeader, NewFooter } from "../Chrome";
 import { ByLang } from "../Lang";
 import { ABOUT, type Lang } from "../strings";
+import { pageMeta, SITE_NAME } from "../meta";
 
-export const metadata: Metadata = {
-  title: "Обо мне · макет",
-  robots: { index: false, follow: false },
-};
+// Описание: первая строка страницы и названия её разделов.
+export const metadata: Metadata = pageMeta({
+  title: `${ABOUT.ru.h1} · ${SITE_NAME}`,
+  description: `${ABOUT.ru.p1} ${ABOUT.ru.exp}, ${ABOUT.ru.edu.toLowerCase()}, ${ABOUT.ru.langs.toLowerCase()}.`,
+});
 
 /* Ветка 04 по ТЗ.
 

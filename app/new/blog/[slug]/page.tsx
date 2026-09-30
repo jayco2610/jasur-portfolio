@@ -13,6 +13,7 @@ import Rail from "../Rail";
 import Share from "../Share";
 import NoTranslation from "../NoTranslation";
 import Poster from "../Poster";
+import { RSS, SITE_NAME } from "../../meta";
 
 /* Страница статьи в макете: /new/blog/[slug].
 
@@ -41,7 +42,6 @@ import Poster from "../Poster";
    общего подвала сайта, поэтому стоит и здесь. */
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
-const OG = "/og-log.jpg";
 
 /* Кроме статей, собранных при сборке, никаких других адресов не существует.
    Без этой строки Next пытается собрать незнакомый адрес прямо на сервере,
@@ -66,28 +66,43 @@ export async function generateMetadata({
   // Оригинал этой статьи живёт на /blog/[slug]. Макет в поиск не пускаем,
   // а каноническим адресом, превью и ссылкой «поделиться» оставляем живой:
   // репост макета увёл бы человека на страницу, которой завтра не будет.
+  // После переезда макета статья сама встанет на этот адрес.
   const live = `${SITE}/blog/${post.slug}`;
 
+  // Превью ссылки: своя картинка 1200 × 630, если её нарисовали (ogImage),
+  // иначе обложка самой статьи. Раньше без ogImage подставлялась общая
+  // картинка журнала /og-log.jpg, и у четырёх статей (две про сайт, две про
+  // ноль продаж) превью было чужим. Размер у обложки не указываем: он у
+  // каждой свой, а неверный размер в разметке хуже, чем никакого.
+  const image = post.ogImage
+    ? { url: post.ogImage, width: 1200, height: 630, alt: post.title }
+    : post.cover
+      ? { url: post.cover, alt: post.title }
+      : null;
+
   return {
-    title: `${post.title} · Log · макет`,
+    title: { absolute: `${post.title} · ${MAGAZINE_NAME[post.lang]}` },
     description: post.description,
     robots: { index: false, follow: false },
     alternates: {
       canonical: post.canonical ?? live,
+      types: RSS,
     },
     openGraph: {
       type: "article",
+      siteName: SITE_NAME,
+      locale: post.lang === "ru" ? "ru_RU" : "en_US",
       title: post.title,
       description: post.description,
       publishedTime: post.date,
       url: live,
-      images: [{ url: post.ogImage ?? OG, width: 1200, height: 630, alt: post.title }],
+      ...(image ? { images: [image] } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
-      images: [post.ogImage ?? OG],
+      ...(image ? { images: [image.url] } : {}),
     },
   };
 }
