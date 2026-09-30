@@ -69,6 +69,7 @@ function Body({ lang }: { lang: Lang }) {
             src="/new/hero.jpg"
             alt="Jasur Akhmadaliev"
             ratio="1:1"
+            priority
           />
         </div>
       </section>

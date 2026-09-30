@@ -14,7 +14,7 @@ export default function Poster({ src }: { src: string }) {
   return (
     <div className="nm-art-poster">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" />
+      <img src={src} alt="" fetchPriority="high" />
     </div>
   );
 }

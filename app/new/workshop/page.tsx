@@ -52,6 +52,7 @@ function Body({ lang }: { lang: Lang }) {
             src="/new/workshop.jpg"
             alt={s.photoAlt}
             ratio="1:1"
+            priority
           />
         </div>
       </section>

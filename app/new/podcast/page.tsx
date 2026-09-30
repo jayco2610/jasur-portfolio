@@ -135,6 +135,7 @@ function Body({ lang, episodes }: { lang: Lang; episodes: Episode[] }) {
             src="/new/log-bg.jpg"
             alt="Jasur / Talks"
             ratio="4:5"
+            priority
           />
         </div>
       </section>

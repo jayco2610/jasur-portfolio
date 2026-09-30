@@ -56,6 +56,9 @@ export default function Carousel({
   const offset = useRef(0);
   const drag = useRef<{ x: number; from: number } | null>(null);
   const moved = useRef(false);
+  /* Лента стоит, пока внутри неё фокус с клавиатуры: иначе карточка, до
+     которой человек дошёл клавишей Tab, уезжает из-под рамки фокуса. */
+  const focused = useRef(false);
 
   const reduced = useSyncExternalStore(
     subscribeReduced,
@@ -96,7 +99,7 @@ export default function Carousel({
     const frame = (now: number) => {
       const dt = Math.min(now - last, 100) / 1000;
       last = now;
-      if (!drag.current && !reduced && !document.hidden) {
+      if (!drag.current && !focused.current && !reduced && !document.hidden) {
         offset.current = norm(offset.current + SPEED * dt);
       }
       track.style.transform = `translate3d(${-offset.current}px, 0, 0)`;
@@ -135,6 +138,12 @@ export default function Carousel({
         }}
         onPointerCancel={() => {
           drag.current = null;
+        }}
+        onFocus={() => {
+          focused.current = true;
+        }}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node | null)) focused.current = false;
         }}
         // Протяжка не должна заодно открывать статью, на которой началась.
         onClickCapture={(e) => {

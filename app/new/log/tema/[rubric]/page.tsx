@@ -82,6 +82,7 @@ function Body({ rubric, lang }: { rubric: string; lang: Lang }) {
               src={cover}
               alt={name}
               ratio="1:1"
+              priority
             />
           )}
         </div>

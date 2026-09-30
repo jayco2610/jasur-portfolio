@@ -48,6 +48,7 @@ export default function LogContent({ posts, lang }: { posts: CardPost[]; lang: L
             src="/new/log-hero.png"
             alt="Log"
             ratio="1:1"
+            priority
           />
         </div>
       </section>

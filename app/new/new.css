@@ -19,7 +19,11 @@
      нужно только вместе. */
   --nm-paper: #f9f9f7;
   --nm-ink: #0b0b0b;
-  --nm-dim: #8c8c8c;
+  /* Серый мелких подписей. Был #8c8c8c: на листе #f9f9f7 это 3,2 к 1, а
+     для текста мельче 18 точек нужно не меньше 4,5 к 1. #6b6b6b даёт 5,1 к 1
+     на листе и 4,7 к 1 на светло-сером поле ввода при фокусе (#f1f1ee).
+     Проверено замером по всем страницам макета 30 сентября 2026. */
+  --nm-dim: #6b6b6b;
   --nm-rule: #dcdcdc;
 
   /* Боковой отступ контентной колонки, вынесен в переменную: .nm-wrap
@@ -52,6 +56,48 @@
 .nm ::selection {
   background: var(--nm-ink);
   color: var(--nm-paper);
+}
+
+/* ============ фокус с клавиатуры ============
+   Одна рамка на весь макет: чёрная, в два пикселя, с отступом. Раньше
+   работало кольцо браузера по умолчанию, синее, и в нескольких местах его
+   срезали края блоков с overflow: рубрики в шапке Log, лента обложек,
+   полка статьи. Там кольцо рисуется внутрь (отрицательный отступ) или
+   заменено подчёркиванием. Только :focus-visible: при нажатии мышью рамки
+   нет, при переходе клавишей Tab есть. */
+.nm :focus-visible {
+  outline: 2px solid var(--nm-ink);
+  outline-offset: 3px;
+}
+
+/* В тёмной шапке издания рамка белая. */
+.nm-log-head :focus-visible {
+  outline-color: #ffffff;
+}
+
+/* Рубрики в шапке Log: блок прокручивается вбок, кольцо вокруг ссылки он
+   обрезает сверху и снизу. Вместо кольца белое подчёркивание. */
+.nm .nm-log-nav-btn:focus-visible {
+  outline: none;
+  opacity: 1;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+/* Лента обложек и полка статьи обрезают всё, что выходит за их края:
+   рамка внутри карточки. У карточки ещё подчёркивается заголовок, как при
+   наведении мышью. */
+.nm .nm-car .nm-card:focus-visible,
+.nm .nm-rail a:focus-visible,
+.nm .nm-rail button:focus-visible {
+  outline-offset: -2px;
+}
+
+.nm-card:focus-visible .nm-card-t {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
 }
 
 .nm-wrap {
@@ -1050,8 +1096,12 @@
   color: var(--nm-dim);
 }
 
+/* Фокус в поле почты: рамка изнутри в два пикселя. Раньше менялся только
+   фон, на #f1f1ee против #f9f9f7, и при переходе с клавиатуры было не
+   видно, что курсор уже в поле. */
 .nm-subs-mail input:focus {
-  outline: none;
+  outline: 2px solid var(--nm-ink);
+  outline-offset: -3px;
   background: #f1f1ee;
 }
 
@@ -1788,7 +1838,8 @@
 }
 
 .nm-log-lang span {
-  color: rgba(255, 255, 255, 0.45);
+  /* 0,45 давало 4,5 к 1 впритык, 0,55 с запасом (около 6 к 1). */
+  color: rgba(255, 255, 255, 0.55);
   transition: color 0.2s;
 }
 

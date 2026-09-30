@@ -278,7 +278,7 @@ export default async function NewArticle({
                   (post.coverFit === "poster" ? (
                     <Poster src={post.cover} />
                   ) : (
-                    <Photo className="nm-art-cover" src={post.cover} alt="" ratio="16:10" />
+                    <Photo className="nm-art-cover" src={post.cover} alt="" ratio="16:10" priority />
                   ))}
 
                 <div className="nm-body" dangerouslySetInnerHTML={{ __html: html }} />
@@ -311,6 +311,10 @@ export default async function NewArticle({
                 <img
                   src="/new/portret.jpg"
                   alt="Jasur Akhmadaliev"
+                  width={92}
+                  height={92}
+                  loading="lazy"
+                  decoding="async"
                   className="nm-author-ph"
                 />
                 <div>

@@ -115,7 +115,10 @@ export default function LogChrome({ article }: { article?: ArticleContext } = {}
   }
 
   return (
-    <div className="nm-log-head">
+    // lang: над английской статьёй шапка говорит по-английски, даже если
+    // интерфейс сайта русский, и читалка экрана должна читать её английским
+    // голосом. Атрибут у <html> идёт за языком интерфейса, а не статьи.
+    <div className="nm-log-head" lang={lang}>
       <div className="nm-wrap nm-log-head-in">
         {/* Логотип издания: косая черта */}
         <div className="nm-log-logo" aria-label={name}>

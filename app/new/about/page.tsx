@@ -47,6 +47,7 @@ function Body({ lang }: { lang: Lang }) {
               src="/new/portret.jpg"
               alt={s.photoAlt}
               ratio="2:3"
+              priority
             />
             <figcaption className="nm-about-cap">
               <span>{s.cap}</span>
