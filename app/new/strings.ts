@@ -318,7 +318,7 @@ export const WORKSHOP = {
     yesT: "For people who are already launching something or about to start.",
     yesD: "You are building your first product, looking for a way to make money, and want to see someone else's process uncut. You do not need motivation. You need to see what it looks like from the inside for someone one step ahead.",
     noT: "Not for people looking for a scheme.",
-    noD: "There are no ready-made ways to make money here and no guarantee it will work for you. I have not got rich myself yet. When I do, I will raise the price.",
+    noD: "There are no ready-made ways to make money here and no guarantee it will work for you. I am not rich yet. When I am, the price goes up.",
     stateT: "Intake paused",
     stateD: "I will reopen when I can run it properly. Leave a contact and I will write first.",
     button: "Leave a contact",
@@ -371,7 +371,7 @@ export const ABOUT = {
       { name: "Braiden Consulting", what: "AI project manager. Brought AI into the company's processes." },
       {
         name: "Synergia",
-        what: "Ran forty clients, gathered requirements, kept deadlines. NPS went from 62 to 78, response time dropped by a third.",
+        what: "Managed forty clients, gathered requirements, kept deadlines. NPS went from 62 to 78, response time dropped by a third.",
       },
       {
         name: "Instameal",

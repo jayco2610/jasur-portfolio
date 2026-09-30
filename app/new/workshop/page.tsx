@@ -5,10 +5,11 @@ import { ByLang } from "../Lang";
 import { WORKSHOP, CHROME, type Lang } from "../strings";
 import { pageMeta, SITE_NAME } from "../meta";
 
-// Описание: заголовок страницы и подводка под ним.
+// Описание: заголовок страницы и подводка под ним. Первая строка заголовка
+// уже кончается точкой, вторая нет.
 export const metadata: Metadata = pageMeta({
   title: `${CHROME.ru.nav.workshop} · ${SITE_NAME}`,
-  description: `${WORKSHOP.ru.h1.join(". ")}. ${WORKSHOP.ru.lead}`,
+  description: `${WORKSHOP.ru.h1.join(" ")}. ${WORKSHOP.ru.lead}`,
 });
 
 /* Ветка 03 по ТЗ, единственная новая сущность в конструкции.
