@@ -12,6 +12,7 @@ import { articleHref, cardDate, toCard } from "../../posts";
 import Rail from "../Rail";
 import Share from "../Share";
 import NoTranslation from "../NoTranslation";
+import Poster from "../Poster";
 
 /* Страница статьи в макете: /new/blog/[slug].
 
@@ -163,7 +164,14 @@ export default async function NewArticle({
   const html = adapt(post.html, new Set(all.map((p) => p.slug)));
   // Источники под статьёй и полка справа собраны из тех же ссылок текста,
   // поэтому ссылки на демо в них ведут туда же, куда в тексте.
-  const links = post.links.map((l) => ({ ...l, href: demoHref(l.href) }));
+  // lib/blog вынимает адрес прямо из html, где & записан как &amp;. В тексте
+  // статьи браузер это раскодирует сам, а здесь адрес идёт в JSX, и React
+  // экранирует его второй раз: ссылка на Хабр Карьеру в источниках уводила
+  // на адрес с «&amp;amp;» внутри и теряла второй параметр запроса.
+  const links = post.links.map((l) => ({
+    ...l,
+    href: demoHref(l.href.replace(/&amp;/g, "&")),
+  }));
   const rubric = rubricName(post.rubric, post.lang);
   const live = `${SITE}/blog/${post.slug}`;
 
@@ -253,10 +261,7 @@ export default async function NewArticle({
                     кадр. Нарисованная обложка-постер показывается целиком. */}
                 {post.cover &&
                   (post.coverFit === "poster" ? (
-                    <div className="nm-art-poster">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={post.cover} alt="" />
-                    </div>
+                    <Poster src={post.cover} />
                   ) : (
                     <Photo className="nm-art-cover" src={post.cover} alt="" ratio="16:10" />
                   ))}
