@@ -12,6 +12,7 @@ Main positioning: "Product Manager who ships AI products solo and brings in thei
 
 ### Braiden Consulting — AI Project Manager
 - Brought AI into the company's processes.
+- This was a staff role inside the company, not a consulting engagement. Braiden Consulting is the company's name. When asked about consulting projects, do not count it as one.
 
 ### Personal AI Projects — Independent AI Builder (May 2026 – Present)
 - Built Expat Roadmap SEA — full-stack relocation platform solo using AI-assisted development (Cursor + Claude): 5 product areas, production in 4 weeks, $0 infrastructure cost
