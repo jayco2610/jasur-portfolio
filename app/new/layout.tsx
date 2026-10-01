@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./new.css";
+import "./gpt/gpt.css";
 import { unbounded, onest } from "./fonts";
 import { LangAttr } from "./Lang";
 import { HOME } from "./strings";
 import { pageMeta, SITE_NAME } from "./meta";
+import { GptProvider } from "./gpt/Gpt";
 
 /* Запасные значения на случай страницы, которая не задала своих: имя вместо
    «Макет новой главной» и описание главной. У каждой страницы макета свои
@@ -38,7 +40,11 @@ export const metadata: Metadata = pageMeta({
    липкими. На живом сайте ровно та же поломка (шапка журнала и полка
    статьи тоже не липнут), но globals.css общий, и чинить его отсюда нельзя.
    overflow-x: clip режет вбок так же, как hidden, но собственной прокрутки
-   не создаёт. Боковую прокрутку всё так же держит html. */
+   не создаёт. Боковую прокрутку всё так же держит html.
+
+   Старый JasurGPT (components/JasurGPT.tsx) тоже лежит вне <main> и
+   прячется этим же правилом. У макета свой JasurGPT: GptProvider рисует
+   всплывающую кнопку на каждой странице и окно чата «Титр» (папка gpt/). */
 const isolate = `
 body > *:not(main):not(nextjs-portal) { display: none !important; }
 body { background: #f9f9f7 !important; }
@@ -56,7 +62,7 @@ export default function NewLayout({
         id="nm-root"
         className={`nm ${unbounded.variable} ${onest.variable}`}
       >
-        {children}
+        <GptProvider>{children}</GptProvider>
       </div>
     </>
   );
