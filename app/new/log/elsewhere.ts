@@ -16,9 +16,9 @@
    старой страницы: там английский местами писался отдельно и по смыслу
    расходился с русским.
 
-   Проверено 30 сентября 2026: статья про Fable 5 на VC.ru отдаёт 404, в
-   профиле её больше нет. Ссылка оставлена до решения Жасура: убрать строку
-   или заменить адрес, если статья переехала. */
+   Статья про Fable 5 на VC.ru удалена (30 сентября 2026 адрес отдавал 404),
+   1 октября строку убрали по решению Жасура. Если статья вернётся под
+   другим адресом, строку можно завести снова. */
 
 export type External = {
   title: { ru: string; en: string };
@@ -105,15 +105,6 @@ export const PUBLISHED: External[] = [
     lang: "EN",
     href: "https://medium.com/@jasurakhmadaliev283/your-best-thinking-happens-before-you-start-writing-0eb0f35df9c7",
   },
-  {
-    title: {
-      ru: "Fable 5 за 36 часов: запуск, скандал, запрет. Что это значит для бизнеса на AI",
-      en: "Fable 5 in 36 Hours: Launch, Controversy, Ban. What It Means for AI Businesses",
-    },
-    platform: "VC.ru",
-    lang: "RU",
-    href: "https://vc.ru/id5991727/2977300-fable-5-zapusk-skandal-posledstviya-dlya-biznesa-na-ai",
-  },
 ];
 
 export type Channel = {
@@ -126,8 +117,8 @@ export const CHANNELS: Channel[] = [
   {
     name: "Telegram @head_of_ceo",
     description: {
-      ru: "Главный канал. AI-инструменты, продуктовое мышление, дневник поиска работы.",
-      en: "The main channel. AI tools, product thinking, a job search diary.",
+      ru: "Главный канал. AI-инструменты и продуктовое мышление.",
+      en: "The main channel. AI tools and product thinking.",
     },
     href: "https://t.me/head_of_ceo",
   },

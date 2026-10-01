@@ -289,7 +289,7 @@ export const WORKSHOP = {
     ],
     option: {
       t: "Час на вашу задачу",
-      d: "Один-два раза в месяц разбираю чью-то задачу: собираю инструмент, смотрю цифры, придумываю подачу. Беру пять человек, больше не вытяну: три смены в неделю и десять-двенадцать часов на всё остальное.",
+      d: "Один-два раза в месяц разбираю чью-то задачу: собираю инструмент, смотрю цифры, придумываю подачу. Беру пять человек, больше не вытяну: свободных часов у меня десять-двенадцать в неделю.",
     },
     forWhom: "Для кого",
     yesT: "Для тех, кто уже что-то запускает или вот-вот начнёт.",
@@ -321,7 +321,7 @@ export const WORKSHOP = {
     ],
     option: {
       t: "An hour on your problem",
-      d: "Once or twice a month I take on someone's problem: build a tool, look at the numbers, work out how to pitch it. I take five people, I cannot carry more: three shifts a week and ten to twelve hours for everything else.",
+      d: "Once or twice a month I take on someone's problem: build a tool, look at the numbers, work out how to pitch it. I take five people, I cannot carry more: I have ten to twelve free hours a week.",
     },
     forWhom: "Who it is for",
     yesT: "For people who are already launching something or about to start.",
@@ -341,7 +341,7 @@ export const ABOUT = {
     h1: "Обо мне",
     photoAlt: "Портрет",
     cap: "Рис. 01 — Москва",
-    p1: "Продакт-менеджер: собираю продукты в одиночку, код, дизайн и тексты делаю сам.",
+    p1: "Собираю продукты в одиночку: код, дизайн и тексты делаю сам.",
     p2: "Всё, что собрал, лежит в «Работах», а как это собиралось и что из этого вышло — в Log, вместе с цифрами.",
     exp: "Опыт",
     experience: [
@@ -373,7 +373,7 @@ export const ABOUT = {
     h1: "About",
     photoAlt: "Portrait",
     cap: "Fig. 01, Moscow",
-    p1: "Product manager: I build products alone and do the code, design and copy myself.",
+    p1: "I build products solo: I do the code, design and copy myself.",
     p2: "Everything I have built is in Works. How it was built and what came of it is in Log, with the numbers.",
     exp: "Experience",
     experience: [

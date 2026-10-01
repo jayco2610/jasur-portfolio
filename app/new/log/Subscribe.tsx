@@ -52,7 +52,7 @@ export default function Subscribe({ lang = "ru" }: { lang?: "ru" | "en" }) {
 
   return (
     <section className="nm-subs">
-      <h2 className="nm-subs-t">{ru ? "Чтобы не пропустить" : "Catch the next one"}</h2>
+      <h2 className="nm-subs-t">{ru ? "Подписка" : "Subscribe"}</h2>
       <p className="nm-subs-d">
         {ru
           ? "Новая статья или выпуск подкаста, ничего больше. Рассылки по расписанию не будет."
@@ -95,8 +95,8 @@ export default function Subscribe({ lang = "ru" }: { lang?: "ru" | "en" }) {
           {state === "bad" && (ru ? "Проверьте адрес." : "Check the address.")}
           {state === "off" &&
             (ru
-              ? "Подписка по почте сейчас не работает. В телеграме точно не пропустите."
-              : "Email signup is down right now. Telegram works.")}
+              ? "Подписка по почте сейчас не работает. В телеграме всё приходит сразу."
+              : "Email signup is down right now. On Telegram everything arrives right away.")}
         </p>
       )}
     </section>

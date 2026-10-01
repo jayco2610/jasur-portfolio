@@ -203,7 +203,6 @@ export default async function NewArticle({
     author: {
       "@type": "Person",
       name: "Jasur Akhmadaliev",
-      jobTitle: "Product Manager",
       url: SITE,
       sameAs: [
         "https://www.linkedin.com/in/jasur-akhmadaliev/",
@@ -321,8 +320,8 @@ export default async function NewArticle({
                   <p className="nm-author-n">Jasur Akhmadaliev</p>
                   <p className="nm-author-d">
                     {ru
-                      ? "Продакт-менеджер. Строю AI-инструменты для собственной работы и показываю процесс открыто. Москва."
-                      : "Product manager. I build AI tools for my own work and show the process openly. Moscow."}
+                      ? "Собираю продукты в одиночку и пишу, как это выходит. Москва."
+                      : "I build products solo and write about how it goes. Moscow."}
                   </p>
                   <p className="nm-author-l">
                     <a href="https://t.me/head_of_ceo" target="_blank" rel="noopener noreferrer">
