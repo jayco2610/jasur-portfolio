@@ -129,7 +129,7 @@ export default function LeftoversDemo() {
     >
       <div className="nm-dm-split">
         {/* Слева: витрина и получатели */}
-        <div className="nm-dm-grow">
+        <div className="nm-dm-grow nm-dm-app">
           <p className="nm-dm-label">{c.counterTitle}</p>
           <div className="nm-dm-tbl">
             <table>
@@ -150,7 +150,7 @@ export default function LeftoversDemo() {
                     <td>{(i.qty * i.price).toLocaleString("ru-RU")} ₽</td>
                   </tr>
                 ))}
-                <tr>
+                <tr className="is-total">
                   <td colSpan={3}>{c.writeOffLabel}</td>
                   <td>{writeOffSum.toLocaleString("ru-RU")} ₽</td>
                 </tr>
@@ -159,7 +159,7 @@ export default function LeftoversDemo() {
           </div>
 
           <div className="nm-dm-mt">
-            <button type="button" onClick={run} disabled={loading} className="nm-dm-btn">
+            <button type="button" onClick={run} disabled={loading} className={`nm-dm-btn${loading ? " is-busy" : ""}`}>
               {loading ? c.generating : pushText ? c.regenBtn : c.runBtn}
             </button>
             {error && <p className="nm-dm-err">{error}</p>}
@@ -175,7 +175,7 @@ export default function LeftoversDemo() {
                   { value: `~${savedSum.toLocaleString("ru-RU")} ₽`, label: c.resultSaved, off: false },
                 ].map((s) => (
                   <div key={s.label}>
-                    <span className={`nm-dm-num-v${s.off ? " is-off" : ""}`}>{s.value}</span>
+                    <span className={`nm-dm-num-v${s.off ? " is-off" : " is-good"}`}>{s.value}</span>
                     <span className="nm-dm-num-k">{s.label}</span>
                   </div>
                 ))}
@@ -191,7 +191,7 @@ export default function LeftoversDemo() {
                     <span className="is-dim">
                       {r.dist} · {c.lastVisit}: {r.last[lang]}
                     </span>
-                    <span className="is-end">✓ {c.sent}</span>
+                    <span className="is-end is-ok">✓ {c.sent}</span>
                   </div>
                 ))}
               </div>

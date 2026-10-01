@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import { useVariant, withVariant } from "./variant";
 
 /* Общая обёртка каждого демо: возврат в каталог, заголовок, подводка,
    выделенная мысль, подсказка, сам интерфейс, оговорка про данные.
@@ -32,9 +34,14 @@ export default function DemoShell({
   children: React.ReactNode;
 }) {
   const { lang } = useLanguage();
+  const v = useVariant();
+  /* Имя демо из адреса (/new/demos/fraud → fraud). По нему во втором
+     цветном варианте у каждого демо своя палитра. Адрес сервер знает при
+     сборке, поэтому атрибут есть уже в разметке с сервера. */
+  const demo = usePathname().split("/").pop();
   return (
-    <div className="nm-wrap nm-dm">
-      <Link href="/new/demos" className="nm-dm-back">
+    <div className="nm-wrap nm-dm" data-demo={demo}>
+      <Link href={withVariant("/new/demos", v)} className="nm-dm-back">
         ← {lang === "en" ? "All demos" : "Все демо"}
       </Link>
 

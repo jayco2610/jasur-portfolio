@@ -5,6 +5,7 @@ import Photo from "../Photo";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 import { demos, productDemos, type Demo } from "./list";
+import { useVariant, withVariant, type Variant } from "./variant";
 
 /* Каталог демо. Перенос app/demos/page.tsx: те же три блока (вступление,
    демо для бизнеса, свои продукты), те же тексты, те же номера D.01 и P.01,
@@ -33,22 +34,34 @@ function rowsFor(...groups: number[]): string {
     .join(" ");
 }
 
+/* Ветка demos-color: при ?v= карточка ведёт в демо с тем же вариантом и
+   показывает кадр этого варианта (public/new/demos/v1, v2, v3). Кадры
+   сняты так же, как основные: окно 1100 точек, от линейки над интерфейсом,
+   1200 × 750. Key по адресу кадра: при смене кадра Photo собирается
+   заново, иначе заглушка от прежнего адреса осталась бы висеть. */
+function shotFor(demo: Demo, v: Variant): string {
+  return v ? demo.shot.replace("/new/demos/", `/new/demos/v${v}/`) : demo.shot;
+}
+
 function DemoCard({
   demo,
   lang,
   index,
   letter,
   openLabel,
+  v,
 }: {
   demo: Demo;
   lang: "en" | "ru";
   index: number;
   letter: string;
   openLabel: string;
+  v: Variant;
 }) {
+  const shot = shotFor(demo, v);
   return (
-    <Link href={demo.href} className="nm-dm-card">
-      <Photo src={demo.shot} alt="" ratio="16:10" />
+    <Link href={withVariant(demo.href, v)} className="nm-dm-card">
+      <Photo key={shot} src={shot} alt="" ratio="16:10" />
       <h3 className="nm-dm-card-n">{demo.name[lang]}</h3>
       <p className="nm-dm-card-s">{demo.tags[lang].join(" · ")}</p>
       <p className="nm-dm-card-d">{demo.desc[lang]}</p>
@@ -67,6 +80,7 @@ function DemoCard({
 export default function Catalog() {
   const { lang } = useLanguage();
   const d = t[lang].demos;
+  const v = useVariant();
   const [first, ...rest] = d.title.split(" ");
 
   return (
@@ -98,7 +112,7 @@ export default function Catalog() {
             <span className="nm-dm-no">{demos.length}</span>
           </div>
           {demos.map((demo, i) => (
-            <DemoCard key={demo.href} demo={demo} lang={lang} index={i} letter="D" openLabel={d.open} />
+            <DemoCard key={demo.href} demo={demo} lang={lang} index={i} letter="D" openLabel={d.open} v={v} />
           ))}
 
           <div className="nm-dm-sh is-next">
@@ -107,7 +121,7 @@ export default function Catalog() {
             <span className="nm-dm-no">{productDemos.length}</span>
           </div>
           {productDemos.map((demo, i) => (
-            <DemoCard key={demo.href} demo={demo} lang={lang} index={i} letter="P" openLabel={d.open} />
+            <DemoCard key={demo.href} demo={demo} lang={lang} index={i} letter="P" openLabel={d.open} v={v} />
           ))}
         </div>
       </section>
