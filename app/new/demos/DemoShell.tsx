@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 
 /* Общая обёртка каждого демо: возврат в каталог, заголовок, подводка,
@@ -32,8 +33,12 @@ export default function DemoShell({
   children: React.ReactNode;
 }) {
   const { lang } = useLanguage();
+  /* Имя демо из адреса (у /new/demos/fraud это fraud). По нему у каждого демо
+     своя палитра (demos-color.css). Адрес сервер знает при сборке, поэтому
+     атрибут есть уже в разметке с сервера. */
+  const demo = usePathname().split("/").pop();
   return (
-    <div className="nm-wrap nm-dm">
+    <div className="nm-wrap nm-dm" data-demo={demo}>
       <Link href="/new/demos" className="nm-dm-back">
         ← {lang === "en" ? "All demos" : "Все демо"}
       </Link>

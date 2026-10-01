@@ -326,8 +326,8 @@ export default function PreorderDemo() {
         </PhoneFrame>
 
         {/* Панель точки */}
-        <div className="nm-dm-grow">
-          <div className="nm-dm-biz-h">
+        <div className="nm-dm-grow nm-dm-app">
+          <div className="nm-dm-biz-h is-live">
             <p className="nm-dm-label">{c.bizTitle}</p>
             <p className="nm-dm-timer">
               {c.breakLabel}:{" "}
@@ -379,7 +379,7 @@ export default function PreorderDemo() {
           <p className="nm-dm-label nm-dm-mt">{c.feedTitle}</p>
           <div ref={feedRef} className="nm-dm-feed is-orders">
             {feed.map((o, i) => (
-              <div key={`${o.id}-${i}`} className={`nm-dm-feed-i${o.yours ? " is-hot" : ""}`}>
+              <div key={`${o.id}-${i}`} className={`nm-dm-feed-i${o.yours ? " is-hot is-mine" : ""}`}>
                 <span className={o.yours ? undefined : "is-dim"}>
                   {o.yours ? <b>{orderLabel(o.id, lang)}</b> : orderLabel(o.id, lang)}
                   {o.yours ? ` · ${c.yourOrder}` : ""}

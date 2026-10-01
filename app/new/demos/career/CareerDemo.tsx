@@ -122,94 +122,98 @@ export default function CareerDemo() {
       hint={{ en: copy.en.hint, ru: copy.ru.hint }}
       footer={null}
     >
-      <div className="nm-dm-row">
-        <button type="button" onClick={run} className="nm-dm-btn">
-          {stage >= 5 ? c.rerun : c.run}
-        </button>
-        <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="nm-dm-link">
-          {c.github}
-        </a>
-      </div>
+      {/* Окно интерфейса: рамка, подложка и тень приложения, как у панели
+          рядом с телефоном в других демо (demos-color.css, .nm-dm-app). */}
+      <div className="nm-dm-app is-wrap">
+        <div className="nm-dm-row">
+          <button type="button" onClick={run} className="nm-dm-btn">
+            {stage >= 5 ? c.rerun : c.run}
+          </button>
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="nm-dm-link">
+            {c.github}
+          </a>
+        </div>
 
-      {/* Цифры */}
-      <div className="nm-dm-nums nm-dm-w nm-dm-mt">
-        {c.stats.map((s) => (
-          <div key={s.label}>
-            <span className="nm-dm-num-v">{s.value}</span>
-            <span className="nm-dm-num-k">{s.label}</span>
-          </div>
-        ))}
-      </div>
+        {/* Цифры */}
+        <div className="nm-dm-nums nm-dm-w nm-dm-mt">
+          {c.stats.map((s) => (
+            <div key={s.label}>
+              <span className="nm-dm-num-v">{s.value}</span>
+              <span className="nm-dm-num-k">{s.label}</span>
+            </div>
+          ))}
+        </div>
 
-      {/* Шаги пайплайна */}
-      <div className="nm-dm-w nm-dm-stack nm-dm-mt">
-        {c.steps.map((step, i) => {
-          const st = stepState(i);
-          return (
-            <div key={step.name} className={`nm-dm-panel${st === "idle" ? "" : " is-on"}`}>
-              <div className="nm-dm-step-h">
-                <span className={`nm-dm-step-no${st === "done" ? " is-done" : st === "active" ? " is-run" : ""}`}>
-                  {st === "done" ? "✓" : i + 1}
-                </span>
-                <p className={`nm-dm-step-n${st === "idle" ? " is-idle" : ""}`}>{step.name}</p>
-                {st === "active" && <span className="nm-dm-spin" aria-hidden="true" />}
-              </div>
-              <p className={`nm-dm-step-d${st === "idle" ? " is-idle" : ""}`}>{step.desc}</p>
+        {/* Шаги пайплайна */}
+        <div className="nm-dm-w nm-dm-stack nm-dm-mt">
+          {c.steps.map((step, i) => {
+            const st = stepState(i);
+            return (
+              <div key={step.name} className={`nm-dm-panel${st === "idle" ? "" : " is-on"}`} data-st={st === "active" ? "run" : st}>
+                <div className="nm-dm-step-h">
+                  <span className={`nm-dm-step-no${st === "done" ? " is-done" : st === "active" ? " is-run" : ""}`}>
+                    {st === "done" ? "✓" : i + 1}
+                  </span>
+                  <p className={`nm-dm-step-n${st === "idle" ? " is-idle" : ""}`}>{step.name}</p>
+                  {st === "active" && <span className="nm-dm-spin" aria-hidden="true" />}
+                </div>
+                <p className={`nm-dm-step-d${st === "idle" ? " is-idle" : ""}`}>{step.desc}</p>
 
-              {/* Что выдаёт каждый шаг */}
-              {i === 0 && st !== "idle" && (
-                <div className="nm-dm-step-x nm-dm-in">
-                  <div className="nm-dm-vac">
-                    <p>
-                      <span className="nm-dm-emo">🔗</span> {c.vacancy.title}
-                    </p>
-                    <p>{c.vacancy.meta}</p>
+                {/* Что выдаёт каждый шаг */}
+                {i === 0 && st !== "idle" && (
+                  <div className="nm-dm-step-x nm-dm-in">
+                    <div className="nm-dm-vac">
+                      <p>
+                        <span className="nm-dm-emo">🔗</span> {c.vacancy.title}
+                      </p>
+                      <p>{c.vacancy.meta}</p>
+                    </div>
                   </div>
-                </div>
-              )}
-              {i === 1 && (st === "done" || st === "active") && stage >= 1 && (
-                <div className="nm-dm-step-x nm-dm-chips nm-dm-in">
-                  {c.requirements.map((r) => (
-                    <span key={r}>{r}</span>
-                  ))}
-                </div>
-              )}
-              {i === 2 && stage >= 2 && (
-                <div className="nm-dm-step-x nm-dm-match nm-dm-in">
-                  {c.matches.map((m) => (
-                    <p key={m.skill} className={m.ok ? undefined : "is-gap"}>
-                      {m.ok ? "✓" : "△"} {m.skill}
-                    </p>
-                  ))}
-                  <p className="is-score">78% {c.matchScore}</p>
-                </div>
-              )}
-              {i === 3 && stage >= 3 && (
-                <div className="nm-dm-step-x nm-dm-quote nm-dm-in">
-                  <p className="nm-dm-quote-k">{c.letterLabel}</p>
-                  <p className="nm-dm-quote-t">{c.letter}</p>
-                </div>
-              )}
-              {i === 4 && stage >= 4 && (
-                <div className="nm-dm-step-x nm-dm-scroll-x nm-dm-in">
-                  <p className="nm-dm-quote-k">{c.sheetLabel}</p>
-                  <div className="nm-dm-sheet">
-                    {c.sheetRow.map((cell) => (
-                      <span key={cell}>{cell}</span>
+                )}
+                {i === 1 && (st === "done" || st === "active") && stage >= 1 && (
+                  <div className="nm-dm-step-x nm-dm-chips nm-dm-in">
+                    {c.requirements.map((r) => (
+                      <span key={r}>{r}</span>
                     ))}
                   </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
+                )}
+                {i === 2 && stage >= 2 && (
+                  <div className="nm-dm-step-x nm-dm-match nm-dm-in">
+                    {c.matches.map((m) => (
+                      <p key={m.skill} className={m.ok ? "is-ok" : "is-gap"}>
+                        <span className="nm-dm-sym">{m.ok ? "✓" : "△"}</span> {m.skill}
+                      </p>
+                    ))}
+                    <p className="is-score">78% {c.matchScore}</p>
+                  </div>
+                )}
+                {i === 3 && stage >= 3 && (
+                  <div className="nm-dm-step-x nm-dm-quote nm-dm-in">
+                    <p className="nm-dm-quote-k">{c.letterLabel}</p>
+                    <p className="nm-dm-quote-t">{c.letter}</p>
+                  </div>
+                )}
+                {i === 4 && stage >= 4 && (
+                  <div className="nm-dm-step-x nm-dm-scroll-x nm-dm-in">
+                    <p className="nm-dm-quote-k">{c.sheetLabel}</p>
+                    <div className="nm-dm-sheet">
+                      {c.sheetRow.map((cell) => (
+                        <span key={cell}>{cell}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
 
-        {stage >= 5 && (
-          <div className="nm-dm-panel is-on nm-dm-in">
-            <p className="nm-dm-done-t">✓ {c.doneTitle}</p>
-            <p className="nm-dm-panel-d">{c.doneDesc}</p>
-          </div>
-        )}
+          {stage >= 5 && (
+            <div className="nm-dm-panel is-on is-success nm-dm-in">
+              <p className="nm-dm-done-t">✓ {c.doneTitle}</p>
+              <p className="nm-dm-panel-d">{c.doneDesc}</p>
+            </div>
+          )}
+        </div>
       </div>
 
       <p className="nm-dm-note nm-dm-w nm-dm-mt">{c.simNote}</p>

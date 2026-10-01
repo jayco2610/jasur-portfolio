@@ -179,6 +179,21 @@ export default function FraudDemo() {
     feedRef.current?.scrollTo({ top: feedRef.current.scrollHeight, behavior: "smooth" });
   }, [events]);
 
+  const nums = (
+    <div className="nm-dm-nums nm-dm-w">
+      {[
+        { value: processed, label: c.stats.events },
+        { value: alerts.length, label: c.stats.alerts },
+        { value: `${flaggedSum.toLocaleString("ru-RU")} ₽`, label: c.stats.saved },
+      ].map((s) => (
+        <div key={s.label}>
+          <span className="nm-dm-num-v">{s.value}</span>
+          <span className="nm-dm-num-k">{s.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <DemoShell
       title={{ en: copy.en.title, ru: copy.ru.title }}
@@ -186,24 +201,13 @@ export default function FraudDemo() {
       pitch={{ en: copy.en.pitch, ru: copy.ru.pitch }}
       hint={{ en: "Press Inject a fraud event and watch the alert land in Telegram on the right.", ru: "Нажмите «Подбросить фрод-событие» и следите за алертом в Telegram справа." }}
     >
-      {/* Цифры */}
-      <div className="nm-dm-nums nm-dm-w">
-        {[
-          { value: processed, label: c.stats.events },
-          { value: alerts.length, label: c.stats.alerts },
-          { value: `${flaggedSum.toLocaleString("ru-RU")} ₽`, label: c.stats.saved },
-        ].map((s) => (
-          <div key={s.label}>
-            <span className="nm-dm-num-v">{s.value}</span>
-            <span className="nm-dm-num-k">{s.label}</span>
-          </div>
-        ))}
-      </div>
-
       <div className="nm-dm-split nm-dm-mt">
         {/* Слева: поток событий и правила */}
-        <div className="nm-dm-grow">
-          <div className="nm-dm-biz-h">
+        <div className="nm-dm-grow nm-dm-app">
+          {/* Цифры внутри панели слева, в общем окне с потоком и
+              правилами: это одна панель владельца, а не две. */}
+          {nums}
+          <div className={`nm-dm-biz-h nm-dm-mt${running ? " is-live" : ""}`}>
             <p className="nm-dm-label">{c.feedTitle}</p>
             <div className="nm-dm-row is-tight">
               <button type="button" onClick={() => setRunning((v) => !v)} className="nm-dm-btn2 is-s">
@@ -217,17 +221,17 @@ export default function FraudDemo() {
 
           <div ref={feedRef} className="nm-dm-feed is-events">
             {events.map((ev) => (
-              <div key={ev.id} className={`nm-dm-feed-i${ev.flagged ? " is-hot" : ""}`}>
+              <div key={ev.id} className={`nm-dm-feed-i${ev.flagged ? " is-hot is-alert" : ""}`}>
                 <span className="is-dim">{ev.time}</span>
                 <span className="is-dim">
                   {c.registerWord} {ev.register}
                 </span>
-                <span className={ev.flagged || ev.kind !== "sale" ? undefined : "is-dim"}>
+                <span className={`nm-dm-kind is-${ev.kind}${ev.flagged || ev.kind !== "sale" ? "" : " is-dim"}`}>
                   {c.kinds[ev.kind]}
                   {ev.kind === "discount" ? ` ${ev.discountPct}%` : ""}
                 </span>
                 <span className="is-end">{ev.amount.toLocaleString("ru-RU")} ₽</span>
-                {ev.flagged && <span>⚠</span>}
+                {ev.flagged && <span className="nm-dm-flag">⚠</span>}
               </div>
             ))}
           </div>
@@ -257,7 +261,7 @@ export default function FraudDemo() {
           <div ref={chatRef} className="nm-dm-chat">
             {alerts.length === 0 && <p className="nm-dm-empty">{c.chatEmpty}</p>}
             {alerts.map((a) => (
-              <div key={a.id} className="nm-dm-msg is-wide">
+              <div key={a.id} className="nm-dm-msg is-wide is-alert">
                 <p className="nm-dm-msg-k">
                   <span className="nm-dm-emo">⚠️</span> {c.alertWord} · {c.registerWord.toLowerCase()} {a.register}
                 </p>

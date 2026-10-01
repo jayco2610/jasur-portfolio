@@ -150,7 +150,7 @@ function TypedText({ text }: { text: string }) {
 
 function Reply({ label, text }: { label: string; text: string }) {
   return (
-    <div className="nm-dm-quote">
+    <div className="nm-dm-quote is-ai">
       <p className="nm-dm-quote-k">{label}</p>
       <p className="nm-dm-quote-t">
         <TypedText text={text} />
@@ -200,90 +200,94 @@ export default function ReviewsDemo() {
       pitch={{ en: copy.en.pitch, ru: copy.ru.pitch }}
       hint={{ en: "Press Reply with AI under any review, or paste your own review below.", ru: "Нажмите «Ответить с ИИ» под любым отзывом или вставьте свой отзыв в поле внизу." }}
     >
-      {/* Тон ответа */}
-      <div className="nm-dm-row is-tight">
-        <span className="nm-dm-label nm-dm-tone-k">{c.tone}:</span>
-        {(["neutral", "warm"] as const).map((t) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setTone(t)}
-            className={`nm-dm-btn2 is-s${tone === t ? " is-on" : ""}`}
-            aria-pressed={tone === t}
-          >
-            {t === "neutral" ? c.toneNeutral : c.toneWarm}
-          </button>
-        ))}
-        {error && <span className="nm-dm-err nm-dm-tone-err">{error}</span>}
-      </div>
+      {/* Окно интерфейса: рамка, подложка и тень приложения, как у панели
+          рядом с телефоном в других демо (demos-color.css, .nm-dm-app). */}
+      <div className="nm-dm-app is-wrap">
+        {/* Тон ответа */}
+        <div className="nm-dm-row is-tight">
+          <span className="nm-dm-label nm-dm-tone-k">{c.tone}:</span>
+          {(["neutral", "warm"] as const).map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTone(t)}
+              className={`nm-dm-btn2 is-s${tone === t ? " is-on" : ""}`}
+              aria-pressed={tone === t}
+            >
+              {t === "neutral" ? c.toneNeutral : c.toneWarm}
+            </button>
+          ))}
+          {error && <span className="nm-dm-err nm-dm-tone-err">{error}</span>}
+        </div>
 
-      <div className="nm-dm-reviews nm-dm-stack nm-dm-mt">
-        {REVIEWS.map((r) => (
-          <div key={r.id} className="nm-dm-panel">
-            <div className="nm-dm-rev-h">
-              <span className="nm-dm-ava">{r.name[lang][0]}</span>
-              <div>
-                <p className="nm-dm-rev-n">{r.name[lang]}</p>
-                <Stars rating={r.rating} />
+        <div className="nm-dm-reviews nm-dm-stack nm-dm-mt">
+          {REVIEWS.map((r) => (
+            <div key={r.id} className="nm-dm-panel">
+              <div className="nm-dm-rev-h">
+                <span className="nm-dm-ava">{r.name[lang][0]}</span>
+                <div>
+                  <p className="nm-dm-rev-n">{r.name[lang]}</p>
+                  <Stars rating={r.rating} />
+                </div>
+                <span className="nm-dm-src">{SOURCE[r.source][lang]}</span>
               </div>
-              <span className="nm-dm-src">{SOURCE[r.source][lang]}</span>
-            </div>
-            <p className="nm-dm-rev-t is-dim">{r.text[lang]}</p>
+              <p className="nm-dm-rev-t is-dim">{r.text[lang]}</p>
 
-            {replies[r.id] ? (
-              <Reply label={c.replyLabel} text={replies[r.id]} />
-            ) : (
+              {replies[r.id] ? (
+                <Reply label={c.replyLabel} text={replies[r.id]} />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => reply(r.id, r.text[lang], r.rating)}
+                  disabled={loadingId !== null}
+                  className={`nm-dm-btn is-s${loadingId === r.id ? " is-busy" : ""}`}
+                >
+                  {loadingId === r.id ? c.replying : c.replyBtn}
+                </button>
+              )}
+            </div>
+          ))}
+
+          {/* Свой отзыв */}
+          <div className="nm-dm-panel is-on is-own">
+            <p className="nm-dm-rev-n nm-dm-custom-t">{c.customTitle}</p>
+            <textarea
+              value={customText}
+              onChange={(e) => setCustomText(e.target.value)}
+              maxLength={500}
+              rows={3}
+              placeholder={c.customPlaceholder}
+              className="nm-dm-area"
+            />
+            <div className="nm-dm-rate">
+              <span className="nm-dm-label nm-dm-tone-k">{c.customRating}:</span>
+              {[1, 2, 3, 4, 5].map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setCustomRating(n)}
+                  className={`nm-dm-star${n <= customRating ? " is-on" : ""}`}
+                  aria-label={`${n}/5`}
+                  aria-pressed={n === customRating}
+                >
+                  ★
+                </button>
+              ))}
               <button
                 type="button"
-                onClick={() => reply(r.id, r.text[lang], r.rating)}
-                disabled={loadingId !== null}
-                className="nm-dm-btn is-s"
+                onClick={() => reply("custom", customText.trim(), customRating)}
+                disabled={loadingId !== null || customText.trim().length < 10}
+                className={`nm-dm-btn is-s${loadingId === "custom" ? " is-busy" : ""}`}
               >
-                {loadingId === r.id ? c.replying : c.replyBtn}
+                {loadingId === "custom" ? c.replying : c.customBtn}
               </button>
+            </div>
+            {replies.custom && (
+              <div className="nm-dm-mts">
+                <Reply label={c.replyLabel} text={replies.custom} />
+              </div>
             )}
           </div>
-        ))}
-
-        {/* Свой отзыв */}
-        <div className="nm-dm-panel is-on">
-          <p className="nm-dm-rev-n nm-dm-custom-t">{c.customTitle}</p>
-          <textarea
-            value={customText}
-            onChange={(e) => setCustomText(e.target.value)}
-            maxLength={500}
-            rows={3}
-            placeholder={c.customPlaceholder}
-            className="nm-dm-area"
-          />
-          <div className="nm-dm-rate">
-            <span className="nm-dm-label nm-dm-tone-k">{c.customRating}:</span>
-            {[1, 2, 3, 4, 5].map((n) => (
-              <button
-                key={n}
-                type="button"
-                onClick={() => setCustomRating(n)}
-                className={`nm-dm-star${n <= customRating ? " is-on" : ""}`}
-                aria-label={`${n}/5`}
-                aria-pressed={n === customRating}
-              >
-                ★
-              </button>
-            ))}
-            <button
-              type="button"
-              onClick={() => reply("custom", customText.trim(), customRating)}
-              disabled={loadingId !== null || customText.trim().length < 10}
-              className="nm-dm-btn is-s"
-            >
-              {loadingId === "custom" ? c.replying : c.customBtn}
-            </button>
-          </div>
-          {replies.custom && (
-            <div className="nm-dm-mts">
-              <Reply label={c.replyLabel} text={replies.custom} />
-            </div>
-          )}
         </div>
       </div>
     </DemoShell>

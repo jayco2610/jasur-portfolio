@@ -166,15 +166,15 @@ export default function MiaDemo() {
       hint={{ en: copy.en.hint, ru: copy.ru.hint }}
       footer={null}
     >
-      <a href={HF_URL} target="_blank" rel="noopener noreferrer" className="nm-dm-btn">
+      <a href={HF_URL} target="_blank" rel="noopener noreferrer" className="nm-dm-btn is-cta">
         {c.openLive}
       </a>
 
       <div className="nm-dm-split nm-dm-mt">
         {/* Слева: шаги */}
-        <div className="nm-dm-grow nm-dm-stack">
+        <div className="nm-dm-grow nm-dm-stack nm-dm-app">
           {/* Шаг 1: база знаний */}
-          <div className="nm-dm-panel">
+          <div className="nm-dm-panel" data-st="done">
             <p className="nm-dm-panel-t">1 · {c.step1}</p>
             <p className="nm-dm-panel-d">{c.step1desc}</p>
             <div className="nm-dm-docs">
@@ -187,7 +187,7 @@ export default function MiaDemo() {
           </div>
 
           {/* Шаг 2: поиск */}
-          <div className={`nm-dm-panel${phase === "idle" ? "" : " is-on"}`}>
+          <div className={`nm-dm-panel${phase === "idle" ? "" : " is-on"}`} data-st={phase === "idle" ? "idle" : phase === "searching" ? "run" : "done"}>
             <p className="nm-dm-panel-t">2 · {c.step2}</p>
             <p className="nm-dm-panel-d">{c.step2desc}</p>
             {phase === "idle" && (
@@ -209,7 +209,7 @@ export default function MiaDemo() {
           </div>
 
           {/* Шаг 3: ответ по документам */}
-          <div className={`nm-dm-panel${phase === "done" ? " is-on" : ""}`}>
+          <div className={`nm-dm-panel${phase === "done" ? " is-on" : ""}`} data-st={phase === "done" ? "done" : phase === "found" ? "run" : "idle"}>
             <p className="nm-dm-panel-t">3 · {c.step3}</p>
             <p className="nm-dm-panel-d">{c.step3desc}</p>
             {phase === "done" && <p className="nm-dm-done-t nm-dm-mts nm-dm-in">✓ {c.step3check}</p>}
@@ -236,7 +236,7 @@ export default function MiaDemo() {
                 </div>
               )}
               {phase === "searching" && (
-                <div className="nm-dm-msg">
+                <div className="nm-dm-msg is-typing">
                   <p className="nm-dm-msg-d">{c.searching}</p>
                 </div>
               )}
