@@ -217,9 +217,9 @@
   --u-mine-text: #4d3d00;
   --u-mine-bar: #f5c000;
   --u-out: #15803d;
-  --u-head: #15803d;
+  --u-head: #146c34;
   --u-head-text: #ffffff;
-  --u-head-text-2: #d4ecdb;
+  --u-head-text-2: #dceee2;
   --u-chat: #eef3ed;
   --u-ring: rgba(21, 128, 61, 0.3);
   --u-num-font: var(--nm-display);
@@ -303,7 +303,7 @@
 
 /* Ответы на отзывы. Белый и золото звёзд. Кнопки золотые с тёмным текстом
    (9,2 к 1), золото как текст не используется: на белом оно не читается,
-   для подписей есть тёмная охра. */
+   для подписей есть тёмная охра #7a5600. */
 .nm-dmv[data-v="2"] .nm-dm[data-demo="reviews"] {
   --u-canvas: #ffffff;
   --u-surface-2: #f8f7f4;
@@ -312,7 +312,7 @@
   --u-border-2: #d6d1c5;
   --u-text: #1c1a17;
   --u-text-2: #67615a;
-  --u-icon: #9b958b;
+  --u-icon: #8f897f;
   --u-accent: #f2b200;
   --u-accent-hover: #e3a600;
   --u-accent-press: #cc9500;
@@ -320,7 +320,9 @@
   --u-accent-soft: #fff7dc;
   --u-accent-line: #f0d68a;
   --u-accent-text: #7a5600;
-  --u-star: #f2b200;
+  /* Звёзды на тон темнее кнопки: знак рейтинга должен держать 3 к 1 на
+     белом, у #f2b200 только 1,9. #c98600 даёт 3,05 и остаётся золотом. */
+  --u-star: #c98600;
   --u-mine: var(--u-accent-soft);
   --u-mine-text: var(--u-accent-text);
   --u-mine-bar: var(--u-accent);
@@ -1822,6 +1824,21 @@
 .nm-dmv[data-v] .nm-dm-stage .nm-dm-rev-t.is-dim {
   font-size: 14px;
   color: var(--u-text);
+}
+
+/* Полоса тональности слева у карточки отзыва, по оценке из aria-label:
+   1–2 звезды тревога (на них отвечать первыми), 3 предупреждение, 4–5
+   успех. Так менеджер видит очередь, не читая каждый отзыв. */
+.nm-dmv[data-v] .nm-dm-stage .nm-dm-panel:has(.nm-dm-stars:is([aria-label="1/5"], [aria-label="2/5"])) {
+  box-shadow: inset 3px 0 0 var(--u-bad), var(--u-shadow-1);
+}
+
+.nm-dmv[data-v] .nm-dm-stage .nm-dm-panel:has(.nm-dm-stars[aria-label="3/5"]) {
+  box-shadow: inset 3px 0 0 var(--u-warn), var(--u-shadow-1);
+}
+
+.nm-dmv[data-v] .nm-dm-stage .nm-dm-panel:has(.nm-dm-stars:is([aria-label="4/5"], [aria-label="5/5"])) {
+  box-shadow: inset 3px 0 0 var(--u-ok), var(--u-shadow-1);
 }
 
 /* «Ответить с ИИ» под каждым отзывом: мягкая кнопка. Пять одинаково
