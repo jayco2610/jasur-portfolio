@@ -560,6 +560,21 @@
   border-color: var(--nm-dim);
 }
 
+/* Та же строка внизу /new/works: «Услуги и цены» и пометка PDF. Отступ
+   сверху равен промежутку между рядами карточек (.nm-wk), чтобы строка не
+   прилипала к последнему ряду. */
+.nm-more.nm-more-pdf {
+  margin-top: clamp(36px, 4.4vw, 64px);
+}
+
+.nm-more-tag {
+  margin-left: 14px;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
 /* ============ блок 5. Контакты и подвал ============ */
 
 .nm-contacts {

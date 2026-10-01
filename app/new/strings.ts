@@ -179,11 +179,18 @@ export type WorkKey = "abcx" | "expat" | "career" | "mia" | "jasurgpt" | "demos"
 
 type WorkText = { name: string; what: string; stack: string[] };
 
-export const WORKS: Record<Lang, { h1: string[]; lead: string; open: string; items: Record<WorkKey, WorkText> }> = {
+/* prices и pdf: строка-ссылка внизу страницы на документ «Услуги» (PDF
+   своего языка в public/new, собирается scripts/uslugi-pdf.mjs). */
+export const WORKS: Record<
+  Lang,
+  { h1: string[]; lead: string; open: string; prices: string; pdf: string; items: Record<WorkKey, WorkText> }
+> = {
   ru: {
     h1: ["Шесть штук,", "собранных", "в одиночку"],
     lead: "Код, дизайн, тексты. Всё работает, всё открывается по ссылке.",
     open: "Открыть",
+    prices: "Услуги и цены",
+    pdf: "PDF",
     items: {
       abcx: {
         name: "abcx",
@@ -221,6 +228,8 @@ export const WORKS: Record<Lang, { h1: string[]; lead: string; open: string; ite
     h1: ["Six things,", "built", "solo"],
     lead: "Code, design, copy. Everything works, everything opens from a link.",
     open: "Open",
+    prices: "Services and prices",
+    pdf: "PDF",
     items: {
       abcx: {
         name: "abcx",

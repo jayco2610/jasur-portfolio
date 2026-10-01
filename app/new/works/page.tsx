@@ -117,6 +117,17 @@ function Body({ lang }: { lang: Lang }) {
             );
           })}
         </div>
+
+        {/* Услуги и цены не отдельная ветка сайта, а документ: решение
+            Жасура. Одна строка после карточек, в той же манере, что «Все
+            материалы в Log» на главной (.nm-more). Открывает PDF своего языка
+            в новой вкладке; файлы собирает scripts/uslugi-pdf.mjs. */}
+        <p className="nm-more nm-more-pdf">
+          <a href={`/new/uslugi-${lang}.pdf`} target="_blank" rel="noopener">
+            {s.prices}
+          </a>
+          <span className="nm-more-tag">{s.pdf}</span>
+        </p>
       </section>
     </>
   );
