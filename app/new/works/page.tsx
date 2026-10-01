@@ -4,6 +4,7 @@ import { NewHeader, NewFooter } from "../Chrome";
 import { ByLang } from "../Lang";
 import { WORKS, CHROME, type Lang, type WorkKey } from "../strings";
 import { pageMeta, SITE_NAME } from "../meta";
+import { GptButton } from "../gpt/Gpt";
 
 // Описание: заголовок страницы одной фразой и подводка под ним.
 export const metadata: Metadata = pageMeta({
@@ -37,12 +38,11 @@ export const metadata: Metadata = pageMeta({
    Куда ведёт «Открыть». Демо, Mia и AI Career System открываются в макете
    (/new/demos...), чтобы человек не выпадал в старый дизайн. Mia раньше
    вела на пространство Hugging Face, которое спит; живой ассистент
-   по-прежнему открывается кнопкой со страницы демо. JasurGPT раньше вёл на
-   jasur.dev, а этот домен не находится (проверено 28 сентября 2026).
-   Отдельного адреса у чата нет: он открывается кнопкой в углу любой
-   страницы живого сайта, ни параметра в адресе, ни якоря он не слушает.
-   Поэтому ссылка ведёт на главную живого сайта, где кнопка есть. В макете
-   кнопки нет: layout.tsx прячет всё, что общий layout кладёт вне <main>.
+   по-прежнему открывается кнопкой со страницы демо. JasurGPT не ссылка:
+   «Открыть» и скриншот на его карточке открывают чат прямо здесь, тот же,
+   что всплывающая кнопка в углу каждой страницы макета (gpt/Gpt.tsx).
+   Отдельного адреса у чата нет. Раньше карточка вела на главную старого
+   сайта, где была кнопка, а ещё раньше на jasur.dev, который не находится.
 
    Тексты карточек на двух языках лежат в strings.ts, здесь только то, что от
    языка не зависит: порядок, скриншот, адрес. Тело собирается дважды, и
@@ -54,7 +54,8 @@ const ORDER: { key: WorkKey; shot: string; href: string }[] = [
   { key: "expat", shot: "/new/works/expat.jpg", href: "https://expat-roadmap-sea.vercel.app" },
   { key: "career", shot: "/new/works/career.jpg", href: "/new/demos/career" },
   { key: "mia", shot: "/new/works/mia.jpg", href: "/new/demos/mia" },
-  { key: "jasurgpt", shot: "/new/works/jasurgpt.jpg", href: "/" },
+  // href не нужен: карточка открывает чат на месте.
+  { key: "jasurgpt", shot: "/new/works/jasurgpt.jpg", href: "" },
   { key: "demos", shot: "/new/works/demos.jpg", href: "/new/demos" },
 ];
 
@@ -88,19 +89,29 @@ function Body({ lang }: { lang: Lang }) {
             const t = s.items[w.key];
             return (
               <article key={w.key} className="nm-wk-card">
-                <a
-                  className="nm-wk-shot"
-                  href={w.href}
-                  tabIndex={-1}
-                  aria-hidden="true"
-                >
-                  <Photo src={w.shot} alt="" ratio="16:10" />
-                </a>
+                {w.key === "jasurgpt" ? (
+                  <GptButton className="nm-wk-shot nm-gpt-shot" hideFromReaders>
+                    <Photo src={w.shot} alt="" ratio="16:10" />
+                  </GptButton>
+                ) : (
+                  <a
+                    className="nm-wk-shot"
+                    href={w.href}
+                    tabIndex={-1}
+                    aria-hidden="true"
+                  >
+                    <Photo src={w.shot} alt="" ratio="16:10" />
+                  </a>
+                )}
                 <h2 className="nm-wk-n">{t.name}</h2>
                 <p className="nm-wk-d">{t.what}</p>
                 <p className="nm-work-s">{t.stack.join(" · ")}</p>
                 <p className="nm-work-l nm-wk-l">
-                  <a href={w.href}>{s.open}</a>
+                  {w.key === "jasurgpt" ? (
+                    <GptButton className="nm-gpt-link">{s.open}</GptButton>
+                  ) : (
+                    <a href={w.href}>{s.open}</a>
+                  )}
                 </p>
               </article>
             );

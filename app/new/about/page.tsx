@@ -4,6 +4,7 @@ import { NewHeader, NewFooter } from "../Chrome";
 import { ByLang } from "../Lang";
 import { ABOUT, type Lang } from "../strings";
 import { pageMeta, SITE_NAME } from "../meta";
+import { GptButton } from "../gpt/Gpt";
 
 // Описание: первая строка страницы и названия её разделов.
 export const metadata: Metadata = pageMeta({
@@ -22,7 +23,9 @@ export const metadata: Metadata = pageMeta({
    диплома нет. Тот же текст надо будет поправить в lib/translations.ts,
    в PDF-резюме и в контексте JasurGPT, иначе расхождение останется.
 
-   JasurGPT на эту страницу не ставится: решение, где он живёт, отложено.
+   JasurGPT: после вводных абзацев кнопка «Спросите у JasurGPT», она
+   открывает тот же чат, что всплывающая кнопка в углу (gpt/Gpt.tsx).
+   Решение Жасура, новых фраз к кнопке не добавлено.
 
    Тексты на двух языках лежат в strings.ts. Тело собирается дважды, и
    ByLang показывает то, что выбрано в переключателе. */
@@ -58,6 +61,9 @@ function Body({ lang }: { lang: Lang }) {
           <div className="nm-about-tx">
             <p>{s.p1}</p>
             <p>{s.p2}</p>
+            <p className="nm-gpt-in">
+              <GptButton />
+            </p>
           </div>
         </div>
       </section>
