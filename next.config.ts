@@ -39,6 +39,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/new", destination: "/", permanent: true },
+      // Значок вкладки у макета лежал в app/new и отдавался как /new/icon.svg,
+      // теперь он в app/icon.svg. Адрес с точкой общее правило ниже не берёт.
+      { source: "/new/icon.svg", destination: "/icon.svg", permanent: true },
       { source: "/new/:path((?!.*\\.).*)", destination: "/:path", permanent: true },
       { source: "/writing", destination: "/log", permanent: true },
       { source: "/blog", destination: "/log", permanent: true },

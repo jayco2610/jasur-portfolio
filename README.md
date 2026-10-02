@@ -10,12 +10,16 @@ Built solo from scratch using vibe coding (Cursor + Claude).
 
 ## What's inside
 
-**Portfolio pages**
-- `/` — Full-screen hero with typewriter animation, projects overview, about
-- `/projects` — All shipped projects with live links and tech stacks
-- `/resume` — Full resume in EN + RU PDF download, all sections: experience, projects, certifications, content & publications, skills
-- `/services` — Services with pricing (AI automation, Fractional PM, Content Factory)
-- `/writing` — Upcoming articles and content channels
+**Portfolio pages** (new design since October 2, 2026; it lived at `/new` before)
+- `/` — home: first screen, numbers, sections, latest pieces, contacts
+- `/log` — the Jasur / Log journal, rubrics at `/log/tema/[rubric]`, articles at `/blog/[slug]` (RU and EN)
+- `/podcast` — Jasur / Talks
+- `/works` — shipped projects and demos, with the "Services and prices" PDF
+- `/demos` — six live demos at `/demos/[name]`
+- `/workshop` — closed channel
+- `/about` — experience, education, contacts
+
+Old addresses (`/writing`, `/projects`, `/resume`, `/services`, `/blog`, `/blog/tema/...`, `/new/...`) redirect permanently, see `next.config.ts`.
 
 **JasurGPT** — AI chat in the bottom-right corner
 - Grounded on: full resume, work history, projects, skills, services
