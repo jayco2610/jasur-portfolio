@@ -8,5 +8,5 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default function Image() {
-  return ogCard({ title: "Jasur\nAkhmadaliev", kicker: "Log · Работы · Мастерская · Обо мне", name: false });
+  return ogCard({ title: "Jasur\nAkhmadaliev", kicker: "Работы · Log · Мастерская · Обо мне", name: false });
 }

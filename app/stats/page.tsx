@@ -18,9 +18,9 @@ const ACTIONS: [string, string][] = [
 // осталось в базе под прежними ключами.
 const PAGES: [string, string][] = [
   ["home", "Главная"],
-  ["log", "Журнал"],
   ["works", "Работы"],
   ["demos", "Демо"],
+  ["log", "Журнал"],
   ["workshop", "Мастерская"],
   ["about", "Обо мне"],
   ["podcast", "Подкаст"],

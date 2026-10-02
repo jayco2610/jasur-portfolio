@@ -17,7 +17,7 @@ export type Lang = "ru" | "en";
 
 export const CHROME = {
   ru: {
-    nav: { log: "Log", works: "Работы", workshop: "Мастерская", about: "Обо мне" },
+    nav: { works: "Работы", log: "Log", workshop: "Мастерская", about: "Обо мне" },
     // Подпись для читалки экрана: говорит, что случится по нажатию.
     langAction: "Switch to English",
     write: "Пишите",
@@ -26,7 +26,7 @@ export const CHROME = {
     email: "почта",
   },
   en: {
-    nav: { log: "Log", works: "Works", workshop: "Workshop", about: "About" },
+    nav: { works: "Works", log: "Log", workshop: "Workshop", about: "About" },
     langAction: "Переключить на русский",
     write: "Write",
     message: "Message",
@@ -53,8 +53,8 @@ export const HOME = {
     ],
     next: "Куда дальше",
     branches: {
-      log: "тексты и подкаст",
       works: "шесть собранных продуктов",
+      log: "тексты и подкаст",
       workshop: "закрытый канал",
       about: "опыт и контакты",
     },
@@ -74,8 +74,8 @@ export const HOME = {
     ],
     next: "Where next",
     branches: {
-      log: "writing and a podcast",
       works: "six products built",
+      log: "writing and a podcast",
       workshop: "private channel",
       about: "experience and contacts",
     },

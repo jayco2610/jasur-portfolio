@@ -16,9 +16,13 @@ import { CHROME, type Lang, type NavKey } from "./strings";
    (context/LanguageContext.tsx), того же, на котором работают старые
    страницы, демо и статьи. Липкость по-прежнему держит CSS. */
 
+/* Порядок веток с 2 октября 2026 по решению Жасура: сначала Работы, потом
+   Log. Тот же порядок в блоке «Куда дальше» на главной (app/page.tsx), на
+   картинке превью главной (app/opengraph-image.tsx) и в статье «Зачем этот
+   сайт». Меняется в одном месте, значит, во всех. */
 const NAV: { key: NavKey; href: string }[] = [
-  { key: "log", href: "/log" },
   { key: "works", href: "/works" },
+  { key: "log", href: "/log" },
   { key: "workshop", href: "/workshop" },
   { key: "about", href: "/about" },
 ];

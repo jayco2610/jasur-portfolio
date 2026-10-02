@@ -26,18 +26,6 @@ The answer sits right under the headline: I build it myself, write it myself, fi
 
 From there the site splits into four branches.
 
-## [Log](/log)
-
-This is where the writing and the podcast live. Log opens as a publication of its own: its own masthead, its own topics, and a button at the top to get back to the site.
-
-![Log: the masthead with its topics, and the latest articles](/blog/why-log.jpg)
-
-There are six topics: [Product](/log/tema/product), [Marketing](/log/tema/marketing), [AI](/log/tema/ai), [Process](/log/tema/process), [Career](/log/tema/career), [Tools](/log/tema/tools). I write about what I build myself: what worked, what fell apart, what it cost.
-
-Inside an article there is a rail on the right: chapters, images and every link from the text. You can jump to the part you need or take the links without rereading.
-
-The [podcast](/podcast) Jasur / Talks lives here too. Conversations with guests and short voice notes, played right on the page. The first episode is being recorded.
-
 ## [Works](/works)
 
 Six things, built solo: abcx, Expat Roadmap SEA, AI Career System, Mia, JasurGPT and the automation demos. Everything opens from a link.
@@ -51,6 +39,18 @@ Each demo now has its own color, like a real product rather than a mockup cut fr
 ![The demo catalog: each one with its own color and its own interface](/blog/why-demos.jpg)
 
 At the bottom of Works there is a PDF, "Services and prices", and it opens in the browser. There is no separate services page anymore. The services are made of the same things listed above, and they belong next to them.
+
+## [Log](/log)
+
+This is where the writing and the podcast live. Log opens as a publication of its own: its own masthead, its own topics, and a button at the top to get back to the site.
+
+![Log: the masthead with its topics, and the latest articles](/blog/why-log.jpg)
+
+There are six topics: [Product](/log/tema/product), [Marketing](/log/tema/marketing), [AI](/log/tema/ai), [Process](/log/tema/process), [Career](/log/tema/career), [Tools](/log/tema/tools). I write about what I build myself: what worked, what fell apart, what it cost.
+
+Inside an article there is a rail on the right: chapters, images and every link from the text. You can jump to the part you need or take the links without rereading.
+
+The [podcast](/podcast) Jasur / Talks lives here too. Conversations with guests and short voice notes, played right on the page. The first episode is being recorded.
 
 ## [Workshop](/workshop)
 

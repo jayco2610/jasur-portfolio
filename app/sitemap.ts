@@ -17,8 +17,8 @@ import { SITE } from "./meta";
    открывается, но поисковику показывать её незачем. */
 const routes = [
   { path: "", priority: 1 },
-  { path: "/log", priority: 0.8 },
   { path: "/works", priority: 0.8 },
+  { path: "/log", priority: 0.8 },
   { path: "/workshop", priority: 0.7 },
   { path: "/about", priority: 0.8 },
   { path: "/podcast", priority: 0.7 },

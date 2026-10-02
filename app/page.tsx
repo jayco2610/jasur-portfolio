@@ -28,8 +28,8 @@ export const metadata: Metadata = pageMeta({
 const NUM_HREFS: (string | null)[] = [null, null, null, null, null];
 
 const BRANCHES: { key: NavKey; href: string }[] = [
-  { key: "log", href: "/log" },
   { key: "works", href: "/works" },
+  { key: "log", href: "/log" },
   { key: "workshop", href: "/workshop" },
   { key: "about", href: "/about" },
 ];
