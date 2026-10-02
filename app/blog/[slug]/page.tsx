@@ -331,7 +331,7 @@ export default async function NewArticle({
                     <a href="https://t.me/biznesmind" target="_blank" rel="noopener noreferrer">
                       {ru ? "Написать: @biznesmind" : "Write: @biznesmind"}
                     </a>
-                    <Link href="/about">{ru ? "Резюме" : "Resume"}</Link>
+                    <Link href="/about">{ru ? "Обо мне" : "About"}</Link>
                   </p>
                 </div>
               </div>
