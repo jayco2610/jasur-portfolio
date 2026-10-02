@@ -1,19 +1,22 @@
-import type { Metadata } from "next";
+import "./demos.css";
+import "./demos-color.css";
 
-export const metadata: Metadata = {
-  title: "Демо — Jasur Akhmadaliev",
-  description: "Живые демо автоматизаций для локального бизнеса. Работают прямо в браузере, без установки.",
-  alternates: { canonical: "https://jasur-portfolio-pied.vercel.app/demos" },
-  openGraph: {
-    title: "Шесть автоматизаций, которые можно потрогать",
-    description: "Живые демо автоматизаций для локального бизнеса. Работают прямо в браузере, без установки.",
-    url: "https://jasur-portfolio-pied.vercel.app/demos",
-    // Свой блок openGraph перекрывает родительский целиком, поэтому
-    // картинку надо повторить здесь, иначе в репосте будет пустое место.
-    images: [{ url: "/og-log.jpg", width: 1200, height: 630, alt: "Jasur Akhmadaliev" }],
-  },
-};
+/* Каталог демо и шесть демо в новом оформлении: перенос app/demos.
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+   Заголовок вкладки и описание у каждой страницы раздела свои: у каталога
+   в demos/page.tsx, у демо в их page.tsx (собираются из demos/list.ts).
+
+   Обёртка .nm-dmv[data-palette] включает цвет демо (demos-color.css,
+   вариант «Свой продукт у каждого демо»). Она в разметке с сервера, поэтому
+   цвет стоит с первого кадра. В раскладке обёртка не участвует
+   (display: contents). */
+
+export default function DemosLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <div className="nm-dmv" data-palette="product">
+      {children}
+    </div>
+  );
 }

@@ -22,8 +22,14 @@ const SAFE = /^[a-z0-9/\-_]{1,60}$/;
 // Считаем только страницы разумного вида: раздел из списка ниже либо статья,
 // выпуск подкаста, рубрика или демо. Читать список статей с диска здесь нельзя:
 // в серверной функции этих файлов нет, и счётчик падал с ошибкой.
+// log, works, workshop, about и log-tema это адреса нового дизайна с 2 октября
+// 2026; старые разделы оставлены, чтобы запрос со старой вкладки не терялся.
 const PAGES = new Set([
   "home",
+  "log",
+  "works",
+  "workshop",
+  "about",
   "blog",
   "podcast",
   "projects",
@@ -34,7 +40,7 @@ const PAGES = new Set([
   "stats",
   "privacy",
 ]);
-const SECTIONS = /^(blog|podcast|demos|blog-tema)-[a-z0-9][a-z0-9-]{0,58}$/;
+const SECTIONS = /^(blog|podcast|demos|blog-tema|log-tema)-[a-z0-9][a-z0-9-]{0,58}$/;
 const knownPage = (slug: string) => PAGES.has(slug) || SECTIONS.test(slug);
 
 export async function POST(req: NextRequest) {

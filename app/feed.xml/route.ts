@@ -39,7 +39,7 @@ export async function GET() {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Jasur / Log</title>
-    <link>${SITE}/writing</link>
+    <link>${SITE}/log</link>
     <description>Продукт, маркетинг и AI. Только то, что я делаю сам.</description>
     <language>ru</language>
     <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml" />

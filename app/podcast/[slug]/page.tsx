@@ -2,20 +2,58 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getEpisode, getEpisodeSlugs, getEpisodes, SHOW } from "@/lib/podcast";
-import { formatDate } from "@/lib/blog";
 import { MAGAZINE_NAME } from "@/lib/rubrics";
-import MagChrome from "@/components/magazine/MagChrome";
-import Player from "@/components/magazine/Player";
-import ShareLinks from "@/components/ShareLinks";
-import NoTranslation from "@/components/magazine/NoTranslation";
+import { NewFooter } from "../../Chrome";
+import LogChrome from "../../LogChrome";
+import Share from "../../blog/Share";
+import NoTranslation from "../../blog/NoTranslation";
+import { cardDate } from "../../posts";
+import { PODCAST } from "../../strings";
+import Player from "../Player";
+import { RSS, SITE_NAME } from "../../meta";
+
+/* Страница выпуска подкаста: /podcast/[slug]. До 2 октября 2026 жила
+   макетом на /new/podcast/[slug].
+
+   Перенос живой app/podcast/[slug]/page.tsx. Состав и порядок блоков тот же,
+   поведение то же, меняется только оформление, в системе остальной ветки Log
+   (шапка издания LogChrome, разворот и полка как у статьи):
+
+    1. разметка PodcastEpisode для поисковиков (JSON-LD);
+    2. шапка издания, пункт «Подкаст» подсвечен;
+    3. хлебные крошки: издание, шоу, «выпуск N» или «голосовая»;
+    4. строка сведений: дата, длительность, теги;
+    5. заголовок;
+    6. гость и его роль, если есть;
+    7. описание;
+    8. пометка «перевода нет», если язык сайта не совпадает с языком выпуска;
+    9. плеер с главами;
+   10. текст выпуска (заметки, расшифровка), если есть;
+   11. «из разговора»: ссылки, упомянутые в выпуске;
+   12. «поделиться»;
+   13. «ещё послушать»: до трёх других выпусков на том же языке;
+   14. полка справа: обложка, название шоу, описание, «все выпуски»;
+   15. нижняя строка издания с возвратом ко всем выпускам.
+
+   Подвал с контактами (NewFooter) стоит на всех страницах макета вместо
+   общего подвала сайта, поэтому стоит и здесь.
+
+   Язык страницы это язык выпуска, как у статьи: выпуски выходят на одном
+   языке, перевода у них не бывает. */
 
 const SITE = "https://jasur-portfolio-pied.vercel.app";
 
-// Кроме статей, собранных при сборке, никаких других адресов не существует.
-// Без этого Next пытается собрать незнакомый адрес прямо на сервере, а там
-// нет папки content, и вместо честной 404 читатель видит ошибку.
+/* Кроме выпусков, собранных при сборке, никаких других адресов не существует.
+   Без этой строки Next пытается собрать незнакомый адрес прямо на сервере,
+   а там нет папки content, и вместо честной 404 читатель видит ошибку. */
 export const dynamicParams = false;
 
+/* Тот же список, что у живой страницы: опубликованные выпуски обоих языков
+   с аудио, черновики отсекает lib/podcast.
+
+   Пока выпусков ноль, список пуст. Next в таком случае не пишет в сборку ни
+   одной страницы маршрута, и любой адрес /podcast/что-угодно отдаёт
+   404 благодаря dynamicParams выше. */
 export function generateStaticParams() {
   return getEpisodeSlugs().map((slug) => ({ slug }));
 }
@@ -29,22 +67,27 @@ export async function generateMetadata({
   const ep = getEpisode(slug);
   if (!ep) return {};
 
+  // Постоянный адрес выпуска: канонический, в превью и в «поделиться».
+  const live = `${SITE}/podcast/${ep.slug}`;
+
   return {
-    title: `${ep.title} — ${SHOW.name}`,
+    title: { absolute: `${ep.title} · ${SHOW.name}` },
     description: ep.description,
-    alternates: { canonical: `${SITE}/podcast/${ep.slug}` },
+    alternates: { canonical: live, types: RSS },
     openGraph: {
       type: "article",
+      siteName: SITE_NAME,
+      locale: ep.lang === "ru" ? "ru_RU" : "en_US",
       title: ep.title,
       description: ep.description,
       publishedTime: ep.date,
-      url: `${SITE}/podcast/${ep.slug}`,
+      url: live,
       images: [{ url: ep.cover ?? SHOW.cover, width: 1200, height: 1200, alt: ep.title }],
     },
   };
 }
 
-export default async function EpisodePage({
+export default async function NewEpisode({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -53,11 +96,12 @@ export default async function EpisodePage({
   const ep = getEpisode(slug);
   if (!ep) notFound();
 
-  const ru = ep.lang === "ru";
+  const s = PODCAST[ep.lang];
+  const voice = ep.kind === "voice";
   const others = getEpisodes()
     .filter((e) => e.slug !== ep.slug && e.lang === ep.lang)
     .slice(0, 3);
-  const voice = ep.kind === "voice";
+  const live = `${SITE}/podcast/${ep.slug}`;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -68,7 +112,7 @@ export default async function EpisodePage({
     inLanguage: ep.lang,
     partOfSeries: { "@type": "PodcastSeries", name: SHOW.name, url: `${SITE}/podcast` },
     associatedMedia: { "@type": "MediaObject", contentUrl: `${SITE}${ep.audio}` },
-    url: `${SITE}/podcast/${ep.slug}`,
+    url: live,
   };
 
   return (
@@ -78,59 +122,53 @@ export default async function EpisodePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
 
-      <div className="mag-root">
-        <MagChrome section="podcast" rightLabel={ru ? "Подкаст" : "Podcast"} />
+      <LogChrome article={{ lang: ep.lang }} />
 
-        <div className="mag-w">
-          <nav className="mag-crumbs">
-            <Link href="/writing">{MAGAZINE_NAME[ep.lang]}</Link>
-            <span>›</span>
+      <div lang={ep.lang}>
+        <div className="nm-wrap">
+          <nav className="nm-crumbs">
+            <Link href="/log">{MAGAZINE_NAME[ep.lang]}</Link>
+            <span aria-hidden="true">›</span>
             <Link href="/podcast">{SHOW.name}</Link>
-            <span>›</span>
-            <b>
-              {voice
-                ? ru ? "голосовая" : "voice note"
-                : ru ? `выпуск ${ep.number}` : `episode ${ep.number}`}
-            </b>
+            <span aria-hidden="true">›</span>
+            <b>{voice ? s.crumbVoice : `${s.crumbEpisode} ${ep.number}`}</b>
           </nav>
 
-          <div className="mag-art">
-            <div className="mag-art-main">
+          <div className="nm-art">
+            <div className="nm-art-main">
               <article>
-                <div className="flex flex-wrap gap-x-5 gap-y-2 pb-6 pt-1">
-                  <span className="tiny">{formatDate(ep.date, ep.lang)}</span>
-                  {ep.duration && <span className="tiny">{ep.duration}</span>}
-                  {ep.tags.length > 0 && <span className="tiny">{ep.tags.join(" · ")}</span>}
+                <div className="nm-art-meta">
+                  <span>{cardDate(ep.date, ep.lang)}</span>
+                  {ep.duration && <span>{ep.duration}</span>}
+                  {ep.tags.length > 0 && <span>{ep.tags.join(" · ")}</span>}
                 </div>
 
-                <h1 className="mag-art-h1">{ep.title}</h1>
+                <h1 className="nm-art-h1">{ep.title}</h1>
 
                 {ep.guest && (
-                  <div className="pod-guest-big">
-                    <span className="tiny">{ru ? "Гость" : "Guest"}</span>
+                  <p className="nm-ep-guest">
+                    <span>{s.guest}</span>
                     <b>{ep.guest}</b>
                     {ep.guestRole && <span>{ep.guestRole}</span>}
-                  </div>
+                  </p>
                 )}
 
-                {ep.description && <p className="mag-art-lead">{ep.description}</p>}
+                {ep.description && <p className="nm-art-lead">{ep.description}</p>}
 
                 <NoTranslation postLang={ep.lang} />
 
-                <Player src={ep.audio} ru={ru} slug={ep.slug} chapters={ep.chapters} />
+                <Player src={ep.audio} slug={ep.slug} lang={ep.lang} chapters={ep.chapters} />
 
                 {ep.html && (
-                  <div className="article-body mt-10" dangerouslySetInnerHTML={{ __html: ep.html }} />
+                  <div className="nm-body" dangerouslySetInnerHTML={{ __html: ep.html }} />
                 )}
               </article>
 
               {ep.links.length > 0 && (
-                <section className="mag-sources">
-                  <div className="mag-sh">
-                    <h3>{ru ? "Из разговора" : "Mentioned"}</h3>
-                    <span className="mag-ln" />
-                    <span className="tiny">{String(ep.links.length).padStart(2, "0")}</span>
-                  </div>
+                <section className="nm-art-sec nm-src">
+                  <p className="nm-sec-t">
+                    {s.mentioned} · {String(ep.links.length).padStart(2, "0")}
+                  </p>
                   <ol>
                     {ep.links.map((l) => (
                       <li key={l.href}>
@@ -144,54 +182,58 @@ export default async function EpisodePage({
                 </section>
               )}
 
-              <div className="mt-14 pt-7 border-t border-ink">
-                <ShareLinks url={`${SITE}/podcast/${ep.slug}`} title={ep.title} ru={ru} />
+              <div className="nm-art-sec">
+                <Share url={live} title={ep.title} ru={ep.lang === "ru"} />
               </div>
 
               {others.length > 0 && (
-                <div className="mt-14 pb-24">
-                  <p className="tiny pb-2 border-b border-ink">
-                    {ru ? "Ещё послушать" : "Listen next"}
+                <section className="nm-art-sec nm-ep-next">
+                  <p className="nm-sec-t">
+                    {s.next} · {String(others.length).padStart(2, "0")}
                   </p>
                   {others.map((o) => (
-                    <Link key={o.slug} href={`/podcast/${o.slug}`} className="post-item">
-                      <div className="post-meta">
-                        <span className="tiny">{formatDate(o.date, o.lang)}</span>
-                        {o.duration && <span className="tiny">{o.duration}</span>}
-                      </div>
-                      <h3>{o.title}</h3>
+                    <Link key={o.slug} href={`/podcast/${o.slug}`} className="nm-ep-next-a">
+                      <span className="nm-ep-next-m">
+                        {cardDate(o.date, o.lang)}
+                        {o.duration && ` · ${o.duration}`}
+                      </span>
+                      <span className="nm-ep-next-t">{o.title}</span>
                     </Link>
                   ))}
-                </div>
+                </section>
               )}
-
-              {others.length === 0 && <div className="pb-24" />}
             </div>
 
-            <aside className="mag-rail">
-              <div className="mag-rail-in">
-                <div className="pod-side">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={ep.cover ?? SHOW.cover} alt={SHOW.name} />
-                  <b>{SHOW.name}</b>
-                  <span>{SHOW[ep.lang].tagline}</span>
-                  <Link href="/podcast" className="tiny">
-                    {ru ? "Все выпуски →" : "All episodes →"}
+            {/* Полка справа: вместо глав и ссылок статьи здесь карточка шоу.
+                На узком экране она, как и полка статьи, встаёт над текстом,
+                но строкой: мелкая обложка и подпись рядом, а не квадрат во
+                всю ширину экрана, как было на старой странице. */}
+            <aside className="nm-rail nm-ep-rail">
+              <div className="nm-rail-in nm-ep-side">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={ep.cover ?? SHOW.cover} alt={SHOW.name} className="nm-ep-side-ph" />
+                <div>
+                  <p className="nm-ep-side-n">{SHOW.name}</p>
+                  <p className="nm-ep-side-d">{SHOW[ep.lang].tagline}</p>
+                  <Link href="/podcast" className="nm-ep-side-a">
+                    {s.all}
                   </Link>
                 </div>
               </div>
             </aside>
           </div>
 
-          <footer className="mag-foot">
-            <span className="tiny">
-              {MAGAZINE_NAME[ep.lang]}
-            </span>
-            <Link href="/podcast" className="tiny">
-              {ru ? "← Все выпуски" : "← All episodes"}
+          <footer className="nm-art-foot">
+            <span>{MAGAZINE_NAME[ep.lang]}</span>
+            {/* Стрелка это значок возврата, как в нижней строке статьи, а не
+                часть подписи: читалке экрана её не читаем. */}
+            <Link href="/podcast">
+              <span aria-hidden="true">←</span> {s.all}
             </Link>
           </footer>
         </div>
+
+        <NewFooter lang={ep.lang} />
       </div>
     </>
   );

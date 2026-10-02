@@ -1,0 +1,1942 @@
+/* ============================================================
+   Цвет демо: «Свой продукт у каждого демо».
+
+   Жасур выбрал этот вариант 1 октября 2026 из трёх, которые лежат в ветке
+   demos-color (там они переключаются параметром ?v=). Здесь только он и
+   без переключателя: это вид демо по умолчанию. Монохромная версия ушла.
+
+   Устройство в три слоя.
+
+   1. Переменные интерфейса --u-*: поверхности, текст, акцент, три
+      семантических цвета (успех, предупреждение, тревога), чат, корпус
+      телефона, тени. Общие нейтральные значения на обёртке раздела, акцент
+      и подложка у каждого демо свои, по атрибуту data-demo из DemoShell.
+   2. Слой компонентов ниже. Он красит элементы демо только через --u-*,
+      поэтому состояния (наведение, нажатие, неактивное, загрузка, успех,
+      ошибка) у всех шести демо одинаково продуманы.
+   3. Точечные правки характера по демо.
+
+   Что красится. Только интерфейс демо: окно панели (.nm-dm-app), телефон,
+   а ещё кнопка Mia над ними. Обёртка страницы (шапка, заголовок, подводка,
+   выделенная мысль, подсказка, оговорка, подвал, пояснения под
+   интерфейсом) остаётся в стиле сайта: эти селекторы её не задевают.
+
+   Почему у каждого правила префикс .nm-dmv[data-palette]. Обёртку с этим
+   атрибутом ставит app/demos/layout.tsx, в разметке с сервера она уже
+   есть, поэтому цвет стоит с первого кадра, без мелькания. Класс плюс
+   атрибут дают ту же специфичность, что была в ветке у .nm-dmv[data-palette]:
+   выше любого правила demos.css, и порядок подключения файлов не важен.
+
+   Шкала внутри интерфейсов. Кегли 11, 12, 13, 14, 16, 24 и номер заказа
+   40. Отступы 4, 8, 12, 16, 20, 24. Скругления 4, 6, 8; кругом рисуются
+   только аватары, точки статусов и номера шагов. Контраст текста 4,5 к 1
+   и выше, у значков и линий 3 к 1 (проверено замером).
+   ============================================================ */
+
+/* Обёртка раздела не участвует в раскладке: шапка внутри неё липнет к окну
+   так же, как без обёртки. */
+.nm-dmv {
+  display: contents;
+}
+
+/* ============ слой 1: переменные ============ */
+
+/* ---- Общие нейтральные и семантика. У каждого демо свой акцент, своя
+   подложка окна и свой характер.
+
+   Чтобы шесть демо в каталоге были коллекцией, а не винегретом, у всех
+   акцентов одна и та же роль и примерно одна светлота (белый текст на
+   акценте от 5 к 1), подложки окон одинаково светлые, форма компонентов,
+   шрифт, тени и скругления общие. Различаются оттенок и одна-две детали
+   характера на демо. Исключение по светлоте одно, отзывы: их акцент
+   золото звёзд, и текст на нём тёмный. */
+.nm-dmv[data-palette] {
+  --u-canvas: #ffffff;
+  --u-surface: #ffffff;
+  --u-surface-2: #f5f6f8;
+  --u-surface-3: #eceef2;
+  --u-border: #e3e6eb;
+  --u-border-2: #c9ced7;
+  --u-text: #111827;
+  --u-text-2: #5b6474;
+  --u-icon: #8a93a3;
+
+  --u-ok: #16a36d;
+  --u-ok-strong: #0d7a4f;
+  --u-ok-soft: #e6f6ee;
+  --u-ok-text: #0d7a4f;
+  --u-warn: #e89a0c;
+  --u-warn-soft: #fff4de;
+  --u-warn-text: #8f5507;
+  --u-bad: #e5484d;
+  --u-bad-soft: #fdeced;
+  --u-bad-text: #c4272e;
+
+  --u-chat: #edf0f5;
+  --u-in: #ffffff;
+  --u-in-text: #111827;
+  --u-out-text: #ffffff;
+  --u-head: #ffffff;
+  --u-head-text: #111827;
+  --u-head-text-2: #5b6474;
+  --u-device: #16181d;
+  --u-device-line: #2c2f37;
+
+  --u-num-font: var(--nm-text);
+  --u-shadow-1: 0 1px 2px rgba(17, 24, 39, 0.05);
+  --u-shadow-2: 0 1px 2px rgba(17, 24, 39, 0.04), 0 18px 40px -22px rgba(17, 24, 39, 0.28);
+  --u-shadow-3: 0 2px 6px rgba(17, 24, 39, 0.1), 0 30px 60px -28px rgba(17, 24, 39, 0.5);
+}
+
+/* Стадион «Молот Арена». Газонный зелёный и табло-жёлтый. Жёлтый только
+   под тёмным текстом: свой заказ, номер на выдаче. Цифры набраны Unbounded,
+   как на табло. Зелёный здесь совпадает с «успехом» по смыслу («готов»,
+   «иди»), поэтому статус готовности и бренд одного цвета намеренно. */
+.nm-dmv[data-palette] .nm-dm[data-demo="preorder"] {
+  --u-canvas: #f3f7f2;
+  --u-border: #dfe7dd;
+  --u-surface-2: #f2f6f1;
+  --u-surface-3: #e5ece3;
+  --u-text: #0f2417;
+  --u-text-2: #4f6356;
+  --u-accent: #15803d;
+  --u-accent-hover: #126f35;
+  --u-accent-press: #0e5c2b;
+  --u-on-accent: #ffffff;
+  --u-accent-soft: #e5f3e9;
+  --u-accent-line: #b5dbc1;
+  --u-accent-text: #136f35;
+  --u-ok-strong: #15803d;
+  --u-ok-text: #136f35;
+  --u-star: var(--u-accent);
+  --u-mine: #fff3bf;
+  --u-mine-text: #4d3d00;
+  --u-mine-bar: #f5c000;
+  --u-out: #15803d;
+  --u-head: #146c34;
+  --u-head-text: #ffffff;
+  --u-head-text-2: #dceee2;
+  --u-chat: #eef3ed;
+  --u-ring: rgba(21, 128, 61, 0.3);
+  --u-num-font: var(--nm-display);
+  --u-wall: linear-gradient(168deg, #cfe6d6, #eef4ec);
+}
+
+/* Пекарня «Лавка №1». Кремовая подложка, терракота, тёплый
+   коричневый текст. Успех здесь шалфейный, в тон кремовому, а не
+   кислотно-зелёный. */
+.nm-dmv[data-palette] .nm-dm[data-demo="leftovers"] {
+  --u-canvas: #fbf6ee;
+  --u-surface: #fffdf9;
+  --u-surface-2: #f7efe3;
+  --u-surface-3: #efe4d4;
+  --u-border: #ebe0cf;
+  --u-border-2: #d8c7b0;
+  --u-text: #2b1d14;
+  --u-text-2: #6b5646;
+  --u-icon: #a08b78;
+  --u-accent: #b4532a;
+  --u-accent-hover: #9d4723;
+  --u-accent-press: #843b1d;
+  --u-on-accent: #ffffff;
+  --u-accent-soft: #fbece2;
+  --u-accent-line: #efcab4;
+  --u-accent-text: #9d4723;
+  --u-ok: #5b8a45;
+  --u-ok-strong: #44703a;
+  --u-ok-soft: #edf3e5;
+  --u-ok-text: #3f6a32;
+  --u-warn: #d98a1c;
+  --u-warn-soft: #fbefdc;
+  --u-warn-text: #87500c;
+  --u-star: var(--u-accent);
+  --u-mine: var(--u-accent-soft);
+  --u-mine-text: var(--u-accent-text);
+  --u-mine-bar: var(--u-accent);
+  --u-out: #b4532a;
+  --u-chat: #f6efe4;
+  --u-in: #fffdf9;
+  --u-in-text: #2b1d14;
+  --u-head: #fffdf9;
+  --u-head-text: #2b1d14;
+  --u-head-text-2: #6b5646;
+  --u-ring: rgba(180, 83, 42, 0.3);
+  --u-wall: linear-gradient(170deg, #f0cfb6 0%, #f8e7d6 46%, #fbf3e9 100%);
+}
+
+/* Фрод-контроль касс. Тёмно-синий как цвет системы и сигнальный красный
+   только для того, что требует реакции. Цифры наверху на тёмно-синей
+   плашке, как на пульте охраны. */
+.nm-dmv[data-palette] .nm-dm[data-demo="fraud"] {
+  --u-canvas: #f2f4f8;
+  --u-surface-2: #f3f5f9;
+  --u-surface-3: #e7ebf2;
+  --u-border: #dfe4ec;
+  --u-border-2: #c3cbd8;
+  --u-text: #0e1a33;
+  --u-text-2: #536079;
+  --u-accent: #1b3360;
+  --u-accent-hover: #142a52;
+  --u-accent-press: #0e2042;
+  --u-on-accent: #ffffff;
+  --u-accent-soft: #e8edf6;
+  --u-accent-line: #bfcbe0;
+  --u-accent-text: #1b3360;
+  --u-bad: #e0312b;
+  --u-bad-soft: #fdeceb;
+  --u-bad-text: #c0231d;
+  --u-star: var(--u-accent);
+  --u-mine: var(--u-bad-soft);
+  --u-mine-text: var(--u-bad-text);
+  --u-mine-bar: var(--u-bad);
+  --u-out: #1b3360;
+  --u-head: #1b3360;
+  --u-head-text: #ffffff;
+  --u-head-text-2: #b9c6de;
+  --u-chat: #e9edf3;
+  --u-ring: rgba(27, 51, 96, 0.3);
+}
+
+/* Ответы на отзывы. Белый и золото звёзд. Кнопки золотые с тёмным текстом
+   (9,2 к 1), золото как текст не используется: на белом оно не читается,
+   для подписей есть тёмная охра #7a5600. */
+.nm-dmv[data-palette] .nm-dm[data-demo="reviews"] {
+  --u-canvas: #ffffff;
+  --u-surface-2: #f8f7f4;
+  --u-surface-3: #efede7;
+  --u-border: #ebe8e0;
+  --u-border-2: #d6d1c5;
+  --u-text: #1c1a17;
+  --u-text-2: #67615a;
+  --u-icon: #8f897f;
+  --u-accent: #f2b200;
+  --u-accent-hover: #e3a600;
+  --u-accent-press: #cc9500;
+  --u-on-accent: #1c1a17;
+  --u-accent-soft: #fff7dc;
+  --u-accent-line: #f0d68a;
+  --u-accent-text: #7a5600;
+  /* Звёзды на тон темнее кнопки: знак рейтинга должен держать 3 к 1 на
+     белом, у #f2b200 только 1,9. #c98600 даёт 3,05 и остаётся золотом. */
+  --u-star: #c98600;
+  --u-mine: var(--u-accent-soft);
+  --u-mine-text: var(--u-accent-text);
+  --u-mine-bar: var(--u-accent);
+  --u-ring: rgba(242, 178, 0, 0.4);
+}
+
+/* Клиника Mia. Спокойный бирюзовый, много воздуха, мягкая подложка. */
+.nm-dmv[data-palette] .nm-dm[data-demo="mia"] {
+  --u-canvas: #f0f7f7;
+  --u-surface-2: #f1f7f7;
+  --u-surface-3: #e3eeee;
+  --u-border: #dbe8e8;
+  --u-border-2: #bfd3d3;
+  --u-text: #0f2a2a;
+  --u-text-2: #4d6565;
+  --u-accent: #0e7c7b;
+  --u-accent-hover: #0c6b6a;
+  --u-accent-press: #0a5a59;
+  --u-on-accent: #ffffff;
+  --u-accent-soft: #e2f2f1;
+  --u-accent-line: #aedad7;
+  --u-accent-text: #0b6766;
+  --u-star: var(--u-accent);
+  --u-mine: var(--u-accent-soft);
+  --u-mine-text: var(--u-accent-text);
+  --u-mine-bar: var(--u-accent);
+  --u-out: #0e7c7b;
+  --u-chat: #e7f1f0;
+  --u-head-text: #0f2a2a;
+  --u-ring: rgba(14, 124, 123, 0.3);
+}
+
+/* Карьерная система. Индиго, как у инструментов разработчика. */
+.nm-dmv[data-palette] .nm-dm[data-demo="career"] {
+  --u-canvas: #f6f6fc;
+  --u-surface-2: #f5f5fb;
+  --u-surface-3: #ebebf6;
+  --u-border: #e3e3f0;
+  --u-border-2: #c8c9de;
+  --u-text: #16163a;
+  --u-text-2: #575a78;
+  --u-accent: #4338ca;
+  --u-accent-hover: #3830ad;
+  --u-accent-press: #2f2891;
+  --u-on-accent: #ffffff;
+  --u-accent-soft: #eeefff;
+  --u-accent-line: #c9cbfa;
+  --u-accent-text: #4338ca;
+  --u-star: var(--u-accent);
+  --u-mine: var(--u-accent-soft);
+  --u-mine-text: var(--u-accent-text);
+  --u-mine-bar: var(--u-accent);
+  --u-ring: rgba(67, 56, 202, 0.3);
+}
+
+/* ============ слой 2: компоненты ============
+   Префикс .nm-dmv[data-palette] .nm-dm-stage у каждого правила: только
+   внутри сцены демо. Специфичность выше любого правила demos.css, поэтому
+   порядок подключения файлов не важен. */
+
+/* ---- окно панели и корпус телефона: внутри них переменные сайта
+   подменяются переменными интерфейса, и всё, что demos.css красит
+   через --nm-ink и --nm-rule, само становится цветом демо. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-app,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-phone {
+  --nm-ink: var(--u-text);
+  --nm-paper: var(--u-surface);
+  --nm-dim: var(--u-text-2);
+  --nm-rule: var(--u-border);
+  color: var(--u-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-app {
+  display: block;
+  padding: clamp(16px, 2vw, 24px);
+  background: var(--u-canvas);
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  box-shadow: var(--u-shadow-2);
+}
+
+/* Окно без телефона рядом (карьера, отзывы) шириной в текстовую колонку,
+   а не во всю страницу: внутри него колонка уже не нужна. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-app.is-wrap {
+  max-width: calc(var(--nm-dm-measure) + 50px);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-app .nm-dm-w,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-app .nm-dm-reviews {
+  max-width: none;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-app ::selection,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-phone ::selection {
+  background: var(--u-accent-soft);
+  color: var(--u-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage :focus-visible {
+  outline: 2px solid var(--u-accent);
+  outline-offset: 2px;
+}
+
+/* ---- подписи и служебный текст ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-app .nm-dm-label {
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--u-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-biz-h .nm-dm-label {
+  margin: 0;
+}
+
+/* Живая панель: точка «данные идут» перед заголовком. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-biz-h.is-live .nm-dm-label::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--u-ok);
+  box-shadow: 0 0 0 3px var(--u-ok-soft);
+  vertical-align: 1px;
+  animation: nm-dmc-live 2s ease-in-out infinite;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel .nm-dm-note {
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-timer {
+  font-size: 12px;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-timer b {
+  display: inline-block;
+  margin-left: 2px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--u-surface-3);
+  color: var(--u-text);
+  font-weight: 600;
+}
+
+/* ---- кнопки ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 10px 16px;
+  border: 1px solid var(--u-accent);
+  border-radius: 6px;
+  background: var(--u-accent);
+  color: var(--u-on-accent);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: 0 1px 2px rgba(15, 23, 41, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, transform 0.06s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn:hover:not(:disabled) {
+  background: var(--u-accent-hover);
+  border-color: var(--u-accent-hover);
+  color: var(--u-on-accent);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn:active:not(:disabled) {
+  background: var(--u-accent-press);
+  border-color: var(--u-accent-press);
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn:focus-visible,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn2:focus-visible,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-opt:focus-visible,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-bank:focus-visible,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qty button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--u-ring);
+}
+
+/* Неактивная: серая плашка, текст вторичным цветом. По ней сразу видно,
+   что нажать нельзя, а не что кнопка выцвела. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn:disabled {
+  opacity: 1;
+  background: var(--u-surface-3);
+  border-color: var(--u-surface-3);
+  color: var(--u-text-2);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Загрузка: кнопка остаётся цветной и получает вращающееся кольцо. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn.is-busy:disabled {
+  background: var(--u-accent);
+  border-color: var(--u-accent);
+  color: var(--u-on-accent);
+  cursor: progress;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn.is-busy::before {
+  content: "";
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: nm-dm-spin 0.8s linear infinite;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn.is-s,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn2.is-s {
+  min-height: 32px;
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--u-border-2);
+  border-radius: 6px;
+  background: var(--u-surface);
+  color: var(--u-text);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: var(--u-shadow-1);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn2:hover:not(:disabled) {
+  background: var(--u-surface-2);
+  border-color: var(--u-border-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn2:active:not(:disabled) {
+  background: var(--u-surface-3);
+}
+
+/* Выбранный пункт переключателя (тон ответа). */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-btn2.is-on {
+  background: var(--u-accent-soft);
+  border-color: var(--u-accent-line);
+  color: var(--u-accent-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-link {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--u-accent-text);
+  border-bottom-color: var(--u-accent-line);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-link:hover {
+  color: var(--u-accent-hover);
+  border-bottom-color: currentColor;
+}
+
+/* Ошибка генерации: красная плашка, а не просто жирный текст. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-err {
+  display: block;
+  width: fit-content;
+  margin-top: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--u-bad-soft);
+  color: var(--u-bad-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-err.nm-dm-tone-err {
+  margin: 0 0 0 4px;
+}
+
+/* ---- цифры: карточка, подпись над значением, как в дашбордах ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-nums {
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+  overflow: hidden;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-nums > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 14px 16px 16px;
+  border-left: 1px solid var(--u-border);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-nums > div:first-child {
+  border-left: 0;
+  padding-left: 16px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-num-v {
+  font-family: var(--u-num-font);
+  font-size: clamp(18px, 1.7vw, 24px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--u-text);
+}
+
+/* Подписи в данных начинаются со строчной («заказов за перерыв»). Над
+   значением, как в дашбордах, заглавная читается лучше; меняется только
+   отрисовка первой буквы, текст тот же. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-num-k::first-letter {
+  text-transform: uppercase;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-num-k {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-num-v.is-off {
+  color: var(--u-text-2);
+  text-decoration-color: var(--u-bad);
+  text-decoration-thickness: 2px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-num-v.is-good {
+  color: var(--u-ok-text);
+}
+
+/* ---- панели ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel {
+  padding: 16px 18px;
+  background: var(--u-surface);
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  box-shadow: var(--u-shadow-1);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Шаг в работе: акцентная рамка и мягкое кольцо. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel.is-on,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel[data-st="run"] {
+  border-color: var(--u-accent-line);
+  box-shadow: 0 0 0 3px var(--u-accent-soft), var(--u-shadow-1);
+}
+
+/* Пройденный шаг возвращается к обычной рамке, о готовности говорит
+   зелёная галочка в номере. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel[data-st="done"] {
+  border-color: var(--u-border);
+  box-shadow: var(--u-shadow-1);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel.is-success {
+  background: var(--u-ok-soft);
+  border-color: color-mix(in srgb, var(--u-ok) 40%, transparent);
+  box-shadow: none;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel.is-success .nm-dm-done-t {
+  color: var(--u-ok-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel.is-success .nm-dm-panel-d {
+  color: var(--u-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel-t {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel-d {
+  font-size: 13px;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-done-t {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--u-ok-text);
+}
+
+/* ---- цитата: фрагмент документа, письмо, ответ заведения ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-quote {
+  padding: 10px 12px;
+  border-left: 3px solid var(--u-accent);
+  border-radius: 0 6px 6px 0;
+  background: var(--u-surface-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-quote-k {
+  margin-bottom: 4px !important;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--u-accent-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-quote-t {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--u-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-quote.is-ai {
+  background: var(--u-accent-soft);
+}
+
+/* ---- ленты событий и заказов ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-feed {
+  gap: 2px;
+  padding: 4px;
+  background: var(--u-surface);
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  box-shadow: var(--u-shadow-1);
+  font-size: 13px;
+  scrollbar-color: var(--u-border-2) transparent;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-feed-i {
+  gap: 2px 12px;
+  padding: 7px 10px;
+  border-radius: 4px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-feed-i:hover {
+  background: var(--u-surface-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-feed-i .is-dim {
+  color: var(--u-text-2);
+}
+
+/* Свой заказ в ленте точки. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-feed-i.is-mine {
+  background: var(--u-mine);
+  color: var(--u-mine-text);
+  box-shadow: inset 3px 0 0 var(--u-mine-bar);
+  animation: nm-dmc-flash 0.6s ease both;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-feed-i.is-mine .is-dim {
+  color: var(--u-mine-text);
+}
+
+/* Подозрительное событие кассы: тревога. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-feed-i.is-alert {
+  background: var(--u-bad-soft);
+  color: var(--u-bad-text);
+  box-shadow: inset 3px 0 0 var(--u-bad);
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-feed-i.is-alert .is-dim {
+  color: var(--u-bad-text);
+  font-weight: 400;
+}
+
+/* Отмена, удаление и скидка ниже порога: ещё не тревога, но не обычная
+   продажа. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-feed-i:not(.is-alert) .nm-dm-kind:not(.is-sale) {
+  color: var(--u-warn-text);
+  font-weight: 500;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-flag {
+  color: var(--u-bad);
+}
+
+/* ---- список правил: строки карточки, справа точка «правило включено» ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-list {
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+  overflow: hidden;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-list li {
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--u-border);
+  font-size: 13px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-list li:first-child {
+  border-top: 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-list li:last-child {
+  border-bottom: 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-list li::after {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: var(--u-ok);
+  box-shadow: 0 0 0 3px var(--u-ok-soft);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-list .nm-dm-mark {
+  color: var(--u-accent-text);
+}
+
+/* ---- полосы сравнения ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-bar {
+  height: 8px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--u-surface-3);
+  overflow: hidden;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-bar i {
+  border-radius: 4px;
+  background: var(--u-icon);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-bar i.is-ink {
+  background: var(--u-accent);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-bar-k {
+  font-size: 12px;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-bar-k b {
+  color: var(--u-accent-text);
+  font-weight: 600;
+}
+
+/* ---- таблица витрины ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-tbl {
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-1);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-tbl table {
+  font-size: 13px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-tbl th {
+  padding: 9px 14px;
+  background: var(--u-surface-2);
+  border-bottom-color: var(--u-border);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-tbl td {
+  padding: 10px 14px;
+  border-bottom-color: var(--u-border);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-tbl tbody tr:not(.is-total):hover td {
+  background: var(--u-surface-2);
+}
+
+/* Итог «к списанию»: прогноз потери, то есть предупреждение. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-tbl tr.is-total td {
+  background: var(--u-warn-soft);
+  color: var(--u-warn-text);
+  font-weight: 600;
+}
+
+/* ---- получатели рассылки ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-person {
+  padding: 8px 12px;
+  border: 1px solid var(--u-border);
+  border-radius: 6px;
+  background: var(--u-surface);
+  font-size: 13px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-person .is-dim {
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-person .is-ok {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--u-ok-soft);
+  color: var(--u-ok-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ---- аватары: кружок в мягком акценте ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-ava {
+  border: 0;
+  border-radius: 50%;
+  background: var(--u-accent-soft);
+  color: var(--u-accent-text);
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-emo {
+  filter: grayscale(1) contrast(1.1);
+}
+
+/* ---- спиннеры ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-spin {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--u-accent-line);
+  border-top-color: var(--u-accent);
+  border-radius: 50%;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-spin.is-l {
+  width: 40px;
+  height: 40px;
+  border-width: 3px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-wait {
+  font-size: 13px;
+  color: var(--u-text-2);
+}
+
+/* ============ телефон ============ */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-phone {
+  width: 316px;
+  padding: 8px;
+  border: 1px solid var(--u-device-line);
+  border-radius: 8px;
+  background: var(--u-device);
+  box-shadow: var(--u-shadow-3);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-screen {
+  border-radius: 4px;
+  background: var(--u-surface);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-status {
+  padding: 8px 16px 7px;
+  background: var(--u-head);
+  color: var(--u-head-text);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-notch {
+  width: 90px;
+  height: 18px;
+  border-radius: 0 0 8px 8px;
+  background: var(--u-device);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-batt {
+  position: relative;
+  width: 18px;
+  height: 9px;
+  border-color: currentColor;
+  border-radius: 2px;
+  vertical-align: -1px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-batt::after {
+  content: "";
+  position: absolute;
+  inset: 1px 5px 1px 1px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-home {
+  height: 18px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-home::before {
+  width: 104px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--u-text);
+  opacity: 0.85;
+}
+
+/* ---- шапка мини-приложения и чата ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-chat-h {
+  padding: 10px 14px 11px;
+  border-top: 0;
+  border-bottom: 1px solid var(--u-border);
+  background: var(--u-head);
+  color: var(--u-head-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-chat-h .nm-dm-ava {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-chat-t {
+  font-size: 13px;
+  font-weight: 600;
+  color: inherit;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-chat-s {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--u-head-text-2);
+}
+
+/* «online» в чатах (рядом с аватаром), а не место в шапке меню. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-ava + div .nm-dm-chat-s::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--u-ok);
+  vertical-align: 1px;
+}
+
+/* ---- переписка ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-chat {
+  gap: 6px;
+  padding: 12px 10px;
+  background: var(--u-chat);
+  scrollbar-color: var(--u-border-2) transparent;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-empty {
+  font-size: 12px;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-chat .nm-dm-empty {
+  align-self: center;
+  margin-top: 24px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--u-surface) 70%, transparent);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-msg {
+  padding: 8px 11px 7px;
+  border: 0;
+  border-radius: 8px 8px 8px 2px;
+  background: var(--u-in);
+  color: var(--u-in-text);
+  font-size: 13px;
+  line-height: 1.42;
+  box-shadow: 0 1px 1px rgba(15, 23, 41, 0.07);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-msg.is-out {
+  border-radius: 8px 8px 2px 8px;
+  background: var(--u-out);
+  color: var(--u-out-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-msg-d,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-msg-m {
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-msg-d {
+  font-size: 12px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-msg-m {
+  font-size: 11px;
+}
+
+/* «Ищу в базе знаний…»: пузырь дышит, пока идёт поиск. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-msg.is-typing {
+  animation: nm-dmc-breathe 1.4s ease-in-out infinite;
+}
+
+/* Алерт бота: полоса тревоги слева, заголовок красным. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-msg.is-alert {
+  box-shadow: inset 3px 0 0 var(--u-bad), 0 1px 1px rgba(15, 23, 41, 0.07);
+  padding-left: 13px;
+  animation: nm-dm-in 0.35s ease both;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-msg.is-alert .nm-dm-msg-k {
+  color: var(--u-bad-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ---- быстрые ответы (Mia) ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-opts {
+  gap: 6px;
+  padding: 10px;
+  border-top: 1px solid var(--u-border);
+  background: var(--u-surface);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-opt {
+  padding: 8px 12px;
+  border: 1px solid var(--u-accent-line);
+  border-radius: 6px;
+  background: var(--u-surface);
+  color: var(--u-accent-text);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-opt:hover:not(:disabled) {
+  background: var(--u-accent-soft);
+  border-color: var(--u-accent-line);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-opt:active:not(:disabled) {
+  border-color: var(--u-accent);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-opt.is-on {
+  background: var(--u-accent-soft);
+  border-color: var(--u-accent);
+  color: var(--u-accent-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-opt:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---- меню (предзаказ) ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-menu {
+  padding: 4px 14px;
+  scrollbar-color: var(--u-border-2) transparent;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-item {
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom-color: var(--u-border);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-item:last-child {
+  border-bottom: 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-item-e {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 6px;
+  background: var(--u-surface-2);
+  font-size: 20px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-item-n {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-item-p {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qty {
+  gap: 6px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qty button {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--u-border-2);
+  border-radius: 6px;
+  background: var(--u-surface);
+  color: var(--u-text);
+  font-size: 15px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qty button:hover {
+  background: var(--u-surface-2);
+  border-color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qty button:active {
+  background: var(--u-surface-3);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qty button.is-add {
+  background: var(--u-accent);
+  border-color: var(--u-accent);
+  color: var(--u-on-accent);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qty button.is-add:hover {
+  background: var(--u-accent-hover);
+  border-color: var(--u-accent-hover);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qty button.is-add:active {
+  background: var(--u-accent-press);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qty span {
+  width: 18px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-phone-foot {
+  padding: 10px 12px;
+  border-top: 1px solid var(--u-border);
+  background: var(--u-surface);
+}
+
+/* ---- QR ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qr-box {
+  position: relative;
+  padding: 12px;
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: var(--u-shadow-1);
+  overflow: hidden;
+}
+
+/* Сканирование: рамка в акцент и бегущая линия поверх кода. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qr-box.is-scan {
+  border-color: var(--u-accent);
+  box-shadow: 0 0 0 3px var(--u-ring);
+  animation: none;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-qr-box.is-scan::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 6px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--u-accent);
+  box-shadow: 0 0 8px var(--u-accent);
+  animation: nm-dmc-scan 0.9s ease-in-out infinite alternate;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-seat {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-small {
+  font-size: 13px;
+  color: var(--u-text-2);
+}
+
+/* ---- оплата ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-pay {
+  padding: 20px 14px 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-pay-t {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-bank {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border: 1px solid var(--u-border);
+  border-radius: 6px;
+  background: var(--u-surface);
+  color: var(--u-text);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+/* Шеврон справа: строка списка, а не поле. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-bank::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-top: 2px solid var(--u-icon);
+  border-right: 2px solid var(--u-icon);
+  transform: rotate(45deg);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-bank:hover {
+  background: var(--u-accent-soft);
+  border-color: var(--u-accent-line);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-bank:active {
+  border-color: var(--u-accent);
+}
+
+/* ---- заказ оплачен ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-order {
+  gap: 8px;
+}
+
+/* Эмодзи ✅ остаётся в разметке (читалка экрана его прочтёт), на экране
+   вместо него знак успеха: зелёный круг с галочкой. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-order > p.nm-dm-emo {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 6px;
+  border-radius: 50%;
+  background: var(--u-ok-strong);
+  box-shadow: 0 0 0 6px var(--u-ok-soft);
+  filter: none;
+  overflow: hidden;
+  text-indent: 200%;
+  white-space: nowrap;
+  animation: nm-dmc-pop 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-order > p.nm-dm-emo::after {
+  content: "";
+  position: absolute;
+  left: 21px;
+  top: 14px;
+  width: 11px;
+  height: 21px;
+  border: solid #ffffff;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-order-no {
+  font-size: 40px;
+  color: var(--u-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-state {
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--u-warn-soft);
+  color: var(--u-warn-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-state.is-ready {
+  background: var(--u-ok-strong);
+  color: #ffffff;
+  animation: nm-dmc-pop 0.35s ease both;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-textbtn {
+  border-bottom-color: transparent;
+  color: var(--u-accent-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-textbtn:hover {
+  border-bottom-color: currentColor;
+  color: var(--u-accent-hover);
+}
+
+/* ---- экран блокировки с пушем (остатки) ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-screen:has(.nm-dm-lock) {
+  background: var(--u-wall);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-screen:has(.nm-dm-lock) .nm-dm-status {
+  background: transparent;
+  color: var(--u-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-push {
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--u-surface) 88%, transparent);
+  box-shadow: var(--u-shadow-2);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-push-h .nm-dm-ava {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--u-accent);
+  font-size: 12px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-push-h .nm-dm-emo {
+  filter: grayscale(1) brightness(2.2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-push-a {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-push-m {
+  font-size: 11px;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-push-t {
+  font-size: 13px;
+  color: var(--u-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-lock .nm-dm-empty {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--u-surface) 70%, transparent);
+  color: var(--u-text-2);
+}
+
+/* ---- Mia: документы базы знаний ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-docs div {
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--u-border);
+  border-radius: 6px;
+  background: var(--u-surface-2);
+  font-size: 13px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-docs .nm-dm-emo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  background: var(--u-surface);
+  box-shadow: inset 0 0 0 1px var(--u-border);
+  font-size: 13px;
+}
+
+/* Номера шагов в заголовках панелей Mia: первый шаг готов с самого
+   начала (база проиндексирована), второй и третий загораются по ходу. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel[data-st] .nm-dm-panel-t {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel[data-st] .nm-dm-panel-t::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: var(--u-border-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel[data-st="run"] .nm-dm-panel-t::after {
+  background: var(--u-accent);
+  box-shadow: 0 0 0 3px var(--u-accent-soft);
+  animation: nm-dmc-live 1.2s ease-in-out infinite;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel[data-st="done"] .nm-dm-panel-t::after {
+  background: var(--u-ok);
+  box-shadow: 0 0 0 3px var(--u-ok-soft);
+}
+
+/* ---- карьера: шаги пайплайна ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-no {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--u-border-2);
+  border-radius: 50%;
+  background: var(--u-surface);
+  color: var(--u-text-2);
+  font-size: 12px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-no.is-run {
+  border-color: var(--u-accent);
+  color: var(--u-accent-text);
+  box-shadow: 0 0 0 4px var(--u-accent-soft);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-no.is-done {
+  background: var(--u-ok-strong);
+  border-color: var(--u-ok-strong);
+  color: #ffffff;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-n {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-n.is-idle,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-d,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-d.is-idle {
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-d {
+  margin-left: 38px;
+  font-size: 13px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-x {
+  margin-left: 38px;
+}
+
+/* Линия между шагами пайплайна (у карьеры): зелёная там, где шаг уже
+   пройден. Стоит по центру кружка с номером. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-stack > .nm-dm-panel[data-st] {
+  position: relative;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-stack > .nm-dm-panel[data-st]:has(.nm-dm-step-h) + .nm-dm-panel::before {
+  content: "";
+  position: absolute;
+  left: 30px;
+  top: -13px;
+  width: 2px;
+  height: 12px;
+  background: var(--u-border-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-stack > .nm-dm-panel[data-st="done"]:has(.nm-dm-step-h) + .nm-dm-panel::before {
+  background: var(--u-ok);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-vac {
+  padding: 10px 12px;
+  border: 1px solid var(--u-border);
+  border-radius: 6px;
+  background: var(--u-surface-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-vac p {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-vac p + p {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-chips span {
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--u-accent-soft);
+  color: var(--u-accent-text);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-match p {
+  font-size: 13px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-match .nm-dm-sym {
+  display: inline-block;
+  width: 16px;
+  font-weight: 700;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-match .is-ok .nm-dm-sym {
+  color: var(--u-ok-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-match .is-gap {
+  color: var(--u-warn-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-match .is-score {
+  display: inline-block;
+  margin-top: 8px !important;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--u-accent-soft);
+  color: var(--u-accent-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Строка таблицы с условным форматированием, как в настоящей таблице:
+   скор акцентом, «письмо готово» зелёным, «ждёт аппрува» янтарным. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-sheet {
+  border: 1px solid var(--u-border);
+  border-radius: 6px;
+  background: var(--u-surface);
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-sheet span {
+  padding: 7px 12px;
+  border-left-color: var(--u-border);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-sheet span:nth-child(2) {
+  color: var(--u-accent-text);
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-sheet span:nth-child(3) {
+  background: var(--u-ok-soft);
+  color: var(--u-ok-text);
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-sheet span:nth-child(4) {
+  background: var(--u-warn-soft);
+  color: var(--u-warn-text);
+  font-weight: 600;
+}
+
+/* ---- отзывы ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-app .nm-dm-tone-k {
+  margin: 0 4px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-rev-h .nm-dm-ava {
+  width: 36px;
+  height: 36px;
+  background: var(--u-surface-3);
+  color: var(--u-text-2);
+  font-size: 14px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-rev-n {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-stars {
+  color: var(--u-star);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+/* Пустая звезда: значок, 3 к 1 к фону. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-stars i {
+  color: var(--u-icon);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-src {
+  padding: 3px 8px;
+  border: 1px solid var(--u-border);
+  border-radius: 4px;
+  background: var(--u-surface-2);
+  color: var(--u-text-2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-rev-t,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-rev-t.is-dim {
+  font-size: 14px;
+  color: var(--u-text);
+}
+
+/* Полоса тональности слева у карточки отзыва, по оценке из aria-label:
+   1–2 звезды тревога (на них отвечать первыми), 3 предупреждение, 4–5
+   успех. Так менеджер видит очередь, не читая каждый отзыв. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel:has(.nm-dm-stars:is([aria-label="1/5"], [aria-label="2/5"])) {
+  box-shadow: inset 3px 0 0 var(--u-bad), var(--u-shadow-1);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel:has(.nm-dm-stars[aria-label="3/5"]) {
+  box-shadow: inset 3px 0 0 var(--u-warn), var(--u-shadow-1);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel:has(.nm-dm-stars:is([aria-label="4/5"], [aria-label="5/5"])) {
+  box-shadow: inset 3px 0 0 var(--u-ok), var(--u-shadow-1);
+}
+
+/* «Ответить с ИИ» под каждым отзывом: мягкая кнопка. Пять одинаково
+   ярких кнопок подряд спорили бы друг с другом и с текстом отзывов;
+   залитой остаётся одна, «Сгенерировать ответ» внизу. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel:not(.is-own) > .nm-dm-btn {
+  background: var(--u-accent-soft);
+  border-color: var(--u-accent-line);
+  color: var(--u-accent-text);
+  box-shadow: none;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel:not(.is-own) > .nm-dm-btn:hover:not(:disabled) {
+  background: var(--u-accent);
+  border-color: var(--u-accent);
+  color: var(--u-on-accent);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel:not(.is-own) > .nm-dm-btn:disabled:not(.is-busy) {
+  background: var(--u-surface-2);
+  border-color: var(--u-border);
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-panel.is-own {
+  border-color: var(--u-border);
+  box-shadow: var(--u-shadow-1);
+  background: var(--u-surface);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-area {
+  padding: 10px 12px;
+  border: 1px solid var(--u-border-2);
+  border-radius: 6px;
+  background: var(--u-surface);
+  color: var(--u-text);
+  font-size: 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-area::placeholder {
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-area:hover {
+  border-color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-area:focus {
+  border-color: var(--u-accent);
+  box-shadow: 0 0 0 3px var(--u-ring);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-star {
+  color: var(--u-icon);
+  font-size: 20px;
+  transition: color 0.1s ease, transform 0.1s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-star.is-on {
+  color: var(--u-star);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-star:hover {
+  color: var(--u-star);
+  transform: scale(1.12);
+}
+
+/* ============ кнопка Mia над интерфейсом ============
+   Стоит на странице, а не в окне, поэтому без подмены переменных: просто
+   акцентная кнопка в цвет своего демо. */
+.nm-dmv[data-palette] .nm-dm-stage > .nm-dm-btn.is-cta {
+  min-height: 44px;
+  padding: 11px 18px;
+  font-size: 14px;
+}
+
+/* ============ слой 3: характер ============ */
+
+/* ---- стадион: табло ---- */
+
+/* Номер заказа на жёлтой табличке, как на табло выдачи. */
+.nm-dmv[data-palette] .nm-dm[data-demo="preorder"] .nm-dm-stage .nm-dm-order-no {
+  padding: 6px 14px 4px;
+  border-radius: 6px;
+  background: #f5c000;
+  color: #1f1a00;
+}
+
+.nm-dmv[data-palette] .nm-dm[data-demo="preorder"] .nm-dm-stage .nm-dm-num-v {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* На зелёной шапке меню место набрано светло-зелёным. */
+.nm-dmv[data-palette] .nm-dm[data-demo="preorder"] .nm-dm-stage .nm-dm-chat-h {
+  border-bottom-color: var(--u-head);
+}
+
+/* Обратный отсчёт перерыва как на табло: жёлтые цифры на тёмном. */
+.nm-dmv[data-palette] .nm-dm[data-demo="preorder"] .nm-dm-stage .nm-dm-timer b {
+  padding: 4px 10px 3px;
+  background: #0f2417;
+  color: #f5c000;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+/* ---- фрод: цифры на тёмно-синей плашке ---- */
+
+.nm-dmv[data-palette] .nm-dm[data-demo="fraud"] .nm-dm-stage .nm-dm-nums {
+  border-color: #1b3360;
+  background: #1b3360;
+}
+
+.nm-dmv[data-palette] .nm-dm[data-demo="fraud"] .nm-dm-stage .nm-dm-nums > div {
+  border-left-color: #2f4877;
+}
+
+.nm-dmv[data-palette] .nm-dm[data-demo="fraud"] .nm-dm-stage .nm-dm-num-v {
+  color: #ffffff;
+}
+
+.nm-dmv[data-palette] .nm-dm[data-demo="fraud"] .nm-dm-stage .nm-dm-nums > div + div .nm-dm-num-v {
+  color: #ff9e98;
+}
+
+.nm-dmv[data-palette] .nm-dm[data-demo="fraud"] .nm-dm-stage .nm-dm-num-k {
+  color: #b9c6de;
+}
+
+/* Журнал событий кассы моноширинным, как лог на пульте. */
+.nm-dmv[data-palette] .nm-dm[data-demo="fraud"] .nm-dm-stage .nm-dm-feed {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+/* ---- карьера: инструмент разработчика ---- */
+
+/* Цифры, скор и строка таблицы моноширинным: так выглядят логи прогонов
+   в n8n и консоли разработчика. Русский текст требований остаётся
+   обычным шрифтом, моноширинная кириллица читается хуже. */
+.nm-dmv[data-palette] .nm-dm[data-demo="career"] .nm-dm-stage :is(.nm-dm-sheet, .nm-dm-num-v, .nm-dm-match .is-score) {
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.nm-dmv[data-palette] .nm-dm[data-demo="career"] .nm-dm-stage .nm-dm-num-v {
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+/* ---- пекарня ---- */
+
+.nm-dmv[data-palette] .nm-dm[data-demo="leftovers"] .nm-dm-stage .nm-dm-tbl th {
+  background: #f6ebdd;
+  color: #6b5646;
+}
+
+/* ---- отзывы: золотая кнопка ---- */
+
+.nm-dmv[data-palette] .nm-dm[data-demo="reviews"] .nm-dm-stage .nm-dm-btn {
+  box-shadow: 0 1px 2px rgba(122, 86, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.nm-dmv[data-palette] .nm-dm[data-demo="reviews"] .nm-dm-stage .nm-dm-quote {
+  border-left-color: var(--u-accent);
+}
+
+/* ============ движение ============ */
+
+@keyframes nm-dmc-live {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes nm-dmc-breathe {
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes nm-dmc-scan {
+  from {
+    top: 6px;
+  }
+  to {
+    top: calc(100% - 8px);
+  }
+}
+
+@keyframes nm-dmc-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nm-dmc-flash {
+  from {
+    filter: brightness(1.15);
+  }
+  to {
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nm-dmv[data-palette] .nm-dm-stage *,
+  .nm-dmv[data-palette] .nm-dm-stage *::before,
+  .nm-dmv[data-palette] .nm-dm-stage *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============ телефон шириной экрана ============ */
+
+@media (max-width: 620px) {
+  .nm-dmv[data-palette] .nm-dm-stage .nm-dm-app {
+    padding: 14px;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-dm-nums > div {
+    padding: 12px 10px 14px;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-dm-nums > div:first-child {
+    padding-left: 12px;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-dm-num-v {
+    font-size: 17px;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-dm-num-k {
+    font-size: 11px;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-d,
+  .nm-dmv[data-palette] .nm-dm-stage .nm-dm-step-x {
+    margin-left: 0;
+  }
+
+  /* Строка ленты кассы на узком экране: плотнее, без знака ⚠, иначе он
+     уезжает на вторую строку. Тревогу и так несут красная полоса, фон и
+     жирный текст. */
+  .nm-dmv[data-palette] .nm-dm-stage .nm-dm-feed-i {
+    gap: 2px 8px;
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-dm-flag {
+    display: none;
+  }
+}
