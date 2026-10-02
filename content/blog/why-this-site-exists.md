@@ -1,7 +1,7 @@
 ---
 title: "Why this site exists"
-date: "2026-09-12"
-description: "Who I am, what is here and how to use it. One page instead of a round of questions."
+date: "2026-10-02"
+description: "What is here, where to find things and where to start. One page instead of a round of questions."
 lang: "en"
 rubric: "process"
 cover: "/blog/why.jpg"
@@ -10,89 +10,86 @@ translation: "zachem-etot-sayt"
 draft: false
 ---
 
-My name is Jasur Akhmadaliev. I am a product manager. I live in Moscow and build what you are looking at.
+My name is Jasur Akhmadaliev. I build products solo: I do the code, design and copy myself. I live in Moscow.
 
-I built this site myself. It is about what I do, not about what I call myself.
+This site was built the same way. On October 2 it moved to a new design, and the previous version of this article started lying the same day: it walked you through pages that no longer exist. I rewrote it.
 
-## Why a resume was not enough
+## You came to find out who this is
 
-A resume is a sheet of paper listing the jobs a person held. It does not show what that person can do today.
+Those are the first words on the [home page](/). That is the thought a person has when landing on a stranger's personal site. I just wrote it down for you.
 
-I got tired of explaining and decided to show instead. Here are projects that run, demos you can poke at right in the browser, texts with real numbers, and a podcast. Nothing is staged for looks.
+![Home page: “You came to find out who this is”, a portrait and five numbers](/blog/why-home.jpg)
 
-It is also a test on myself. I write about product and automation, so my own site has to be built by the rules I write about. Otherwise the advice is worthless.
+The answer sits right under the headline: I build it myself, write it myself, film it myself. Below that, five numbers. Four are about attention and about what got built. The fifth is zero.
 
-## What is where
+**Zero people hired. Everything here was made by one person.**
 
-**[The portfolio](/)** is the first screen and four sections under it.
+From there the site splits into four branches.
 
-![The portfolio's front screen: headline, the latest project abcx, and a photo](/blog/why-portfolio.jpg)
+## [Log](/log)
 
-**[Projects](/projects)** holds what I built and what is still alive: a platform for expats, an AI job-search system, a RAG assistant for a clinic. With numbers and links to the code.
+This is where the writing and the podcast live. Log opens as a publication of its own: its own masthead, its own topics, and a button at the top to get back to the site.
 
-![Projects section: what got built, with stack and numbers](/blog/why-projects.jpg)
+![Log: the masthead with its topics, and the latest articles](/blog/why-log.jpg)
 
-**[Services](/services)** says what I take on and what it costs.
+There are six topics: [Product](/log/tema/product), [Marketing](/log/tema/marketing), [AI](/log/tema/ai), [Process](/log/tema/process), [Career](/log/tema/career), [Tools](/log/tema/tools). I write about what I build myself: what worked, what fell apart, what it cost.
 
-![Services section: what I take on and what it costs](/blog/why-services.jpg)
+Inside an article there is a rail on the right: chapters, images and every link from the text. You can jump to the part you need or take the links without rereading.
 
-**[Demos](/demos)** has six automations for ordinary businesses. A clinic, a cafe, a stadium, a till, reviews. Everything runs on the page, nothing to install. It is the fastest way to understand what I mean when I say "automation".
+The [podcast](/podcast) Jasur / Talks lives here too. Conversations with guests and short voice notes, played right on the page. The first episode is being recorded.
 
-![Demos section: automations for real businesses, running right in the browser](/blog/why-demos.jpg)
+## [Works](/works)
 
-**[Resume](/resume)** is the resume. Russian and English, the PDF downloads.
+Six things, built solo: abcx, Expat Roadmap SEA, AI Career System, Mia, JasurGPT and the automation demos. Everything opens from a link.
 
-![Resume section: resume in two languages, PDF downloads](/blog/why-resume.jpg)
+![Works: six cards with live product screens](/blog/why-works.jpg)
 
-## [Notebook](/writing)
+The fastest way to understand what I mean by automation is the [demos](/demos). There are six, they all run in the browser, nothing to install. Four are for businesses: pre-orders from the stands, selling off evening leftovers with AI, fraud control at the till, replies to reviews. And two are my own products: Mia, a clinic assistant, and AI Career System.
 
-This is the blog, but it lives as its own publication. Own masthead, own layout, own rules. You enter it from the portfolio and leave through the button at the top.
+Each demo now has its own color, like a real product rather than a mockup cut from one template.
 
-![The Notebook: the journal lives as its own publication with its own masthead](/blog/why-blocknot.jpg)
+![The demo catalog: each one with its own color and its own interface](/blog/why-demos.jpg)
 
-Six sections, each about one thing:
+At the bottom of Works there is a PDF, "Services and prices", and it opens in the browser. There is no separate services page anymore. The services are made of the same things listed above, and they belong next to them.
 
-- **[Product](/blog/tema/product).** What to build, what to drop and why. On my own projects.
-- **[Marketing](/blog/tema/marketing).** How to sell what you built. What worked, what burned money.
-- **[AI](/blog/tema/ai).** Models, prompts, pipelines. What actually holds up in use.
-- **[Process](/blog/tema/process).** How the work is wired. Automation, routine, a build diary.
-- **[Career](/blog/tema/career).** Resumes, interviews, negotiation. All of it first-hand.
-- **[Tools](/blog/tema/tools).** Tools and real prices. What earns its keep, what only looks free.
+## [Workshop](/workshop)
 
-Some sections are still empty. I did not pad them with filler, they fill up as I go.
+This is a private channel. Six projects taken apart from the inside: what I did, where I got it wrong, what it cost. If you are launching your first, you will dodge half of my screwups.
 
-Inside an article there is a rail on the right: chapters, images and every link the text mentions. You can jump to the part you need or take the links without rereading.
+![Workshop: what's inside and who it is for](/blog/why-workshop.jpg)
 
-## [Podcast](/podcast)
+Intake is paused for now. I will reopen when I can run it properly. You can leave a contact on the page, and I will write first.
 
-It is called Jasur / Talks. Conversations about work, business, products and life with people who have something to say. Plus short voice notes when I have something to say myself.
+## [About](/about)
 
-![The Jasur / Talks podcast page](/blog/why-podcast.jpg)
+Experience, education, languages. The experience is a list: what I did and what came of it, with numbers.
 
-You listen on the page, one button. Nothing to download, nowhere to go.
+![About: a portrait, experience as a list, education and languages](/blog/why-about.jpg)
 
-The first episode is being recorded.
+There is no separate resume page anymore. Anyone who follows an old link lands here.
 
-## The button in the bottom right
+## Two things on every page
 
-That is JasurGPT. Ask about my experience, projects or skills and get an answer. It runs on my own materials, answers to the point and does not invent things that did not happen.
+The first is the "Ask JasurGPT" button in the corner. You press it, the screen goes dark, and my face fades up out of the darkness like the opening titles of a film. Then the chat opens.
 
-![JasurGPT open, with ready-made questions about experience and projects](/blog/why-jasurgpt.jpg)
+![JasurGPT: the face fades up out of the dark before the chat begins](/blog/why-jasurgpt.jpg)
 
-It is not there for decoration. A recruiter would rather ask than read three pages.
+The chat answers questions about my experience and projects, and in Russian it addresses you formally. Asking is faster than opening three pages.
+
+The second is the RU / EN switch. Every article comes out in both languages at once, and the switch takes you from one version to the other. This one too.
 
 ## What comes next
 
-The podcast. Solo episodes when I have something to say myself. Conversations with guests who have something to say. Short voice notes when a topic does not carry a whole episode.
+The first podcast episode. Then conversations with guests, and voice notes when a topic does not carry a whole episode.
 
-Breakdowns. I take one thing and dig to the bottom: how it works, what it costs, what holds up and what only promises to. I will not be retelling the news, plenty of people do that already.
-
-Articles across the six sections above. My own work, my own numbers, my own failures.
+Breakdowns. I take one thing and dig to the bottom: how it works, what it costs, what of it holds up and what only promises to. I will not be retelling the news, half the country is busy with that already.
 
 Everything new shows up here and in the channel.
 
 ## If you want to write
 
-Telegram [@biznesmind](https://t.me/biznesmind), channel [@head_of_ceo](https://t.me/head_of_ceo).
+Message: [@biznesmind](https://t.me/biznesmind). Read: [@head_of_ceo](https://t.me/head_of_ceo).
 
-Write about something real: work, collaboration, a topic for the podcast. I answer.
+An introduction, a joint project, a topic for the podcast. I answer.
+
+If the site moves again, this is the first page I will rewrite.
