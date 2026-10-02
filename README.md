@@ -11,13 +11,13 @@ Built solo from scratch using vibe coding (Cursor + Claude).
 ## What's inside
 
 **Portfolio pages** (new design since October 2, 2026; it lived at `/new` before)
-- `/` — home: first screen, numbers, sections, latest pieces, contacts
-- `/log` — the Jasur / Log journal, rubrics at `/log/tema/[rubric]`, articles at `/blog/[slug]` (RU and EN)
-- `/podcast` — Jasur / Talks
-- `/works` — shipped projects and demos, with the "Services and prices" PDF
-- `/demos` — six live demos at `/demos/[name]`
-- `/workshop` — closed channel
-- `/about` — experience, education, contacts
+- `/`: home, with first screen, numbers, sections, latest pieces, contacts
+- `/log`: the Jasur / Log journal, rubrics at `/log/tema/[rubric]`, articles at `/blog/[slug]` (RU and EN)
+- `/podcast`: Jasur / Talks
+- `/works`: shipped projects and demos, with the "Services and prices" PDF
+- `/demos`: six live demos at `/demos/[name]`
+- `/workshop`: closed channel
+- `/about`: experience, education, contacts
 
 Old addresses (`/writing`, `/projects`, `/resume`, `/services`, `/blog`, `/blog/tema/...`, `/new/...`) redirect permanently, see `next.config.ts`.
 
