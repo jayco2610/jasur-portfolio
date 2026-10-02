@@ -24,6 +24,33 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  /* Старые адреса после переезда нового дизайна с /new на обычные адреса
+     (2 октября 2026). Все постоянные (308): ссылки на них уже лежат в
+     поисковиках, в постах и в чужих закладках, и поисковик должен перенести
+     вес на новый адрес, а не держать оба.
+
+     /new/... уводит только адреса без точки. Картинки и PDF нового сайта
+     лежат в public/new и отдаются по адресам вида /new/hero.jpg и
+     /new/uslugi-ru.pdf, а редиректы Next проверяет раньше файлов из
+     public: правило на весь /new/:path* сломало бы все картинки. У страниц
+     точки в адресе нет, у файлов есть всегда.
+
+     /blog уводит только сам список: статьи остались на /blog/[slug]. */
+  async redirects() {
+    return [
+      { source: "/new", destination: "/", permanent: true },
+      // Значок вкладки у макета лежал в app/new и отдавался как /new/icon.svg,
+      // теперь он в app/icon.svg. Адрес с точкой общее правило ниже не берёт.
+      { source: "/new/icon.svg", destination: "/icon.svg", permanent: true },
+      { source: "/new/:path((?!.*\\.).*)", destination: "/:path", permanent: true },
+      { source: "/writing", destination: "/log", permanent: true },
+      { source: "/blog", destination: "/log", permanent: true },
+      { source: "/blog/tema/:rubric", destination: "/log/tema/:rubric", permanent: true },
+      { source: "/projects", destination: "/works", permanent: true },
+      { source: "/resume", destination: "/about", permanent: true },
+      { source: "/services", destination: "/works", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

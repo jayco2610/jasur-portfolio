@@ -12,14 +12,18 @@ const ACTIONS: [string, string][] = [
   ["telegram_click", "Переходов в Telegram"],
 ];
 
+// Разделы нового сайта (с 2 октября 2026). Старые адреса /projects,
+// /services, /writing и /resume уводят редиректом раньше, чем страница
+// откроется, поэтому новых открытий у них не будет; накопленное по ним
+// осталось в базе под прежними ключами.
 const PAGES: [string, string][] = [
   ["home", "Главная"],
-  ["projects", "Проекты"],
-  ["services", "Услуги"],
+  ["log", "Журнал"],
+  ["works", "Работы"],
   ["demos", "Демо"],
-  ["writing", "Журнал"],
+  ["workshop", "Мастерская"],
+  ["about", "Обо мне"],
   ["podcast", "Подкаст"],
-  ["resume", "Резюме"],
 ];
 
 function days(n: number): string[] {
@@ -43,22 +47,22 @@ export default async function Stats({ searchParams }: { searchParams: Promise<{ 
 
   if (!secret || key !== secret) {
     return (
-      <main style={{ padding: "60px 24px", maxWidth: 720, margin: "0 auto" }}>
+      <div style={{ padding: "60px 24px", maxWidth: 720, margin: "0 auto" }}>
         <h1>Счётчик</h1>
         <p>
           {!secret
             ? "Ключ не задан в настройках проекта: добавьте переменную STATS_KEY в Vercel и нажмите Redeploy."
             : "Ключ в ссылке не совпадает с тем, что задан в настройках проекта."}
         </p>
-      </main>
+      </div>
     );
   }
   if (!upstashConfigured()) {
     return (
-      <main style={{ padding: "60px 24px", maxWidth: 720, margin: "0 auto" }}>
+      <div style={{ padding: "60px 24px", maxWidth: 720, margin: "0 auto" }}>
         <h1>Счётчик</h1>
         <p>Хранилище не подключено: нет переменных UPSTASH_REDIS_REST_URL и UPSTASH_REDIS_REST_TOKEN.</p>
-      </main>
+      </div>
     );
   }
 
@@ -92,13 +96,13 @@ export default async function Stats({ searchParams }: { searchParams: Promise<{ 
   );
 
   return (
-    <main style={{ padding: "48px 24px", maxWidth: 760, margin: "0 auto" }}>
+    <div style={{ padding: "48px 24px", maxWidth: 760, margin: "0 auto" }}>
       <h1 style={{ fontSize: 32, margin: 0 }}>Счётчик портфолио</h1>
       {table("Действия", actions)}
       {table("Страницы", pages)}
       <p style={{ opacity: 0.6, fontSize: 14, marginTop: 28 }}>
         Считаются только эти события. Адреса посетителей не хранятся, дневные ключи удаляются через 40 дней.
       </p>
-    </main>
+    </div>
   );
 }

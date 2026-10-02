@@ -39,7 +39,7 @@
             <div class="note">
               Это RSS-лента. Её адрес можно вставить в любую читалку
               и получать новые материалы автоматически. Чтобы просто читать,
-              откройте <a href="/writing">блог</a>.
+              откройте <a href="/log">блог</a>.
             </div>
           </header>
           <ul>
@@ -52,7 +52,7 @@
             </xsl:for-each>
           </ul>
           <footer>
-            <a class="tiny" href="/writing">← Вернуться в блог</a>
+            <a class="tiny" href="/log">← Вернуться в блог</a>
           </footer>
         </div>
       </body>

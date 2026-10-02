@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { useLanguage } from "@/context/LanguageContext";
@@ -14,11 +14,20 @@ export type Choice = "yes" | "no";
 // Аналитика не загружается, пока человек не разрешил. Не потому, что так
 // строже, а потому что Clarity пишет видеозапись экрана, и включать её
 // молча нечестно. Пока выбора нет, не грузится ничего.
+//
+// Оформление в системе сайта (.nm-consent в new.css): полоса снизу во всю
+// ширину, Onest, чёрное на листе, прямые углы, без тени и без выезда.
+// Компонент стоит внутри .nm (app/layout.tsx), оттуда шрифт и цвета.
+//
+// Пока полоса видна, её высота лежит в переменной --nm-consent-h у <html>:
+// всплывающая кнопка JasurGPT (gpt.css) поднимается на эту высоту и не
+// прячется под полосой. После выбора переменная убирается.
 export default function Consent() {
   const { lang } = useLanguage();
   const ru = lang === "ru";
   const [choice, setChoice] = useState<Choice | null>(null);
   const [asked, setAsked] = useState(true);
+  const bar = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let saved: string | null = null;
@@ -30,6 +39,23 @@ export default function Consent() {
     if (saved === "yes" || saved === "no") setChoice(saved);
     setAsked(saved === "yes" || saved === "no");
   }, []);
+
+  useEffect(() => {
+    const el = bar.current;
+    const root = document.documentElement;
+    if (asked || !el) {
+      root.style.removeProperty("--nm-consent-h");
+      return;
+    }
+    const set = () => root.style.setProperty("--nm-consent-h", `${el.offsetHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => {
+      ro.disconnect();
+      root.style.removeProperty("--nm-consent-h");
+    };
+  }, [asked]);
 
   function decide(value: Choice) {
     try {
@@ -57,14 +83,14 @@ export default function Consent() {
       )}
 
       {!asked && (
-        <div className="consent" role="dialog" aria-live="polite">
-          <div className="consent-in">
+        <div ref={bar} className="nm-consent" role="dialog" aria-live="polite">
+          <div className="nm-wrap nm-consent-in">
             <p>
               {ru
                 ? "Сайт использует куки, чтобы я видел, какие страницы читают и где люди уходят. Личных данных не собираю и никому не передаю."
                 : "This site uses cookies so I can see which pages get read and where people leave. No personal data is collected or passed on."}
             </p>
-            <div className="consent-btns">
+            <div className="nm-consent-btns">
               <button type="button" onClick={() => decide("no")} className="is-no">
                 {ru ? "Отклонить" : "Decline"}
               </button>

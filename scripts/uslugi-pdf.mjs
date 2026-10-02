@@ -6,8 +6,8 @@
      node scripts/uslugi-pdf.mjs
 
    Когда пересобирать: поменялись кадры демо (public/new/demos/*.jpg), их
-   названия и описания (app/new/demos/list.ts), услуги и цены
-   (app/new/uslugi/services.ts) или контакты (app/new/strings.ts). После
+   названия и описания (app/demos/list.ts), услуги и цены
+   (app/uslugi/services.ts) или контакты (app/strings.ts). После
    пересборки закоммитить оба PDF и запушить.
 
    Что делает:
@@ -18,7 +18,7 @@
       проекта не меняется, в node_modules ничего не попадает. Браузер берётся
       из общего кэша Playwright (~/Library/Caches/ms-playwright), если его
       там нет, скачивается туда же.
-   4. Открывает /new/uslugi/ru и /new/uslugi/en, ждёт шрифты и картинки и
+   4. Открывает /uslugi/ru и /uslugi/en, ждёт шрифты и картинки и
       печатает каждую страницу в PDF: лист 1280 × 720 точек (16:9), поля
       нулевые, фон печатается.
    5. Гасит сервер и удаляет временную папку с Playwright.
@@ -41,7 +41,7 @@ import { createServer } from "node:net";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "public", "new");
-const ROUTE = process.env.ROUTE || "/new/uslugi";
+const ROUTE = process.env.ROUTE || "/uslugi";
 const LANGS = ["ru", "en"];
 /* Версия закреплена: 1.63.0 работает со сборкой браузера 1243, которая уже
    лежит в кэше. Новая версия потянула бы новый браузер на 100+ МБ. */
