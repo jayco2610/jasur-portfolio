@@ -33,12 +33,12 @@ export const productDemos: Demo[] = [
     shotEn: "/new/demos/mia-en.jpg",
     name: { en: "Mia, a clinic RAG assistant", ru: "Mia, RAG-ассистент клиники" },
     desc: {
-      en: "An assistant that answers patients only from the clinic's documents. Step-by-step walkthrough plus the live assistant on Hugging Face.",
-      ru: "Ассистент, который отвечает пациентам только по документам клиники. Пошаговый разбор плюс живой ассистент на Hugging Face.",
+      en: "An assistant that answers patients only from the clinic's documents. Step-by-step walkthrough plus the live assistant right on the page.",
+      ru: "Ассистент, который отвечает пациентам только по документам клиники. Пошаговый разбор плюс живой ассистент прямо на странице.",
     },
     tags: {
-      en: ["RAG", "Hugging Face", "does not make things up"],
-      ru: ["RAG", "Hugging Face", "не выдумывает"],
+      en: ["RAG", "Groq", "does not make things up"],
+      ru: ["RAG", "Groq", "не выдумывает"],
     },
     live: true,
   },

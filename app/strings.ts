@@ -206,7 +206,7 @@ export const WORKS: Record<
       mia: {
         name: "Mia",
         what: "Ассистент для стоматологической клиники: цены, услуги, часы, процедуры. Отвечает только по документам клиники и показывает, из какого фрагмента собран ответ.",
-        stack: ["Python", "RAG", "Groq", "Gradio", "Hugging Face"],
+        stack: ["Next.js", "RAG", "Groq", "Vercel"],
       },
       jasurgpt: {
         name: "JasurGPT",
@@ -245,7 +245,7 @@ export const WORKS: Record<
       mia: {
         name: "Mia",
         what: "An assistant for a dental clinic: prices, services, hours, procedures. It answers only from the clinic's documents and shows which fragment the answer was built from.",
-        stack: ["Python", "RAG", "Groq", "Gradio", "Hugging Face"],
+        stack: ["Next.js", "RAG", "Groq", "Vercel"],
       },
       jasurgpt: {
         name: "JasurGPT",
