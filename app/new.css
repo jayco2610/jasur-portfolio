@@ -288,7 +288,7 @@
 }
 
 /* Под линейкой две колонки: слева абзац со статусом, справа карточка статьи
-   «Зачем этот сайт». Ниже 1100 карточка встаёт под статус на всю колонку. */
+   «Зачем этот сайт». Ниже 1400 карточка встаёт под статус. */
 .nm-hero-meta-l {
   min-width: 0;
 }
@@ -334,9 +334,11 @@
   outline-offset: 4px;
 }
 
-/* Ниже 1100 карточка компактная: обложка слева, текст справа, чтобы
-   первый экран не вытягивался на высоту большой картинки. */
-@media (max-width: 1099px) {
+/* Ниже 1400 карточка компактная: обложка слева, текст справа, чтобы
+   первый экран не вытягивался на высоту большой картинки. До 3 октября 2026
+   граница стояла на 1100, и между 1100 и 1400 карточка сбоку от абзаца
+   сжималась до 100-230 точек шириной. */
+@media (max-width: 1399px) {
   .nm-why {
     display: grid;
     grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
@@ -353,16 +355,52 @@
   }
 }
 
-@media (min-width: 1100px) {
+/* От 1400 карточка справа от абзаца со статусом и ровно той же высоты:
+   верх на линии первой строки абзаца, низ на линии низа статуса (просьба
+   Жасура 3 октября 2026). Строка сетки растягивает карточку на высоту
+   левого блока. Внутри: обложка слева, справа дата, заголовок и описание
+   в две строки, описание прижато к низу.
+
+   Ширины. Левая колонка по содержимому (абзац ограничен своими 34ch), так
+   карточке остаётся больше места. Тексту справа нужно 200 точек, чтобы
+   строка даты и заголовок шли в одну строку. Обложка берёт остальное, но не
+   шире 160: при 16:10 это 100 точек высоты, ровно высота левого блока.
+   На 1440 обложка около 90 × 56, на 1920 160 × 100. */
+@media (min-width: 1400px) {
   .nm-hero-meta {
     display: grid;
-    grid-template-columns: minmax(0, 34ch) minmax(0, 1fr);
-    column-gap: clamp(24px, 3vw, 44px);
-    align-items: start;
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: clamp(24px, 2.2vw, 36px);
+    align-items: stretch;
   }
   .nm-why {
+    display: grid;
+    grid-template-columns: minmax(0, 160px) minmax(200px, 1fr);
+    column-gap: 14px;
+    align-items: start;
     margin-top: 0;
     max-width: none;
+  }
+  .nm-why-body {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+  }
+  .nm-why .nm-card-meta {
+    margin-top: 0;
+    white-space: nowrap;
+  }
+  .nm-why .nm-why-t {
+    margin-top: 6px;
+  }
+  .nm-why .nm-why-d {
+    margin-top: auto;
+    padding-top: 6px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
   }
 }
 
