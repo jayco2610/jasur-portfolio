@@ -2663,6 +2663,10 @@
     display: none;
   }
 
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-person-s {
+    white-space: normal;
+  }
+
   .nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-stages span {
     font-size: 0;
     padding: 0;
