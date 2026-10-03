@@ -14,9 +14,18 @@ export const STATE_TTL_SECONDS = 7 * 24 * 60 * 60;
 
 export type Lang = "ru" | "en";
 
-const STEPS = ["name", "doing", "launching", "revenue", "want", "email"] as const;
+const STEPS = ["name", "doing", "launching", "revenue", "want", "email", "phone"] as const;
 type StepKey = (typeof STEPS)[number];
-export type Answers = Record<StepKey, string>;
+// Телефон добавлен 3 октября 2026. В заявках, сохранённых раньше, его нет
+// совсем, поэтому поле необязательное: нет поля, значит заявка старая;
+// пустая строка, значит человек пропустил вопрос.
+export type Answers = Record<Exclude<StepKey, "phone">, string> & { phone?: string };
+
+// Откуда номер: own — кнопкой «Отправить номер», свой; foreign — человек
+// переслал чужой контакт (user_id контакта не совпал с отправителем);
+// text — написан текстом и прошёл проверку; unchecked — написан текстом,
+// проверку не прошёл и со второй попытки принят как есть.
+export type PhoneFrom = "own" | "foreign" | "text" | "unchecked";
 
 // v нужен на случай, если формат состояния когда-нибудь поменяется:
 // старое состояние с другим v просто не примется, и человек начнёт с /start.
@@ -28,6 +37,8 @@ export type SurveyState = {
   answers: Partial<Answers>;
   source: string;
   emailRetried: boolean;
+  // Нет в состояниях, начатых до появления вопроса про телефон.
+  phoneRetried?: boolean;
   startedAt: number;
 };
 export type DoneState = { v: 1; phase: "done"; lang: Lang };
@@ -44,6 +55,9 @@ export type Lead = {
   source: string;
   at: number;
   answers: Answers;
+  phoneFrom?: PhoneFrom;
+  // Имя из чужого контакта, чтобы было понятно, чей это номер.
+  phoneName?: string;
 };
 export type LeadDraft = Omit<Lead, "n">;
 
@@ -57,6 +71,7 @@ type From = {
 };
 export type Incoming =
   | ({ kind: "text"; text: string } & From)
+  | ({ kind: "contact"; phone: string; contactUserId: number | null; contactName: string } & From)
   | ({
       kind: "button";
       data: string;
@@ -66,9 +81,23 @@ export type Incoming =
     } & From);
 
 export type Button = { text: string; data?: string; url?: string };
+// Кнопка клавиатуры ответа (под полем ввода). requestContact: Telegram
+// спрашивает у человека разрешение и присылает его номер контактом.
+export type ReplyButton = { text: string; requestContact?: boolean };
 
+// buttons: кнопки под сообщением; replyKeyboard: клавиатура под полем
+// ввода; removeKeyboard: убрать эту клавиатуру. У одного сообщения только
+// что-то одно.
 export type Effect =
-  | { type: "send"; chatId: number; text: string; html?: boolean; buttons?: Button[][] }
+  | {
+      type: "send";
+      chatId: number;
+      text: string;
+      html?: boolean;
+      buttons?: Button[][];
+      replyKeyboard?: ReplyButton[][];
+      removeKeyboard?: boolean;
+    }
   | { type: "edit"; chatId: number; messageId: number; text: string }
   | { type: "ackButton"; callbackId: string }
   | { type: "setState"; chatId: number; state: State }
@@ -85,7 +114,7 @@ const REVENUE_RU = ["Пока нет", "До 100 тыс. ₽ в месяц", "10
 const T = {
   ru: {
     greeting:
-      "Это лист ожидания Мастерской Жасура. Шесть коротких вопросов. Ответы увидит только Жасур. Удалить свои данные: /delete",
+      "Это лист ожидания Мастерской Жасура. Семь коротких вопросов. Ответы увидит только Жасур. Удалить свои данные: /delete",
     questions: [
       "Как вас зовут?",
       "Чем вы сейчас занимаетесь?",
@@ -93,13 +122,17 @@ const T = {
       "Есть ли уже выручка?",
       "Что хотите получить от Мастерской?",
       "Почта, если удобно. Можно пропустить.",
+      "Телефон, если удобно. Можно отправить кнопкой ниже или пропустить.",
     ],
     revenue: REVENUE_RU,
     skip: "Пропустить",
     skipped: "Пропущено",
+    sendPhone: "Отправить номер",
     thanks: "Спасибо. Поток сейчас закрыт. Как открою, напишу вам первым.",
     deleted: "Данные удалены.",
     badEmail: "Не похоже на адрес почты. Пришлите ещё раз или нажмите «Пропустить».",
+    badPhone: "Не похоже на номер телефона. Пришлите ещё раз, отправьте кнопкой «Отправить номер» или нажмите «Пропустить».",
+    phoneOnly: "Отправьте номер кнопкой ниже, напишите его текстом или нажмите «Пропустить».",
     textOnly: "Ответьте, пожалуйста, текстом.",
     hint: "Чтобы встать в лист ожидания, нажмите /start",
     done: "Ваши ответы уже у Жасура. Заполнить заново: /start",
@@ -107,7 +140,7 @@ const T = {
   },
   en: {
     greeting:
-      "This is the waitlist for Jasur's Workshop. Six short questions. Only Jasur will see your answers. To delete your data: /delete",
+      "This is the waitlist for Jasur's Workshop. Seven short questions. Only Jasur will see your answers. To delete your data: /delete",
     questions: [
       "What is your name?",
       "What do you do right now?",
@@ -115,13 +148,17 @@ const T = {
       "Do you have revenue yet?",
       "What do you want to get from the Workshop?",
       "Email, if you like. You can skip this.",
+      "Phone number, if you like. Send it with the button below or skip.",
     ],
     revenue: ["Not yet", "Under ₽100k a month", "₽100-500k", "Over ₽500k"],
     skip: "Skip",
     skipped: "Skipped",
+    sendPhone: "Send my number",
     thanks: "Thank you. Intake is closed for now. When it opens, I will write to you first.",
     deleted: "Your data has been deleted.",
     badEmail: 'That does not look like an email address. Send it again or tap "Skip".',
+    badPhone: 'That does not look like a phone number. Send it again, use the "Send my number" button, or tap "Skip".',
+    phoneOnly: 'Send your number with the button below, type it, or tap "Skip".',
     textOnly: "Please reply with text.",
     hint: "To join the waitlist, tap /start",
     done: "Your answers are already with Jasur. To fill them in again: /start",
@@ -154,7 +191,7 @@ export const COMMANDS = {
 
 // Потолки длины ответов. Сообщение в Telegram не длиннее 4096 знаков, а
 // заявка админу собирает все ответы в одно сообщение.
-const LIMIT = { name: 100, text: 800, email: 200 };
+const LIMIT = { name: 100, text: 800, email: 200, phone: 40 };
 
 // ——— разбор входа ———
 
@@ -191,6 +228,18 @@ export function parseUpdate(update: unknown): Incoming | null {
     if (!chat || chat.type !== "private") return null;
     const from = parseFrom(obj(m.from), num(chat.id));
     if (!from) return null;
+    // Контакт: кнопка «Отправить номер» или пересланный чужой контакт.
+    const c = obj(m.contact);
+    const phone = c ? str(c.phone_number).trim() : "";
+    if (c && phone) {
+      return {
+        kind: "contact",
+        phone,
+        contactUserId: num(c.user_id),
+        contactName: [str(c.first_name), str(c.last_name)].filter(Boolean).join(" "),
+        ...from,
+      };
+    }
     return { kind: "text", text: str(m.text) || str(m.caption), ...from };
   }
 
@@ -262,6 +311,26 @@ export function isValidEmail(s: string): boolean {
   return s.length <= LIMIT.email && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
 }
 
+// Номер текстом: цифры, пробелы, скобки, дефисы и плюс в начале, от 7 до 15
+// цифр. Проверка нарочно простая, как у почты.
+export function isValidPhone(s: string): boolean {
+  if (!/^\+?[\d\s()-]+$/.test(s)) return false;
+  const digits = s.replace(/\D/g, "").length;
+  return digits >= 7 && digits <= 15;
+}
+
+// Telegram присылает номер из контакта без плюса: 79161234567.
+function contactPhone(raw: string): string {
+  return /^\d/.test(raw) ? `+${raw}` : raw;
+}
+
+// «Пропустить» на клавиатуре ответа приходит обычным текстом. Принимаются
+// оба языка: человек мог сменить язык Telegram посреди опроса.
+function isSkipText(s: string): boolean {
+  const v = s.trim().toLowerCase();
+  return v === T.ru.skip.toLowerCase() || v === T.en.skip.toLowerCase();
+}
+
 function clip(s: string, max: number): string {
   return s.length > max ? s.slice(0, max - 1) + "…" : s;
 }
@@ -290,7 +359,21 @@ function question(chatId: number, lang: Lang, step: number): Effect {
   if (STEPS[step] === "email") {
     return send(chatId, text, [[{ text: t.skip, data: "skip" }]]);
   }
+  if (STEPS[step] === "phone") return phoneAsk(chatId, lang, text);
   return send(chatId, text);
+}
+
+// Вопрос про телефон и переспросы идут с клавиатурой ответа: кнопка
+// контакта и «Пропустить». Кнопка контакта бывает только у такой
+// клавиатуры, под сообщением её поставить нельзя.
+function phoneAsk(chatId: number, lang: Lang, text: string): Effect {
+  const t = T[lang];
+  return {
+    type: "send",
+    chatId,
+    text,
+    replyKeyboard: [[{ text: t.sendPhone, requestContact: true }], [{ text: t.skip }]],
+  };
 }
 
 // ——— решения ———
@@ -301,12 +384,17 @@ export function decide(input: Incoming, ctx: { state: State | null; now: number 
   const chatId = input.chatId;
 
   if (input.kind === "button") return onButton(input, state, now);
+  if (input.kind === "contact") return onContact(input, state, now);
 
   const cmd = parseCommand(input.text);
   if (cmd) {
-    if (cmd.name === "start") return onStart(input, cleanSource(cmd.arg), now);
+    if (cmd.name === "start") {
+      const fx = onStart(input, cleanSource(cmd.arg), now);
+      return onPhoneStep(state) ? dropKeyboard(fx) : fx;
+    }
     if (cmd.name === "delete") {
-      return [{ type: "deleteUserData", chatId }, send(chatId, T[lang].deleted)];
+      const fx: Effect[] = [{ type: "deleteUserData", chatId }, send(chatId, T[lang].deleted)];
+      return onPhoneStep(state) ? dropKeyboard(fx) : fx;
     }
     if (cmd.name === "leads" && isAdmin(input.username)) {
       return [{ type: "sendLeads", chatId }];
@@ -317,6 +405,21 @@ export function decide(input: Incoming, ctx: { state: State | null; now: number 
   if (!state) return [send(chatId, T[lang].hint)];
   if (state.phase === "done") return [send(chatId, T[lang].done)];
   return onAnswer(input, state, now);
+}
+
+// Человек сейчас на вопросе про телефон, и под полем ввода висит клавиатура.
+function onPhoneStep(state: State | null): boolean {
+  return state?.phase === "survey" && STEPS[state.step] === "phone";
+}
+
+// /start и /delete посреди вопроса про телефон оставили бы клавиатуру
+// висеть, поэтому первое же сообщение в ответ её убирает.
+function dropKeyboard(fx: Effect[]): Effect[] {
+  const i = fx.findIndex((e) => e.type === "send");
+  if (i < 0) return fx;
+  const out = fx.slice();
+  out[i] = { ...(out[i] as Extract<Effect, { type: "send" }>), removeKeyboard: true };
+  return out;
 }
 
 function onStart(input: Incoming, source: string, now: number): Effect[] {
@@ -342,6 +445,7 @@ function onStart(input: Incoming, source: string, now: number): Effect[] {
     answers: {},
     source,
     emailRetried: false,
+    phoneRetried: false,
     startedAt: now,
   };
   fx.push({ type: "setState", chatId, state });
@@ -354,9 +458,9 @@ function onAnswer(input: Incoming & { kind: "text" }, state: SurveyState, now: n
   const chatId = input.chatId;
   const t = T[state.lang];
   const text = input.text.trim();
-  if (!text) return [send(chatId, t.textOnly)];
-
   const key = STEPS[state.step];
+  if (!text) return [key === "phone" ? phoneAsk(chatId, state.lang, t.phoneOnly) : send(chatId, t.textOnly)];
+
   if (key === "email") {
     // Первый неверный адрес переспрашивается, второй принимается как есть:
     // лучше заявка с кривой почтой, чем человек, который бросил опрос.
@@ -367,6 +471,19 @@ function onAnswer(input: Incoming & { kind: "text" }, state: SurveyState, now: n
       ];
     }
     return advance(input, state, clip(text, LIMIT.email), now);
+  }
+  if (key === "phone") {
+    if (isSkipText(text)) return advance(input, state, "", now);
+    // Как с почтой: неверный номер переспрашивается один раз, второй
+    // принимается как есть и помечается в заявке.
+    if (isValidPhone(text)) return advance(input, state, clip(text, LIMIT.phone), now, { phoneFrom: "text" });
+    if (!state.phoneRetried) {
+      return [
+        { type: "setState", chatId, state: { ...state, phoneRetried: true } },
+        phoneAsk(chatId, state.lang, t.badPhone),
+      ];
+    }
+    return advance(input, state, clip(text, LIMIT.phone), now, { phoneFrom: "unchecked" });
   }
   // На вопросе про выручку человек может написать ответ сам, а не нажать
   // кнопку. Такой ответ принимается как есть.
@@ -404,7 +521,27 @@ function onButton(input: Incoming & { kind: "button" }, state: State | null, now
   return fx.concat(advance(input, state, value, now));
 }
 
-function advance(input: Incoming, state: SurveyState, value: string, now: number): Effect[] {
+// Контакт засчитывается только на вопросе про телефон. На других вопросах
+// он ведёт себя как любое сообщение без текста.
+function onContact(input: Incoming & { kind: "contact" }, state: State | null, now: number): Effect[] {
+  const chatId = input.chatId;
+  const lang = state ? state.lang : detectLang("", input.langCode);
+  if (!state) return [send(chatId, T[lang].hint)];
+  if (state.phase === "done") return [send(chatId, T[lang].done)];
+  if (STEPS[state.step] !== "phone") return [send(chatId, T[lang].textOnly)];
+
+  const phone = clip(contactPhone(input.phone), LIMIT.phone);
+  if (input.contactUserId != null && input.contactUserId === input.userId) {
+    return advance(input, state, phone, now, { phoneFrom: "own" });
+  }
+  // Чужой контакт: номер принимается, в заявке пометка и имя из контакта.
+  const name = clip(input.contactName, LIMIT.name);
+  return advance(input, state, phone, now, name ? { phoneFrom: "foreign", phoneName: name } : { phoneFrom: "foreign" });
+}
+
+type PhoneExtra = { phoneFrom: PhoneFrom; phoneName?: string };
+
+function advance(input: Incoming, state: SurveyState, value: string, now: number, extra?: PhoneExtra): Effect[] {
   const chatId = input.chatId;
   const answers = { ...state.answers, [STEPS[state.step]]: value };
   const next = state.step + 1;
@@ -432,12 +569,18 @@ function advance(input: Incoming, state: SurveyState, value: string, now: number
       revenue: answers.revenue ?? "",
       want: answers.want ?? "",
       email: answers.email ?? "",
+      phone: answers.phone ?? "",
     },
   };
+  if (lead.answers.phone && extra) {
+    lead.phoneFrom = extra.phoneFrom;
+    if (extra.phoneName) lead.phoneName = extra.phoneName;
+  }
+  // Телефон последний вопрос, поэтому «Спасибо» убирает его клавиатуру.
   return [
     { type: "saveLead", lead },
     { type: "setState", chatId, state: { v: 1, phase: "done", lang: state.lang } },
-    send(chatId, T[state.lang].thanks),
+    { type: "send", chatId, text: T[state.lang].thanks, removeKeyboard: true },
   ];
 }
 
@@ -473,6 +616,21 @@ function esc(s: string): string {
 
 const USERNAME_RE = /^[A-Za-z0-9_]{4,32}$/;
 
+function phoneNote(lead: Lead): string {
+  switch (lead.phoneFrom) {
+    case "own":
+      return " (кнопкой, свой номер)";
+    case "foreign":
+      return ` (чужой контакт${lead.phoneName ? `: ${esc(lead.phoneName)}` : ""}, не номер автора заявки)`;
+    case "text":
+      return " (написан текстом)";
+    case "unchecked":
+      return " (написан текстом, на номер не похож)";
+    default:
+      return "";
+  }
+}
+
 export function formatLeadForAdmin(lead: Lead): { text: string; buttons?: Button[][] } {
   const a = lead.answers;
   const name = lead.tgName || a.name || "без имени";
@@ -490,6 +648,8 @@ export function formatLeadForAdmin(lead: Lead): { text: string; buttons?: Button
     `<b>Выручка:</b> ${esc(a.revenue)}`,
     `<b>Что хочет от Мастерской:</b> ${esc(a.want)}`,
     `<b>Почта:</b> ${a.email ? esc(a.email) : "не указана"}`,
+    // В заявках до 3 октября 2026 вопроса про телефон не было: строки нет.
+    ...(a.phone === undefined ? [] : [`<b>Телефон:</b> ${a.phone ? esc(a.phone) + phoneNote(lead) : "не указан"}`]),
     "",
     `Telegram: ${who}`,
     `Язык опроса: ${lead.lang === "ru" ? "русский" : "английский"}, язык Telegram: ${esc(lead.tgLang ?? "не известен")}`,
@@ -510,6 +670,7 @@ export function formatLeadsList(leads: Lead[], total: number | null): string {
       `<b>№${l.n}. ${esc(clip(l.answers.name || l.tgName || "без имени", 60))}</b>, ${formatDate(l.at)}`,
       `Занимается: ${esc(clip(l.answers.doing, 120))}`,
       `Выручка: ${esc(clip(l.answers.revenue, 60))}`,
+      ...(l.answers.phone ? [`Телефон: ${esc(l.answers.phone)}${l.phoneFrom === "foreign" ? " (чужой контакт)" : ""}`] : []),
     ].join("\n")
   );
   return clip([head, ...items].join("\n\n"), 4000);

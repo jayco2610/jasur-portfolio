@@ -8,7 +8,8 @@
 // Что лежит в Upstash:
 //   wsbot:admin          chat_id админа (Жасура), появляется после его /start
 //   wsbot:state:<chat>   состояние разговора, живёт 7 дней
-//   wsbot:leads          все заявки, JSON, новые в начале списка
+//   wsbot:leads          все заявки, JSON, новые в начале списка; телефон
+//                        лежит внутри заявки, /delete стирает его вместе с ней
 //   wsbot:count          счётчик для номера «Заявка №7»
 //   wsbot:pending        номера заявок, которые ещё не дошли до админа
 
@@ -35,6 +36,7 @@ import {
   parseState,
   type Button,
   type Effect,
+  type ReplyButton,
   type Lead,
   type State,
 } from "@/lib/workshopBot";
@@ -96,26 +98,45 @@ export async function tg<T = unknown>(
   }
 }
 
-function keyboard(buttons?: Button[][]) {
-  if (!buttons) return undefined;
-  return {
-    inline_keyboard: buttons.map((row) =>
-      row.map((b) => (b.url ? { text: b.text, url: b.url } : { text: b.text, callback_data: b.data }))
-    ),
-  };
+type MarkupOpts = { buttons?: Button[][]; replyKeyboard?: ReplyButton[][]; removeKeyboard?: boolean };
+
+// У сообщения Telegram одна разметка: кнопки под сообщением, клавиатура
+// ответа под полем ввода или команда убрать эту клавиатуру.
+function markup(opts: MarkupOpts) {
+  if (opts.buttons) {
+    return {
+      inline_keyboard: opts.buttons.map((row) =>
+        row.map((b) => (b.url ? { text: b.text, url: b.url } : { text: b.text, callback_data: b.data }))
+      ),
+    };
+  }
+  if (opts.replyKeyboard) {
+    // one_time_keyboard: после нажатия клавиатура сворачивается, а
+    // следующее сообщение бота убирает её совсем (remove_keyboard).
+    return {
+      keyboard: opts.replyKeyboard.map((row) =>
+        row.map((b) => (b.requestContact ? { text: b.text, request_contact: true } : { text: b.text }))
+      ),
+      resize_keyboard: true,
+      one_time_keyboard: true,
+    };
+  }
+  if (opts.removeKeyboard) return { remove_keyboard: true };
+  return undefined;
 }
 
 async function sendMessage(
   token: string,
   chatId: number,
   text: string,
-  opts: { html?: boolean; buttons?: Button[][] } = {}
+  opts: { html?: boolean } & MarkupOpts = {}
 ): Promise<boolean> {
+  const reply_markup = markup(opts);
   const r = await tg(token, "sendMessage", {
     chat_id: chatId,
     text,
     ...(opts.html ? { parse_mode: "HTML" } : {}),
-    ...(opts.buttons ? { reply_markup: keyboard(opts.buttons) } : {}),
+    ...(reply_markup ? { reply_markup } : {}),
     link_preview_options: { is_disabled: true },
   });
   return r.ok;
@@ -244,7 +265,12 @@ async function sendLeads(token: string, chatId: number): Promise<void> {
 async function runEffect(token: string, fx: Effect): Promise<void> {
   switch (fx.type) {
     case "send":
-      await sendMessage(token, fx.chatId, fx.text, { html: fx.html, buttons: fx.buttons });
+      await sendMessage(token, fx.chatId, fx.text, {
+        html: fx.html,
+        buttons: fx.buttons,
+        replyKeyboard: fx.replyKeyboard,
+        removeKeyboard: fx.removeKeyboard,
+      });
       return;
     case "edit":
       // Без reply_markup Telegram убирает кнопки под сообщением.
