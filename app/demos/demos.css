@@ -1139,6 +1139,66 @@
   text-align: center;
 }
 
+/* ---- живая Mia над пошаговым разбором (MiaLive.tsx) ----
+   Окно чата шириной в текстовую колонку: шапка, переписка, три готовых
+   вопроса, поле ввода. Переписка фиксированной высоты и прокручивается
+   сама, поэтому длинный ответ не сдвигает страницу. */
+.nm-dm-live-wrap {
+  max-width: var(--nm-dm-measure);
+}
+
+.nm-dm-live {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--nm-ink);
+  background: var(--nm-paper);
+}
+
+.nm-dm-live-log {
+  flex: none;
+  height: 340px;
+}
+
+/* Ответ модели может прийти списком строк: переносы сохраняются. */
+.nm-dm-live .nm-dm-msg p {
+  white-space: pre-line;
+}
+
+.nm-dm-live .nm-dm-opts {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.nm-dm-live .nm-dm-opt {
+  width: auto;
+}
+
+.nm-dm-live-f {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--nm-rule);
+}
+
+.nm-dm-live-f .nm-dm-area {
+  flex: 1;
+  min-width: 0;
+}
+
+.nm-dm-live-f .nm-dm-btn {
+  flex: none;
+}
+
+.nm-dm-live-note {
+  margin-top: 12px;
+}
+
+@media (max-width: 620px) {
+  .nm-dm-live-log {
+    height: 260px;
+  }
+}
+
 .nm-dm-phone-col {
   display: flex;
   flex-direction: column;

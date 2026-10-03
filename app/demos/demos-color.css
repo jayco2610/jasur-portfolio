@@ -17,9 +17,10 @@
    3. Точечные правки характера по демо.
 
    Что красится. Только интерфейс демо: окно панели (.nm-dm-app), телефон,
-   а ещё кнопка Mia над ними. Обёртка страницы (шапка, заголовок, подводка,
-   выделенная мысль, подсказка, оговорка, подвал, пояснения под
-   интерфейсом) остаётся в стиле сайта: эти селекторы её не задевают.
+   а ещё окно живой Mia над ними (.nm-dm-live). Обёртка страницы (шапка,
+   заголовок, подводка, выделенная мысль, подсказка, оговорка, подвал,
+   пояснения под интерфейсом) остаётся в стиле сайта: эти селекторы её не
+   задевают.
 
    Почему у каждого правила префикс .nm-dmv[data-palette]. Обёртку с этим
    атрибутом ставит app/demos/layout.tsx, в разметке с сервера она уже
@@ -283,7 +284,8 @@
    подменяются переменными интерфейса, и всё, что demos.css красит
    через --nm-ink и --nm-rule, само становится цветом демо. */
 .nm-dmv[data-palette] .nm-dm-stage .nm-dm-app,
-.nm-dmv[data-palette] .nm-dm-stage .nm-dm-phone {
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-phone,
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-live {
   --nm-ink: var(--u-text);
   --nm-paper: var(--u-surface);
   --nm-dim: var(--u-text-2);
@@ -1746,13 +1748,32 @@
   transform: scale(1.12);
 }
 
-/* ============ кнопка Mia над интерфейсом ============
-   Стоит на странице, а не в окне, поэтому без подмены переменных: просто
-   акцентная кнопка в цвет своего демо. */
-.nm-dmv[data-palette] .nm-dm-stage > .nm-dm-btn.is-cta {
-  min-height: 44px;
-  padding: 11px 18px;
-  font-size: 14px;
+/* ============ живая Mia над интерфейсом ============
+   Окно чата (MiaLive.tsx) в той же коже, что телефон и окно панели:
+   переменные сайта подменены переменными интерфейса выше, здесь рамка,
+   скругление, тень и низ окна. До 03.10.2026 на этом месте стояла
+   акцентная кнопка на Hugging Face. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-live {
+  overflow: hidden;
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  background: var(--u-surface);
+  box-shadow: var(--u-shadow-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-live-f {
+  border-top-color: var(--u-border);
+  background: var(--u-surface);
+}
+
+/* Ошибка внутри переписки: плашка у левого края, как входящее сообщение,
+   без отступа сверху (промежутки задаёт переписка). */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-live-log .nm-dm-err {
+  flex: none;
+  max-width: 88%;
+  margin: 0;
+  align-self: flex-start;
+  line-height: 1.45;
 }
 
 /* ============ слой 3: характер ============ */

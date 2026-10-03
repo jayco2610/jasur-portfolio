@@ -4,13 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import DemoShell from "../DemoShell";
 import PhoneFrame from "../PhoneFrame";
+import MiaLive from "./MiaLive";
 
 /* Mia в макете. Перенос app/demos/mia/page.tsx: те же документы, те же
    три вопроса с фрагментами и ответами, те же паузы (поиск 1,4 секунды,
-   ответ на 2,6). Кнопка на живого ассистента ведёт туда же, на Hugging Face.
-   Логика строка в строку, меняется только разметка. Сети демо не трогает. */
+   ответ на 2,6). Пошаговый разбор сети не трогает.
 
-const HF_URL = "https://huggingface.co/spaces/rag-jasur/mia-clinic-assistant";
+   Сверху живой ассистент (MiaLive.tsx, /api/mia). До 03.10.2026 на его
+   месте стояла кнопка на пространство Hugging Face, которое засыпало. Три
+   готовых вопроса у живого те же, что в разборе. */
 
 type Phase = "idle" | "searching" | "found" | "done";
 
@@ -93,7 +95,7 @@ const copy = {
   en: {
     title: "Mia, a clinic RAG assistant",
     subtitle:
-      "An assistant for a dental clinic that answers patients only from the clinic's own documents. Below is a step-by-step simulation of how it works inside; the live assistant is one click away.",
+      "An assistant for a dental clinic that answers patients only from the clinic's own documents. The live assistant answers right on this page; below it is a step-by-step simulation of how it works inside.",
     pitch:
       "A knowledge base becomes an assistant that works round the clock and doesn't invent prices. Every answer is assembled from a document fragment. No fragment, no answer.",
     hint: "Pick a patient question under the phone and watch the answer get built from documents.",
@@ -108,14 +110,13 @@ const copy = {
     chatTitle: "Mia · clinic assistant",
     chatEmpty: "Choose a question below",
     searching: "searching the knowledge base…",
-    openLive: "Open the live assistant on Hugging Face →",
     tryAnother: "Try another question",
-    simNote: "The walkthrough is simulated from the real project's materials. The assistant on Hugging Face is live.",
+    simNote: "The walkthrough is simulated from the real project's materials. The assistant above it is live.",
   },
   ru: {
     title: "Mia, RAG-ассистент клиники",
     subtitle:
-      "Ассистент стоматологической клиники, который отвечает пациентам только по документам клиники. Ниже пошаговая симуляция того, как это устроено внутри; живой ассистент открывается в один клик.",
+      "Ассистент стоматологической клиники, который отвечает пациентам только по документам клиники. Живой ассистент отвечает прямо на этой странице, под ним пошаговая симуляция того, как это устроено внутри.",
     pitch:
       "База знаний становится ассистентом, который работает круглосуточно и не выдумывает цены. Каждый ответ собран из фрагмента документа. Нет фрагмента, нет ответа.",
     hint: "Выберите вопрос пациента под телефоном и посмотрите, как ответ собирается из документов.",
@@ -130,9 +131,8 @@ const copy = {
     chatTitle: "Mia · ассистент клиники",
     chatEmpty: "Выберите вопрос ниже",
     searching: "ищу в базе знаний…",
-    openLive: "Открыть живого ассистента на Hugging Face →",
     tryAnother: "Задать другой вопрос",
-    simNote: "Разбор шагов симулирован на материалах реального проекта. Ассистент на Hugging Face живой.",
+    simNote: "Разбор шагов симулирован на материалах реального проекта. Ассистент над ним живой.",
   },
 };
 
@@ -166,9 +166,7 @@ export default function MiaDemo() {
       hint={{ en: copy.en.hint, ru: copy.ru.hint }}
       footer={null}
     >
-      <a href={HF_URL} target="_blank" rel="noopener noreferrer" className="nm-dm-btn is-cta">
-        {c.openLive}
-      </a>
+      <MiaLive questions={QUESTIONS.map((q) => q.q)} />
 
       <div className="nm-dm-split nm-dm-mt">
         {/* Слева: шаги */}
