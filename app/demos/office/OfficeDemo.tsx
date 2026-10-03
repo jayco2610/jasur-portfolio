@@ -76,6 +76,7 @@ const copy = {
     draftBtn: "Draft a reply",
     drafting: "writing…",
     draftLabel: "Draft reply",
+    fillNote: "Fields in square brackets are for the manager to fill in: AI does not invent numbers, dates or prices that are not in the email.",
     send: "Send",
     again: "Another version",
     sent: "Sent. The email has left the queue.",
@@ -130,6 +131,7 @@ const copy = {
     draftBtn: "Написать черновик",
     drafting: "пишу…",
     draftLabel: "Черновик ответа",
+    fillNote: "Поля в квадратных скобках заполняет менеджер: ИИ не выдумывает цифры, даты и цены, которых нет в письме.",
     send: "Отправить",
     again: "Другой вариант",
     sent: "Отправлено. Письмо ушло из очереди.",
@@ -623,6 +625,7 @@ function MailCard({
               <p className="nm-dm-quote-t">
                 <Typed text={draft} />
               </p>
+              {/\[[^\]]+\]/.test(draft) ? <p className="nm-cx-note">{c.fillNote}</p> : null}
             </div>
           ) : null}
           {answered ? (
