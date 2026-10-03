@@ -137,7 +137,9 @@ export default function StroykaDemo() {
   const [shown, setShown] = useState(0);
   const [read, setRead] = useState(0);
   const [phase, setPhase] = useState<"idle" | "receiving" | "checking" | "done">("idle");
-  const [summary, setSummary] = useState<string | null>(null);
+  // Сводка помнит язык: после переключения языка старая не показывается.
+  const [summaryRaw, setSummary] = useState<{ lang: "en" | "ru"; text: string } | null>(null);
+  const summary = summaryRaw && summaryRaw.lang === lang ? summaryRaw.text : null;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<DemoError | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -153,7 +155,7 @@ export default function StroykaDemo() {
     timers.current.forEach(clearTimeout);
     setShown(0);
     setRead(0);
-    setSummary(null);
+    // Сводку не сбрасываем: день тот же, модель второй раз не спрашиваем.
     setError(null);
     setPhase("receiving");
     const at = (ms: number, fn: () => void) => timers.current.push(setTimeout(fn, ms));
@@ -170,7 +172,7 @@ export default function StroykaDemo() {
     setLoading(true);
     setError(null);
     const r = await askDemo<{ content: string }>({ type: "stroyka", lang });
-    if (r.ok) setSummary(r.data.content);
+    if (r.ok) setSummary({ lang, text: r.data.content });
     else setError(r.error);
     setLoading(false);
   }
@@ -401,10 +403,10 @@ export default function StroykaDemo() {
                 onClick={writeSummary}
                 disabled={!done || loading}
               >
-                {loading ? c.summaryBusy : summary ? c.summaryAgain : c.summaryBtn}
+                {loading ? c.summaryBusy : summary && done ? c.summaryAgain : c.summaryBtn}
               </button>
             </div>
-            {summary ? (
+            {summary && done ? (
               <p className="nm-cx-summary-t">
                 <Typed text={summary} />
               </p>

@@ -76,6 +76,70 @@
   --cx-concrete: #6f675d;
 }
 
+/* Онлайн-школа «Метод». Тёплый фиолетовый и светлая лавандовая подложка.
+   Баллы рисуются точками, как в журнале оценок; статус ученика цветом
+   риска: красный, янтарный, зелёный. */
+.nm-dmv[data-palette] .nm-dm[data-demo="edtech"] {
+  --u-canvas: #f7f5fc;
+  --u-surface-2: #f6f3fd;
+  --u-surface-3: #ece7f8;
+  --u-border: #e6e0f3;
+  --u-border-2: #cbc2e3;
+  --u-text: #1d1630;
+  --u-text-2: #5d5675;
+  --u-icon: #9189aa;
+  --u-accent: #6d3fd2;
+  --u-accent-hover: #5d33b8;
+  --u-accent-press: #4f2a9e;
+  --u-on-accent: #ffffff;
+  --u-accent-soft: #f1ebfd;
+  --u-accent-line: #cdbcf4;
+  --u-accent-text: #6236c4;
+  --u-ring: rgba(109, 63, 210, 0.3);
+  --u-head: #ffffff;
+  --u-head-text: #1d1630;
+  --u-head-text-2: #5d5675;
+}
+
+/* Агент продаж «Грани». Тёмный технический: графитово-синяя ночь, лаймовый
+   акцент (тёмный текст на кнопке 13 к 1), журнал вызовов моноширинным.
+   Документ КП внутри остаётся белым листом: это то, что получит клиент. */
+.nm-dmv[data-palette] .nm-dm[data-demo="pipeline"] {
+  --u-canvas: #0f1217;
+  --u-surface: #161a21;
+  --u-surface-2: #1b2029;
+  --u-surface-3: #242a35;
+  --u-border: #2a303b;
+  --u-border-2: #3b4351;
+  --u-text: #e8ebf0;
+  --u-text-2: #9ba4b3;
+  --u-icon: #6f7888;
+  --u-accent: #b6f24a;
+  --u-accent-hover: #a5e43a;
+  --u-accent-press: #93d22b;
+  --u-on-accent: #10140a;
+  --u-accent-soft: #1d2614;
+  --u-accent-line: #4a6624;
+  --u-accent-text: #c4f46c;
+  --u-ring: rgba(182, 242, 74, 0.35);
+  --u-ok: #3ccf8e;
+  --u-ok-strong: #2fb37a;
+  --u-ok-soft: #11281e;
+  --u-ok-text: #62dfa6;
+  --u-warn: #f2b84b;
+  --u-warn-soft: #2c2312;
+  --u-warn-text: #f5c86e;
+  --u-bad: #ff6b6b;
+  --u-bad-soft: #2e1618;
+  --u-bad-text: #ff9494;
+  --u-head: #0a0c10;
+  --u-head-text: #e8ebf0;
+  --u-head-text-2: #8b94a3;
+  --u-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --u-shadow-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 24px 48px -24px rgba(0, 0, 0, 0.7);
+  --cx-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+}
+
 /* ============ общие детали ============ */
 
 /* Окно приложения: свой отступ в переменной, по нему шапка выходит
@@ -1368,6 +1432,1114 @@
   font-weight: 600;
 }
 
+/* ============ edtech: проверка ДЗ и риск оттока ============ */
+
+/* Шапка школы светлая, с полосой акцента снизу: кабинет куратора. */
+.nm-dmv[data-palette] .nm-dm[data-demo="edtech"] .nm-dm-stage .nm-cx-bar {
+  border-bottom: 1px solid var(--u-border);
+  box-shadow: inset 0 -3px 0 var(--u-accent);
+}
+
+/* Колонки в edtech поровну, но правая чуть уже: список учеников короче
+   текста задания. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-two.is-edu {
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-sub.nm-cx-sub-0 {
+  margin: 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-student,
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-pick-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-student .nm-dm-ava,
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-pick-h .nm-dm-ava,
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-person .nm-dm-ava {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  font-size: 12px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-student-n {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-student + .nm-cx-area {
+  margin-top: 10px;
+}
+
+/* ---- критерии ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-rubric {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  transition: opacity 0.2s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-rubric.is-busy {
+  opacity: 0.55;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-rubric li {
+  padding: 10px 12px;
+  border: 1px solid var(--u-border);
+  border-radius: 6px;
+  background: var(--u-surface);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-rubric li[data-tone-s="ok"] {
+  box-shadow: inset 3px 0 0 var(--u-ok);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-rubric li[data-tone-s="warn"] {
+  box-shadow: inset 3px 0 0 var(--u-warn);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-rubric li[data-tone-s="bad"] {
+  box-shadow: inset 3px 0 0 var(--u-bad);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-rubric-h {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-rubric-n {
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-rubric-n b {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--u-accent-soft);
+  color: var(--u-accent-text);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-score {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  padding-top: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--u-text-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--u-border-2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-dots i.is-on {
+  background: var(--u-accent);
+  box-shadow: none;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-rubric-c {
+  margin: 6px 0 0 28px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-result {
+  margin-top: 16px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-total {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 4px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-total-k {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-total-v {
+  font-family: var(--nm-display);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* ---- переключатель «В зоне риска / Все» ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-seg {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 6px;
+  background: var(--u-surface-3);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-seg button {
+  appearance: none;
+  min-height: 30px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--u-text-2);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-seg button.is-on {
+  background: var(--u-surface);
+  color: var(--u-text);
+  box-shadow: var(--u-shadow-1);
+}
+
+/* ---- ученики ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-people {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-person {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--u-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-person:hover {
+  background: var(--u-surface-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-person.is-sel {
+  background: var(--u-accent-soft);
+  border-color: var(--u-accent-line);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-person[data-risk="high"] .nm-dm-ava {
+  background: var(--u-bad-soft);
+  color: var(--u-bad-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-person[data-risk="medium"] .nm-dm-ava {
+  background: var(--u-warn-soft);
+  color: var(--u-warn-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-person-m {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-person-n {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-person-s {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-chip.is-risk-high {
+  background: var(--u-bad-soft);
+  color: var(--u-bad-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-chip.is-risk-medium {
+  background: var(--u-warn-soft);
+  color: var(--u-warn-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-chip.is-risk-ok {
+  background: var(--u-ok-soft);
+  color: var(--u-ok-text);
+}
+
+/* Выбранный ученик под списком. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-pick {
+  margin-top: 12px;
+  padding-top: 4px;
+  border-top: 1px solid var(--u-border);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-pick-h > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-meters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-meters span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-meters i {
+  position: relative;
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--u-surface-3);
+  overflow: hidden;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-meters i::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--cx-v);
+  border-radius: 3px;
+  background: var(--u-accent);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-signals {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-signals li {
+  position: relative;
+  padding: 6px 10px 6px 26px;
+  border-radius: 6px;
+  background: var(--u-surface-2);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-signals li::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 12px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--u-warn);
+}
+
+/* Подсказка сообщения: пузырь мессенджера в цвете школы. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-bubble {
+  min-height: 88px;
+  padding: 10px 12px;
+  border-radius: 8px 8px 8px 2px;
+  background: var(--u-accent-soft);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ============ pipeline: заявка в КП ============ */
+
+.nm-dmv[data-palette] .nm-dm[data-demo="pipeline"] .nm-dm-stage .nm-cx-logo {
+  color: var(--u-on-accent);
+}
+
+.nm-dmv[data-palette] .nm-dm[data-demo="pipeline"] .nm-dm-stage .nm-dm-num-v.is-mono {
+  font-family: var(--cx-mono);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* Статус прогона в шапке. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-run {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--u-surface-3);
+  color: var(--u-text-2);
+  font-family: var(--cx-mono, inherit);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-run::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--u-icon);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-run.is-live {
+  color: var(--u-accent-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-run.is-live::before {
+  background: var(--u-accent);
+  animation: nm-dmc-live 1.2s ease-in-out infinite;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-run.is-done {
+  color: var(--u-ok-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-run.is-done::before {
+  background: var(--u-ok);
+}
+
+/* ---- выбор заявки ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-reqs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-req {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  background: var(--u-surface);
+  color: var(--u-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-req:hover:not(:disabled) {
+  border-color: var(--u-border-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-req.is-sel {
+  border-color: var(--u-accent-line);
+  background: var(--u-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--u-accent-line);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-req:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-req:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--u-ring);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-req-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-req-c {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-req-t {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-incoming {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+  padding: 12px 12px 12px 16px;
+  border: 1px dashed var(--u-border-2);
+  border-radius: 8px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-incoming-t {
+  flex: 1;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-incoming .nm-dm-btn {
+  flex: none;
+}
+
+/* ---- журнал агентов и документ ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-pipe {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: 20px;
+  align-items: start;
+  margin-top: 20px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-log {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step {
+  position: relative;
+  padding: 12px 14px;
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  background: var(--u-surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Линия между шагами, зелёная за пройденным. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step + .nm-cx-step::before {
+  content: "";
+  position: absolute;
+  left: 28px;
+  top: -9px;
+  width: 2px;
+  height: 8px;
+  background: var(--u-border-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step[data-st="done"] + .nm-cx-step::before {
+  background: var(--u-ok);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step[data-st="run"] {
+  border-color: var(--u-accent-line);
+  box-shadow: 0 0 0 3px var(--u-accent-soft);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step-no {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--u-border-2);
+  border-radius: 50%;
+  color: var(--u-text-2);
+  font-family: var(--cx-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step[data-st="run"] .nm-cx-step-no {
+  border-color: var(--u-accent);
+  color: var(--u-accent-text);
+  box-shadow: 0 0 0 4px var(--u-accent-soft);
+  animation: nm-dmc-live 1.2s ease-in-out infinite;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step[data-st="done"] .nm-cx-step-no {
+  border-color: var(--u-ok-strong);
+  background: var(--u-ok-strong);
+  color: #08120d;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step-n {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step[data-st="idle"] .nm-cx-step-n {
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step-time {
+  flex: none;
+  color: var(--u-text-2);
+  font-family: var(--cx-mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step[data-st="done"] .nm-cx-step-time {
+  color: var(--u-ok-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-step-b {
+  margin: 10px 0 0 40px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-io {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-io b {
+  margin-right: 6px;
+  color: var(--u-text);
+  font-weight: 600;
+}
+
+/* Вызовы инструментов одной консолью. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-calls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--u-canvas);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-calls code {
+  display: block;
+  color: var(--u-accent-text);
+  font-family: var(--cx-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-calls code::before {
+  content: "$ ";
+  color: var(--u-icon);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-out-b {
+  margin-top: 10px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-out-b > .nm-cx-io {
+  margin-bottom: 6px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-lines,
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-checks {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 0;
+  border-top: 1px solid var(--u-border);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-lines li:first-child {
+  border-top: 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-lines li span:last-child {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-lines li.is-disc {
+  color: var(--u-ok-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-lines li.is-total {
+  font-weight: 700;
+  color: var(--u-accent-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-checks {
+  gap: 4px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-checks li {
+  position: relative;
+  padding-left: 22px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-checks li::before {
+  content: "✓";
+  position: absolute;
+  left: 2px;
+  top: 0;
+  color: var(--u-ok-text);
+  font-weight: 700;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-checks li.is-warn::before {
+  content: "!";
+  left: 5px;
+  color: var(--u-warn-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-checks li.is-warn {
+  color: var(--u-warn-text);
+}
+
+/* ---- документ КП: белый лист ---- */
+
+/* Документ рядом с журналом едет вместе с прокруткой: журнал длинный,
+   а смотреть, как собирается КП, нужно всё время. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-side {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc {
+  --u-surface: #ffffff;
+  --u-surface-2: #f5f6f8;
+  --u-surface-3: #eceef2;
+  --u-border: #e3e6eb;
+  --u-text: #14171c;
+  --u-text-2: #5a6271;
+  --u-bad-soft: #fdeced;
+  --u-bad-text: #c4272e;
+  --u-accent-soft: #eef0f3;
+  --u-accent-text: #3b4351;
+  --u-ring: rgba(20, 23, 28, 0.25);
+  position: relative;
+  padding: 22px 22px 18px;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #14171c;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc .nm-dm-btn2 {
+  border-color: #c9ced7;
+  background: #ffffff;
+  color: #14171c;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-h {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #14171c;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--nm-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-logo i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: #14171c;
+  color: #b6f24a;
+  font-size: 12px;
+  font-style: normal;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-no {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-no small {
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 400;
+  color: #5a6271;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-pdf {
+  margin-top: 6px;
+  padding: 2px 8px;
+  border: 1.5px solid #2f8a4f;
+  border-radius: 4px;
+  color: #1f6e3b;
+  font-family: var(--cx-mono);
+  font-size: 11px;
+  font-weight: 700;
+  transform: rotate(-4deg);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-to {
+  min-height: 20px;
+  margin: 12px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-to span {
+  margin-right: 4px;
+  font-weight: 400;
+  color: #5a6271;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-intro {
+  min-height: 66px;
+  margin-top: 10px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-intro > p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-wait {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5a6271;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc .nm-dm-spin {
+  border-color: #c9ced7;
+  border-top-color: #14171c;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-fail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px dashed #c9ced7;
+  border-radius: 6px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-fail .nm-dm-err {
+  margin: 0;
+}
+
+/* Заглушки строк, пока агенты не дошли до раздела. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-skel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-skel i {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: #eceef2;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-skel i:nth-child(2) {
+  width: 92%;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-skel i:nth-child(3) {
+  width: 64%;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-skel.is-tbl i {
+  height: 22px;
+  width: 100%;
+  border-radius: 3px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-skel.is-tbl i:first-child {
+  background: #e3e6eb;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-blank {
+  margin-top: 16px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-hint {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: #5a6271;
+  text-align: center;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-tbl {
+  margin-top: 16px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-tbl table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-tbl th {
+  padding: 6px 6px;
+  border-bottom: 1px solid #14171c;
+  color: #5a6271;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-tbl td {
+  padding: 7px 6px;
+  border-bottom: 1px solid #e3e6eb;
+  text-align: right;
+  vertical-align: top;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-tbl th:first-child,
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-tbl td:first-child {
+  padding-left: 0;
+  text-align: left;
+  white-space: normal;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-tbl th:last-child,
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-tbl td:last-child {
+  padding-right: 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-sum {
+  margin: 10px 0 0 auto;
+  max-width: 300px;
+  font-size: 12px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-sum div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-sum dt {
+  color: #5a6271;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-sum dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-sum .is-total {
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid #14171c;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-sum .is-total dt {
+  color: #14171c;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-line {
+  margin: 14px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-foot {
+  margin: 14px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid #e3e6eb;
+  font-size: 11px;
+  color: #5a6271;
+}
+
+/* ---- карточка сделки ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm {
+  padding: 14px;
+  border: 1px solid var(--u-border);
+  border-radius: 8px;
+  background: var(--u-surface);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-h {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--u-text-2);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-id {
+  font-family: var(--cx-mono);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-n {
+  margin: 6px 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-stages {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 12px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-stages span {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 4px 4px 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: var(--u-surface-3);
+  color: var(--u-text-2);
+  font-size: 11px;
+  font-weight: 600;
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 0 100%, 6px 50%);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-stages span:first-child {
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 0 100%);
+  border-radius: 4px 0 0 4px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-stages span.is-past {
+  background: var(--u-accent-line);
+  color: var(--u-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-stages span.is-on {
+  background: var(--u-accent);
+  color: var(--u-on-accent);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-task {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--u-warn-soft);
+  color: var(--u-warn-text);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* ---- итог прогона ---- */
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-done {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border: 1px solid var(--u-accent-line);
+  border-radius: 8px;
+  background: var(--u-accent-soft);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-done-t {
+  margin: 0;
+  color: var(--u-accent-text);
+  font-family: var(--nm-display);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-cx-done-d {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--u-text);
+}
+
 /* ============ узкие экраны ============ */
 
 /* Панель рядом с телефоном уже текстовой колонки: две колонки карточек
@@ -1379,12 +2551,18 @@
 }
 
 @media (max-width: 1023px) {
-  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-two {
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-two,
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-two.is-edu {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-office {
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-office,
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-pipe {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-side {
+    position: static;
   }
 
   .nm-dmv[data-palette] .nm-dm-stage .nm-cx-queues {
@@ -1460,6 +2638,39 @@
 
   .nm-dmv[data-palette] .nm-dm-stage .nm-cx-detail .nm-cx-card {
     padding: 14px;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-reqs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-incoming {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-step-b {
+    margin-left: 0;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc {
+    padding: 16px 14px 14px;
+  }
+
+
+  /* В таблице КП на телефоне нет колонки цены: количество и сумма важнее. */
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-doc-tbl .is-price {
+    display: none;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-crm-stages span {
+    font-size: 0;
+    padding: 0;
+    height: 8px;
+  }
+
+  .nm-dmv[data-palette] .nm-dm-stage .nm-cx-done-t {
+    font-size: 18px;
   }
 }
 

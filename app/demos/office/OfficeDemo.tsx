@@ -229,7 +229,7 @@ export default function OfficeDemo() {
     setNow(START);
     setNext(0);
     setSelected(null);
-    setDrafts({});
+    // Черновики остаются: письма те же, модель второй раз не спрашиваем.
     setErrors({});
     setRunning(true);
   }
@@ -250,7 +250,7 @@ export default function OfficeDemo() {
       return n;
     });
     const r = await askDemo<{ content: string }>({ type: "office", lang, emailId: it.id });
-    if (r.ok) setDrafts((d) => ({ ...d, [it.id]: r.data.content }));
+    if (r.ok) setDrafts((d) => ({ ...d, [`${lang}:${it.id}`]: r.data.content }));
     else setErrors((e) => ({ ...e, [it.id]: r.error }));
     setLoadingId(null);
   }
@@ -292,7 +292,7 @@ export default function OfficeDemo() {
       fields: [],
     };
     setItems((prev) => [...prev, { id, email, arrivedAt: now, sorted: true, custom: true }]);
-    if (r.data.label.dept !== "spam") setDrafts((d) => ({ ...d, [id]: r.data.content }));
+    if (r.data.label.dept !== "spam") setDrafts((d) => ({ ...d, [`${lang}:${id}`]: r.data.content }));
     setOwnText("");
     setSelected(id);
   }
@@ -526,7 +526,7 @@ export default function OfficeDemo() {
                 lang={lang}
                 c={c}
                 timer={timer(sel)}
-                draft={drafts[sel.id]}
+                draft={drafts[`${lang}:${sel.id}`]}
                 loading={loadingId === sel.id}
                 busy={loadingId !== null}
                 error={errors[sel.id]}
