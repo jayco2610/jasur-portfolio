@@ -11,6 +11,8 @@ import type { Demo } from "./list";
    (shotEn), сняты одинаково, окно 1600 × 1000, кадр от линейки над
    интерфейсом, файл 1200 × 750. */
 
+/* Английский кадр здесь обязателен: в list.ts поле необязательное, а у
+   новых демо он снят сразу. */
 export type CompanyDemo = Demo & { shotEn: string };
 
 export const companyDemos: CompanyDemo[] = [

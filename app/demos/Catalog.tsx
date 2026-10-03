@@ -96,22 +96,15 @@ export default function Catalog() {
           style={{ "--nm-dm-rows": rowsFor(companyDemos.length, demos.length, productDemos.length) } as React.CSSProperties}
         >
           {/* Для компаний: раздел добавлен 3 октября 2026 первым, номера
-              C.01-C.04. Английский кадр подставляется здесь же, у каждого
-              демо раздела он есть (list-company.ts). */}
+              C.01-C.04. Английский кадр DemoCard берёт сам (demoShot), у
+              каждого демо раздела он есть (list-company.ts). */}
           <div className="nm-dm-sh">
             <span className="nm-dm-no">02</span>
             <h2 className="nm-dm-h2">{d.groupCompany}</h2>
             <span className="nm-dm-no">{companyDemos.length}</span>
           </div>
           {companyDemos.map((demo, i) => (
-            <DemoCard
-              key={demo.href}
-              demo={lang === "en" ? { ...demo, shot: demo.shotEn } : demo}
-              lang={lang}
-              index={i}
-              letter="C"
-              openLabel={d.open}
-            />
+            <DemoCard key={demo.href} demo={demo} lang={lang} index={i} letter="C" openLabel={d.open} />
           ))}
 
           <div className="nm-dm-sh is-next">
