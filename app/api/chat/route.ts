@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { upstashConfigured, incr } from "@/lib/upstash";
+import { complete, anyProviderConfigured } from "@/lib/ai";
 
 const SYSTEM_PROMPT = `You are JasurGPT — an AI assistant trained on the full professional context of Jasur Akhmadaliev.
 
@@ -66,7 +67,7 @@ Receives vacancy link → parses JD → compares with resume → generates tailo
 Stats: 47 vacancies processed, 47 cover letters generated, 80s avg time-to-output, 100% pipeline automation rate.
 
 ### Mia — Dental Clinic RAG Assistant — live
-Retrieval-augmented assistant for a dental clinic. Answers patient questions from the clinic's documents only — every answer cites its source, and it declines to answer when the documents do not cover the question. Live demo on Hugging Face Spaces.
+Retrieval-augmented assistant for a dental clinic. Answers patient questions from the clinic's documents only — every answer cites its source, and it declines to answer when the documents do not cover the question. Live demo right on its page on this site.
 
 ### Expat Roadmap SEA — shipped
 Full-stack relocation platform for Southeast Asia: visa/city map, housing board, community, events, jobs. Built solo with Next.js + Supabase. 5 product areas, production in 4 weeks, $0/month infrastructure.
@@ -214,7 +215,7 @@ const SYSTEM_PROMPT_RU = `Ты JasurGPT, AI-ассистент, обученны
 Цифры: обработано 47 вакансий, написано 47 сопроводительных писем, в среднем 80 секунд до готового результата, доля автоматизации процесса 100%.
 
 ### Mia, RAG-ассистент для стоматологической клиники: работает
-Ассистент с поиском по документам (RAG) для стоматологической клиники. Отвечает на вопросы пациентов только по документам клиники: к каждому ответу указывает источник, а если в документах нет ответа на вопрос, отказывается отвечать. Живое демо на Hugging Face Spaces.
+Ассистент с поиском по документам (RAG) для стоматологической клиники. Отвечает на вопросы пациентов только по документам клиники: к каждому ответу указывает источник, а если в документах нет ответа на вопрос, отказывается отвечать. Живое демо прямо на его странице на этом сайте.
 
 ### Expat Roadmap SEA: запущен
 Полноценная платформа для переезда в Юго-Восточную Азию: карта виз и городов, доска объявлений о жилье, сообщество, мероприятия, вакансии. Сделана в одиночку на Next.js и Supabase. 5 продуктовых разделов, рабочая версия запущена за 4 недели, $0 в месяц на инфраструктуру.
@@ -292,128 +293,18 @@ AI и автоматизация:
 Если сообщение просит что-то из списка ЗАПРЕЩЕНО или что-то не по теме, ответь только этим отказом, по-русски, и больше ничем:
 "Я отвечаю только на вопросы о профессиональном опыте Жасура. Спросите про его опыт, проекты, навыки или услуги."`;
 
-// Бесплатные модели OpenRouter регулярно меняются и часто перегружены:
-// зашитые названия через пару месяцев перестают существовать, а живые модели
-// отвечают 429. Поэтому список берём у самого OpenRouter (кэш на час) и
-// спрашиваем по три модели сразу, забирая первый готовый ответ.
-const PREFERRED = [/gemma-4-26b/, /gemma-4-31b/, /glm-5/, /nemotron-3-super-120b/, /llama.*70b/, /qwen.*(72b|80b|235b)/];
-const SKIP = /safety|code|coder|vision|audio|embed|guard|nano|lightning/i;
-const FALLBACK = ["google/gemma-4-31b-it:free"];
-const MODEL_TIMEOUT_MS = 24_000;
-const TOTAL_BUDGET_MS = 55_000;
-const BATCH = 3;
-let modelCache: { at: number; ids: string[] } | null = null;
-
+// Модели, порядок провайдеров (Groq, потом OpenRouter), таймауты и причина
+// отказа живут в lib/ai.ts, общем для чата, демо и Mia.
 export const maxDuration = 60;
-
-async function freeModels(): Promise<string[]> {
-  if (modelCache && Date.now() - modelCache.at < 3_600_000) return modelCache.ids;
-  try {
-    const res = await fetch("https://openrouter.ai/api/v1/models", { cache: "no-store" });
-    const data = await res.json();
-    const all: { id: string; context_length?: number }[] = Array.isArray(data?.data) ? data.data : [];
-    const free = all
-      .filter((m) => m.id.endsWith(":free") && !SKIP.test(m.id) && (m.context_length ?? 0) >= 16000)
-      .map((m) => m.id);
-    const ranked = [...PREFERRED.flatMap((re) => free.filter((id) => re.test(id))), ...free]
-      .filter((id, i, arr) => arr.indexOf(id) === i)
-      .slice(0, 9);
-    if (ranked.length) {
-      modelCache = { at: Date.now(), ids: ranked };
-      return ranked;
-    }
-  } catch {
-    // ниже запасной список
-  }
-  return FALLBACK;
-}
 
 type Message = { role: "user" | "assistant"; content: string };
 
-// Причина отказа: дневной лимит бесплатных моделей или перегрузка. У аккаунта
-// без пополнений OpenRouter даёт 50 бесплатных запросов в сутки на весь
-// аккаунт, и их делят все сайты, где стоит этот ключ.
-let lastReason: "daily" | "busy" = "busy";
-
-function noteReason(status: number, body: string) {
-  if (status === 429 && /per-?day|daily|free-models-per-day|daily limit/i.test(body)) lastReason = "daily";
-}
-
+// Тексты отказа. Дневной показывается, только если все провайдеры исчерпали
+// дневной лимит (lib/ai.ts решает это сам), иначе «занято».
 const BUSY_EN = "All models are busy right now. Try again in a minute.";
 const BUSY_RU = "Модели сейчас перегружены. Попробуйте через минуту.";
 const DAILY_EN = "The free daily limit is used up. Try again tomorrow, or write to Jasur: https://t.me/biznesmind";
 const DAILY_RU = "Бесплатный лимит на сегодня исчерпан. Попробуйте завтра или напишите Жасуру: https://t.me/biznesmind";
-
-async function askModel(
-  model: string,
-  system: string,
-  messages: Message[],
-  apiKey: string,
-  signal: AbortSignal
-): Promise<string> {
-  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    signal,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-      "HTTP-Referer": "https://jasur-portfolio-pied.vercel.app",
-      "X-Title": "JasurGPT",
-    },
-    body: JSON.stringify({
-      model,
-      messages: [{ role: "system", content: system }, ...messages],
-      max_tokens: 1200,
-      temperature: 0.7,
-      // Бесплатные модели сейчас рассуждающие: без этого они тратят весь лимит
-      // токенов на размышления и возвращают пустой ответ.
-      reasoning: { effort: "low", exclude: true },
-    }),
-  });
-  if (!res.ok) {
-    const body = (await res.text()).slice(0, 300);
-    noteReason(res.status, body);
-    throw new Error(`${res.status} ${body.slice(0, 120)}`);
-  }
-  const data = await res.json();
-  const text: unknown = data?.choices?.[0]?.message?.content;
-  if (typeof text !== "string" || !text.trim()) {
-    const err = JSON.stringify(data?.error ?? "").slice(0, 300);
-    noteReason(Number(data?.error?.code) || 0, err);
-    throw new Error(`пустой ответ ${err.slice(0, 120)}`);
-  }
-  return text.trim();
-}
-
-async function answer(system: string, messages: Message[], apiKey: string): Promise<string | null> {
-  const started = Date.now();
-  lastReason = "busy";
-  const models = await freeModels();
-  for (let i = 0; i < models.length; i += BATCH) {
-    const left = TOTAL_BUDGET_MS - (Date.now() - started);
-    if (left < 6_000) break;
-    const ctl = new AbortController();
-    const timer = setTimeout(() => ctl.abort(), Math.min(MODEL_TIMEOUT_MS, left));
-    try {
-      return await Promise.any(
-        models.slice(i, i + BATCH).map(async (model) => {
-          try {
-            return await askModel(model, system, messages, apiKey, ctl.signal);
-          } catch (e) {
-            console.warn(`[JasurGPT] ${model}: ${e instanceof Error ? e.message || e.name : "ошибка"}`);
-            throw e;
-          }
-        })
-      );
-    } catch {
-      // вся тройка не справилась, пробуем следующую
-    } finally {
-      clearTimeout(timer);
-      ctl.abort();
-    }
-  }
-  return null;
-}
 
 // --- Basic abuse protection ---
 const MAX_MESSAGE_LENGTH = 1000; // chars per message
@@ -565,17 +456,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ content: refusalFor(lastUser.content) });
   }
 
-  const apiKey = process.env.OPENROUTER_API_KEY;
-  if (!apiKey) {
+  if (!anyProviderConfigured()) {
     return NextResponse.json({ content: "API key not configured." });
   }
 
   // Русский вопрос получает русский промпт: иначе слабые модели тащат в ответ
   // английские слова из контекста.
   const ru = lastUser ? isRussian(lastUser.content) : false;
-  const content = await answer(ru ? SYSTEM_PROMPT_RU : SYSTEM_PROMPT, messages, apiKey);
-  if (content) return NextResponse.json({ content });
+  const res = await complete([{ role: "system", content: ru ? SYSTEM_PROMPT_RU : SYSTEM_PROMPT }, ...messages], {
+    maxTokens: 1200,
+    temperature: 0.7,
+    title: "JasurGPT",
+    tag: "JasurGPT",
+  });
+  if (res.ok) return NextResponse.json({ content: res.text });
 
-  const fallback = lastReason === "daily" ? (ru ? DAILY_RU : DAILY_EN) : ru ? BUSY_RU : BUSY_EN;
+  const fallback = res.reason === "daily" ? (ru ? DAILY_RU : DAILY_EN) : ru ? BUSY_RU : BUSY_EN;
   return NextResponse.json({ content: fallback });
 }
