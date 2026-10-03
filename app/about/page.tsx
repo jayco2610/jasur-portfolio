@@ -27,8 +27,26 @@ export const metadata: Metadata = pageMeta({
    открывает тот же чат, что всплывающая кнопка в углу (gpt/Gpt.tsx).
    Решение Жасура, новых фраз к кнопке не добавлено.
 
+   Под кнопкой два абзаца про видео, тексты и знакомства (p3, p4, выбор
+   Жасура 03.10). Телеграм-имена в них ссылки, вид как у ссылок в тексте
+   статей (.nm-body a).
+
    Тексты на двух языках лежат в strings.ts. Тело собирается дважды, и
    ByLang показывает то, что выбрано в переключателе. */
+
+// «@head_of_ceo» в тексте становится ссылкой на t.me/head_of_ceo.
+// Точка после имени в ссылку не попадает: в имени Telegram её не бывает.
+function withTelegram(text: string) {
+  return text.split(/(@[A-Za-z0-9_]{5,32})/).map((part, i) =>
+    i % 2 === 1 ? (
+      <a key={i} href={`https://t.me/${part.slice(1)}`} target="_blank" rel="noopener noreferrer">
+        {part}
+      </a>
+    ) : (
+      part
+    )
+  );
+}
 
 function Body({ lang }: { lang: Lang }) {
   const s = ABOUT[lang];
@@ -64,6 +82,8 @@ function Body({ lang }: { lang: Lang }) {
             <p className="nm-gpt-in">
               <GptButton />
             </p>
+            <p>{withTelegram(s.p3)}</p>
+            <p>{withTelegram(s.p4)}</p>
           </div>
         </div>
       </section>

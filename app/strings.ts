@@ -339,6 +339,10 @@ export const ABOUT = {
     cap: "Рис. 01, Москва",
     p1: "Собираю продукты в одиночку: код, дизайн и тексты делаю сам.",
     p2: "Всё, что собрал, лежит в «Работах». Как это собиралось и что из этого вышло, написано в Log, с цифрами.",
+    // Под кнопкой JasurGPT, выбор Жасура 03.10 (варианты А и В вместе).
+    // Имена вида @handle страница делает ссылками на t.me.
+    p3: "Ещё снимаю видео и пишу тексты. Снимаю около года: места и мысли, сейчас учусь монтировать всерьёз. Тексты выходят в Log и в телеграме @head_of_ceo.",
+    p4: "Мне интересно сводить людей и входить в проекты. Если у вас есть идея или человек, с которым нам стоит познакомиться, пишите в телеграм @biznesmind.",
     exp: "Опыт",
     experience: [
       { name: "Braiden Consulting", what: "AI-проджект-менеджер. Внедрял ИИ в процессы компании." },
@@ -371,6 +375,8 @@ export const ABOUT = {
     cap: "Fig. 01, Moscow",
     p1: "I build products solo: I do the code, design and copy myself.",
     p2: "Everything I have built is in Works. How it was built and what came of it is in Log, with the numbers.",
+    p3: "I also shoot video and write. I have been filming for about a year, places and thoughts, and now I am learning to edit properly. The writing goes to Log and to my Telegram channel @head_of_ceo.",
+    p4: "I like connecting people and joining projects. If you have an idea, or someone I should meet, message me on Telegram at @biznesmind.",
     exp: "Experience",
     experience: [
       { name: "Braiden Consulting", what: "AI project manager. Brought AI into the company's processes." },
