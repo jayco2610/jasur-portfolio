@@ -116,6 +116,11 @@ async function main() {
       mkdirSync(OUT, { recursive: true });
       for (const lang of LANGS) {
         const ctx = await browser.newContext({ viewport: { width: 1280, height: 720 } });
+        // Выбор «нет» по куки: иначе полоса согласия (по-русски, даже в
+        // английском PDF) печатается внизу каждой страницы.
+        await ctx.addInitScript((l) => {
+          try { localStorage.setItem("lang", l); localStorage.setItem("consent", "no"); } catch {}
+        }, lang);
         const page = await ctx.newPage();
         // Счётчик посещений и аналитика Vercel: печать документа не визит.
         await page.route(/\/api\/hit|\/_vercel\//, (r) => r.abort());

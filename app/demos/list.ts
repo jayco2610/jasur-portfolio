@@ -10,7 +10,14 @@
 
 export type Demo = {
   href: string;
+  /* Кадр демо с русским интерфейсом. */
   shot: string;
+  /* Тот же кадр с английским интерфейсом: то же окно, тот же сценарий,
+     только язык сайта английский. Без него английский каталог и английский
+     PDF показывают русский кадр, поэтому поле необязательное: демо, для
+     которого английского кадра ещё нет, просто останется с русским, а не с
+     серой заглушкой. Выбор делает demoShot ниже. */
+  shotEn?: string;
   name: { en: string; ru: string };
   desc: { en: string; ru: string };
   /* Метки тоже на двух языках: на старой странице они оставались русскими
@@ -23,6 +30,7 @@ export const productDemos: Demo[] = [
   {
     href: "/demos/mia",
     shot: "/new/demos/mia.jpg",
+    shotEn: "/new/demos/mia-en.jpg",
     name: { en: "Mia, a clinic RAG assistant", ru: "Mia, RAG-ассистент клиники" },
     desc: {
       en: "An assistant that answers patients only from the clinic's documents. Step-by-step walkthrough plus the live assistant on Hugging Face.",
@@ -37,6 +45,7 @@ export const productDemos: Demo[] = [
   {
     href: "/demos/career",
     shot: "/new/demos/career.jpg",
+    shotEn: "/new/demos/career-en.jpg",
     name: { en: "AI Career System", ru: "AI Career System" },
     desc: {
       en: "My own job search automation: vacancy link in, tailored cover letter out in ~80 seconds. Watch a real run step by step.",
@@ -51,6 +60,7 @@ export const demos: Demo[] = [
   {
     href: "/demos/preorder",
     shot: "/new/demos/preorder.jpg",
+    shotEn: "/new/demos/preorder-en.jpg",
     name: { en: "Pre-order from the stands", ru: "Предзаказ с трибуны" },
     desc: {
       en: "A fan scans a QR on the seat, pays via SBP without getting up, and picks the order up at a separate window. The stand serves ~30% more checks per break.",
@@ -62,6 +72,7 @@ export const demos: Demo[] = [
   {
     href: "/demos/leftovers",
     shot: "/new/demos/leftovers.jpg",
+    shotEn: "/new/demos/leftovers-en.jpg",
     name: { en: "Evening leftovers sold by AI", ru: "Слив вечерних остатков через ИИ" },
     desc: {
       en: "At 7:30 pm AI looks at the counter, writes a push, and sends it to loyal customers nearby. Write-offs go to zero.",
@@ -73,6 +84,7 @@ export const demos: Demo[] = [
   {
     href: "/demos/fraud",
     shot: "/new/demos/fraud.jpg",
+    shotEn: "/new/demos/fraud-en.jpg",
     name: { en: "POS fraud control", ru: "Фрод-контроль касс" },
     desc: {
       en: "Check voids, deleted items, and suspicious discounts trigger an instant Telegram alert to the owner: who, where, how much.",
@@ -84,6 +96,7 @@ export const demos: Demo[] = [
   {
     href: "/demos/reviews",
     shot: "/new/demos/reviews.jpg",
+    shotEn: "/new/demos/reviews-en.jpg",
     name: { en: "AI replies to reviews", ru: "ИИ-автоответы на отзывы" },
     desc: {
       en: "AI drafts replies to Yandex Maps and 2GIS reviews in the venue's tone. The manager only approves.",
@@ -93,6 +106,13 @@ export const demos: Demo[] = [
     live: true,
   },
 ];
+
+/* Кадр демо на языке страницы: английский, если он есть, иначе русский.
+   Одна функция на каталог (Catalog.tsx) и PDF «Услуги» (uslugi/[lang]),
+   чтобы правило выбора не расходилось. */
+export function demoShot(d: Demo, lang: "en" | "ru"): string {
+  return lang === "en" && d.shotEn ? d.shotEn : d.shot;
+}
 
 /* Заголовок вкладки и описание страницы демо: название и описание из
    каталога. Их читает сервер (page.tsx каждого демо), поэтому функция живёт

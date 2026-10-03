@@ -4,7 +4,7 @@ import Link from "next/link";
 import Photo from "../Photo";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
-import { demos, productDemos, type Demo } from "./list";
+import { demos, productDemos, demoShot, type Demo } from "./list";
 
 /* Каталог демо. Перенос app/demos/page.tsx: те же три блока (вступление,
    демо для бизнеса, свои продукты), те же тексты, те же номера D.01 и P.01,
@@ -19,6 +19,8 @@ import { demos, productDemos, type Demo } from "./list";
    1200 × 750. Демо сняты в середине сценария (пайплайн пройден, алерты
    пришли, вопрос задан, корзина собрана). Остатки и отзывы сняты до нажатия:
    их текст пишет модель, а придумывать за неё ответ для картинки нельзя.
+   У каждого кадра есть английская пара (имя-en.jpg), снятая так же при
+   английском языке сайта: в английском каталоге интерфейсы английские.
    Въезд строк слева при прокрутке (hooks/useReveal) не перенесён: в
    обвязке макета анимаций нет. */
 
@@ -48,7 +50,7 @@ function DemoCard({
 }) {
   return (
     <Link href={demo.href} className="nm-dm-card">
-      <Photo src={demo.shot} alt="" ratio="16:10" />
+      <Photo src={demoShot(demo, lang)} alt="" ratio="16:10" />
       <h3 className="nm-dm-card-n">{demo.name[lang]}</h3>
       <p className="nm-dm-card-s">{demo.tags[lang].join(" · ")}</p>
       <p className="nm-dm-card-d">{demo.desc[lang]}</p>

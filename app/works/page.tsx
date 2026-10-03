@@ -23,8 +23,14 @@ export const metadata: Metadata = pageMeta({
    только там, где они действительно есть, отдельного блока под них нет.
 
    Скриншоты в public/new/works сняты с живых адресов, окно 1600 × 1000,
-   первый экран, файл 1200 × 750. JasurGPT снят с главной живого сайта с
-   открытым чатом.
+   первый экран, файл 1200 × 750. JasurGPT переснят 2 октября 2026 с
+   нового сайта: открыт чат «Титр», портрет слева на тёмном, справа один
+   настоящий вопрос и ответ.
+
+   Кадры на двух языках. У JasurGPT, AI Career System, Mia и демо есть
+   английская пара (имя-en.jpg, поле shotEn), снятая так же при
+   английском языке сайта; при EN показывается она. abcx остаётся одним
+   русским кадром (продукт русский), Expat Roadmap и так английский.
 
    Три карточки ведут в демо внутри макета, и их кадры сняты оттуда же, а не
    со старого дизайна (переснято 29 сентября 2026, то же окно и тот же размер
@@ -49,14 +55,15 @@ export const metadata: Metadata = pageMeta({
    ByLang показывает то, что выбрано в переключателе. */
 
 /* Порядок карточек и то, что от языка не зависит. */
-const ORDER: { key: WorkKey; shot: string; href: string }[] = [
+const ORDER: { key: WorkKey; shot: string; shotEn?: string; href: string }[] = [
+  // abcx одним русским кадром: продукт русский. Expat Roadmap и так английский.
   { key: "abcx", shot: "/new/works/abcx.jpg", href: "https://abcx-eight.vercel.app" },
   { key: "expat", shot: "/new/works/expat.jpg", href: "https://expat-roadmap-sea.vercel.app" },
-  { key: "career", shot: "/new/works/career.jpg", href: "/demos/career" },
-  { key: "mia", shot: "/new/works/mia.jpg", href: "/demos/mia" },
+  { key: "career", shot: "/new/works/career.jpg", shotEn: "/new/works/career-en.jpg", href: "/demos/career" },
+  { key: "mia", shot: "/new/works/mia.jpg", shotEn: "/new/works/mia-en.jpg", href: "/demos/mia" },
   // href не нужен: карточка открывает чат на месте.
-  { key: "jasurgpt", shot: "/new/works/jasurgpt.jpg", href: "" },
-  { key: "demos", shot: "/new/works/demos.jpg", href: "/demos" },
+  { key: "jasurgpt", shot: "/new/works/jasurgpt.jpg", shotEn: "/new/works/jasurgpt-en.jpg", href: "" },
+  { key: "demos", shot: "/new/works/demos.jpg", shotEn: "/new/works/demos-en.jpg", href: "/demos" },
 ];
 
 function Body({ lang }: { lang: Lang }) {
@@ -87,11 +94,12 @@ function Body({ lang }: { lang: Lang }) {
         <div className="nm-wk">
           {ORDER.map((w) => {
             const t = s.items[w.key];
+            const shot = lang === "en" && w.shotEn ? w.shotEn : w.shot;
             return (
               <article key={w.key} className="nm-wk-card">
                 {w.key === "jasurgpt" ? (
                   <GptButton className="nm-wk-shot nm-gpt-shot" hideFromReaders>
-                    <Photo src={w.shot} alt="" ratio="16:10" />
+                    <Photo src={shot} alt="" ratio="16:10" />
                   </GptButton>
                 ) : (
                   <a
@@ -100,7 +108,7 @@ function Body({ lang }: { lang: Lang }) {
                     tabIndex={-1}
                     aria-hidden="true"
                   >
-                    <Photo src={w.shot} alt="" ratio="16:10" />
+                    <Photo src={shot} alt="" ratio="16:10" />
                   </a>
                 )}
                 <h2 className="nm-wk-n">{t.name}</h2>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Photo from "../../Photo";
 import { CHROME, WORKS, type Lang } from "../../strings";
-import { demos, type Demo } from "../../demos/list";
+import { demos, demoShot, type Demo } from "../../demos/list";
 import { GROUPS, TITLE, type Service } from "../services";
 import "../uslugi.css";
 
@@ -122,7 +122,7 @@ function DemoCard({ d, lang }: { d: Demo; lang: Lang }) {
   return (
     <article className="nm-us-demo">
       <a href={href} className="nm-us-shot">
-        <Photo src={d.shot} alt={d.name[lang]} ratio="16:10" priority />
+        <Photo src={demoShot(d, lang)} alt={d.name[lang]} ratio="16:10" priority />
       </a>
       <h3 className="nm-us-dn">{d.name[lang]}</h3>
       <p className="nm-us-dd">{d.desc[lang]}</p>
