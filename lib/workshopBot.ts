@@ -245,7 +245,10 @@ const RU_LANGS = ["ru", "uk", "be", "kk", "uz"];
 // или если язык его Telegram не из списка. Если Telegram язык не прислал,
 // остаётся русский.
 export function detectLang(source: string, langCode: string | null): Lang {
+  // Язык страницы, с которой человек пришёл, важнее языка его Telegram:
+  // с русской страницы опрос по-русски, даже если Telegram на английском.
   if (source === "workshop_en") return "en";
+  if (source === "workshop") return "ru";
   if (!langCode) return "ru";
   return RU_LANGS.includes(langCode.toLowerCase().split("-")[0]) ? "ru" : "en";
 }
