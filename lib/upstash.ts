@@ -51,3 +51,54 @@ export async function addToSet(key: string, value: string): Promise<number | nul
 export async function setSize(key: string): Promise<number | null> {
   return (await command(["SCARD", key])) as number | null;
 }
+
+// Строки, списки и удаление. Нужны боту заявок Мастерской
+// (lib/workshopBotRuntime.ts): там лежат состояние разговора, сами заявки и
+// номер админа.
+
+export async function getString(key: string): Promise<string | null> {
+  const v = await command(["GET", key]);
+  return v == null ? null : String(v);
+}
+
+// SET с необязательным сроком жизни в секундах. true, если записалось.
+export async function setString(
+  key: string,
+  value: string,
+  expireSeconds?: number
+): Promise<boolean> {
+  const args: (string | number)[] = ["SET", key, value];
+  if (expireSeconds) args.push("EX", expireSeconds);
+  return (await command(args)) === "OK";
+}
+
+export async function deleteKeys(...keys: string[]): Promise<number | null> {
+  if (keys.length === 0) return 0;
+  return (await command(["DEL", ...keys])) as number | null;
+}
+
+// LPUSH: новое значение встаёт в начало списка, поэтому LRANGE 0 9 отдаёт
+// десять самых свежих. Возвращает новую длину списка.
+export async function pushToList(key: string, value: string): Promise<number | null> {
+  return (await command(["LPUSH", key, value])) as number | null;
+}
+
+// RPUSH: значение встаёт в конец, порядок прихода сохраняется.
+export async function appendToList(key: string, value: string): Promise<number | null> {
+  return (await command(["RPUSH", key, value])) as number | null;
+}
+
+// LRANGE. Пустой список и недоступное хранилище оба дают [].
+export async function listRange(key: string, start: number, stop: number): Promise<string[]> {
+  const v = await command(["LRANGE", key, start, stop]);
+  return Array.isArray(v) ? v.map(String) : [];
+}
+
+export async function listLength(key: string): Promise<number | null> {
+  return (await command(["LLEN", key])) as number | null;
+}
+
+// LREM key 0 value: убирает из списка все копии значения.
+export async function removeFromList(key: string, value: string): Promise<number | null> {
+  return (await command(["LREM", key, 0, value])) as number | null;
+}

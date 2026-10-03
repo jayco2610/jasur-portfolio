@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Photo from "./Photo";
 import { NewHeader, NewFooter } from "./Chrome";
 import { ByLang } from "./Lang";
-import { cardPosts } from "./posts";
-import { HOME, CHROME, type Lang, type NavKey } from "./strings";
+import { cardPosts, cardDate, articleHref } from "./posts";
+import { getPost } from "@/lib/blog";
+import Carousel from "./log/Carousel";
+import { HOME, CHROME, LOG, type Lang, type NavKey } from "./strings";
 import { pageMeta, SITE_NAME } from "./meta";
 
 /* Слово «портфолио» в заголовке вкладки оставлено по той же причине, что
@@ -34,12 +36,20 @@ const BRANCHES: { key: NavKey; href: string }[] = [
   { key: "about", href: "/about" },
 ];
 
+const WHY: Record<Lang, string> = {
+  ru: "zachem-etot-sayt",
+  en: "why-this-site-exists",
+};
+
 function Body({ lang }: { lang: Lang }) {
   const s = HOME[lang];
   const nav = CHROME[lang].nav;
-  // Три самых свежих материала на языке страницы. Список читается из
-  // content/blog, а не переписывается руками.
-  const fresh = cardPosts(lang).slice(0, 3);
+  // Все материалы на языке страницы, новые первыми: их крутит та же лента,
+  // что на Log. Список читается из content/blog, а не переписывается руками.
+  const fresh = cardPosts(lang);
+  // Статья «Зачем этот сайт» (на английском её пара). Всё, что в карточке,
+  // берётся из файла статьи при сборке, фраз здесь нет.
+  const why = getPost(WHY[lang]);
 
   return (
     <>
@@ -57,12 +67,28 @@ function Body({ lang }: { lang: Lang }) {
             </h1>
 
             <div className="nm-hero-meta">
-              <p className="nm-sub">{s.sub}</p>
+              <div className="nm-hero-meta-l">
+                <p className="nm-sub">{s.sub}</p>
 
-              <p className="nm-status">
-                <span className="nm-dot" aria-hidden="true" />
-                {s.status}
-              </p>
+                <p className="nm-status">
+                  <span className="nm-dot" aria-hidden="true" />
+                  {s.status}
+                </p>
+              </div>
+
+              {why && (
+              <a className="nm-why" href={articleHref(why.slug)}>
+                <Photo src={why.cover ?? ""} alt={why.title} ratio="16:10" />
+                <span className="nm-why-body">
+                  <span className="nm-card-meta">
+                    {cardDate(why.date, lang)} · {why.readingMinutes}{" "}
+                    {lang === "ru" ? "мин чтения" : "min read"}
+                  </span>
+                  <span className="nm-why-t">{why.title}</span>
+                  <span className="nm-why-d">{why.description}</span>
+                </span>
+              </a>
+              )}
             </div>
           </div>
 
@@ -117,17 +143,7 @@ function Body({ lang }: { lang: Lang }) {
       {/* ——— блок 4. Свежее ——— */}
       <section className="nm-wrap nm-fresh">
         <p className="nm-sec-t">{s.fresh}</p>
-        <div className="nm-cards">
-          {fresh.map((c) => (
-            <a key={c.slug} className="nm-card" href={c.href}>
-              <Photo src={c.cover} alt={c.title} ratio="16:10" />
-              <span className="nm-card-meta">
-                {c.date} · {c.rubric}
-              </span>
-              <span className="nm-card-t">{c.title}</span>
-            </a>
-          ))}
-        </div>
+        <Carousel posts={fresh} label={LOG[lang].carousel} />
         <p className="nm-more">
           <a href="/log">{s.more}</a>
         </p>

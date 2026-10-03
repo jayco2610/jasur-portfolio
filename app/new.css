@@ -287,6 +287,92 @@
   padding-top: clamp(18px, 2.2vw, 28px);
 }
 
+/* Под линейкой две колонки: слева абзац со статусом, справа карточка статьи
+   «Зачем этот сайт». Ниже 1100 карточка встаёт под статус на всю колонку. */
+.nm-hero-meta-l {
+  min-width: 0;
+}
+
+.nm-why {
+  display: block;
+  margin-top: clamp(22px, 3vw, 30px);
+  text-decoration: none;
+  color: inherit;
+  max-width: 440px;
+}
+
+.nm-why-body {
+  display: block;
+}
+
+.nm-why-t {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.nm-why:hover .nm-why-t {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+.nm-why-d {
+  display: block;
+  margin-top: 8px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--nm-dim);
+}
+
+.nm-why:focus-visible {
+  outline: 1px solid var(--nm-ink);
+  outline-offset: 4px;
+}
+
+/* Ниже 1100 карточка компактная: обложка слева, текст справа, чтобы
+   первый экран не вытягивался на высоту большой картинки. */
+@media (max-width: 1099px) {
+  .nm-why {
+    display: grid;
+    grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+    column-gap: 14px;
+    align-items: start;
+    max-width: 520px;
+  }
+  .nm-why .nm-why-t {
+    margin-top: 6px;
+  }
+  .nm-why .nm-why-d {
+    margin-top: 6px;
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .nm-hero-meta {
+    display: grid;
+    grid-template-columns: minmax(0, 34ch) minmax(0, 1fr);
+    column-gap: clamp(24px, 3vw, 44px);
+    align-items: start;
+  }
+  .nm-why {
+    margin-top: 0;
+    max-width: none;
+  }
+}
+
+/* Лента «Свежее» на главной: заголовки всегда в две строки, как в сетке,
+   чтобы карточки были одной высоты и на телефоне (там общее правило
+   .nm-card-t обнуляет min-height). */
+.nm-fresh .nm-card-t {
+  min-height: 2.4em;
+}
+
 .nm-sub {
   margin: 0;
   font-size: 14px;
@@ -1390,7 +1476,7 @@
    окна: секция сидит в обычном .nm-wrap. */
 .nm-about-in {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 23fr) minmax(0, 77fr);
   gap: clamp(28px, 5vw, 72px);
   /* По верхнему краю: портрет 2:3 заметно выше текста. */
   align-items: start;
@@ -1432,7 +1518,7 @@
    высотой пятнадцатый кегль терялся. Размер тот же, что у текста рядом с
    портретом на старой странице. */
 .nm-about-tx {
-  max-width: 62ch;
+  max-width: 70ch;
 }
 
 .nm-about-tx p {
@@ -1568,7 +1654,8 @@
     gap: clamp(22px, 5vw, 34px);
   }
   .nm-about-fig {
-    max-width: 440px;
+    width: 50%;
+    max-width: 260px;
   }
 }
 
