@@ -15,8 +15,12 @@ export const metadata: Metadata = pageMeta({
 /* Ветка 03 по ТЗ, единственная новая сущность в конструкции.
    Все тексты взяты из ТЗ дословно, ничего не переписано.
 
-   Цены на странице нет: показывается только состояние приёма. Кнопка ведёт
-   в никуда (href="#"), потому что телеграм-бота под лист ожидания ещё нет.
+   Цены на странице нет: показывается только состояние приёма. Кнопка
+   «Оставить контакт» открывает в новой вкладке бота @jasur_workshop_bot,
+   он задаёт шесть вопросов и присылает заявку Жасуру (код бота в
+   app/api/workshop-bot и lib/workshopBot.ts). Метка в ссылке говорит боту,
+   с какой версии страницы пришли: workshop с русской, workshop_en с
+   английской. По ней и по языку Telegram бот выбирает язык опроса.
    Ставить сюда почту вместо бота нельзя: решение по каналу сбора принято.
 
    Тексты на двух языках лежат в strings.ts. Тело собирается дважды, и
@@ -24,6 +28,8 @@ export const metadata: Metadata = pageMeta({
 
    Четвёртая строка «Что внутри» — опция, а не одна из трёх групп. Потолок
    в пять человек относится только к ней, в сам канал заходит кто угодно. */
+
+const BOT = "https://t.me/jasur_workshop_bot";
 
 function Body({ lang }: { lang: Lang }) {
   const s = WORKSHOP[lang];
@@ -96,7 +102,12 @@ function Body({ lang }: { lang: Lang }) {
           <h2 className="nm-state-t">{s.stateT}</h2>
           <p className="nm-state-d">{s.stateD}</p>
           <p className="nm-btn-w">
-            <a className="nm-btn" href="#">
+            <a
+              className="nm-btn"
+              href={`${BOT}?start=${lang === "en" ? "workshop_en" : "workshop"}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {s.button}
             </a>
           </p>
