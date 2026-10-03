@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getAllPosts, getUsedRubrics } from "@/lib/blog";
 import { getEpisodes } from "@/lib/podcast";
 import { demos, productDemos } from "./demos/list";
+import { companyDemos } from "./demos/list-company";
 import { SITE } from "./meta";
 
 /* Карта сайта по адресам нового дизайна (с 2 октября 2026).
@@ -35,7 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority,
   }));
 
-  const demoPages: MetadataRoute.Sitemap = [...productDemos, ...demos].map((d) => ({
+  const demoPages: MetadataRoute.Sitemap = [...companyDemos, ...productDemos, ...demos].map((d) => ({
     url: `${SITE}${d.href}`,
     lastModified,
     changeFrequency: "monthly",

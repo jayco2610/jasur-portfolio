@@ -1,5 +1,6 @@
 import "./demos.css";
 import "./demos-color.css";
+import "./demos-company.css";
 
 /* Каталог демо и шесть демо в новом оформлении: перенос app/demos.
 

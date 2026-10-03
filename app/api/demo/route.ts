@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isRateLimited } from "@/lib/rateLimit";
 import { generate } from "@/lib/llm";
+import { isCompanyType, companyResponse } from "@/lib/demo-company";
 
 // Text generation for the interactive demos on /demos.
 // type "leftovers": push text selling tonight's leftover stock.
 // type "review": reply to a customer review on behalf of the venue.
+// types "office", "stroyka", "homework", "pipeline": the four demos for
+// companies, handled in lib/demo-company.ts with the same rate limit.
 
 type Lang = "en" | "ru";
 
@@ -114,6 +117,8 @@ export async function POST(req: NextRequest) {
   }
 
   const lang: Lang = body.lang === "en" ? "en" : "ru";
+
+  if (isCompanyType(body.type)) return companyResponse(body, lang);
 
   // Generous cap: reasoning models spend tokens thinking before the answer.
   let prompt: { system: string; user: string } | null = null;

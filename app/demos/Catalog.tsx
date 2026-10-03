@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Photo from "../Photo";
+import { companyDemos } from "./list-company";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 import { demos, productDemos, demoShot, type Demo } from "./list";
@@ -80,7 +81,7 @@ export default function Catalog() {
           <h1 className="nm-h1-p">
             {first} <span className="nm-dm-h1-soft">{rest.join(" ")}</span>
           </h1>
-          <span className="nm-dm-no">{demos.length + productDemos.length}</span>
+          <span className="nm-dm-no">{companyDemos.length + demos.length + productDemos.length}</span>
         </div>
 
         <div className="nm-dm-intro">
@@ -92,10 +93,22 @@ export default function Catalog() {
       <section className="nm-wrap nm-sect">
         <div
           className="nm-dm-cat"
-          style={{ "--nm-dm-rows": rowsFor(demos.length, productDemos.length) } as React.CSSProperties}
+          style={{ "--nm-dm-rows": rowsFor(companyDemos.length, demos.length, productDemos.length) } as React.CSSProperties}
         >
+          {/* Для компаний: раздел добавлен 3 октября 2026 первым, номера
+              C.01-C.04. Английский кадр DemoCard берёт сам (demoShot), у
+              каждого демо раздела он есть (list-company.ts). */}
           <div className="nm-dm-sh">
             <span className="nm-dm-no">02</span>
+            <h2 className="nm-dm-h2">{d.groupCompany}</h2>
+            <span className="nm-dm-no">{companyDemos.length}</span>
+          </div>
+          {companyDemos.map((demo, i) => (
+            <DemoCard key={demo.href} demo={demo} lang={lang} index={i} letter="C" openLabel={d.open} />
+          ))}
+
+          <div className="nm-dm-sh is-next">
+            <span className="nm-dm-no">03</span>
             <h2 className="nm-dm-h2">{d.groupBusiness}</h2>
             <span className="nm-dm-no">{demos.length}</span>
           </div>
@@ -104,7 +117,7 @@ export default function Catalog() {
           ))}
 
           <div className="nm-dm-sh is-next">
-            <span className="nm-dm-no">03</span>
+            <span className="nm-dm-no">04</span>
             <h2 className="nm-dm-h2">{d.groupProducts}</h2>
             <span className="nm-dm-no">{productDemos.length}</span>
           </div>
