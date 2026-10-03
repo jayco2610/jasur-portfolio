@@ -122,7 +122,36 @@ function cleanContent(raw: string, unquote: boolean): string {
     .replace(/<think>[\s\S]*?<\/think>/gi, "")
     .replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, "")
     .trim();
-  return unquote ? text.replace(/^["'«»“”]+|["'«»“”]+$/g, "").trim() : text;
+  return unquote ? unwrapQuotes(text) : text;
+}
+
+// Снимает кавычки, только если они обнимают весь ответ. Раньше срезались любые
+// кавычки на краях, и подпись «Отдел продаж «НордТерм»» в демо офиса теряла
+// последнюю «»». Пара снимается, только если внутри кавычки остаются парными.
+const QUOTE_PAIRS: Record<string, string> = { "«": "»", "“": "”", '"': '"', "'": "'" };
+
+function balancedInside(s: string): boolean {
+  for (const [open, close] of [["«", "»"], ["“", "”"]]) {
+    let depth = 0;
+    for (const ch of s) {
+      if (ch === open) depth++;
+      else if (ch === close && --depth < 0) return false;
+    }
+    if (depth !== 0) return false;
+  }
+  return (s.split('"').length - 1) % 2 === 0;
+}
+
+function unwrapQuotes(text: string): string {
+  let s = text;
+  while (s.length >= 2) {
+    const close = QUOTE_PAIRS[s[0]];
+    if (!close || s[s.length - 1] !== close) break;
+    const inner = s.slice(1, -1).trim();
+    if (!balancedInside(inner)) break;
+    s = inner;
+  }
+  return s;
 }
 
 async function attempt(
