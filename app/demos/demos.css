@@ -1165,7 +1165,7 @@
 }
 
 /* Источники под ответом: «Источник: раздел», по нажатию цитата из документа. */
-.nm-dm-srcs {
+.nm-dm-cites {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1174,7 +1174,7 @@
   border-top: 1px solid var(--nm-rule);
 }
 
-.nm-dm-src summary {
+.nm-dm-cite summary {
   cursor: pointer;
   text-transform: none;
   letter-spacing: 0;
@@ -1183,7 +1183,7 @@
   color: var(--nm-dim);
 }
 
-.nm-dm-live .nm-dm-msg .nm-dm-src-q {
+.nm-dm-live .nm-dm-msg .nm-dm-cite-q {
   margin: 6px 0 0;
   padding-left: 10px;
   border-left: 1px solid var(--nm-ink);

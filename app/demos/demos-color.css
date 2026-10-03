@@ -1767,21 +1767,21 @@
 }
 
 /* Источники под ответом Mia: бирюзовая строка и цитата с акцентной линией. */
-.nm-dmv[data-palette] .nm-dm-stage .nm-dm-srcs {
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-cites {
   border-top-color: var(--u-border);
 }
 
-.nm-dmv[data-palette] .nm-dm-stage .nm-dm-src summary {
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-cite summary {
   font-weight: 600;
   color: var(--u-accent-text);
 }
 
-.nm-dmv[data-palette] .nm-dm-stage .nm-dm-src summary:focus-visible {
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-cite summary:focus-visible {
   outline: 2px solid var(--u-ring);
   outline-offset: 2px;
 }
 
-.nm-dmv[data-palette] .nm-dm-stage .nm-dm-live .nm-dm-msg .nm-dm-src-q {
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-live .nm-dm-msg .nm-dm-cite-q {
   padding: 6px 10px;
   border-left: 3px solid var(--u-accent);
   border-radius: 0 6px 6px 0;

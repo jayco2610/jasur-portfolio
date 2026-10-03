@@ -145,13 +145,13 @@ export default function MiaLive({ questions }: { questions: { en: string; ru: st
             <div key={i} className={`nm-dm-msg nm-dm-in${t.role === "user" ? " is-out" : ""}`}>
               <p>{t.content}</p>
               {t.sources && t.sources.length > 0 && (
-                <div className="nm-dm-srcs">
+                <div className="nm-dm-cites">
                   {t.sources.map((src) => (
-                    <details key={src.id} className="nm-dm-src">
+                    <details key={src.id} className="nm-dm-cite">
                       <summary>
                         {c.source}: {lang === "en" ? src.titleEn : src.title}
                       </summary>
-                      <p className="nm-dm-src-q">{src.quote}</p>
+                      <p className="nm-dm-cite-q">{src.quote}</p>
                     </details>
                   ))}
                 </div>
