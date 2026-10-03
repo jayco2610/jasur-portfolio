@@ -26,7 +26,7 @@ import { hit } from "@/components/Pulse";
    пропом от страницы, а не из интерфейса: под английским текстом подписка
    английская, что бы ни было выбрано в переключателе раньше. */
 
-type State = "idle" | "sending" | "done" | "bad" | "off";
+type State = "idle" | "sending" | "done" | "bad" | "rate" | "off";
 
 export default function Subscribe({ lang = "ru" }: { lang?: "ru" | "en" }) {
   const ru = lang === "ru";
@@ -50,7 +50,7 @@ export default function Subscribe({ lang = "ru" }: { lang?: "ru" | "en" }) {
         hit("subscribe");
       } else {
         const data = (await res.json()) as { reason?: string };
-        setState(data.reason === "off" ? "off" : "bad");
+        setState(data.reason === "off" ? "off" : data.reason === "rate" ? "rate" : "bad");
       }
     } catch {
       setState("off");
@@ -101,6 +101,7 @@ export default function Subscribe({ lang = "ru" }: { lang?: "ru" | "en" }) {
           {state === "done" &&
             (ru ? "Готово. Напишу, когда выйдет новое." : "Done. I will write when something new is out.")}
           {state === "bad" && (ru ? "Проверьте адрес." : "Check the address.")}
+          {state === "rate" && (ru ? "Слишком много попыток. Попробуйте через минуту." : "Too many tries. Please wait a minute.")}
           {state === "off" &&
             (ru
               ? "Подписка по почте сейчас не работает. В телеграме всё приходит сразу."

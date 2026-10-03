@@ -1,18 +1,44 @@
-// OpenRouter completion with a fallback chain of free models.
-// Same call pattern as app/api/chat/route.ts.
+// OpenRouter completion for the demos, on free models.
+//
+// The list of free models is taken from OpenRouter itself (cached for an hour),
+// the same way app/api/chat/route.ts does it. A hardcoded list rots: free
+// models disappear within weeks, and every attempt on a dead or overloaded
+// model burns the shared daily allowance. An account that has never bought
+// credits gets 50 free-model requests a day, shared by the chat and all demos.
+//
+// So: ask live models one at a time, stop at the first good answer, and give
+// up when the time budget runs out instead of walking a long chain twice.
 
-const FREE_MODELS = [
-  "meta-llama/llama-3.3-70b-instruct:free",
-  "openai/gpt-oss-120b:free",
-  "google/gemma-4-31b-it:free",
-  "qwen/qwen3-next-80b-a3b-instruct:free",
-  "nvidia/nemotron-3-super-120b-a12b:free",
-  "nousresearch/hermes-3-llama-3.1-405b:free",
-  "google/gemma-4-26b-a4b-it:free",
-  "nvidia/nemotron-3-nano-30b-a3b:free",
-];
+const PREFERRED = [/gemma-4-26b/, /gemma-4-31b/, /glm-5/, /nemotron-3-super-120b/, /llama.*70b/, /qwen.*(72b|80b|235b)/];
+const SKIP = /safety|code|coder|vision|audio|embed|guard|nano|lightning/i;
+const FALLBACK = ["google/gemma-4-31b-it:free", "meta-llama/llama-3.3-70b-instruct:free"];
+const MAX_MODELS = 5;
+const MODEL_TIMEOUT_MS = 18_000;
+const TOTAL_BUDGET_MS = 45_000;
 
-const PASSES = 2; // free models are flaky; run the chain twice before giving up
+let modelCache: { at: number; ids: string[] } | null = null;
+
+async function freeModels(): Promise<string[]> {
+  if (modelCache && Date.now() - modelCache.at < 3_600_000) return modelCache.ids;
+  try {
+    const res = await fetch("https://openrouter.ai/api/v1/models", { cache: "no-store" });
+    const data = await res.json();
+    const all: { id: string; context_length?: number }[] = Array.isArray(data?.data) ? data.data : [];
+    const free = all
+      .filter((m) => m.id.endsWith(":free") && !SKIP.test(m.id) && (m.context_length ?? 0) >= 16000)
+      .map((m) => m.id);
+    const ranked = [...PREFERRED.flatMap((re) => free.filter((id) => re.test(id))), ...free]
+      .filter((id, i, arr) => arr.indexOf(id) === i)
+      .slice(0, MAX_MODELS);
+    if (ranked.length) {
+      modelCache = { at: Date.now(), ids: ranked };
+      return ranked;
+    }
+  } catch {
+    // fall through to the fallback list
+  }
+  return FALLBACK;
+}
 
 export type LlmMessage = { role: "system" | "user" | "assistant"; content: string };
 
@@ -21,7 +47,7 @@ export type GenerateOpts = {
   temperature?: number;
   title?: string;
   // Reject bad outputs (wrong language, leaked reasoning, over-length) and
-  // move on to the next model in the chain.
+  // move on to the next model.
   validate?: (s: string) => boolean;
 };
 
@@ -40,19 +66,16 @@ export async function generate(messages: LlmMessage[], opts?: GenerateOpts): Pro
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) return null;
 
-  for (let pass = 0; pass < PASSES; pass++) {
-    if (pass > 0) await new Promise((r) => setTimeout(r, 800));
-    const content = await tryChain(apiKey, messages, opts);
-    if (content) return content;
-  }
-  return null;
-}
-
-async function tryChain(apiKey: string, messages: LlmMessage[], opts?: GenerateOpts): Promise<string | null> {
-  for (const model of FREE_MODELS) {
+  const started = Date.now();
+  for (const model of await freeModels()) {
+    const left = TOTAL_BUDGET_MS - (Date.now() - started);
+    if (left < 3_000) break;
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), Math.min(MODEL_TIMEOUT_MS, left));
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
+        signal: ctl.signal,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${apiKey}`,
@@ -64,11 +87,17 @@ async function tryChain(apiKey: string, messages: LlmMessage[], opts?: GenerateO
           messages,
           max_tokens: opts?.maxTokens ?? 512,
           temperature: opts?.temperature ?? 0.7,
+          // Free models are mostly reasoning models now: without this they can
+          // spend the whole token budget thinking and return empty content.
+          reasoning: { effort: "low", exclude: true },
         }),
       });
       const data = await res.json();
       if (!res.ok) {
         console.warn(`[llm] ${model} HTTP ${res.status}: ${JSON.stringify(data?.error ?? data).slice(0, 300)}`);
+        // The daily allowance is gone for the whole account: other models will
+        // say the same, stop instead of burning time.
+        if (res.status === 429 && /per-?day|daily/i.test(JSON.stringify(data))) break;
         continue;
       }
       const content = data?.choices?.[0]?.message?.content;
@@ -81,6 +110,8 @@ async function tryChain(apiKey: string, messages: LlmMessage[], opts?: GenerateO
       console.warn(`[llm] ${model} empty content: ${JSON.stringify(data).slice(0, 300)}`);
     } catch (e) {
       console.warn(`[llm] ${model} threw: ${e instanceof Error ? e.message : String(e)}`);
+    } finally {
+      clearTimeout(timer);
     }
   }
   return null;
