@@ -211,12 +211,12 @@ export const WORKS: Record<
       jasurgpt: {
         name: "JasurGPT",
         what: "Чат на моём сайте для тех, кому проще спросить, чем читать резюме: отвечает про опыт и проекты по собранному личному контексту.",
-        stack: ["Next.js", "OpenRouter", "Vercel", "TypeScript"],
+        stack: ["Next.js", "Groq / OpenRouter", "Vercel", "TypeScript"],
       },
       demos: {
         name: "Демо автоматизаций",
         what: "Четыре демо для локального бизнеса, работают в браузере с телефона: предзаказ с трибуны, слив вечерних остатков, алерты о фроде на кассе, ответы на отзывы в картах.",
-        stack: ["Next.js", "OpenRouter", "Telegram WebApp", "СБП"],
+        stack: ["Next.js", "Groq / OpenRouter", "Telegram WebApp", "СБП"],
       },
     },
   },
@@ -250,12 +250,12 @@ export const WORKS: Record<
       jasurgpt: {
         name: "JasurGPT",
         what: "A chat on my site for people who would rather ask than read a resume: it answers about my experience and projects from a personal context I put together.",
-        stack: ["Next.js", "OpenRouter", "Vercel", "TypeScript"],
+        stack: ["Next.js", "Groq / OpenRouter", "Vercel", "TypeScript"],
       },
       demos: {
         name: "Automation demos",
         what: "Four demos for local businesses that run in a phone browser: pre-orders from the stands, selling off evening leftovers, fraud alerts at the till, replies to map reviews.",
-        stack: ["Next.js", "OpenRouter", "Telegram WebApp", "SBP"],
+        stack: ["Next.js", "Groq / OpenRouter", "Telegram WebApp", "SBP"],
       },
     },
   },

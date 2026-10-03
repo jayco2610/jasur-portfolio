@@ -11,6 +11,11 @@ import { useLanguage } from "@/context/LanguageContext";
    же, что в пошаговом разборе ниже. Ошибка хранится кодом, а не текстом:
    переключатель языка переводит и её.
 
+   Под ответом стоит «Источник: раздел» с раскрывающейся цитатой из
+   фрагмента документа, по которому модель отвечала (их присылает
+   /api/mia). Цитата всегда из русского документа, название раздела на
+   языке страницы.
+
    Вопрос, на который модель не ответила, остаётся в переписке, но в
    историю для следующего запроса не идёт: иначе модель получила бы два
    вопроса подряд без ответа между ними.
@@ -19,7 +24,8 @@ import { useLanguage } from "@/context/LanguageContext";
    .nm-dm-live), у Mia это бирюзовый. Прокручивается только переписка, а
    не страница: ответ не дёргает экран. */
 
-type Turn = { role: "user" | "assistant"; content: string; failed?: boolean };
+type Source = { id: string; title: string; titleEn: string; quote: string };
+type Turn = { role: "user" | "assistant"; content: string; failed?: boolean; sources?: Source[] };
 type ErrCode = "busy" | "daily" | "rate_limited" | "network";
 
 const MAX_QUESTION = 500;
@@ -33,6 +39,7 @@ const copy = {
     typing: "searching the clinic document…",
     placeholder: "Your question about the clinic",
     send: "Send",
+    source: "Source",
     sendLabel: "Send the question",
     inputLabel: "Question for Mia",
     errors: {
@@ -50,6 +57,7 @@ const copy = {
     typing: "ищу в документе клиники…",
     placeholder: "Ваш вопрос о клинике",
     send: "Отправить",
+    source: "Источник",
     sendLabel: "Отправить вопрос",
     inputLabel: "Вопрос для Mia",
     errors: {
@@ -98,7 +106,12 @@ export default function MiaLive({ questions }: { questions: { en: string; ru: st
       });
       const data = await res.json().catch(() => null);
       if (res.ok && typeof data?.content === "string" && data.content) {
-        setTurns((prev) => [...prev, { role: "assistant", content: data.content }]);
+        const sources: Source[] = Array.isArray(data.sources)
+          ? data.sources.filter(
+              (x: Source) => x && typeof x.title === "string" && typeof x.titleEn === "string" && typeof x.quote === "string"
+            )
+          : [];
+        setTurns((prev) => [...prev, { role: "assistant", content: data.content, sources }]);
       } else {
         const code = data?.error;
         failure = code === "daily" || code === "rate_limited" ? code : "busy";
@@ -131,6 +144,18 @@ export default function MiaLive({ questions }: { questions: { en: string; ru: st
           {turns.map((t, i) => (
             <div key={i} className={`nm-dm-msg nm-dm-in${t.role === "user" ? " is-out" : ""}`}>
               <p>{t.content}</p>
+              {t.sources && t.sources.length > 0 && (
+                <div className="nm-dm-srcs">
+                  {t.sources.map((src) => (
+                    <details key={src.id} className="nm-dm-src">
+                      <summary>
+                        {c.source}: {lang === "en" ? src.titleEn : src.title}
+                      </summary>
+                      <p className="nm-dm-src-q">{src.quote}</p>
+                    </details>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
           {loading && (

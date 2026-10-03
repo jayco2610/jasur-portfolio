@@ -5,10 +5,14 @@ import { useLanguage } from "@/context/LanguageContext";
 import DemoShell from "../DemoShell";
 import PhoneFrame from "../PhoneFrame";
 import MiaLive from "./MiaLive";
+import { MIA_CHUNKS } from "@/lib/mia";
+import { searchMia, sourcesFor } from "@/lib/miaSearch";
 
-/* Mia в макете. Перенос app/demos/mia/page.tsx: те же документы, те же
-   три вопроса с фрагментами и ответами, те же паузы (поиск 1,4 секунды,
-   ответ на 2,6). Пошаговый разбор сети не трогает.
+/* Mia в макете. Перенос app/demos/mia/page.tsx: те же три вопроса, те же
+   паузы (поиск 1,4 секунды, ответ на 2,6). Пошаговый разбор сети не трогает.
+   С 03.10.2026 разбор идёт на настоящем документе клиники: вместо четырёх
+   выдуманных файлов разделы документа, вместо вписанных фрагментов те,
+   что находит поиск живого ассистента.
 
    Сверху живой ассистент (MiaLive.tsx, /api/mia). До 03.10.2026 на его
    месте стояла кнопка на пространство Hugging Face, которое засыпало. Три
@@ -16,80 +20,72 @@ import MiaLive from "./MiaLive";
 
 type Phase = "idle" | "searching" | "found" | "done";
 
-const DOCS = [
-  { icon: "📄", name: { en: "Price list.pdf", ru: "Прайс-лист.pdf" } },
-  { icon: "🦷", name: { en: "Services.docx", ru: "Услуги.docx" } },
-  { icon: "🗓️", name: { en: "Doctors schedule.xlsx", ru: "График врачей.xlsx" } },
-  { icon: "❓", name: { en: "Patient FAQ.md", ru: "FAQ пациентов.md" } },
-];
+/* Разделы настоящего документа клиники (lib/mia.ts), те же, что видит поиск
+   живого ассистента. Значки только для вида. */
+const SECTION_ICONS: Record<string, string> = {
+  about: "🏥",
+  hours: "🕒",
+  contacts: "📍",
+  guarantees: "🛡️",
+  payment: "💳",
+  implants: "🦷",
+  "implant-faq": "❓",
+  prosthetics: "🦷",
+  veneers: "✨",
+  treatment: "🩺",
+  removal: "🦷",
+  hygiene: "🪥",
+};
 
-const QUESTIONS = [
+/* Фрагменты в каждом вопросе не вписаны руками: их находит тот же поиск
+   (lib/miaSearch.ts), что отвечает живому ассистенту, а цитата это строки
+   настоящего документа. Руками написаны только английский перевод цитаты
+   и готовый ответ; ответ собран из слов цитаты. */
+const QUESTION_DEFS = [
   {
     id: "price",
     q: { en: "How much is professional cleaning?", ru: "Сколько стоит профессиональная чистка?" },
-    fragments: [
-      {
-        source: { en: "Price list, page 2", ru: "Прайс-лист, стр. 2" },
-        text: {
-          en: "Professional AirFlow cleaning: 4,500 ₽. Ultrasonic cleaning: 3,200 ₽.",
-          ru: "Профессиональная чистка AirFlow: 4 500 ₽. Ультразвуковая чистка: 3 200 ₽.",
-        },
-      },
-      {
-        source: { en: "Services: hygiene", ru: "Услуги: гигиена" },
-        text: {
-          en: "The visit takes 40 to 60 minutes, recommended every 6 months.",
-          ru: "Приём занимает 40–60 минут, рекомендуется раз в 6 месяцев.",
-        },
-      },
-    ],
+    quoteEn: { hygiene: "Professional oral hygiene: 8,400 ₽" } as Record<string, string>,
     answer: {
-      en: "Professional AirFlow cleaning costs 4,500 ₽, ultrasonic cleaning costs 3,200 ₽. The visit takes 40 to 60 minutes. We recommend it every 6 months.",
-      ru: "Профессиональная чистка AirFlow стоит 4 500 ₽, ультразвуковая: 3 200 ₽. Приём занимает 40–60 минут. Рекомендуем проходить её раз в 6 месяцев.",
+      en: "Professional oral hygiene costs 8,400 ₽.",
+      ru: "Профессиональная гигиена полости рта стоит 8 400 ₽.",
     },
   },
   {
     id: "sunday",
     q: { en: "Are you open on Sundays?", ru: "Вы работаете по воскресеньям?" },
-    fragments: [
-      {
-        source: { en: "Doctors schedule", ru: "График врачей" },
-        text: {
-          en: "Clinic hours: Mon–Sat 9:00–20:00. Sunday: closed.",
-          ru: "Часы работы клиники: пн–сб 9:00–20:00. Воскресенье: выходной.",
-        },
-      },
-    ],
+    quoteEn: {
+      hours: "Hours: daily 10:00–20:00 / How does the clinic work? Daily from 10:00 to 20:00.",
+    } as Record<string, string>,
     answer: {
-      en: "The clinic is open Monday to Saturday from 9:00 to 20:00. On Sundays we are closed, but you can book online for any other day.",
-      ru: "Клиника работает с понедельника по субботу с 9:00 до 20:00. В воскресенье у нас выходной, но вы можете записаться онлайн на любой другой день.",
+      en: "Yes, the clinic is open daily from 10:00 to 20:00, Sundays included.",
+      ru: "Да, клиника работает ежедневно с 10:00 до 20:00, воскресенье тоже.",
     },
   },
   {
     id: "implant",
     q: { en: "Does getting an implant hurt?", ru: "Больно ли ставить имплант?" },
-    fragments: [
-      {
-        source: { en: "Patient FAQ", ru: "FAQ пациентов" },
-        text: {
-          en: "Implant placement is done under local anesthesia; patients report pressure, not pain.",
-          ru: "Установка импланта проходит под местной анестезией; пациенты отмечают давление, а не боль.",
-        },
-      },
-      {
-        source: { en: "Services: implantology", ru: "Услуги: имплантология" },
-        text: {
-          en: "After the procedure we give written care instructions and a control visit in 7 days.",
-          ru: "После процедуры выдаём письменные рекомендации и назначаем контрольный визит через 7 дней.",
-        },
-      },
-    ],
+    quoteEn: {
+      "implant-faq":
+        "Is implant placement painful? Anti-stress implantation is offered to those who fear pain. Anesthesia is used.",
+    } as Record<string, string>,
     answer: {
-      en: "Implant placement is done under local anesthesia, so patients usually feel pressure rather than pain. Afterwards you get written care instructions and a control visit in 7 days.",
-      ru: "Установка импланта проходит под местной анестезией, поэтому пациенты обычно чувствуют давление, а не боль. После процедуры вы получите письменные рекомендации и контрольный визит через 7 дней.",
+      en: "For patients who are afraid of pain we offer anti-stress implantation. Anesthesia is used.",
+      ru: "Для тех, кто боится боли, проводится антистресс-имплантация. Используется анестезия.",
     },
   },
 ];
+
+const QUESTIONS = QUESTION_DEFS.map((d) => ({
+  id: d.id,
+  q: d.q,
+  answer: d.answer,
+  fragments: sourcesFor(searchMia(d.q.ru), d.q.ru).map((src) => ({
+    id: src.id,
+    source: { en: src.titleEn, ru: src.title },
+    text: { en: d.quoteEn[src.id] ?? src.quote, ru: src.quote },
+  })),
+}));
 
 const copy = {
   en: {
@@ -98,20 +94,20 @@ const copy = {
       "An assistant for a dental clinic that answers patients only from the clinic's own documents. The live assistant answers right on this page; below it is a step-by-step simulation of how it works inside.",
     pitch:
       "A knowledge base becomes an assistant that works round the clock and doesn't invent prices. Every answer is assembled from a document fragment. No fragment, no answer.",
-    hint: "Pick a patient question under the phone and watch the answer get built from documents.",
+    hint: "Pick a patient question under the phone and watch the answer get built from the clinic document.",
     step1: "Knowledge base",
-    step1desc: "The clinic's documents are split into fragments and indexed",
+    step1desc: "The clinic document is split into fragments by section and indexed",
     step2: "Search",
     step2desc: "The question pulls only the relevant fragments",
-    step2empty: "Fragments found in the documents will appear here",
+    step2empty: "Fragments found in the document will appear here",
     step3: "Grounded answer",
     step3desc: "The model answers strictly from the found fragments",
-    step3check: "Answer built only from the documents above",
+    step3check: "Answer built only from the fragments above",
     chatTitle: "Mia · clinic assistant",
     chatEmpty: "Choose a question below",
     searching: "searching the knowledge base…",
     tryAnother: "Try another question",
-    simNote: "The walkthrough is simulated from the real project's materials. The assistant above it is live.",
+    simNote: "The walkthrough runs on the real clinic document. The assistant above it is live.",
   },
   ru: {
     title: "Mia, RAG-ассистент клиники",
@@ -119,20 +115,20 @@ const copy = {
       "Ассистент стоматологической клиники, который отвечает пациентам только по документам клиники. Живой ассистент отвечает прямо на этой странице, под ним пошаговая симуляция того, как это устроено внутри.",
     pitch:
       "База знаний становится ассистентом, который работает круглосуточно и не выдумывает цены. Каждый ответ собран из фрагмента документа. Нет фрагмента, нет ответа.",
-    hint: "Выберите вопрос пациента под телефоном и посмотрите, как ответ собирается из документов.",
+    hint: "Выберите вопрос пациента под телефоном и посмотрите, как ответ собирается из документа клиники.",
     step1: "База знаний",
-    step1desc: "Документы клиники разбиты на фрагменты и проиндексированы",
+    step1desc: "Документ клиники разбит на фрагменты по разделам и проиндексирован",
     step2: "Поиск",
     step2desc: "Вопрос вытягивает только релевантные фрагменты",
-    step2empty: "Здесь появятся фрагменты, найденные в документах",
+    step2empty: "Здесь появятся фрагменты, найденные в документе",
     step3: "Ответ по документам",
     step3desc: "Модель отвечает строго по найденным фрагментам",
-    step3check: "Ответ собран только из документов выше",
+    step3check: "Ответ собран только из фрагментов выше",
     chatTitle: "Mia · ассистент клиники",
     chatEmpty: "Выберите вопрос ниже",
     searching: "ищу в базе знаний…",
     tryAnother: "Задать другой вопрос",
-    simNote: "Разбор шагов симулирован на материалах реального проекта. Ассистент над ним живой.",
+    simNote: "Разбор шагов построен на настоящем документе клиники. Ассистент над ним живой.",
   },
 };
 
@@ -163,10 +159,11 @@ export default function MiaDemo() {
       title={{ en: copy.en.title, ru: copy.ru.title }}
       subtitle={{ en: copy.en.subtitle, ru: copy.ru.subtitle }}
       pitch={{ en: copy.en.pitch, ru: copy.ru.pitch }}
-      hint={{ en: copy.en.hint, ru: copy.ru.hint }}
       footer={null}
     >
       <MiaLive questions={QUESTIONS.map((q) => q.q)} />
+
+      <p className="nm-dm-hint">▶ {c.hint}</p>
 
       <div className="nm-dm-split nm-dm-mt">
         {/* Слева: шаги */}
@@ -176,9 +173,9 @@ export default function MiaDemo() {
             <p className="nm-dm-panel-t">1 · {c.step1}</p>
             <p className="nm-dm-panel-d">{c.step1desc}</p>
             <div className="nm-dm-docs">
-              {DOCS.map((d) => (
-                <div key={d.name.en}>
-                  <span className="nm-dm-emo">{d.icon}</span> {d.name[lang]}
+              {MIA_CHUNKS.map((d) => (
+                <div key={d.id}>
+                  <span className="nm-dm-emo">{SECTION_ICONS[d.id] ?? "📄"}</span> {d.title[lang]}
                 </div>
               ))}
             </div>
@@ -199,7 +196,7 @@ export default function MiaDemo() {
             )}
             {(phase === "found" || phase === "done") &&
               question?.fragments.map((f, i) => (
-                <div key={f.source.en} className="nm-dm-quote nm-dm-in" style={{ animationDelay: `${i * 150}ms` }}>
+                <div key={f.id} className="nm-dm-quote nm-dm-in" style={{ animationDelay: `${i * 150}ms` }}>
                   <p className="nm-dm-quote-k">{f.source[lang]}</p>
                   <p className="nm-dm-quote-t">{f.text[lang]}</p>
                 </div>

@@ -2,17 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { isRateLimited } from "@/lib/rateLimit";
 import { complete, type AiMessage } from "@/lib/ai";
 import { miaSystemPrompt } from "@/lib/mia";
+import { searchMia, sourcesFor } from "@/lib/miaSearch";
 
 // Живая Mia на странице /demos/mia. Принимает вопрос пациента и короткую
-// историю переписки, отвечает по документу клиники (lib/mia.ts) через общий
-// модуль моделей (lib/ai.ts).
+// историю переписки, ищет в документе клиники подходящие фрагменты
+// (lib/miaSearch.ts) и отвечает по ним через общий модуль моделей (lib/ai.ts).
+// В модель уходят только найденные фрагменты, не весь документ. Не нашлось
+// ничего: модель получает пустой контекст и отвечает фразой про консультацию.
 //
 // Защита как у /api/demo: лимит частоты по адресу (lib/rateLimit.ts),
-// проверка тела запроса, ограничение длины. Документ и правила весят около
-// 1,5 тыс. токенов, а у бесплатного Groq 8 тыс. токенов в минуту на модель,
-// поэтому история короткая и ответ ограничен 400 токенами.
+// проверка тела запроса, ограничение длины. Правила и два-три фрагмента весят
+// порядка тысячи токенов, а у бесплатного Groq 8 тыс. токенов в минуту на
+// модель, поэтому история короткая и ответ ограничен 400 токенами.
 //
-// Ответ: { content } или { error: "busy" | "daily" | "rate_limited" |
+// Ответ: { content, sources: [{ id, title, titleEn, quote }] } или { error: "busy" | "daily" | "rate_limited" |
 // "invalid_request" }. Тексты ошибок для человека на странице демо.
 
 export const maxDuration = 60;
@@ -69,8 +72,10 @@ export async function POST(req: NextRequest) {
   }
 
   const ru = /[а-яё]/i.test(question);
+  const lastQuestion = [...history].reverse().find((m) => m.role === "user")?.content;
+  const found = searchMia(question, lastQuestion);
   const messages: AiMessage[] = [
-    { role: "system", content: miaSystemPrompt() },
+    { role: "system", content: miaSystemPrompt(found) },
     ...history,
     { role: "user", content: question },
   ];
@@ -84,7 +89,11 @@ export async function POST(req: NextRequest) {
   });
 
   if (!res.ok) return NextResponse.json({ error: res.reason }, { status: 503 });
-  return NextResponse.json({ content: plain(res.text) });
+  const content = plain(res.text);
+  // Если модель всё же отправила на консультацию, источник не показывается:
+  // ответ собран не из фрагмента.
+  const sources = content.includes("mia-clinic@yandex.ru") ? [] : sourcesFor(found, question);
+  return NextResponse.json({ content, sources });
 }
 
 // Окно чата показывает ответ как текст. Промпт просит обходиться без

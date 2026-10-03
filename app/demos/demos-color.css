@@ -1766,6 +1766,29 @@
   background: var(--u-surface);
 }
 
+/* Источники под ответом Mia: бирюзовая строка и цитата с акцентной линией. */
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-srcs {
+  border-top-color: var(--u-border);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-src summary {
+  font-weight: 600;
+  color: var(--u-accent-text);
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-src summary:focus-visible {
+  outline: 2px solid var(--u-ring);
+  outline-offset: 2px;
+}
+
+.nm-dmv[data-palette] .nm-dm-stage .nm-dm-live .nm-dm-msg .nm-dm-src-q {
+  padding: 6px 10px;
+  border-left: 3px solid var(--u-accent);
+  border-radius: 0 6px 6px 0;
+  background: var(--u-accent-soft);
+  color: var(--u-text);
+}
+
 /* Ошибка внутри переписки: плашка у левого края, как входящее сообщение,
    без отступа сверху (промежутки задаёт переписка). */
 .nm-dmv[data-palette] .nm-dm-stage .nm-dm-live-log .nm-dm-err {
