@@ -229,7 +229,7 @@ export const WORKS: Record<
       },
       demos: {
         name: "Демо автоматизаций",
-        what: "Четыре демо для локального бизнеса, работают в браузере с телефона: предзаказ с трибуны, слив вечерних остатков, алерты о фроде на кассе, ответы на отзывы в картах.",
+        what: "Восемь демо, работают прямо в браузере. Для компаний: разбор входящих заявок, отчёт прораба, проверка домашних заданий, КП за две минуты. Для локального бизнеса: предзаказ с трибуны, слив вечерних остатков, алерты о фроде на кассе, ответы на отзывы.",
         stack: ["Next.js", "Groq / OpenRouter", "Telegram WebApp", "СБП"],
       },
     },
@@ -270,7 +270,7 @@ export const WORKS: Record<
       },
       demos: {
         name: "Automation demos",
-        what: "Four demos for local businesses that run in a phone browser: pre-orders from the stands, selling off evening leftovers, fraud alerts at the till, replies to map reviews.",
+        what: "Eight demos that run right in the browser. For companies: inbound request triage, site reports, homework review, a quote in two minutes. For local business: pre-orders from the stands, selling off evening leftovers, fraud alerts at the till, replies to reviews.",
         stack: ["Next.js", "Groq / OpenRouter", "Telegram WebApp", "SBP"],
       },
     },
