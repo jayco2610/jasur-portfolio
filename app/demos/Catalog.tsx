@@ -6,6 +6,7 @@ import { companyDemos } from "./list-company";
 import { useLanguage } from "@/context/LanguageContext";
 import { t } from "@/lib/translations";
 import { demos, productDemos, demoShot, type Demo } from "./list";
+import { DEMOS } from "../strings";
 
 /* Каталог демо. Перенос app/demos/page.tsx: те же три блока (вступление,
    демо для бизнеса, свои продукты), те же тексты, те же номера D.01 и P.01,
@@ -67,6 +68,23 @@ function DemoCard({
   );
 }
 
+/* Строка-ссылка на документ «Услуги и цены» (PDF своего языка, новая
+   вкладка). Добавлена 5 октября 2026: кто дошёл до демо, должен видеть,
+   что то же самое можно заказать. Стоит дважды: под вводным текстом
+   (top) и внизу каталога, после последнего раздела. Вид как у «Все
+   материалы в Log» на главной: линейка, прописные, пометка PDF. */
+function Prices({ lang, top = false }: { lang: "en" | "ru"; top?: boolean }) {
+  const s = DEMOS[lang];
+  return (
+    <p className={`nm-more ${top ? "nm-dm-prices" : "nm-more-pdf"}`}>
+      <a href={`/new/uslugi-${lang}.pdf`} target="_blank" rel="noopener">
+        {s.prices}
+      </a>
+      <span className="nm-more-tag">{s.pdf}</span>
+    </p>
+  );
+}
+
 export default function Catalog() {
   const { lang } = useLanguage();
   const d = t[lang].demos;
@@ -85,7 +103,10 @@ export default function Catalog() {
         </div>
 
         <div className="nm-dm-intro">
-          <p className="nm-dm-intro-t">{d.intro}</p>
+          <div>
+            <p className="nm-dm-intro-t">{d.intro}</p>
+            <Prices lang={lang} top />
+          </div>
           <p className="nm-dm-intro-n">{d.note}</p>
         </div>
       </section>
@@ -125,6 +146,8 @@ export default function Catalog() {
             <DemoCard key={demo.href} demo={demo} lang={lang} index={i} letter="P" openLabel={d.open} />
           ))}
         </div>
+
+        <Prices lang={lang} />
       </section>
     </>
   );

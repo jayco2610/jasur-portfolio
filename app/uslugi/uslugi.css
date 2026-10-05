@@ -175,6 +175,14 @@
   margin-top: 9px;
 }
 
+/* Два демо под услугой стоят в одну строку, если помещаются: слайд с
+   четырьмя услугами иначе упирается в подвал. */
+.nm-us-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px 24px;
+}
+
 .nm-us-link a {
   font-size: 10px;
   letter-spacing: 0.12em;
@@ -195,9 +203,12 @@
 
 /* ---- демо ---- */
 
+/* Колонка подводки 440 точек, а не 520: заголовок «Демо для локального
+   бизнеса» в оставшиеся 600 точек ложился в три строки и придавливал
+   карточки к подвалу. */
 .nm-us-dhead {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 520px;
+  grid-template-columns: minmax(0, 1fr) 440px;
   gap: 32px;
   align-items: end;
 }

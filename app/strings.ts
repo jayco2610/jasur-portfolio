@@ -175,17 +175,31 @@ export type WorkKey = "abcx" | "expat" | "career" | "mia" | "jasurgpt" | "demos"
 
 type WorkText = { name: string; what: string; stack: string[] };
 
-/* prices и pdf: строка-ссылка внизу страницы на документ «Услуги» (PDF
-   своего языка в public/new, собирается scripts/uslugi-pdf.mjs). */
+/* prices, pricesD, pricesBtn, pdf: блок «Услуги и цены» после карточек
+   (с 5 октября 2026 вместо мелкой строки внизу). Кнопка открывает
+   документ «Услуги» своего языка (PDF в public/new, собирается
+   scripts/uslugi-pdf.mjs). Двенадцать услуг: столько позиций в
+   app/uslugi/services.ts, поменяется их число, поправить и строку. */
 export const WORKS: Record<
   Lang,
-  { h1: string[]; lead: string; open: string; prices: string; pdf: string; items: Record<WorkKey, WorkText> }
+  {
+    h1: string[];
+    lead: string;
+    open: string;
+    prices: string;
+    pricesD: string;
+    pricesBtn: string;
+    pdf: string;
+    items: Record<WorkKey, WorkText>;
+  }
 > = {
   ru: {
     h1: ["Шесть штук,", "собранных", "в одиночку"],
     lead: "Код, дизайн, тексты. Всё работает, всё открывается по ссылке.",
     open: "Открыть",
     prices: "Услуги и цены",
+    pricesD: "Собираю такие же вещи под ваш бизнес: ИИ-агенты, автоматизация, CRM. Двенадцать услуг с ценами.",
+    pricesBtn: "Открыть услуги и цены",
     pdf: "PDF",
     items: {
       abcx: {
@@ -225,6 +239,8 @@ export const WORKS: Record<
     lead: "Code, design, copy. Everything works, everything opens from a link.",
     open: "Open",
     prices: "Services and prices",
+    pricesD: "I build the same kind of things for your business: AI agents, automation, CRM. Twelve services with prices.",
+    pricesBtn: "Open services and prices",
     pdf: "PDF",
     items: {
       abcx: {
@@ -259,6 +275,16 @@ export const WORKS: Record<
       },
     },
   },
+};
+
+/* ---------- Демо ---------- */
+
+/* Каталог /demos (demos/Catalog.tsx): строка-ссылка на документ «Услуги»
+   под вводным текстом и ещё раз внизу каталога. Остальные подписи
+   каталога живут в lib/translations.ts (t.demos), как на старом сайте. */
+export const DEMOS: Record<Lang, { prices: string; pdf: string }> = {
+  ru: { prices: "То же под ваш бизнес: услуги и цены", pdf: "PDF" },
+  en: { prices: "The same for your business: services and prices", pdf: "PDF" },
 };
 
 /* ---------- Мастерская ---------- */

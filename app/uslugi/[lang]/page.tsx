@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Photo from "../../Photo";
 import { CHROME, WORKS, type Lang } from "../../strings";
-import { demos, demoShot, type Demo } from "../../demos/list";
-import { GROUPS, TITLE, type Service } from "../services";
+import { demos, productDemos, demoShot, type Demo } from "../../demos/list";
+import { companyDemos } from "../../demos/list-company";
+import { DEMO_SLIDES, GROUPS, LIVE_DEMO, TITLE, type Service } from "../services";
 import "../uslugi.css";
 
 /* Исходник документа «Услуги»: слайды 16:9, из которых печатается PDF.
@@ -11,7 +12,12 @@ import "../uslugi.css";
    Страницу никто не открывает руками. Её открывает скрипт
    scripts/uslugi-pdf.mjs, печатает через Playwright (page.pdf) и кладёт
    результат в public/new/uslugi-ru.pdf и public/new/uslugi-en.pdf. Человек
-   на сайте видит только PDF: строка «Услуги и цены» внизу /works.
+   на сайте видит только PDF: блок «Услуги и цены» на /works и строка
+   «То же под ваш бизнес: услуги и цены» вверху и внизу каталога /demos.
+
+   Состав (с 5 октября 2026): обложка, три слайда услуг, два слайда «Демо
+   для компаний» (demos/list-company.ts), два слайда «Демо для локального
+   бизнеса» (demos/list.ts), контакты. Номера страниц считаются сами.
 
    Почему страница сайта, а не отдельный html-файл: так документ собран из
    тех же шрифтов (next/font), тех же переменных new.css, той же заглушки
@@ -81,9 +87,26 @@ function permanent(href: string): string {
   return SITE + href;
 }
 
+/* Подпись ссылки на демо под услугой: «Живое демо: » и название демо из
+   каталога со строчной буквы («разбор входящих заявок»). Имя собственное
+   и аббревиатура в начале остаются как есть: «Mia, RAG-ассистент
+   клиники», «ИИ-автоответы на отзывы», «AI replies to reviews». Адреса нет
+   в каталоге: сборка падает, а не печатает пустую ссылку. */
+const CATALOG: Demo[] = [...companyDemos, ...demos, ...productDemos];
+
+function demoLabel(path: string, lang: Lang): string {
+  const d = CATALOG.find((x) => x.href === path);
+  if (!d) throw new Error(`Демо ${path} из services.ts нет в каталоге`);
+  const name = d.name[lang];
+  const keep = /^(Mia\b|AI\b|ИИ)/.test(name);
+  return `${LIVE_DEMO[lang]}: ${keep ? name : name[0].toLowerCase() + name.slice(1)}`;
+}
+
+/* Слайды демо: заголовок раздела на каждом, подводка (lead) только на
+   первом слайде раздела, где она есть. */
 type Slide =
   | { kind: "services"; title: string; items: Service[] }
-  | { kind: "demos"; items: Demo[]; first: boolean };
+  | { kind: "demos"; title: string; lead?: string; items: Demo[] };
 
 function Foot({ lang, n, total }: { lang: Lang; n: number; total: number }) {
   return (
@@ -106,9 +129,13 @@ function ServiceRow({ s, lang }: { s: Service; lang: Lang }) {
       <div>
         <p className="nm-us-desc">{s.desc[lang]}</p>
         {s.note && <p className="nm-us-note">{s.note[lang]}</p>}
-        {s.demo && (
-          <p className="nm-us-link">
-            <a href={SITE + s.demo.path}>{s.demo.label[lang]}</a>
+        {s.demos && (
+          <p className="nm-us-link nm-us-links">
+            {s.demos.map((path) => (
+              <a key={path} href={permanent(path)}>
+                {demoLabel(path, lang)}
+              </a>
+            ))}
           </p>
         )}
       </div>
@@ -143,7 +170,14 @@ export default async function Uslugi({
   if (!isLang(lang)) notFound();
 
   const c = CHROME[lang];
-  const demoText = WORKS[lang].items.demos;
+
+  /* Демо для компаний идут первыми, без подводки: своей утверждённой
+     подводки у раздела нет. У локального бизнеса подводка прежняя, из
+     карточки «Демо автоматизаций» на /works. */
+  const demoSlides = (list: Demo[], title: string, lead?: string): Slide[] =>
+    chunks(list, DEMOS_PER_SLIDE).map(
+      (items, k): Slide => ({ kind: "demos", title, lead: k === 0 ? lead : undefined, items }),
+    );
 
   const slides: Slide[] = [
     ...GROUPS.flatMap((g) =>
@@ -151,9 +185,8 @@ export default async function Uslugi({
         (items): Slide => ({ kind: "services", title: g.title[lang], items }),
       ),
     ),
-    ...chunks(demos, DEMOS_PER_SLIDE).map(
-      (items, k): Slide => ({ kind: "demos", items, first: k === 0 }),
-    ),
+    ...demoSlides(companyDemos, DEMO_SLIDES.company[lang]),
+    ...demoSlides(demos, DEMO_SLIDES.local[lang], WORKS[lang].items.demos.what),
   ];
   // Обложка, слайды выше, контакты.
   const total = slides.length + 2;
@@ -180,10 +213,10 @@ export default async function Uslugi({
         ) : (
           <section key={i} className="nm-us-s">
             <div className="nm-us-dhead">
-              <h2 className="nm-us-h">{demoText.name}</h2>
-              {/* Подводка один раз, на первом слайде демо: на втором тот же
-                  абзац читался бы повтором. */}
-              {sl.first && <p className="nm-us-lead">{demoText.what}</p>}
+              <h2 className="nm-us-h">{sl.title}</h2>
+              {/* Подводка один раз, на первом слайде раздела: на втором тот
+                  же абзац читался бы повтором. */}
+              {sl.lead && <p className="nm-us-lead">{sl.lead}</p>}
             </div>
             <div className="nm-us-demos">
               {sl.items.map((d) => (

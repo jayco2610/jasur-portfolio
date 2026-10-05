@@ -125,17 +125,26 @@ function Body({ lang }: { lang: Lang }) {
             );
           })}
         </div>
+      </section>
 
-        {/* Услуги и цены не отдельная ветка сайта, а документ: решение
-            Жасура. Одна строка после карточек, в той же манере, что «Все
-            материалы в Log» на главной (.nm-more). Открывает PDF своего языка
-            в новой вкладке; файлы собирает scripts/uslugi-pdf.mjs. */}
-        <p className="nm-more nm-more-pdf">
-          <a href={`/new/uslugi-${lang}.pdf`} target="_blank" rel="noopener">
-            {s.prices}
-          </a>
-          <span className="nm-more-tag">{s.pdf}</span>
-        </p>
+      {/* Услуги и цены не отдельная ветка сайта, а документ: решение
+          Жасура. До 5 октября 2026 это была одна мелкая строка под
+          карточками, и её не замечали («что с услугами? где они могут
+          посмотреть?»). Теперь отдельный блок на всю ширину, устроен как
+          «Поток приостановлен» на Мастерской: чёрная линейка, крупный
+          заголовок, строка, главная кнопка. Кнопка открывает PDF своего
+          языка в новой вкладке; файлы собирает scripts/uslugi-pdf.mjs. */}
+      <section className="nm-wrap nm-sect">
+        <div className="nm-state nm-svc">
+          <h2 className="nm-state-t">{s.prices}</h2>
+          <p className="nm-state-d">{s.pricesD}</p>
+          <p className="nm-btn-w">
+            <a className="nm-btn" href={`/new/uslugi-${lang}.pdf`} target="_blank" rel="noopener">
+              {s.pricesBtn}{" "}
+              <span className="nm-btn-tag">{s.pdf}</span>
+            </a>
+          </p>
+        </div>
       </section>
     </>
   );

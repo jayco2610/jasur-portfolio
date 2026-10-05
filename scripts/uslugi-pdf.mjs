@@ -6,7 +6,8 @@
      node scripts/uslugi-pdf.mjs
 
    Когда пересобирать: поменялись кадры демо (public/new/demos/*.jpg), их
-   названия и описания (app/demos/list.ts), услуги и цены
+   названия и описания (app/demos/list.ts и list-company.ts: из названий
+   собираются и подписи ссылок на демо под услугами), услуги и цены
    (app/uslugi/services.ts) или контакты (app/strings.ts). После
    пересборки закоммитить оба PDF и запушить.
 

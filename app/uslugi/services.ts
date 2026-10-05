@@ -12,14 +12,18 @@
      стала фразой, как в английской версии того же описания);
    - короткие тире в диапазонах («1–2 часа») заменены дефисом, как на новом
      сайте («десять-двенадцать часов»);
-   - подпись демо у RAG-ассистента: было «Попробовать живой демо — Mia,
-     ассистент стоматологии», стало «Живое демо: Mia, ассистент
-     стоматологии», в одном ряду с остальными подписями демо;
    - ссылки демо ведут на постоянные адреса /demos/... без /new: после
      переезда макета на главную (2 октября 2026) там новый дизайн, и PDF
      пересобирать не пришлось. У Mia старая ссылка вела прямо на Hugging
      Face, теперь на страницу демо, где живой ассистент отвечает прямо на
      странице (с 03.10.2026, до этого там была кнопка на Hugging Face).
+
+   Демо под услугой (поле demos, 5 октября 2026). Раньше у трёх услуг
+   стояло по одному демо со своей подписью. Теперь демо привязаны по
+   смыслу, не больше двух на услугу, и здесь лежат только адреса: подпись
+   собирается из названия демо в каталоге (demos/list.ts и
+   list-company.ts), «Живое демо: разбор входящих заявок». Переименуют
+   демо в каталоге, подпись в PDF поменяется при пересборке сама.
 
    Не перенесено: метки «Enterprise», «Новое», «RAG» (у «Новое» нет даты, в
    документе, который живёт месяцами, она врёт) и вся вводная часть старой
@@ -34,13 +38,25 @@ type L = { ru: string; en: string };
    файла старого сайта, который уйдёт после переезда макета. */
 export const TITLE: L = { ru: "Услуги", en: "Services" };
 
+/* Начало подписи ссылки на демо под услугой: «Живое демо: <название>». */
+export const LIVE_DEMO: L = { ru: "Живое демо", en: "Live demo" };
+
+/* Заголовки слайдов с демо в конце документа. Сначала демо для компаний,
+   потом для локального бизнеса: решение Жасура 5 октября 2026, новые
+   демо серьёзнее. До этого был один раздел «Демо автоматизаций». */
+export const DEMO_SLIDES: { company: L; local: L } = {
+  company: { ru: "Демо для компаний", en: "Demos for companies" },
+  local: { ru: "Демо для локального бизнеса", en: "Demos for local business" },
+};
+
 export type Service = {
   name: L;
   sub?: L;
   price: L;
   desc: L;
   note?: L;
-  demo?: { path: string; label: L };
+  /* Адреса демо из каталога, не больше двух. */
+  demos?: string[];
 };
 
 export type Group = { title: L; items: Service[] };
@@ -66,6 +82,7 @@ export const GROUPS: Group[] = [
           ru: "Настройка AI для конкретной команды: аудит задач, выбор модели, настройка воркфлоу и промтов, обучение. 2-3 недели от старта до рабочего результата.",
           en: "Configure AI for a specific team: audit current tasks, select the right model, set up workflows and prompts, train the team. 2-3 weeks from kickoff to working result.",
         },
+        demos: ["/demos/office", "/demos/edtech"],
       },
       {
         price: { ru: "от 40 000 ₽", en: "from 40,000 ₽" },
@@ -75,10 +92,7 @@ export const GROUPS: Group[] = [
           ru: "Превратите документы, базу знаний или каталог продуктов в ассистента, который отвечает только по вашим данным, без выдумок. Обрабатывает вопросы клиентов и сотрудников об услугах, ценах, политиках и процедурах.",
           en: "Turn your company's documents, knowledge base, or product catalog into an assistant that answers only from your data, with no made-up facts. Handles client and staff questions about services, pricing, policies, and procedures.",
         },
-        demo: {
-          path: "/demos/mia",
-          label: { ru: "Живое демо: Mia, ассистент стоматологии", en: "Live demo: Mia, a dental clinic assistant" },
-        },
+        demos: ["/demos/mia"],
       },
       {
         price: { ru: "от 35 000 ₽", en: "from 35,000 ₽" },
@@ -88,10 +102,7 @@ export const GROUPS: Group[] = [
           ru: "Настройка CRM с AI-слоем: воронка продаж и стадии сделок, импорт базы, базовая автоматизация (3 сценария), AI-агент для входящих, интеграция с Telegram или WhatsApp.",
           en: "CRM setup with an AI layer: sales funnel and deal stages, database import, basic automation (3 scenarios), AI agent for incoming requests, integration with Telegram or WhatsApp.",
         },
-        demo: {
-          path: "/demos/leftovers",
-          label: { ru: "Живое демо: ИИ сливает вечерние остатки", en: "Live demo: AI sells the evening leftovers" },
-        },
+        demos: ["/demos/pipeline", "/demos/leftovers"],
       },
       {
         price: { ru: "от 25 000 ₽", en: "from 25,000 ₽" },
@@ -100,10 +111,7 @@ export const GROUPS: Group[] = [
           ru: "Кастомный AI-агент под конкретную задачу: обработка запросов, квалификация лидов, внутренний ассистент, авто-ответы. Включает дискавери задачи и техническое задание.",
           en: "Custom AI agent for a specific task: handling inquiries, lead qualification, internal assistant, auto-replies. Includes task discovery and technical specification.",
         },
-        demo: {
-          path: "/demos/reviews",
-          label: { ru: "Живое демо: ИИ-ответы на отзывы", en: "Live demo: AI replies to reviews" },
-        },
+        demos: ["/demos/reviews", "/demos/office"],
       },
       {
         price: { ru: "от 15 000 ₽", en: "from 15,000 ₽" },
@@ -113,10 +121,7 @@ export const GROUPS: Group[] = [
           ru: "Связать CRM, мессенджеры, AI и таблицы. Заявка с формы становится карточкой в CRM, запускает уведомление в Telegram и AI-ответ клиенту. Схема, настройка, тест, инструкция.",
           en: "Connect your CRM, messengers, AI, and spreadsheets. A form submission becomes a CRM card, triggers a Telegram notification, and sends an AI reply to the client. Schema, setup, testing, instructions.",
         },
-        demo: {
-          path: "/demos/fraud",
-          label: { ru: "Живое демо: алерты о фроде на кассе в Telegram", en: "Live demo: POS fraud alerts in Telegram" },
-        },
+        demos: ["/demos/fraud", "/demos/stroyka"],
       },
       {
         price: { ru: "от 8 000 ₽", en: "from 8,000 ₽" },
@@ -175,6 +180,7 @@ export const GROUPS: Group[] = [
           ru: "Маркетинг, продажи, онбординг или клиентский сервис. Найти узкие места и приоритизировать улучшения. Результат: карта процессов + план оптимизации с оценкой влияния.",
           en: "Marketing, sales, onboarding, or customer service. Find bottlenecks and prioritize fixes. Output: process map + optimization plan with impact estimates.",
         },
+        demos: ["/demos/stroyka"],
       },
     ],
   },
