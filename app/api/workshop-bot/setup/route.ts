@@ -14,7 +14,10 @@ import {
 //   1. getMe: проверяет, что токен из WORKSHOP_BOT_TOKEN живой;
 //   2. setWebhook: велит Telegram слать обновления на /api/workshop-bot с
 //      секретом в заголовке;
-//   3. setMyCommands: меню команд на русском и английском;
+//   3. setMyCommands: общее меню на русском и английском (/start, /delete)
+//      и отдельное меню в чате админа, если он уже нажимал /start: там ещё
+//      /leads и /resume (запросы резюме с сайта). Состав меню в
+//      COMMANDS из lib/workshopBot.ts;
 //   4. getWebhookInfo: что Telegram думает о вебхуке сейчас.
 //
 // Вызывать можно сколько угодно раз: адрес и секрет каждый раз те же.

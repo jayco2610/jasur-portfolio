@@ -105,7 +105,9 @@ export type Effect =
   | { type: "flushPending"; chatId: number }
   | { type: "saveLead"; lead: LeadDraft }
   | { type: "deleteUserData"; chatId: number }
-  | { type: "sendLeads"; chatId: number };
+  | { type: "sendLeads"; chatId: number }
+  // Последние запросы резюме с сайта (анкета на «Обо мне», lib/resumeRequest.ts).
+  | { type: "sendResumeRequests"; chatId: number };
 
 // ——— тексты ———
 
@@ -167,7 +169,8 @@ const T = {
 };
 
 const ADMIN = {
-  hello: "Вы админ. Новые заявки будут приходить сюда. Команда /leads покажет последние.",
+  hello:
+    "Вы админ. Сюда приходят заявки Мастерской и запросы резюме с сайта. Последние заявки: /leads, последние запросы резюме: /resume.",
   hint: "Пройти опрос как посетитель: откройте бота кнопкой «Оставить контакт» на сайте.",
 };
 
@@ -182,9 +185,11 @@ export const COMMANDS = {
     { command: "start", description: "Начать заново" },
     { command: "delete", description: "Удалить мои данные" },
   ],
+  // Меню админа ставится только в его чат (scope chat), у остальных его нет.
   admin: [
     { command: "start", description: "Начать заново" },
     { command: "leads", description: "Последние заявки" },
+    { command: "resume", description: "Последние запросы резюме" },
     { command: "delete", description: "Удалить мои данные" },
   ],
 };
@@ -331,7 +336,7 @@ function isSkipText(s: string): boolean {
   return v === T.ru.skip.toLowerCase() || v === T.en.skip.toLowerCase();
 }
 
-function clip(s: string, max: number): string {
+export function clip(s: string, max: number): string {
   return s.length > max ? s.slice(0, max - 1) + "…" : s;
 }
 
@@ -398,6 +403,11 @@ export function decide(input: Incoming, ctx: { state: State | null; now: number 
     }
     if (cmd.name === "leads" && isAdmin(input.username)) {
       return [{ type: "sendLeads", chatId }];
+    }
+    // Не-админ на /resume получает тот же ответ, что на любую неизвестную
+    // команду: о запросах резюме ему знать незачем.
+    if (cmd.name === "resume" && isAdmin(input.username)) {
+      return [{ type: "sendResumeRequests", chatId }];
     }
     return [send(chatId, T[lang].unknown)];
   }
@@ -603,14 +613,14 @@ export function formatDate(ms: number): string {
   return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 }
 
-function formatDateTime(ms: number): string {
+export function formatDateTime(ms: number): string {
   const d = moscow(ms);
   const hh = String(d.getUTCHours()).padStart(2, "0");
   const mm = String(d.getUTCMinutes()).padStart(2, "0");
   return `${formatDate(ms)}, ${hh}:${mm} по Москве`;
 }
 
-function esc(s: string): string {
+export function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 

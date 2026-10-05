@@ -12,6 +12,13 @@
 //                        лежит внутри заявки, /delete стирает его вместе с ней
 //   wsbot:count          счётчик для номера «Заявка №7»
 //   wsbot:pending        номера заявок, которые ещё не дошли до админа
+//
+// Запросы резюме из анкеты на «Обо мне» (app/api/resume-request) приходят
+// Жасуру через этого же бота. Проверка полей и тексты в lib/resumeRequest.ts.
+//   resume:requests      все запросы, JSON, новые в начале списка
+//   resume:count         счётчик для номера «Запрос резюме №3»
+//   resume:pending       номера запросов, которые ещё не дошли до админа;
+//                        уходят ему при /start вместе с заявками Мастерской
 
 import { createHash, timingSafeEqual } from "node:crypto";
 import {
@@ -40,6 +47,14 @@ import {
   type Lead,
   type State,
 } from "@/lib/workshopBot";
+import {
+  formatResumeForAdmin,
+  formatResumeList,
+  formatResumePendingIntro,
+  parseResumeRecord,
+  type ResumeDraft,
+  type ResumeRequest,
+} from "@/lib/resumeRequest";
 
 // Адрес сайта прописан константой, как SITE в других файлах. Брать его из
 // запроса нельзя: вызов setup с превью-сборки увёл бы вебхук на превью.
@@ -51,6 +66,9 @@ const KEY = {
   leads: "wsbot:leads",
   count: "wsbot:count",
   pending: "wsbot:pending",
+  resumes: "resume:requests",
+  resumeCount: "resume:count",
+  resumePending: "resume:pending",
 };
 
 // ——— секрет вебхука ———
@@ -183,13 +201,18 @@ function toPlain(html: string): string {
     .slice(0, 4096);
 }
 
-async function notifyAdmin(token: string, adminId: number, lead: Lead): Promise<boolean> {
-  const m = formatLeadForAdmin(lead);
+type AdminMessage = { text: string; buttons?: Button[][] };
+
+async function deliver(token: string, adminId: number, m: AdminMessage): Promise<boolean> {
   if (await sendMessage(token, adminId, m.text, { html: true, buttons: m.buttons })) return true;
   // Telegram мог не принять разметку (например, обрезка длинного ответа
-  // пришлась на середину тега) или кнопку. Тогда та же заявка уходит
+  // пришлась на середину тега) или кнопку. Тогда то же сообщение уходит
   // простым текстом без кнопки.
   return sendMessage(token, adminId, toPlain(m.text));
+}
+
+function notifyAdmin(token: string, adminId: number, lead: Lead): Promise<boolean> {
+  return deliver(token, adminId, formatLeadForAdmin(lead));
 }
 
 async function saveLead(token: string, draft: Omit<Lead, "n">): Promise<void> {
@@ -216,22 +239,57 @@ async function saveLead(token: string, draft: Omit<Lead, "n">): Promise<void> {
   if (!delivered) await appendToList(KEY.pending, String(n));
 }
 
-async function flushPending(token: string, chatId: number): Promise<void> {
-  const nums = (await listRange(KEY.pending, 0, -1)).map(Number).filter(Number.isFinite);
+// Очередь недоставленного: номера в списке pending, сами записи в list.
+// Одна логика на заявки Мастерской и на запросы резюме.
+type Queue<T extends { n: number }> = {
+  pending: string;
+  list: string;
+  parse: (raw: string) => T | null;
+  format: (item: T) => AdminMessage;
+  intro: (count: number) => string;
+};
+
+const LEAD_QUEUE: Queue<Lead> = {
+  pending: KEY.pending,
+  list: KEY.leads,
+  parse: parseLead,
+  format: formatLeadForAdmin,
+  intro: formatPendingIntro,
+};
+
+const RESUME_QUEUE: Queue<ResumeRequest> = {
+  pending: KEY.resumePending,
+  list: KEY.resumes,
+  parse: parseResumeRecord,
+  format: (r) => formatResumeForAdmin(r),
+  intro: formatResumePendingIntro,
+};
+
+async function flushQueue<T extends { n: number }>(token: string, chatId: number, q: Queue<T>): Promise<void> {
+  const nums = (await listRange(q.pending, 0, -1)).map(Number).filter(Number.isFinite);
   if (nums.length === 0) return;
   const unique = Array.from(new Set(nums)).sort((a, b) => a - b);
-  const byNumber = new Map((await allLeads()).map(({ lead }) => [lead.n, lead]));
-  const leads = unique.map((n) => byNumber.get(n)).filter((l): l is Lead => Boolean(l));
+  const byNumber = new Map<number, T>();
+  for (const raw of await listRange(q.list, 0, -1)) {
+    const item = q.parse(raw);
+    if (item) byNumber.set(item.n, item);
+  }
+  const found = unique.filter((n) => byNumber.has(n));
 
-  if (leads.length > 0) await sendMessage(token, chatId, formatPendingIntro(leads.length));
-  // Из очереди убирается только то, что дошло, и номера удалённых заявок
+  if (found.length > 0) await sendMessage(token, chatId, q.intro(found.length));
+  // Из очереди убирается только то, что дошло, и номера удалённых записей
   // (их уже нет в списке). Не дошедшее остаётся до следующего /start.
   for (const n of unique) {
-    const lead = byNumber.get(n);
-    if (!lead || (await notifyAdmin(token, chatId, lead))) {
-      await removeFromList(KEY.pending, String(n));
+    const item = byNumber.get(n);
+    if (!item || (await deliver(token, chatId, q.format(item)))) {
+      await removeFromList(q.pending, String(n));
     }
   }
+}
+
+async function flushPending(token: string, chatId: number): Promise<void> {
+  await flushQueue(token, chatId, LEAD_QUEUE);
+  await flushQueue(token, chatId, RESUME_QUEUE);
 }
 
 async function deleteUserData(token: string, chatId: number): Promise<void> {
@@ -258,6 +316,47 @@ async function sendLeads(token: string, chatId: number): Promise<void> {
     .filter((l): l is Lead => Boolean(l));
   const total = await listLength(KEY.leads);
   await sendMessage(token, chatId, formatLeadsList(leads, total), { html: true });
+}
+
+async function sendResumeRequests(token: string, chatId: number): Promise<void> {
+  const list = (await listRange(KEY.resumes, 0, 9))
+    .map(parseResumeRecord)
+    .filter((r): r is ResumeRequest => Boolean(r));
+  const total = await listLength(KEY.resumes);
+  await sendMessage(token, chatId, formatResumeList(list, total), { html: true });
+}
+
+// ——— запрос резюме с сайта ———
+
+// Сохраняет запрос и сразу шлёт его Жасуру. Токена может не быть (бот не
+// настроен в этой сборке) или админ ещё не нажал /start: тогда запрос
+// встаёт в очередь resume:pending и дойдёт при его /start.
+//
+// stored: запрос лежит в Upstash. Маршрут отвечает человеку 200 только в
+// этом случае. null: хранилище не ответило даже на счётчик, запрос целиком
+// ушёл в журнал Vercel, человек увидит ошибку и сможет отправить ещё раз.
+export async function saveResumeRequest(
+  token: string | undefined,
+  draft: ResumeDraft,
+  now: number
+): Promise<{ n: number; stored: boolean; delivered: boolean } | null> {
+  const n = await incr(KEY.resumeCount);
+  if (n == null) {
+    console.error(`resume-request: storage unavailable, not saved: ${JSON.stringify(draft)}`);
+    return null;
+  }
+
+  const request: ResumeRequest = { ...draft, n, at: now };
+  const stored = (await pushToList(KEY.resumes, JSON.stringify(request))) != null;
+  if (!stored) console.error(`resume-request: #${n} not stored: ${JSON.stringify(request)}`);
+
+  const adminId = token ? await getAdminChatId() : null;
+  const delivered =
+    token != null && adminId != null && (await deliver(token, adminId, formatResumeForAdmin(request, stored)));
+  // В очередь встаёт только то, что лежит в базе: из очереди запрос
+  // достаётся по номеру из resume:requests.
+  if (!delivered && stored) await appendToList(KEY.resumePending, String(n));
+  return { n, stored, delivered };
 }
 
 // ——— исполнение ———
@@ -301,6 +400,9 @@ async function runEffect(token: string, fx: Effect): Promise<void> {
       return;
     case "sendLeads":
       await sendLeads(token, fx.chatId);
+      return;
+    case "sendResumeRequests":
+      await sendResumeRequests(token, fx.chatId);
       return;
   }
 }

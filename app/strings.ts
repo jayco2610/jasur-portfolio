@@ -332,17 +332,31 @@ export const WORKSHOP = {
 
 /* ---------- Обо мне ---------- */
 
+const COURSES = [
+  "AI for Product Manager · DeepLearning.AI, Coursera",
+  "CJM and CustDev Tools · ProductStar",
+  "Metrics and Models for Project Managers · Shelf",
+];
+
 export const ABOUT = {
   ru: {
     h1: "Обо мне",
     photoAlt: "Портрет",
     cap: "Рис. 01, Москва",
-    p1: "Собираю продукты в одиночку: код, дизайн и тексты делаю сам.",
-    p2: "Всё, что собрал, лежит в «Работах». Как это собиралось и что из этого вышло, написано в Log, с цифрами.",
-    // Под кнопкой JasurGPT, выбор Жасура 03.10 (варианты А и В вместе).
-    // Имена вида @handle страница делает ссылками на t.me.
-    p3: "Ещё снимаю видео и пишу тексты. Снимаю около года: места и мысли, сейчас учусь монтировать всерьёз. Тексты выходят в Log и в телеграме @head_of_ceo.",
-    p4: "Мне интересно сводить людей и входить в проекты. Если у вас есть идея или человек, с которым нам стоит познакомиться, пишите в телеграм @biznesmind.",
+    // Вводный блок справа от портрета, утверждён Жасуром 03.10. Два абзаца:
+    // стартапы, потом штат и сейчас. Слово из work страница делает ссылкой
+    // на «Работы».
+    intro: [
+      "Запускал продукты с нуля в двух стартапах, оба раза сооснователем. В Instameal был продакт-менеджером и координировал команду из 8 человек: около 400 пользователей, 40% дошли до первого заказа. В Yonma Yon собрал MVP из лендинга и телеграм-бота: 150 пользователей и B2B-направление.",
+      "Потом в штате Braiden Consulting внедрял ИИ в процессы компании. Сейчас собираю продукты сам, шесть из них лежат в «Работах».",
+    ],
+    work: "Работах",
+    // Строка контактов под вводным блоком: город и подпись к телеграму,
+    // адреса и ссылки одинаковые для обоих языков (about/page.tsx).
+    city: "Москва",
+    telegram: "Телеграм",
+    // Строка под кнопками. Сама кнопка и окно анкеты в RESUME ниже.
+    resumeNote: "Пара вопросов о вас и компании. Резюме пришлю сам, на почту или в телеграм.",
     exp: "Опыт",
     experience: [
       { name: "Braiden Consulting", what: "AI-проджект-менеджер. Внедрял ИИ в процессы компании." },
@@ -364,19 +378,30 @@ export const ABOUT = {
         what: "Аудит закупок и операционных данных, автоматизированная отчётность по категориям затрат. Затраты снизились примерно на восемнадцать процентов.",
       },
     ],
+    // Образование и курсы без годов, раздела «Языки» нет: решение Жасура
+    // 03.10. Названия курсов одинаковые на обоих языках.
     edu: "Образование",
-    eduV: "НИУ ВШЭ, бизнес и экономика, 2023-2025",
-    langs: "Языки",
-    langsV: ["Русский: родной", "Узбекский: родной", "Английский: профессиональный", "Турецкий: B2"],
+    eduV: "НИУ ВШЭ, бизнес и экономика",
+    courses: "Курсы",
+    coursesV: COURSES,
+    // Последний раздел страницы, под «Курсами». Log и @имена страница делает
+    // ссылками.
+    outside: "Кроме работы",
+    outsideV:
+      "Около года снимаю видео, учусь монтажу. Тексты выходят в Log и в телеграме @head_of_ceo. Если знаете человека, с которым нам стоит познакомиться, пишите @biznesmind.",
   },
   en: {
     h1: "About",
     photoAlt: "Portrait",
     cap: "Fig. 01, Moscow",
-    p1: "I build products solo: I do the code, design and copy myself.",
-    p2: "Everything I have built is in Works. How it was built and what came of it is in Log, with the numbers.",
-    p3: "I also shoot video and write. I have been filming for about a year, places and thoughts, and now I am learning to edit properly. The writing goes to Log and to my Telegram channel @head_of_ceo.",
-    p4: "I like connecting people and joining projects. If you have an idea, or someone I should meet, message me on Telegram at @biznesmind.",
+    intro: [
+      "I launched products from zero at two startups, both times as a co-founder. At Instameal I was the product manager and coordinated a team of 8: about 400 users, 40% made it to a first order. At Yonma Yon I built an MVP from a landing page and a Telegram bot: 150 users and a B2B line.",
+      "Then, on staff at Braiden Consulting, I brought AI into the company's processes. Now I build products on my own, six of them are in Works.",
+    ],
+    work: "Works",
+    city: "Moscow",
+    telegram: "Telegram",
+    resumeNote: "A few questions about you and your company. I'll send the resume myself, by email or Telegram.",
     exp: "Experience",
     experience: [
       { name: "Braiden Consulting", what: "AI project manager. Brought AI into the company's processes." },
@@ -399,8 +424,91 @@ export const ABOUT = {
       },
     ],
     edu: "Education",
-    eduV: "HSE University, business and economics, 2023-2025",
-    langs: "Languages",
-    langsV: ["Russian: native", "Uzbek: native", "English: professional", "Turkish: B2"],
+    eduV: "HSE University, business and economics",
+    courses: "Courses",
+    coursesV: COURSES,
+    outside: "Outside work",
+    outsideV:
+      "I have been filming video for about a year and am learning to edit. My writing goes to Log and to Telegram @head_of_ceo. If you know someone I should meet, message @biznesmind.",
+  },
+};
+
+/* ---------- Запрос резюме (окно-анкета на «Обо мне») ----------
+
+   Кнопка и окно в app/about/ResumeRequest.tsx, маршрут
+   app/api/resume-request. Подпись кнопки утверждена Жасуром 03.10, менять
+   одной строкой здесь (button). Тексты окна: обращение на «вы», без длинных
+   тире и стрелок. Порядок вопросов задан в окне, здесь только слова. */
+
+export const RESUME = {
+  ru: {
+    button: "Запросить резюме",
+    title: "Запрос резюме",
+    of: "из",
+    close: "Закрыть",
+    back: "Назад",
+    next: "Далее",
+    send: "Отправить",
+    sending: "Отправляем…",
+    retry: "Отправить ещё раз",
+    skip: "Пропустить",
+    qRole: "Кто вы?",
+    roles: {
+      director: "Директор",
+      founder: "Основатель компании",
+      hr: "HR / рекрутер",
+      other: "Другое",
+    },
+    otherLabel: "Кто именно",
+    otherPh: "Например, руководитель отдела",
+    qCompany: "Как называется компания?",
+    qWhat: "Чем занимается компания?",
+    whatPh: "Одной-двумя строками",
+    qEmail: "Почта для ответа",
+    emailPh: "name@company.com",
+    qTelegram: "Телеграм, если удобно",
+    telegramPh: "@username",
+    note: "Ответы увидит только Жасур.",
+    badEmail: "Проверьте адрес: нужен вид name@company.com.",
+    errNet: "Не получилось отправить. Проверьте соединение и отправьте ещё раз, ответы сохранены.",
+    errRate: "Слишком много попыток подряд. Подождите несколько минут и отправьте ещё раз.",
+    errBad: "Сервер не принял ответы. Проверьте их и отправьте ещё раз.",
+    thanksT: "Спасибо.",
+    thanksD: "Жасур посмотрит запрос и лично пришлёт вам резюме.",
+  },
+  en: {
+    button: "Request my resume",
+    title: "Resume request",
+    of: "of",
+    close: "Close",
+    back: "Back",
+    next: "Next",
+    send: "Send",
+    sending: "Sending…",
+    retry: "Send again",
+    skip: "Skip",
+    qRole: "Who are you?",
+    roles: {
+      director: "Director",
+      founder: "Company founder",
+      hr: "HR / recruiter",
+      other: "Other",
+    },
+    otherLabel: "Your role",
+    otherPh: "For example, head of department",
+    qCompany: "What is the company called?",
+    qWhat: "What does the company do?",
+    whatPh: "A line or two",
+    qEmail: "Your email for the reply",
+    emailPh: "name@company.com",
+    qTelegram: "Telegram, if you like",
+    telegramPh: "@username",
+    note: "Only Jasur will see your answers.",
+    badEmail: "Check the address: it should look like name@company.com.",
+    errNet: "Could not send. Check your connection and send again, your answers are saved.",
+    errRate: "Too many attempts in a row. Wait a few minutes and send again.",
+    errBad: "The server did not accept the answers. Check them and send again.",
+    thanksT: "Thank you.",
+    thanksD: "Jasur will review your request and send you his resume personally.",
   },
 };

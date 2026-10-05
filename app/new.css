@@ -1511,13 +1511,15 @@
 /* Подача как на старой странице: под заголовком линейка, под ней две
    колонки. Портрет больше не доходит до края окна: секция сидит в обычном
    .nm-wrap. Ширина колонки портрета подобрана так, чтобы низ фото стоял
-   на уровне низа текста справа: 03.10 под кнопкой JasurGPT добавились два
-   абзаца, колонка ужата с 23 до 20 долей (около 248 точек на 1440). На
-   1440 и 1920 низ фото ниже низа текста на 17-21 точку по-русски и выше
-   на 10-14 по-английски. Править вместе с текстом «Обо мне». */
+   на уровне низа блока с кнопками справа (кнопки и строка под ними).
+   03.10 текст справа заменён на утверждённый (вводный блок, контакты,
+   кнопки), колонка 20% ширины сетки, нижняя граница диапазона 20-28% (прежние 20fr из 100fr давали из-за зазора лишь 18,9%). На
+   1440 и 1920, на обоих языках, низ фото выше низа строки под кнопками на
+   11-15 точек и ниже низа самих кнопок на 36-40. Править вместе с текстом
+   «Обо мне». */
 .nm-about-in {
   display: grid;
-  grid-template-columns: minmax(0, 20fr) minmax(0, 80fr);
+  grid-template-columns: minmax(0, 20%) minmax(0, 1fr);
   gap: clamp(28px, 5vw, 72px);
   /* По верхнему краю: портрет 2:3 заметно выше текста. */
   align-items: start;
@@ -1572,10 +1574,99 @@
   margin-top: 16px;
 }
 
-/* Абзацы под кнопкой JasurGPT отходят от неё на тот же шаг, что и кнопка
-   от текста над ней (.nm-gpt-in в gpt/gpt.css). */
-.nm-about-tx .nm-gpt-in + p {
+/* Строка контактов под вводным блоком: мелко и серым, как почта и ссылки
+   в подвале (.nm-small), но одной строкой через точку. Пункт не рвётся
+   посередине, строка переносится только после точки (about/page.tsx). */
+.nm-about-tx .nm-about-ct {
+  margin-top: clamp(16px, 2vw, 22px);
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--nm-dim);
+}
+
+.nm-about-ct span {
+  white-space: nowrap;
+}
+
+.nm-about-tx .nm-about-ct a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--nm-rule);
+  padding-bottom: 1px;
+}
+
+.nm-about-tx .nm-about-ct a:hover {
+  color: var(--nm-ink);
+  border-color: var(--nm-ink);
+}
+
+/* Кнопки под контактами. Главная «Запросить резюме» чёрной плашкой, как
+   .nm-btn; вторая «Спросите у JasurGPT» обводкой, как «Пропустить» в окне
+   анкеты. Обёртки .nm-about-bw нужны ради метки data-fab-avoid
+   (всплывающая кнопка JasurGPT уходит, пока стоит поверх них, gpt/Gpt.tsx):
+   GptButton своих атрибутов не принимает. */
+.nm-about-act {
   margin-top: clamp(22px, 2.6vw, 32px);
+}
+
+.nm-about-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nm-about-bw {
+  display: flex;
+}
+
+.nm-about-btns button {
+  appearance: none;
+  border: 1px solid var(--nm-ink);
+  border-radius: 0;
+  padding: 16px clamp(20px, 3vw, 38px);
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.nm-about-b1 {
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-about-b1:hover {
+  background: transparent;
+  color: var(--nm-ink);
+}
+
+.nm-about-b2 {
+  background: transparent;
+  color: var(--nm-ink);
+}
+
+.nm-about-b2:hover {
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-about-tx .nm-about-note {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--nm-dim);
+  max-width: 56ch;
+}
+
+/* На телефоне обе кнопки во всю ширину колонки, одна под другой. */
+@media (max-width: 520px) {
+  .nm-about-bw,
+  .nm-about-btns button {
+    flex: 1 1 100%;
+  }
 }
 
 /* Ссылки в тексте как в статьях (.nm-body a): подчёркивание серым,
@@ -1592,12 +1683,30 @@
   text-decoration-color: var(--nm-ink);
 }
 
-/* Значения в строках «Образование» и «Языки» текстовым кеглем: это факты,
-   а не заголовки, и крупный Unbounded здесь спорил бы с именами компаний
-   в блоке опыта выше. */
+/* Значения в строках «Образование», «Курсы» и «Кроме работы» текстовым
+   кеглем: это факты, а не заголовки, и крупный Unbounded здесь спорил бы
+   с именами компаний в блоке опыта выше. */
 .nm-cline-s {
   font-size: 15px;
   line-height: 1.5;
+}
+
+/* «Курсы» на «Обо мне»: каждый курс своей строкой. */
+.nm-cline-list > span {
+  display: block;
+}
+
+/* Ссылки в «Кроме работы» как в тексте «Обо мне» выше. */
+.nm-cline-s a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--nm-dim);
+}
+
+.nm-cline-s a:hover {
+  text-decoration-color: var(--nm-ink);
 }
 
 /* ============ адаптив ============ */
@@ -3491,4 +3600,339 @@
   color: var(--nm-ink);
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+
+/* ============ запрос резюме ============
+   Окно-анкета с «Обо мне» (app/about/ResumeRequest.tsx). Родной <dialog>
+   в верхнем слое: всплывающая кнопка JasurGPT и полоса куки под ним.
+   Система сайта: Onest, Unbounded в вопросе, чёрное на листе, линейки,
+   прямые углы, без теней и без движения. Подложка под окном ровная
+   полупрозрачная чёрная, это не тень.
+
+   На широком экране окно одной высоты на всех вопросах, кнопки прижаты к
+   низу: при переходе между вопросами ничего не прыгает. На телефоне окно
+   во весь экран, кнопки сразу под полем: прижатые к низу, они оказались
+   бы под экранной клавиатурой. */
+
+.nm .nm-rq {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(600px, calc(100% - 32px));
+  height: min(560px, calc(100% - 32px));
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 1px solid var(--nm-ink);
+  border-radius: 0;
+  background: var(--nm-paper);
+  color: var(--nm-ink);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.nm .nm-rq::backdrop {
+  background: rgba(11, 11, 11, 0.6);
+}
+
+/* Пока окно открыто, всплывающая кнопка JasurGPT не просвечивает сквозь
+   подложку. */
+.nm:has(.nm-rq[open]) .nm-fab {
+  visibility: hidden;
+}
+
+.nm-rq-in {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 100%;
+  padding: clamp(20px, 3vw, 36px);
+}
+
+.nm-rq-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding-bottom: 12px;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-rq-x {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 6px 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: var(--nm-ink);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: transparent;
+}
+
+.nm-rq-x:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Прогресс: линейка, закрашенная на долю пройденных вопросов. */
+.nm-rq-track {
+  height: 2px;
+  background: var(--nm-rule);
+}
+
+.nm-rq-track i {
+  display: block;
+  height: 100%;
+  background: var(--nm-ink);
+}
+
+.nm-rq-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  position: relative;
+}
+
+.nm-rq-q {
+  font-family: var(--nm-display);
+  font-weight: 700;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: clamp(24px, 3.2vw, 36px) 0 clamp(16px, 2vw, 22px);
+  overflow-wrap: break-word;
+}
+
+/* Заголовок «Спасибо» получает фокус программно, рамка ему не нужна. */
+.nm .nm-rq-q:focus-visible {
+  outline: none;
+}
+
+.nm-rq-d {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  max-width: 40ch;
+}
+
+/* Роли: список во всю ширину, рамки соседних пунктов сходятся в одну
+   линейку. Выбранная роль чёрной плашкой. */
+.nm-rq-opts {
+  display: flex;
+  flex-direction: column;
+}
+
+.nm-rq-opt {
+  appearance: none;
+  display: block;
+  width: 100%;
+  border: 1px solid var(--nm-ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--nm-ink);
+  padding: 15px 18px;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.3;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nm-rq-opt + .nm-rq-opt {
+  margin-top: -1px;
+}
+
+.nm-rq-opt:hover {
+  background: #f1f1ee;
+}
+
+.nm-rq-opt[aria-pressed="true"] {
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+/* Поля как почта в подписке (.nm-subs-mail): рамка в пиксель, при фокусе
+   рамка изнутри в два и светло-серый фон. Кегль 16, иначе айфон
+   увеличивает страницу при фокусе. */
+.nm-rq-field {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  appearance: none;
+  border: 1px solid var(--nm-ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--nm-ink);
+  padding: 14px 16px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.nm-rq-field::placeholder {
+  color: var(--nm-dim);
+}
+
+.nm .nm-rq-field:focus {
+  outline: 2px solid var(--nm-ink);
+  outline-offset: -3px;
+  background: #f1f1ee;
+}
+
+textarea.nm-rq-field {
+  resize: none;
+}
+
+.nm-rq-other {
+  margin-top: 10px;
+}
+
+.nm-rq-note {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--nm-dim);
+}
+
+/* Ошибка: чёрным, с линейкой слева, чтобы её было видно без красного. */
+.nm-rq-err {
+  margin: 14px 0 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--nm-ink);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.nm-rq-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.nm-rq-acts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.nm-rq-go,
+.nm-rq-skip {
+  appearance: none;
+  border: 1px solid var(--nm-ink);
+  border-radius: 0;
+  padding: 15px clamp(18px, 2.4vw, 30px);
+  font: inherit;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.nm-rq-go {
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-rq-go:hover:not(:disabled) {
+  background: transparent;
+  color: var(--nm-ink);
+}
+
+.nm-rq-skip {
+  background: transparent;
+  color: var(--nm-ink);
+}
+
+.nm-rq-skip:hover:not(:disabled) {
+  background: var(--nm-ink);
+  color: var(--nm-paper);
+}
+
+.nm-rq-go:disabled,
+.nm-rq-skip:disabled {
+  background: transparent;
+  border-color: var(--nm-rule);
+  color: var(--nm-dim);
+  cursor: default;
+}
+
+/* «Назад» тише главных кнопок, как «Отклонить» в полосе куки. */
+.nm-rq-back {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 8px 0;
+  font: inherit;
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+  cursor: pointer;
+}
+
+.nm-rq-back:hover:not(:disabled) {
+  color: var(--nm-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Ловушка для ботов: в разметке есть, глазу и мыши недоступна. Не
+   уводится за край окна: у окна своя прокрутка, и поле за краем дало бы
+   ему прокрутку вбок. */
+.nm-rq-trap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .nm .nm-rq {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .nm-rq-in {
+    padding: 16px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Кнопки во всю ширину одна под другой, как кнопки «Обо мне» на
+     телефоне: сверху главная, под ней «Пропустить», «Назад» последней.
+     В ряд «Отправить ещё раз» и «Пропустить» не помещались и
+     разъезжались по двум строкам. */
+  .nm-rq-nav {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 0;
+  }
+
+  .nm-rq-acts {
+    flex-direction: column-reverse;
+    margin-left: 0;
+  }
+
+  .nm-rq-back {
+    order: 2;
+    align-self: flex-start;
+  }
 }

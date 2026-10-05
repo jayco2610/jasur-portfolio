@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Photo from "../Photo";
 import { NewHeader, NewFooter } from "../Chrome";
 import { ByLang } from "../Lang";
 import { ABOUT, type Lang } from "../strings";
 import { pageMeta, SITE_NAME } from "../meta";
 import { GptButton } from "../gpt/Gpt";
+import ResumeRequest from "./ResumeRequest";
 
-// Описание: первая строка страницы и названия её разделов.
+// Описание: первая фраза вводного блока и названия разделов страницы.
 export const metadata: Metadata = pageMeta({
   title: `${ABOUT.ru.h1} · ${SITE_NAME}`,
-  description: `${ABOUT.ru.p1} ${ABOUT.ru.exp}, ${ABOUT.ru.edu.toLowerCase()}, ${ABOUT.ru.langs.toLowerCase()}.`,
+  description: `${ABOUT.ru.intro[0].split(". ")[0]}. ${ABOUT.ru.exp}, ${ABOUT.ru.edu.toLowerCase()}, ${ABOUT.ru.courses.toLowerCase()}.`,
 });
 
 /* Ветка 04 по ТЗ.
@@ -18,34 +20,60 @@ export const metadata: Metadata = pageMeta({
    Последняя позиция идёт без названия компании — правило из CLAUDE.md:
    Молот не указывается как официальное место работы.
 
-   Образование: только период, без слова об окончании. Это правка по сути,
-   а не по стилю: на живом сайте и в резюме сейчас стоит «окончил 2025»,
-   диплома нет. Тот же текст надо будет поправить в lib/translations.ts,
+   Образование: без годов и без слова об окончании (диплома нет). Под ним
+   «Курсы», тоже без годов. Раздела «Языки» больше нет. Все три правки
+   Жасура 03.10. Тот же текст надо будет поправить в lib/translations.ts,
    в PDF-резюме и в контексте JasurGPT, иначе расхождение останется.
+   Картинку сертификата (public/certificate-deeplearning.png) на страницу
+   не ставить, пока Жасур не решит.
 
-   JasurGPT: после вводных абзацев кнопка «Спросите у JasurGPT», она
-   открывает тот же чат, что всплывающая кнопка в углу (gpt/Gpt.tsx).
-   Решение Жасура, новых фраз к кнопке не добавлено.
+   Справа от портрета (тексты утверждены Жасуром 03.10): вводный блок в два
+   абзаца, под ним строка контактов мелким шрифтом через точку, под ней две
+   кнопки. Страница прежде всего для работодателей и HR, поэтому главная
+   кнопка «Запросить резюме» (чёрная плашка, открывает анкету,
+   ResumeRequest.tsx), вторая «Спросите у JasurGPT» обводкой, она открывает
+   тот же чат, что всплывающая кнопка в углу (gpt/Gpt.tsx). Под кнопками
+   строка о том, что будет после запроса.
 
-   Под кнопкой два абзаца про видео, тексты и знакомства (p3, p4, выбор
-   Жасура 03.10). Телеграм-имена в них ссылки, вид как у ссылок в тексте
-   статей (.nm-body a).
+   Обе кнопки помечены data-fab-avoid: всплывающая кнопка JasurGPT уходит,
+   пока стоит поверх них (на телефоне и планшете они попадают под неё при
+   прокрутке).
+
+   Внизу раздел «Кроме работы» в оформлении «Образования» и «Курсов»: видео,
+   тексты, знакомства. Раньше это были два абзаца под кнопкой JasurGPT.
 
    Тексты на двух языках лежат в strings.ts. Тело собирается дважды, и
    ByLang показывает то, что выбрано в переключателе. */
 
-// «@head_of_ceo» в тексте становится ссылкой на t.me/head_of_ceo.
-// Точка после имени в ссылку не попадает: в имени Telegram её не бывает.
-function withTelegram(text: string) {
-  return text.split(/(@[A-Za-z0-9_]{5,32})/).map((part, i) =>
-    i % 2 === 1 ? (
-      <a key={i} href={`https://t.me/${part.slice(1)}`} target="_blank" rel="noopener noreferrer">
-        {part}
-      </a>
-    ) : (
-      part
-    )
+const TG = "https://t.me/";
+const EMAIL = "jasurakhmadaliev283@gmail.com";
+const LINKEDIN = "https://www.linkedin.com/in/jasur-akhmadaliev";
+const GITHUB = "https://github.com/jayco2610";
+
+// Ссылки внутри текста: @имя ведёт в Telegram, слова из words на страницы
+// сайта («Работах» на /works, Log на /log). Точка после имени в ссылку не
+// попадает: в имени Telegram её не бывает. Латинские слова ищутся целиком,
+// чтобы Log не нашёлся внутри другого слова.
+function rich(text: string, words: Record<string, string> = {}) {
+  const keys = Object.keys(words).map((w) =>
+    /^[A-Za-z]+$/.test(w) ? `\\b${w}\\b` : w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
   );
+  const re = new RegExp(`(@[A-Za-z0-9_]{5,32}${keys.map((k) => `|${k}`).join("")})`);
+  return text.split(re).map((part, i) => {
+    if (i % 2 === 0) return part;
+    if (part.startsWith("@")) {
+      return (
+        <a key={i} href={TG + part.slice(1)} target="_blank" rel="noopener noreferrer">
+          {part}
+        </a>
+      );
+    }
+    return (
+      <Link key={i} href={words[part]}>
+        {part}
+      </Link>
+    );
+  });
 }
 
 function Body({ lang }: { lang: Lang }) {
@@ -77,13 +105,53 @@ function Body({ lang }: { lang: Lang }) {
           </figure>
 
           <div className="nm-about-tx">
-            <p>{s.p1}</p>
-            <p>{s.p2}</p>
-            <p className="nm-gpt-in">
-              <GptButton />
+            {s.intro.map((p, i) => (
+              <p key={i}>{rich(p, { [s.work]: "/works" })}</p>
+            ))}
+
+            {/* Строка контактов: точки-разделители склеены неразрывным
+                пробелом с пунктом слева, поэтому строка переносится после
+                точки, а не перед ней. Каждый пункт целиком на одной строке. */}
+            <p className="nm-about-ct">
+              <span>{s.city}</span>
+              {"\u00a0· "}
+              <span>
+                {s.telegram}{" "}
+                <a href={TG + "biznesmind"} target="_blank" rel="noopener noreferrer">
+                  @biznesmind
+                </a>
+              </span>
+              {"\u00a0· "}
+              <span>
+                <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+              </span>
+              {"\u00a0· "}
+              <span>
+                <a href={LINKEDIN} target="_blank" rel="noopener noreferrer">
+                  LinkedIn
+                </a>
+              </span>
+              {"\u00a0· "}
+              <span>
+                <a href={GITHUB} target="_blank" rel="noopener noreferrer">
+                  GitHub
+                </a>
+              </span>
             </p>
-            <p>{withTelegram(s.p3)}</p>
-            <p>{withTelegram(s.p4)}</p>
+
+            <div className="nm-about-act">
+              <div className="nm-about-btns">
+                <span className="nm-about-bw" data-fab-avoid>
+                  <ResumeRequest className="nm-about-b1" describedBy={`about-resume-note-${lang}`} />
+                </span>
+                <span className="nm-about-bw" data-fab-avoid>
+                  <GptButton className="nm-about-b2" />
+                </span>
+              </div>
+              <p id={`about-resume-note-${lang}`} className="nm-about-note">
+                {s.resumeNote}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -108,8 +176,16 @@ function Body({ lang }: { lang: Lang }) {
           <span className="nm-cline-s">{s.eduV}</span>
         </div>
         <div className="nm-cline">
-          <span className="nm-cline-k">{s.langs}</span>
-          <span className="nm-cline-s">{s.langsV.join(" · ")}</span>
+          <span className="nm-cline-k">{s.courses}</span>
+          <span className="nm-cline-s nm-cline-list">
+            {s.coursesV.map((c) => (
+              <span key={c}>{c}</span>
+            ))}
+          </span>
+        </div>
+        <div className="nm-cline">
+          <span className="nm-cline-k">{s.outside}</span>
+          <span className="nm-cline-s">{rich(s.outsideV, { Log: "/log" })}</span>
         </div>
       </section>
     </>

@@ -83,32 +83,8 @@
 
 /* ============ кнопка-вход внутри страницы ============ */
 
-/* «Обо мне»: та же плашка, что .nm-btn, но кнопкой, а не ссылкой. */
-.nm-gpt-in {
-  margin: clamp(22px, 2.6vw, 32px) 0 0;
-}
-
-.nm-gpt-in button {
-  appearance: none;
-  display: inline-block;
-  border: 1px solid var(--nm-ink);
-  border-radius: 0;
-  background: var(--nm-ink);
-  color: var(--nm-paper);
-  padding: 16px clamp(20px, 3vw, 38px);
-  font: inherit;
-  font-size: 11.5px;
-  font-weight: 500;
-  line-height: 1.45;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.nm-gpt-in button:hover {
-  background: transparent;
-  color: var(--nm-ink);
-}
+/* «Обо мне»: кнопка обводкой рядом с «Запросить резюме», её вид в new.css
+   (.nm-about-b2). */
 
 /* «Работы»: «Открыть» у карточки JasurGPT кнопка, а у остальных ссылка.
    Вид один: сброшено всё браузерное, дальше работают правила

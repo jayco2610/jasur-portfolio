@@ -53,7 +53,7 @@ export function GptProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [fresh, setFresh] = useState(-1);
   const [away, setAway] = useState(false);
-  const [inDemo, setInDemo] = useState(false);
+  const [covering, setCovering] = useState(false);
   const pathname = usePathname();
   const opener = useRef<HTMLElement | null>(null);
   const fab = useRef<HTMLButtonElement>(null);
@@ -152,28 +152,55 @@ export function GptProvider({ children }: { children: ReactNode }) {
      экране демо (заголовок, подводка) она видна. Одно переключение туда и
      одно обратно, без мигания на каждой кнопке. Адрес в зависимостях: «Все
      демо» и рубрики Log переходят без перезагрузки, а layout с этим
-     компонентом при таком переходе остаётся. */
+     компонентом при таком переходе остаётся.
+
+     Кнопки страницы с меткой data-fab-avoid («Запросить резюме» и
+     «Спросите у JasurGPT» на «Обо мне»). На телефоне и планшете при
+     прокрутке они проходят ровно под плашкой, и она закрывала бы кнопку
+     резюме. Плашка уходит, пока стоит поверх такой кнопки (с запасом в 8
+     точек), и возвращается, как только кнопка уехала. Элементы ищутся
+     заново на каждой проверке: переключатель языка меняет тело страницы
+     целиком, и прежние узлы пропадают. */
   useEffect(() => {
     const stage = document.querySelector(".nm-dm-stage");
     let raf = 0;
     const check = () => {
       raf = 0;
-      if (!stage) {
-        setInDemo(false);
-        return;
-      }
-      const r = stage.getBoundingClientRect();
-      const first = (stage.querySelector("button, input, textarea, select, a[href]") ?? stage).getBoundingClientRect();
       const f = fab.current?.getBoundingClientRect();
-      const fabTop = f && f.height ? f.top : window.innerHeight - 80;
-      const fabBottom = f && f.height ? f.bottom : window.innerHeight;
-      setInDemo(first.top < fabBottom && r.bottom > fabTop);
+      const has = Boolean(f && f.height);
+      const fabTop = has ? f!.top : window.innerHeight - 80;
+      const fabBottom = has ? f!.bottom : window.innerHeight;
+      const fabLeft = has ? f!.left : window.innerWidth - 280;
+      const fabRight = has ? f!.right : window.innerWidth;
+      let hide = false;
+      if (stage) {
+        const r = stage.getBoundingClientRect();
+        const first = (stage.querySelector("button, input, textarea, select, a[href]") ?? stage).getBoundingClientRect();
+        hide = first.top < fabBottom && r.bottom > fabTop;
+      }
+      if (!hide) {
+        const GAP = 8;
+        for (const el of document.querySelectorAll("[data-fab-avoid]")) {
+          const r = el.getBoundingClientRect();
+          if (
+            r.height > 0 &&
+            r.top < fabBottom + GAP &&
+            r.bottom > fabTop - GAP &&
+            r.left < fabRight + GAP &&
+            r.right > fabLeft - GAP
+          ) {
+            hide = true;
+            break;
+          }
+        }
+      }
+      setCovering(hide);
     };
     const on = () => {
       if (!raf) raf = requestAnimationFrame(check);
     };
     on();
-    if (!stage) return () => cancelAnimationFrame(raf);
+    if (!stage && !document.querySelector("[data-fab-avoid]")) return () => cancelAnimationFrame(raf);
     window.addEventListener("scroll", on, { passive: true });
     window.addEventListener("resize", on);
     return () => {
@@ -194,7 +221,7 @@ export function GptProvider({ children }: { children: ReactNode }) {
         <button
           ref={fab}
           type="button"
-          className={`nm-fab${away || inDemo ? " is-away" : ""}`}
+          className={`nm-fab${away || covering ? " is-away" : ""}`}
           hidden={isOpen}
           onClick={(e) => open(e.currentTarget)}
           onPointerEnter={warm}
