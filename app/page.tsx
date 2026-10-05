@@ -27,7 +27,9 @@ export const metadata: Metadata = pageMeta({
 // Ссылки цифр, по порядку. 1 октября 2026 пустые заглушки «#» убраны: цифра
 // выглядела ссылкой и никуда не вела. Когда появятся адреса поста, статьи
 // и рейтинга VC.ru, вписать их в первые три места, вид ссылки вернётся сам.
-const NUM_HREFS: (string | null)[] = [null, null, null, null, null];
+// Третье место: профиль на VC.ru, значок «Топ-3» на нём виден без входа
+// (прислан Жасуром 05.10). Пост ВК и статья на Хабре пока без ссылок.
+const NUM_HREFS: (string | null)[] = [null, null, "https://vc.ru/id5991727", null, null];
 
 const BRANCHES: { key: NavKey; href: string }[] = [
   { key: "works", href: "/works" },
@@ -108,7 +110,12 @@ function Body({ lang }: { lang: Lang }) {
           {s.nums.map((n, i) => {
             const href = NUM_HREFS[i];
             return href ? (
-              <a key={n.k} className="nm-num-a" href={href}>
+              <a
+                key={n.k}
+                className="nm-num-a"
+                href={href}
+                {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
                 <span className="nm-num-v">{n.v}</span>
                 <span className="nm-num-k">{n.k}</span>
               </a>
