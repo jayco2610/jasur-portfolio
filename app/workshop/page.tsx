@@ -4,6 +4,7 @@ import { NewHeader, NewFooter } from "../Chrome";
 import { ByLang } from "../Lang";
 import { WORKSHOP, CHROME, type Lang } from "../strings";
 import { pageMeta, SITE_NAME } from "../meta";
+import Inside from "./Inside";
 
 // Описание: заголовок страницы и подводка под ним. Первая строка заголовка
 // уже кончается точкой, вторая нет.
@@ -28,12 +29,18 @@ export const metadata: Metadata = pageMeta({
    ByLang показывает то, что выбрано в переключателе.
 
    Четвёртая строка «Что внутри» — опция, а не одна из трёх групп. Потолок
-   в пять человек относится только к ней, в сам канал заходит кто угодно. */
+   в пять человек относится только к ней, в сам канал заходит кто угодно.
+
+   С 5 октября 2026 каждый пункт «Что внутри» раскрывается по плюсу:
+   что внутри, пример поста, таблица или кадр демо, формат (Inside.tsx,
+   тексты утверждены Жасуром 04.10). Второй пункт переименован в «Где ищу
+   деньги», строка «Поток приостановлен» обещает цену и дату старта. */
 
 const BOT = "https://t.me/jasur_workshop_bot";
 
 function Body({ lang }: { lang: Lang }) {
   const s = WORKSHOP[lang];
+  const labels = { inside: s.inside, post: s.postL, format: s.formatL, openDemo: s.openDemo };
 
   return (
     <>
@@ -65,20 +72,17 @@ function Body({ lang }: { lang: Lang }) {
         </div>
       </section>
 
-      {/* ——— блок 2. Что внутри ——— */}
+      {/* ——— блок 2. Что внутри ———
+          Каждый пункт раскрывается по плюсу справа (Inside.tsx), все
+          закрыты по умолчанию. Четвёртый пункт, опция, стоит отдельно от
+          первых трёх, раскрывается так же. */}
       <section className="nm-wrap nm-sect nm-sect--ws">
         <p className="nm-sec-t">{s.inside}</p>
         <div>
           {s.items.map((i) => (
-            <div key={i.t} className="nm-item">
-              <h2 className="nm-item-t">{i.t}</h2>
-              <p className="nm-item-d">{i.d}</p>
-            </div>
+            <Inside key={i.t} item={i} labels={labels} />
           ))}
-          <div className="nm-item is-opt">
-            <h2 className="nm-item-t">{s.option.t}</h2>
-            <p className="nm-item-d">{s.option.d}</p>
-          </div>
+          <Inside item={s.option} labels={labels} opt />
         </div>
       </section>
 

@@ -1429,6 +1429,273 @@
   margin-top: clamp(18px, 2.2vw, 28px);
 }
 
+/* ---- Мастерская: пункты «Что внутри» раскрываются ----
+   Разметка в workshop/Inside.tsx. Кнопка это вся строка заголовка, плюс
+   справа. Единственное место макета с движением: раскрытие по просьбе
+   Жасура (5 октября 2026), высота и поворот палочки плюса, 0,34 с. При
+   prefers-reduced-motion без анимации. */
+
+.nm-acc-btn {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(16px, 3vw, 40px);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nm-acc-btn:hover .nm-acc-t {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.12em;
+}
+
+/* Плюс из двух палочек. При раскрытии вертикальная ложится на
+   горизонтальную, и плюс становится минусом. */
+.nm-acc-ic {
+  position: relative;
+  flex: none;
+  width: clamp(18px, 1.7vw, 24px);
+  height: clamp(18px, 1.7vw, 24px);
+}
+
+.nm-acc-ic::before,
+.nm-acc-ic::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: currentColor;
+  transition: transform 0.34s ease;
+}
+
+.nm-acc-ic::after {
+  transform: rotate(90deg);
+}
+
+.nm-acc.is-open .nm-acc-ic::after {
+  transform: rotate(0deg);
+}
+
+/* Высота панели идёт от 0fr к 1fr. Закрытая панель ещё и visibility:
+   hidden, но только после того, как схлопнулась: тогда её ссылки не
+   ловят Tab и не читаются, а закрытие не обрывается на полпути. */
+.nm-acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.34s ease,
+    visibility 0s linear 0.34s;
+}
+
+.nm-acc.is-open .nm-acc-panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows 0.34s ease,
+    visibility 0s linear 0s;
+}
+
+/* Обрезка шире колонки на 8 точек с каждой стороны: иначе она срезала бы
+   рамку фокуса у ссылок и таблиц, стоящих вплотную к краю. */
+.nm-acc-clip {
+  min-height: 0;
+  overflow: hidden;
+  margin-inline: -8px;
+  padding-inline: 8px;
+}
+
+.nm-acc-body {
+  padding: clamp(24px, 2.8vw, 38px) 0 clamp(6px, 1vw, 14px);
+}
+
+.nm-acc-sec + .nm-acc-sec {
+  margin-top: clamp(28px, 3.2vw, 44px);
+}
+
+.nm-acc-k {
+  margin: 0 0 14px;
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--nm-dim);
+}
+
+.nm-acc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+.nm-acc-list li {
+  position: relative;
+  padding-left: 20px;
+}
+
+.nm-acc-list li + li {
+  margin-top: 10px;
+}
+
+.nm-acc-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 5px;
+  height: 5px;
+  background: var(--nm-ink);
+}
+
+/* Пример поста: цитата с линейкой слева, без рамки по кругу. */
+.nm-acc-post {
+  margin: 0;
+  padding: 2px 0 2px clamp(16px, 1.8vw, 24px);
+  border-left: 2px solid var(--nm-ink);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.nm-acc-post p {
+  margin: 0;
+}
+
+.nm-acc-post p + p {
+  margin-top: 0.8em;
+}
+
+.nm-acc-post strong {
+  font-weight: 600;
+}
+
+.nm-acc-fig {
+  margin: clamp(24px, 2.6vw, 34px) 0 0;
+}
+
+/* Таблица шире колонки (на телефоне) прокручивается вбок внутри своей
+   обёртки, страница при этом вбок не едет. */
+.nm-acc-scroll {
+  overflow-x: auto;
+}
+
+.nm-acc-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Четыре колонки (пункт 2) на телефоне не сжимаются в столбики по слову. */
+.nm-acc-tbl.is-wide {
+  min-width: 560px;
+}
+
+.nm-acc-tbl th,
+.nm-acc-tbl td {
+  padding: 10px 14px 10px 0;
+  border-bottom: 1px solid var(--nm-rule);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+
+.nm-acc-tbl th:last-child,
+.nm-acc-tbl td:last-child {
+  padding-right: 0;
+}
+
+/* Шапка: Unbounded, чёрные линейки сверху и снизу. */
+.nm-acc-tbl thead th,
+.nm-acc-tbl thead td {
+  padding-top: 12px;
+  border-top: 1px solid var(--nm-ink);
+  border-bottom-color: var(--nm-ink);
+  vertical-align: bottom;
+  font-family: var(--nm-display);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: -0.005em;
+}
+
+.nm-acc-tbl tbody th {
+  font-weight: 500;
+}
+
+.nm-acc-cap {
+  margin-top: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--nm-dim);
+}
+
+.nm-acc-shot {
+  display: block;
+}
+
+.nm-acc-fig .nm-acc-open {
+  margin: 14px 0 0;
+}
+
+.nm-acc-fmt {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* Широкий экран: слева «Что внутри» и под ним «Формат», справа пример
+   поста с таблицей или кадром. На телефоне и планшете всё одним
+   столбцом в порядке разметки. */
+@media (min-width: 900px) {
+  .nm-acc-body {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "in post"
+      "fmt post";
+    column-gap: clamp(40px, 5.5vw, 96px);
+  }
+
+  .nm-acc-sec:nth-child(1) {
+    grid-area: in;
+  }
+
+  .nm-acc-sec:nth-child(2) {
+    grid-area: post;
+    margin-top: 0;
+  }
+
+  .nm-acc-sec:nth-child(3) {
+    grid-area: fmt;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nm-acc-panel,
+  .nm-acc.is-open .nm-acc-panel,
+  .nm-acc-ic::before,
+  .nm-acc-ic::after {
+    transition: none;
+  }
+}
+
 /* ---- Мастерская: для кого и для кого нет ---- */
 
 .nm-two {

@@ -263,29 +263,184 @@ export const WORKS: Record<
 
 /* ---------- Мастерская ---------- */
 
-export const WORKSHOP = {
+/* Пункт «Что внутри»: видимые заголовок и строка (t, d) и то, что
+   открывается по плюсу (more), workshop/Inside.tsx. Тексты раскрытых
+   пунктов утверждены Жасуром 4 октября 2026 и стоят дословно.
+
+   post: абзацы примера поста. Перенос строки внутри абзаца пишется "\n",
+   абзац целиком в **...** выводится жирным.
+   table: настоящая таблица, не картинка. Первая ячейка строки служит её
+   заголовком (th scope="row"); пустая ячейка шапки над ними так и остаётся
+   пустой.
+   shot: кадр демо вместо таблицы (пункт 4), файл в public/new/workshop. */
+export type WsTable = { head: string[]; rows: string[][]; cap: string };
+
+export type WsItem = {
+  t: string;
+  d: string;
+  more: {
+    inside: string[];
+    post: string[];
+    table?: WsTable;
+    shot?: { src: string; alt: string; href: string; cap: string };
+    format: string;
+  };
+};
+
+export const WORKSHOP: Record<
+  Lang,
+  {
+    h1: string[];
+    lead: string;
+    photoAlt: string;
+    inside: string;
+    postL: string;
+    formatL: string;
+    openDemo: string;
+    items: WsItem[];
+    option: WsItem;
+    forWhom: string;
+    yesT: string;
+    yesD: string;
+    noT: string;
+    noD: string;
+    stateT: string;
+    stateD: string;
+    button: string;
+  }
+> = {
   ru: {
     h1: ["Запустил шесть проектов.", "Разбираю каждый"],
     lead: "Что делал, где ошибся, сколько это стоило. Если вы запускаете первый, половину моих граблей вы обойдёте.",
     photoAlt: "Человек в металлическом лифте нажимает кнопку этажа",
     inside: "Что внутри",
+    postL: "Пример поста",
+    formatL: "Формат",
+    openDemo: "Открыть демо",
     items: [
       {
         t: "Как собирается",
         d: "Разборы моих инструментов по шагам: JasurGPT, RAG-ассистент, боты, автоматизации. Что использовал, сколько стоило, где сломалось.",
+        more: {
+          inside: [
+            "Как 3 октября весь ИИ на сайте лёг из-за лимита в 50 запросов. И почему после переезда на Groq он отвечает за 0,85-1,9 секунды вместо 6-40, а стоит по-прежнему 0 ₽.",
+            "Почему Mia, ассистент стоматологии, молчала с 16 августа. Модель отключили, а пространство на Hugging Face засыпало через 48 часов без посетителей.",
+            "Карточка обещала источник под ответом, а чат его не показывал. В разборе стояла чистка за 4 500 ₽ вместо 8 400 ₽ и выходной в воскресенье. Как появился настоящий поиск по 12 разделам документа.",
+            "Сайт на 127 адресов, собранный с ИИ-агентами, и ни одного битого адреса. Где агенты обрываются посреди работы и как при этом не потерять сделанное.",
+            "Бот заявок за вечер: вебхук на Vercel, хранилище Upstash, бесплатно.",
+          ],
+          post: [
+            "Третьего октября весь ИИ на сайте замолчал. Не сломался, а кончился: бесплатный OpenRouter даёт пятьдесят запросов в сутки на весь аккаунт, и их съела проверка сайта.",
+            "Причина оказалась смешнее лимита. На один клик демо перебирало до шестнадцати моделей. Часть из них давно удалили, но код всё равно стучался к каждой, и каждый стук списывался из общего лимита.",
+            "За тысячу запросов в сутки просят 10 $. Платить не стал, перевёл всё на Groq: тысяча запросов в сутки на каждую из трёх моделей, без карты.",
+            "Ответ шёл от шести до сорока секунд. Теперь меньше двух.",
+            "**Стоимость та же, ноль рублей. Скорость другая.**",
+          ],
+          table: {
+            head: ["", "До 3 октября", "После"],
+            rows: [
+              ["Лимит", "50 в сутки на аккаунт", "1000 в сутки на модель"],
+              ["Время ответа", "6-40 с", "0,85-1,9 с"],
+              ["Моделей на клик", "до 16", "1"],
+              ["Стоимость", "0 ₽", "0 ₽"],
+            ],
+            cap: "Было и стало после 3 октября. Цена в обеих колонках одна.",
+          },
+          format: "Один случай на пост: что сломалось, почему, что сделал, сколько стоило. Текст и скриншоты.",
+        },
       },
       {
-        t: "Как находятся деньги",
-        d: "Связи, посредничество, темы, которые прилетают. Уголь, брусчатка, NFC-метки для локального бизнеса. Что сработало, что нет и почему.",
+        t: "Где ищу деньги",
+        d: "Посредничество, связи, темы, которые прилетают: уголь, брусчатка, NFC-метки. Закрытых сделок пока ноль. Показываю, на каком шаге встаёт каждая.",
+        more: {
+          inside: [
+            "Уголь: почему разговор встал раньше, чем дошло до первого покупателя.",
+            "Брусчатка: производство в Красногорске, которому не хватает объёма: 5 тыс. тонн против нужных 15-20 тыс. Что требуется от меня и есть ли процент, пока не выяснено. Этот момент тоже показываю.",
+            "NFC-метки для кафе: порог был пятнадцать визитов. Поговорил с одним заведением, меня даже не дослушали. Через шесть дней закрыл направление. Разбор, почему так вышло.",
+            "Визитка с нулевым оборотом в сообществе предпринимателей: почему она собрала больше реакций, чем визитки людей с оборотом, и дала два входящих контакта в первый день.",
+            "По каждой теме один и тот же порядок: что предложили, что я спросил, что ответили, на каком шаге встало.",
+          ],
+          post: [
+            "Человек, с которым мы обсуждали брусчатку, предложил ещё и уголь. Посредничество.",
+            "Я попросил вводные. Ответ: сначала компания-покупатель, потом вводные.",
+            "Только покупатель первым делом спросит три вещи: марку, цену и базис поставки. Без них я не могу даже начать с ним разговор.",
+            "Получается круг. Чтобы найти клиента, нужна цена. Чтобы получить цену, нужен клиент.",
+            "Сделки нет. Часов на это не трачу, но телефон не выключаю.",
+          ],
+          table: {
+            head: ["Тема", "Что нужно было", "Где встало", "Статус"],
+            rows: [
+              ["Уголь", "марка, цена, базис", "не дают, пока нет покупателя", "фоном"],
+              ["Брусчатка", "объём 15-20 тыс. т, есть 5 тыс. т", "моя роль не определена", "фоном"],
+              ["NFC-метки", "15 визитов", "один разговор, не дослушали", "закрыто"],
+            ],
+            cap: "Три темы, ноль закрытых сделок. Внутри по шагам, где встала каждая.",
+          },
+          format: "Переговоры по шагам: пост плюс общая таблица статусов, она обновляется, когда что-то сдвинулось.",
+        },
       },
       {
         t: "Что происходит у меня",
         d: "Цифры по каждой публикации, сколько собрал и сколько не собрал, что пробую на этой неделе. Без монтажа.",
+        more: {
+          inside: [
+            "Цифры по каждой публикации: показы, открытия, дочитывания, комментарии, подписки. Сравнение площадок на одном тексте.",
+            "Деньги по моим проектам, включая ноль.",
+            "Что пробую на этой неделе и по какой цифре пойму, что не сработало.",
+            "Что бросил и почему, без пересказа задним числом.",
+          ],
+          post: [
+            "Двадцать третьего сентября выложил один и тот же текст на DTF и VC.ru. Без правок под площадку.",
+            "DTF: 1390 показов, 149 открытий, 99 дочитали, 13 комментариев.\nVC.ru: 199 показов, 28 открытий, 16 дочитали, 2 комментария.",
+            "По охвату DTF выиграл в семь раз. По тому, как читают, почти ничья: дочитали 66% и 57%. Текст зашёл одинаково, просто лента DTF показала его большему числу людей.",
+            "Подписок на блог по одной с каждой площадки. Один пост, закономерностью это не считаю.",
+            "Версию с заголовком под каждую площадку я подготовил и не выложил. Сколько она дала бы, не знаю.",
+          ],
+          // Таблица стоит, пока Жасур не пришлёт скриншот статистики DTF,
+          // потом её заменит скриншот.
+          table: {
+            head: ["", "DTF", "VC.ru"],
+            rows: [
+              ["Показы", "1390", "199"],
+              ["Открытия", "149", "28"],
+              ["Дочитали", "99 (66%)", "16 (57%)"],
+              ["Комментарии", "13", "2"],
+              ["Подписки", "1", "1"],
+            ],
+            cap: "23 сентября, один и тот же текст на двух площадках.",
+          },
+          format: "Пост с цифрами после каждой публикации.",
+        },
       },
     ],
     option: {
       t: "Час на вашу задачу",
       d: "Один-два раза в месяц разбираю чью-то задачу: собираю инструмент, смотрю цифры, придумываю подачу. Беру пять человек, больше не вытяну: свободных часов у меня десять-двенадцать в неделю.",
+      more: {
+        inside: [
+          "Вы присылаете задачу, я беру одну из трёх вещей: собрать инструмент, посмотреть цифры, придумать подачу.",
+          "Сначала переписка, потом назначаем созвон.",
+          "Один-два раза в месяц, пять мест, задачи выбираю я.",
+          "На выходе один из трёх результатов: черновик инструмента, разбор цифр или вариант подачи.",
+          "Без обязательств с обеих сторон: это не подряд и не консультация эксперта.",
+        ],
+        post: [
+          "Задача. Владелец строит дом на 186 метров и не успевает слушать, что прораб присылает за день.",
+          "Что собрал. Прораб пишет как привык: голосовые, фото с объекта, фото накладной. Из них складывается отчёт по четырём разделам: работы, материалы, люди, проблемы. Дальше сверка с графиком и сметой.",
+          "Что показали цифры. Перекрытие второго этажа залито, а кровля по графику уже должна идти и отстаёт на три дня.",
+          "Что получает владелец. Вечером одно сообщение вместо пачки голосовых.",
+          "Объект выдуманный, демо открывается на сайте. Голосовые и сверка в нём прописаны заранее, живой ИИ пишет только сводку.",
+        ],
+        // Кадр /demos/stroyka с живого сайта после прохода сценария, окно
+        // 1600 × 1000, снят 5 октября 2026.
+        shot: {
+          src: "/new/workshop/stroyka.jpg",
+          alt: "Демо «Отчёт прораба и контроль сметы»: расшифровка голосового прораба, отчёт дня по разделам, отклонение «Кровля отстаёт на 3 дня» и сводка для владельца",
+          href: "/demos/stroyka",
+          cap: "Демо на выдуманном объекте. Под вашу задачу то же самое, только на ваших данных.",
+        },
+        format: "Один-два раза в месяц, пять мест, задачи выбираю я. Сначала переписка, потом созвон.",
+      },
     },
     forWhom: "Для кого",
     yesT: "Для тех, кто уже что-то запускает или вот-вот начнёт.",
@@ -293,7 +448,7 @@ export const WORKSHOP = {
     noT: "Не для тех, кто ищет схему.",
     noD: "Здесь нет готовых способов заработать и нет гарантий, что у вас получится. Сам ещё не разбогател. Как разбогатею, подниму цену.",
     stateT: "Поток приостановлен",
-    stateD: "Открою, когда смогу вести нормально. Оставьте контакт, напишу первым.",
+    stateD: "Открою, когда смогу вести нормально. Оставьте контакт: напишу первым, сразу с ценой и датой старта.",
     button: "Оставить контакт",
   },
   en: {
@@ -301,23 +456,129 @@ export const WORKSHOP = {
     lead: "What I did, where I got it wrong, what it cost. If you are launching your first, you will dodge half of my screwups.",
     photoAlt: "A man in a metal elevator pressing a floor button",
     inside: "What's inside",
+    postL: "Sample post",
+    formatL: "Format",
+    openDemo: "Open the demo",
     items: [
       {
         t: "How it gets built",
         d: "Step-by-step breakdowns of my tools: JasurGPT, the RAG assistant, bots, automations. What I used, what it cost, where it broke.",
+        more: {
+          inside: [
+            "How on October 3 all the AI on my site went down over a 50-request limit. And why after moving to Groq it answers in 0.85-1.9 seconds instead of 6-40, and still costs nothing.",
+            "Why Mia, the dental clinic assistant, had been silent since August 16. The model was switched off, and the Hugging Face space went to sleep after 48 hours without visitors.",
+            "The card promised a source under each answer, the chat did not show one. The walkthrough had a cleaning at 4,500 ₽ instead of 8,400 ₽ and Sunday as a day off. How real search across 12 sections of the document got built.",
+            "A 127-page site built with AI agents, not one broken link. Where agents cut out mid-task and how not to lose the work.",
+            "The waitlist bot built in one evening: a Vercel webhook, Upstash storage, free.",
+          ],
+          post: [
+            "On October 3 all the AI on my site went quiet. Nothing broke, it ran out: free OpenRouter gives fifty requests a day for the whole account, and a site check used them up.",
+            "The cause turned out to be sillier than the limit. On a single click the demo cycled through up to sixteen models. Some had been removed long ago, but the code knocked on every door anyway, and every knock came out of the shared limit.",
+            "A thousand requests a day costs $10. I did not pay. I moved everything to Groq: a thousand requests a day for each of three models, no card needed.",
+            "Replies used to take six to forty seconds. Now under two.",
+            "**Same cost, zero. Different speed.**",
+          ],
+          table: {
+            head: ["", "Before October 3", "After"],
+            rows: [
+              ["Limit", "50 a day per account", "1,000 a day per model"],
+              ["Response time", "6-40 s", "0.85-1.9 s"],
+              ["Models per click", "up to 16", "1"],
+              ["Cost", "0 ₽", "0 ₽"],
+            ],
+            cap: "Before and after October 3. The price is the same in both columns.",
+          },
+          format: "One case per post: what broke, why, what I did, what it cost. Text and screenshots.",
+        },
       },
       {
-        t: "How the money turns up",
-        d: "Connections, brokering, deals that land in my lap. Coal, paving stones, NFC tags for local businesses. What worked, what did not, and why.",
+        t: "Where I look for money",
+        d: "Brokering, connections, deals that land in my lap: coal, paving stones, NFC tags. Zero closed deals so far. I show the step where each one stalls.",
+        more: {
+          inside: [
+            "Coal: why the talk stalled before it got to a single buyer.",
+            "Paving stones: a plant in Krasnogorsk short on volume: 5 thousand tonnes against the 15-20 thousand it needs. What is required from me and whether there is a cut is still unclear. I show that part too.",
+            "NFC tags for cafes: the bar was fifteen visits. I talked to one place, and they did not even hear me out. Six days later I closed it. Why it went that way.",
+            "A zero-revenue intro in an entrepreneurs' community: why it got more reactions than intros from people with revenue, and two inbound contacts on day one.",
+            "Every topic goes the same way: what was offered, what I asked, what they said, where it stalled.",
+          ],
+          post: [
+            "A man I had been discussing paving stones with offered coal as well. Brokering.",
+            "I asked for the basics. The answer: first a buyer company, then the basics.",
+            "But a buyer asks three things first: grade, price and delivery terms. Without them I cannot even start the conversation.",
+            "So it is a loop. To find a client I need a price. To get a price I need a client.",
+            "No deal. I spend no hours on it, but I keep my phone on.",
+          ],
+          table: {
+            head: ["Topic", "What was needed", "Where it stalled", "Status"],
+            rows: [
+              ["Coal", "grade, price, delivery terms", "not given until there is a buyer", "background"],
+              ["Paving stones", "volume 15-20 thousand t, have 5 thousand t", "my role undefined", "background"],
+              ["NFC tags", "15 visits", "one talk, not heard out", "closed"],
+            ],
+            cap: "Three topics, zero closed deals. Inside, step by step, where each one stalled.",
+          },
+          format: "Negotiations step by step: a post plus a shared status table, updated when something moves.",
+        },
       },
       {
         t: "What is going on with me",
         d: "Numbers for every post, how much came in and how much did not, what I am trying this week. Uncut.",
+        more: {
+          inside: [
+            "Numbers for every post: impressions, opens, read-throughs, comments, follows. Platforms compared on the same text.",
+            "Money from my projects, zero included.",
+            "What I am trying this week and which number will tell me it failed.",
+            "What I dropped and why, without rewriting it after the fact.",
+          ],
+          post: [
+            "On September 23 I posted the same text on DTF and VC.ru. No edits for either platform.",
+            "DTF: 1,390 impressions, 149 opens, 99 read to the end, 13 comments.\nVC.ru: 199 impressions, 28 opens, 16 read to the end, 2 comments.",
+            "On reach DTF won seven to one. On how people read, it is almost a tie: 66% and 57% finished. The text landed the same way, DTF's feed just showed it to more people.",
+            "One blog follow from each platform. One post, so I do not call it a pattern.",
+            "I had a version with a headline for each platform ready and did not post it. How much it would have added, I do not know.",
+          ],
+          table: {
+            head: ["", "DTF", "VC.ru"],
+            rows: [
+              ["Impressions", "1,390", "199"],
+              ["Opens", "149", "28"],
+              ["Read to the end", "99 (66%)", "16 (57%)"],
+              ["Comments", "13", "2"],
+              ["Follows", "1", "1"],
+            ],
+            cap: "September 23, the same text on two platforms.",
+          },
+          format: "A post with numbers after every publication.",
+        },
       },
     ],
     option: {
       t: "An hour on your problem",
       d: "Once or twice a month I take on someone's problem: build a tool, look at the numbers, work out how to pitch it. I take five people, I cannot carry more: I have ten to twelve free hours a week.",
+      more: {
+        inside: [
+          "You send a problem, I take one of three things: build a tool, look at the numbers, work out how to pitch it.",
+          "First we write, then we set up a call.",
+          "Once or twice a month, five places, I pick the problems.",
+          "What you get: a draft tool, a read of the numbers or a pitch.",
+          "No obligations on either side: it is not a contract and not an expert consultation.",
+        ],
+        post: [
+          "The problem. An owner is building a 186 m² house and has no time to listen to what the foreman sends during the day.",
+          "What I built. The foreman writes the way he always does: voice notes, site photos, a photo of the delivery note. They turn into a report in four sections: work, materials, people, issues. Then it is checked against the schedule and the estimate.",
+          "What the numbers showed. The first-floor slab is poured, but the roof should already be underway and is three days behind.",
+          "What the owner gets. One message in the evening instead of a pile of voice notes.",
+          "The site is made up, the demo opens on my website. Its voice notes and checks are scripted in advance, the live AI only writes the summary.",
+        ],
+        shot: {
+          src: "/new/workshop/stroyka-en.jpg",
+          alt: "The Site reports and budget control demo: a transcribed voice note from the foreman, the day's report by section, the deviation Roof 3 days behind and the owner's summary",
+          href: "/demos/stroyka",
+          cap: "A demo on a made-up site. For your problem, the same thing on your data.",
+        },
+        format: "Once or twice a month, five places, I pick the problems. First we write, then a call.",
+      },
     },
     forWhom: "Who it is for",
     yesT: "For people who are already launching something or about to start.",
@@ -325,7 +586,7 @@ export const WORKSHOP = {
     noT: "Not for people looking for a scheme.",
     noD: "There are no ready-made ways to make money here and no guarantee it will work for you. I am not rich yet. When I am, the price goes up.",
     stateT: "Intake paused",
-    stateD: "I will reopen when I can run it properly. Leave a contact and I will write first.",
+    stateD: "I will reopen when I can run it properly. Leave a contact and I will write first, with the price and the start date.",
     button: "Leave a contact",
   },
 };
